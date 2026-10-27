@@ -4,8 +4,8 @@
   "private": true,
   "description": "SDW UMROH — Digital Umrah Tour & Travel Platform (One Journey, One Platform)",
   "scripts": {
-    "dev": "node server.js",
-    "start": "node server.js",
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
     "build:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --minify",
     "watch:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --watch",
     "build": "npm run build:css",
