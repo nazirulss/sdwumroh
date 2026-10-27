@@ -311,6 +311,30 @@
                 <span>Bersihkan Cache &amp; Muat Ulang</span>
               </button>
             </div>
+
+            <!-- 4. Mode Peran Pengguna (Role Switcher Testing Backoffice & Jamaah) -->
+            <div class="p-3.5 bg-black/20 rounded-2xl border border-white/5">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
+                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                  <span>Simulasi Peran Pengguna</span>
+                </span>
+                <span id="settingsCurrentRoleBadge" class="text-[10px] bg-gold-500/20 px-2 py-0.5 rounded-full border border-gold-500/30 text-gold-300 font-bold">PILGRIM</span>
+              </div>
+              <p class="text-[11px] text-emerald-300/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, atau Admin.</p>
+              <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2.5 px-3 rounded-xl bg-[#143528] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
+                <option value="PILGRIM">Jamaah (Pilgrim)</option>
+                <option value="SALES">Sales / Marketing</option>
+                <option value="DOCUMENT_OFFICER">Document Officer</option>
+                <option value="FINANCE">Finance Staff</option>
+                <option value="OPERATIONS">Operations Kloter</option>
+                <option value="TOUR_LEADER">Tour Leader</option>
+                <option value="MUTHAWWIF">Muthawwif</option>
+                <option value="PARTNER">Mitra / Agen</option>
+                <option value="ADMIN">Admin Sistem</option>
+                <option value="OWNER">Executive Owner</option>
+              </select>
+            </div>
           </div>
         </div>
       `;
@@ -411,11 +435,54 @@
   };
 
   // 5. Settings Modal Controls
+  window.updateSettingsRoleUI = function () {
+    const role = (typeof SDW_AUTH !== 'undefined' && SDW_AUTH.getCurrentRole)
+      ? SDW_AUTH.getCurrentRole()
+      : (localStorage.getItem('sdw_user_role') || 'PILGRIM');
+    const badge = document.getElementById('settingsCurrentRoleBadge');
+    const sel = document.getElementById('settingsRoleSelect');
+    if (badge) badge.textContent = role.replace('_', ' ');
+    if (sel) sel.value = role;
+  };
+
+  window.showNotificationToast = function (msg) {
+    let toast = document.getElementById('sdw-notif-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'sdw-notif-toast';
+      toast.className =
+        'fixed top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 bg-[#0A1C14]/95 text-emerald-100 p-4 rounded-2xl shadow-2xl border border-gold-500/40 backdrop-blur-md transition-all duration-300 transform -translate-y-8 opacity-0 pointer-events-none flex items-start gap-3';
+      document.body.appendChild(toast);
+    }
+    toast.innerHTML = `
+      <div class="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-400/30 text-sm">
+        <i class="fa-solid fa-bell"></i>
+      </div>
+      <div class="flex-1 min-w-0">
+        <h5 class="text-xs font-extrabold text-amber-300">Pemberitahuan Manasik</h5>
+        <p class="text-xs text-slate-200 mt-0.5 leading-snug">${msg}</p>
+      </div>
+      <button onclick="document.getElementById('sdw-notif-toast').classList.add('-translate-y-8', 'opacity-0')" class="text-slate-400 hover:text-white text-xs p-1 cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    `;
+    toast.classList.remove('-translate-y-8', 'opacity-0', 'pointer-events-none');
+    toast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+
+    setTimeout(() => {
+      if (toast) {
+        toast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        toast.classList.add('-translate-y-8', 'opacity-0', 'pointer-events-none');
+      }
+    }, 6000);
+  };
+
   window.openSettingsModal = function () {
     const modal = document.getElementById('settingsModal');
     if (!modal) return;
     updateSettingsPwaStatus();
     updateFontSizeUI();
+    window.updateSettingsRoleUI();
     const modeLabel = document.getElementById('currentModeLabel');
     if (modeLabel) {
       modeLabel.textContent = document.body.classList.contains('is-pwa-standalone')

@@ -28,17 +28,18 @@
 <body class="bg-slate-100 font-sans text-sdw-charcoal min-h-screen flex flex-col antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
 
     <!-- ==================== TOP BAR APP SHELL ==================== -->
-    <header class="bg-sdw-pine text-white h-16 px-4 sm:px-6 flex items-center justify-between border-b border-sdw-emerald/40 sticky top-0 z-50 shadow-md">
+    <header class="bg-gradient-to-r from-[#0A1C14] via-[#143528] to-[#1E4D3A] text-white h-16 px-4 sm:px-6 flex items-center justify-between border-b border-sdw-gold/25 sticky top-0 z-50 shadow-md">
+        <!-- Brand Info -->
         <div class="flex items-center gap-3">
             <a href="/" class="flex items-center gap-2.5 group">
                 <img src="assets/sdw-logo.png" alt="SDW Umroh" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform">
                 <div class="flex flex-col">
-                    <span class="font-black text-base tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>
-                    <span class="text-[9px] text-sdw-gold font-bold uppercase tracking-wider block mt-0.5">Portal Terpadu</span>
+                    <span class="font-black text-base sm:text-lg tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>
+                    <span class="text-[9px] text-sdw-gold font-bold uppercase tracking-wider block mt-0.5">One Journey, One Platform</span>
                 </div>
             </a>
-            <span class="text-white/20 hidden sm:inline">|</span>
-            <div class="hidden sm:flex items-center gap-2">
+            <span class="text-white/20 hidden md:inline">|</span>
+            <div class="hidden md:flex items-center gap-2">
                 <span class="text-xs text-slate-300">Peran Aktif:</span>
                 <span id="current-role-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-sdw-gold text-sdw-pine">
                     PILGRIM
@@ -46,11 +47,26 @@
             </div>
         </div>
 
-        <!-- Role Switcher & User Tools -->
-        <div class="flex items-center gap-3">
-            <!-- Development Role Tester Selector -->
-            <div class="flex items-center gap-1.5 bg-black/25 px-2.5 py-1 rounded-xl border border-white/10 text-xs">
-                <span class="text-[11px] text-sdw-gold hidden md:inline">Ganti Peran:</span>
+        <!-- Right Action Tools: Desktop Full Role Switcher vs Mobile Native App Action Icons -->
+        <div class="flex items-center gap-2 sm:gap-3">
+            <!-- Mobile Action Icons (Asnawiyyah Native App Style) -->
+            <div class="flex md:hidden items-center gap-2">
+                <!-- 1. Tombol Lonceng Notifikasi Ibadah & Manasik -->
+                <button type="button" onclick="if(window.showNotificationToast){window.showNotificationToast('Jadwal Manasik Akbar: Ahad, 20 Des 2026 di Hotel Bintang Wisata Mandiri.')}else{alert('Jadwal Manasik Akbar: Ahad, 20 Des 2026')}" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-amber-300 flex items-center justify-center relative transition-all cursor-pointer border border-white/10" title="Pemberitahuan Manasik" aria-label="Notifikasi">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber-400"></span>
+                </button>
+
+                <!-- 2. Tombol Setelan / Role Switcher -->
+                <button type="button" onclick="window.openSettingsModal()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition-all cursor-pointer border border-white/10" title="Setelan Aplikasi & Akun" aria-label="Setelan">
+                    <i class="fa-solid fa-sliders text-sm text-emerald-300"></i>
+                </button>
+            </div>
+
+            <!-- Desktop Role Tester Selector (Visible on MD and larger) -->
+            <div class="hidden md:flex items-center gap-1.5 bg-black/25 px-2.5 py-1 rounded-xl border border-white/10 text-xs">
+                <span class="text-[11px] text-sdw-gold">Ganti Peran:</span>
                 <select id="role-switcher-select" onchange="SDW_AUTH.setRole(this.value)" class="bg-transparent text-white font-bold text-xs outline-none cursor-pointer">
                     <option value="PILGRIM" class="text-sdw-charcoal">Jamaah (Pilgrim)</option>
                     <option value="SALES" class="text-sdw-charcoal">Sales / Marketing</option>
@@ -65,7 +81,7 @@
                 </select>
             </div>
 
-            <a href="/" class="text-xs text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition hidden sm:inline-block">
+            <a href="/" class="text-xs text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition hidden md:inline-block">
                 <i class="fa-solid fa-globe mr-1"></i> Web Publik
             </a>
         </div>
@@ -116,7 +132,7 @@
         </aside>
 
         <!-- Dynamic Main Content Area -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 mb-16 md:mb-0">
+        <main class="flex-1 overflow-y-auto p-3.5 sm:p-6 lg:p-8 pb-32 md:pb-8">
             <!-- ==================== TAB 1: PORTAL JAMAAH PWA ==================== -->
             <div id="tab-jamaah" class="app-view-container space-y-5 max-w-5xl mx-auto">
                 <!-- 1. Widget Waktu Sholat Haramain & Masehi/Hijriah (Asnawiyyah Reference) -->
@@ -173,7 +189,7 @@
                     </div>
                     <div class="grid grid-cols-4 gap-y-4 gap-x-2">
                         <!-- 1. Paket Umroh -->
-                        <a href="/paket" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="/paket" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-purple-50 text-sdw-pine rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sdw-pine group-hover:text-white transition-all duration-300 border border-purple-100/80">
                                 <i class="fa-solid fa-kaaba"></i>
                             </div>
@@ -181,7 +197,7 @@
                         </a>
 
                         <!-- 2. Jadwal Kloter -->
-                        <a href="/jadwal" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="/jadwal" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-rose-50 text-rose-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition-all duration-300 border border-rose-100/80">
                                 <i class="fa-solid fa-calendar-check"></i>
                             </div>
@@ -189,7 +205,7 @@
                         </a>
 
                         <!-- 3. Kalkulator Biaya -->
-                        <a href="/kalkulator" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="/kalkulator" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-amber-50 text-amber-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 border border-amber-100/80">
                                 <i class="fa-solid fa-calculator"></i>
                             </div>
@@ -197,7 +213,7 @@
                         </a>
 
                         <!-- 4. Panduan Doa (Buku Saku Manasik Offline) -->
-                        <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                        <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
                                 <i class="fa-solid fa-book-quran"></i>
                             </div>
@@ -205,7 +221,7 @@
                         </button>
 
                         <!-- 5. Peta Ziarah -->
-                        <a href="/ziarah" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="/ziarah" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-teal-600 group-hover:text-white transition-all duration-300 border border-teal-100/80">
                                 <i class="fa-solid fa-map-location-dot"></i>
                             </div>
@@ -213,7 +229,7 @@
                         </a>
 
                         <!-- 6. Syarat & Dokumen -->
-                        <a href="/faq#dokumen" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="/faq#dokumen" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-blue-50 text-blue-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-blue-100/80">
                                 <i class="fa-solid fa-passport"></i>
                             </div>
@@ -221,7 +237,7 @@
                         </a>
 
                         <!-- 7. Live Haramain -->
-                        <a href="https://www.youtube.com/results?search_query=live+makkah+haramain+now" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="https://www.youtube.com/results?search_query=live+makkah+haramain+now" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-red-600 group-hover:text-white transition-all duration-300 border border-red-100/80">
                                 <i class="fa-solid fa-tower-broadcast"></i>
                             </div>
@@ -229,7 +245,7 @@
                         </a>
 
                         <!-- 8. CS Khidmat 24/7 -->
-                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
+                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition active:scale-95">
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
                                 <i class="fa-brands fa-whatsapp text-2xl"></i>
                             </div>
@@ -238,27 +254,39 @@
                     </div>
                 </div>
 
-                <!-- 3. Banner Carousel Slider (Auto-Slide Promosi & Manasik) -->
+                <!-- 3. Banner Carousel Slider (Fotografi Haramain & Ka'bah dengan Cinematic Overlay) -->
                 <section class="space-y-1.5">
                     <div class="relative w-full aspect-[21/9] rounded-2xl overflow-hidden shadow-sm bg-slate-900 border border-slate-200">
                         <div id="appBannerTrack" class="flex w-full h-full transition-transform duration-500 ease-out">
-                            <!-- Slide 1: Promo Syawal -->
-                            <div class="w-full h-full shrink-0 relative bg-gradient-to-r from-[#240E31] via-[#4C1D6B] to-[#632585] p-3.5 sm:p-5 flex flex-col justify-center text-white">
-                                <span class="text-[9px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded-full w-max border border-amber-300/30">Early Bird 1448H</span>
-                                <h4 class="font-black text-xs sm:text-base leading-tight mt-1 text-white">Paket Umroh Syawal Barakah</h4>
-                                <p class="text-[9.5px] sm:text-xs text-purple-200 mt-0.5">Hotel Bintang 5 Pelataran &bull; Saudia Airlines Direct</p>
+                            <!-- Slide 1: Promo Syawal (Background Masjidil Haram) -->
+                            <div class="w-full h-full shrink-0 relative p-3.5 sm:p-5 flex flex-col justify-end text-white overflow-hidden">
+                                <img src="assets/hero-haram.png" alt="Paket Umroh Syawal" class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20"></div>
+                                <div class="relative z-10 space-y-0.5">
+                                    <span class="text-[8.5px] sm:text-[9.5px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/25 px-2 py-0.5 rounded-full inline-block border border-amber-300/40 backdrop-blur-xs">Early Bird 1448H</span>
+                                    <h4 class="font-black text-xs sm:text-base leading-tight mt-0.5 text-white drop-shadow">Paket Umroh Syawal Barakah</h4>
+                                    <p class="text-[9.5px] sm:text-xs text-slate-200 line-clamp-1 drop-shadow-xs">Hotel Bintang 5 Pelataran Ka'bah &bull; Saudia Airlines Direct</p>
+                                </div>
                             </div>
-                            <!-- Slide 2: Manasik Akbar -->
-                            <div class="w-full h-full shrink-0 relative bg-gradient-to-r from-[#0F281E] via-[#143528] to-[#1E4D3A] p-3.5 sm:p-5 flex flex-col justify-center text-white">
-                                <span class="text-[9px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-400/20 px-2 py-0.5 rounded-full w-max border border-emerald-300/30">Bimbingan Bersanad</span>
-                                <h4 class="font-black text-xs sm:text-base leading-tight mt-1 text-white">Manasik Intensif Sesuai Sunnah</h4>
-                                <p class="text-[9.5px] sm:text-xs text-emerald-200 mt-0.5">Pendampingan Muthawwif Alumni Univ. Islam Madinah</p>
+                            <!-- Slide 2: Manasik Akbar (Background Twilight Madinah) -->
+                            <div class="w-full h-full shrink-0 relative p-3.5 sm:p-5 flex flex-col justify-end text-white overflow-hidden">
+                                <img src="assets/hero-twilight.jpg" alt="Manasik Sesuai Sunnah" class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#0A1C14]/95 via-[#0A1C14]/65 to-black/20"></div>
+                                <div class="relative z-10 space-y-0.5">
+                                    <span class="text-[8.5px] sm:text-[9.5px] font-black uppercase tracking-wider text-emerald-300 bg-emerald-400/25 px-2 py-0.5 rounded-full inline-block border border-emerald-300/40 backdrop-blur-xs">Bimbingan Bersanad</span>
+                                    <h4 class="font-black text-xs sm:text-base leading-tight mt-0.5 text-white drop-shadow">Manasik Intensif Sesuai Sunnah</h4>
+                                    <p class="text-[9.5px] sm:text-xs text-slate-200 line-clamp-1 drop-shadow-xs">Pendampingan Muthawwif Alumni Univ. Islam Madinah</p>
+                                </div>
                             </div>
-                            <!-- Slide 3: Tabungan Syariah -->
-                            <div class="w-full h-full shrink-0 relative bg-gradient-to-r from-amber-950 via-amber-900 to-[#4C1D6B] p-3.5 sm:p-5 flex flex-col justify-center text-white">
-                                <span class="text-[9px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded-full w-max border border-amber-300/30">Kemudahan Jamaah</span>
-                                <h4 class="font-black text-xs sm:text-base leading-tight mt-1 text-white">Simulasi Biaya &amp; Tabungan Umroh</h4>
-                                <p class="text-[9.5px] sm:text-xs text-amber-200 mt-0.5">Rencanakan keberangkatan keluarga dengan amanah</p>
+                            <!-- Slide 3: Tabungan Syariah (Background VIP Khidmat) -->
+                            <div class="w-full h-full shrink-0 relative p-3.5 sm:p-5 flex flex-col justify-end text-white overflow-hidden">
+                                <img src="assets/pkg-vip-khidmat.png" alt="Simulasi Biaya Umroh" class="absolute inset-0 w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-[#240E31]/95 via-[#240E31]/65 to-black/20"></div>
+                                <div class="relative z-10 space-y-0.5">
+                                    <span class="text-[8.5px] sm:text-[9.5px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/25 px-2 py-0.5 rounded-full inline-block border border-amber-300/40 backdrop-blur-xs">Kemudahan Jamaah</span>
+                                    <h4 class="font-black text-xs sm:text-base leading-tight mt-0.5 text-white drop-shadow">Simulasi Biaya &amp; Tabungan Umroh</h4>
+                                    <p class="text-[9.5px] sm:text-xs text-slate-200 line-clamp-1 drop-shadow-xs">Rencanakan keberangkatan keluarga dengan amanah &amp; berkah</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -503,10 +531,10 @@
     </div>
 
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH 5-TAB STYLE) ==================== -->
-    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] pt-2 px-2 transition-transform duration-300">
         <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
             <!-- 1. Beranda / Jamaah (Active) -->
-            <button type="button" onclick="SDW_AUTH.switchAppTab('tab-jamaah')" class="flex flex-col items-center justify-center py-1 transition group text-sdw-pine cursor-pointer" aria-label="Beranda Jamaah">
+            <button type="button" onclick="SDW_AUTH.switchAppTab('tab-jamaah')" class="flex flex-col items-center justify-center py-1 transition group text-sdw-pine cursor-pointer active:scale-95" aria-label="Beranda Jamaah">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl bg-purple-50 text-sdw-pine group-hover:scale-110 transition-transform">
                     <i class="fa-solid fa-kaaba text-sm"></i>
                 </div>
@@ -514,7 +542,7 @@
             </button>
 
             <!-- 2. Paket Umroh -->
-            <a href="/paket" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Katalog Paket">
+            <a href="/paket" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine active:scale-95" aria-label="Katalog Paket">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-cubes text-sm"></i>
                 </div>
@@ -522,7 +550,7 @@
             </a>
 
             <!-- 3. Buku Doa Offline (Elevated Center Action Button) -->
-            <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer" aria-label="Buka Buku Doa Manasik">
+            <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Buka Buku Doa Manasik">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
                     <i class="fa-solid fa-book-quran text-lg text-slate-950"></i>
                 </div>
@@ -530,7 +558,7 @@
             </button>
 
             <!-- 4. Kloter -->
-            <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Jadwal Kloter">
+            <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine active:scale-95" aria-label="Jadwal Kloter">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-calendar-days text-sm"></i>
                 </div>
@@ -538,7 +566,7 @@
             </a>
 
             <!-- 5. Pengaturan (Aksesibilitas & PWA Settings) -->
-            <button type="button" onclick="window.openSettingsModal()" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer" aria-label="Buka Pengaturan">
+            <button type="button" onclick="window.openSettingsModal()" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer active:scale-95" aria-label="Buka Pengaturan">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-gear text-sm"></i>
                 </div>
