@@ -1,93 +1,79 @@
-const CACHE_NAME = 'sdw-umroh-cache-v3';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'sdw-umroh-pwa-v1';
+
+const PRECACHE_URLS = [
   '/',
   '/index.html',
-  '/app',
+  '/paket.html',
+  '/jadwal.html',
+  '/kalkulator.html',
+  '/ziarah.html',
+  '/tentang.html',
+  '/faq.html',
   '/app.html',
+  '/manifest.json',
   '/css/styles.min.css',
-  '/js/app-config.js',
-  '/js/data-mock.js',
-  '/js/api.js',
-  '/js/catalog.js',
-  '/js/departures.js',
-  '/js/estimator.js',
-  '/js/auth.js',
-  '/js/jamaah.js',
-  '/js/backoffice.js',
-  '/manifest.json'
+  '/assets/sdw-logo.png',
+  '/assets/hero-twilight.jpg',
+  '/assets/icon-192.png',
+  '/assets/icon-512.png',
+  '/js/pwa.js'
 ];
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('[ServiceWorker] Pre-caching offline assets...');
-      return cache.addAll(ASSETS_TO_CACHE);
-    }).then(() => self.skipWaiting())
+      return cache.addAll(PRECACHE_URLS).catch((err) => {
+        console.warn('[PWA SW] Pre-caching some assets failed:', err);
+      });
+    })
   );
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => {
+    caches.keys().then((cacheNames) => {
       return Promise.all(
-        keys.map((key) => {
-          if (key !== CACHE_NAME) {
-            console.log('[ServiceWorker] Cleaning old cache:', key);
-            return caches.delete(key);
-          }
-        })
+        cacheNames
+          .filter((cacheName) => cacheName !== CACHE_NAME)
+          .map((cacheName) => caches.delete(cacheName))
       );
     }).then(() => self.clients.claim())
   );
 });
 
 self.addEventListener('fetch', (event) => {
-  // Hanya tangani GET requests
-  if (event.request.method !== 'GET') return;
-
-  // Jangan cache request ke Google Apps Script atau eksternal API
-  const url = event.request.url;
-  if (url.includes('script.google.com') || url.includes('google-analytics')) {
+  // Hanya proses request GET http/https
+  if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
     return;
   }
 
-  // Network-First untuk HTML/Navigation agar perubahan halaman selalu fresh
-  if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
-    event.respondWith(
-      fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const clone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return networkResponse;
-        })
-        .catch(() => caches.match(event.request))
-    );
-    return;
-  }
-
-  // Cache-first dengan background network update untuk asset statis
+  // Network-first strategy: ambil dari internet dulu, jika offline baru ambil dari cache
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-          return networkResponse;
+    fetch(event.request)
+      .then((response) => {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
         }
-        const responseToCache = networkResponse.clone();
+
+        const responseToCache = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
           cache.put(event.request, responseToCache);
         });
-        return networkResponse;
-      }).catch(() => {
-        // Fallback jika offline dan membuka halaman app
-        if (event.request.headers.get('accept').includes('text/html')) {
-          return caches.match('/app.html');
-        }
-      });
-    })
+
+        return response;
+      })
+      .catch(() => {
+        // Jika offline, fallback ke cache
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) {
+            return cachedResponse;
+          }
+          // Jika navigasi halaman dan tidak ada di cache, arahkan ke index.html
+          if (event.request.mode === 'navigate') {
+            return caches.match('/index.html');
+          }
+        });
+      })
   );
 });

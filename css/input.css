@@ -450,3 +450,18 @@
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Accessibility: Larger text scale for elderly pilgrims */
+html.text-lg-active {
+  font-size: 110%;
+}
+
+/* PWA Standalone Mode adjustments */
+body.is-pwa-standalone #mainNavbar {
+  display: none !important;
+}
+
+body.is-pwa-standalone {
+  padding-top: env(safe-area-inset-top, 0px) !important;
+}
+

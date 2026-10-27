@@ -7,9 +7,11 @@
     <title>Pilihan Paket Umroh 1447H - 1448H | SDW UMROH</title>
     <meta name="description" content="Katalog resmi paket Umroh Reguler, VIP Khidmat Clock Tower, Ramadhan & Syawal, serta Umroh Plus Turki. Transparansi fasilitas bintang 5 & 4 tanpa biaya tersembunyi.">
     <link rel="canonical" href="https://sdwumroh.com/paket">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4C1D6B">
-    <link rel="icon" type="image/png" href="assets/hero-haram.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#143528">
+    <link rel="icon" type="image/png" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <script src="/js/pwa.js" defer></script>
 
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -697,7 +699,7 @@
             }
         });
     </script>
-    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
     <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
         <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
             <!-- 1. Beranda -->
@@ -716,29 +718,29 @@
                 <span class="text-[9.5px] font-extrabold mt-1 text-sdw-pine">Paket</span>
             </a>
 
-            <!-- 3. Konsultasi WA (Elevated Center CTA) -->
-            <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center -mt-4 transition group">
-                <div class="w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/35 ring-4 ring-white active:scale-95 transition-transform">
-                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+            <!-- 3. Buku Doa Offline (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer" aria-label="Buka Buku Doa Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-book-quran text-lg text-slate-950"></i>
                 </div>
-                <span class="text-[9.5px] font-extrabold mt-1 text-emerald-600">Konsul WA</span>
-            </a>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Buku Doa</span>
+            </button>
 
-            <!-- 4. Jadwal -->
+            <!-- 4. Kloter -->
             <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-calendar-days text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-semibold mt-1">Jadwal</span>
+                <span class="text-[9.5px] font-semibold mt-1">Kloter</span>
             </a>
 
-            <!-- 5. Estimasi / Kalkulator -->
-            <a href="/kalkulator" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
+            <!-- 5. Pengaturan (Aksesibilitas & PWA Settings) -->
+            <button type="button" onclick="window.openSettingsModal()" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer" aria-label="Buka Pengaturan">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-calculator text-sm"></i>
+                    <i class="fa-solid fa-gear text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-semibold mt-1">Estimasi</span>
-            </a>
+                <span class="text-[9.5px] font-semibold mt-1">Setelan</span>
+            </button>
         </div>
     </nav>
 </body>

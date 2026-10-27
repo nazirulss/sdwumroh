@@ -1,22 +1,27 @@
 {
-  "name": "SDW UMROH — Digital Umrah Platform",
-  "short_name": "SDW Umroh",
-  "description": "Platform Digital Perjalanan Ibadah Umroh Terpadu (One Journey, One Platform)",
-  "start_url": "/app",
+  "name": "SDW UMROH — Perjalanan Ibadah Penuh Ketenangan",
+  "short_name": "SDW UMROH",
+  "description": "Aplikasi Resmi Penyelenggara Perjalanan Umroh & Haji Khusus PT Sahabat Dhuha Wisata (One Journey, One Platform)",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0F3D2E",
-  "theme_color": "#0F3D2E",
-  "orientation": "portrait",
+  "background_color": "#0A1C14",
+  "theme_color": "#143528",
+  "orientation": "portrait-primary",
+  "categories": ["travel", "lifestyle", "utilities"],
   "icons": [
     {
-      "src": "assets/hero-haram.png",
+      "src": "/assets/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "assets/hero-haram.png",
+      "src": "/assets/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
