@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDW UMROH — Perjalanan Ibadah Penuh Ketenangan | One Journey, One Platform</title>
+
+    <!-- SEO & Metadata Dasar -->
+    <meta name="description" content="Platform digital resmi penyelenggara perjalanan Umroh SDW UMROH. Paket Umroh Reguler, VIP Khidmat, Ramadhan, bimbingan asatidz bersanad, akomodasi dekat pelataran Masjidil Haram, dan transparansi jadwal kloter.">
+    <meta name="keywords" content="Umroh Resmi Kemenag, Paket Umroh Jakarta, Umroh VIP Clock Tower, Umroh Ramadhan, Travel Umroh Terpercaya, Bimbingan Manasik Sunnah, SDW Umroh">
+    <meta name="author" content="PT Sahabat Dhuha Wisata (SDW UMROH)">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <link rel="canonical" href="https://sdwumroh.com/">
+
+    <!-- Open Graph (WhatsApp, Facebook, Telegram) -->
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="id_ID">
+    <meta property="og:url" content="https://sdwumroh.com/">
+    <meta property="og:site_name" content="SDW UMROH">
+    <meta property="og:title" content="SDW UMROH — Perjalanan Ibadah Penuh Ketenangan">
+    <meta property="og:description" content="Layanan digital resmi Umroh terpadu: kepastian seat, transparansi harga tanpa biaya tersembunyi, dan pendampingan ibadah sesuai sunnah.">
+    <meta property="og:image" content="assets/hero-haram.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SDW UMROH — Perjalanan Ibadah Penuh Ketenangan">
+    <meta name="twitter:description" content="One Journey, One Platform. Portal resmi pemesanan paket umroh, jadwal keberangkatan, dan simulasi biaya keluarga.">
+    <meta name="twitter:image" content="assets/hero-haram.png">
+
+    <!-- PWA & Mobile Icons -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/hero-haram.png">
+    <link rel="apple-touch-icon" href="assets/hero-haram.png">
+
+    <!-- Preconnect & Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Pre-compiled & Minified Local Tailwind CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=heroMobile1">
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== MAIN PUBLIC NAVIGATION (TRANSPARENT AT TOP, FROSTED WHITE ON SCROLL) ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-transparent transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="/" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none transition-colors">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-sdw-gold font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu (5 Items: Beranda + 4 Dropdown Groups) -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <!-- Nav Item: Beranda (Active on Home) -->
+                <a href="/" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+
+                <!-- Dropdown 1: Pilihan Paket -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/paket" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Pilihan Paket</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/paket" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-cubes"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Semua Paket Umroh</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Katalog lengkap &amp; komparasi</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=reguler" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-star-half-stroke"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Paket Umroh Reguler</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Hotel Bintang 4 Dekat Masjid</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=vip" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-crown text-amber-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Paket VIP Khidmat</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Pelataran Ka'bah &amp; Clock Tower</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=ramadhan" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-moon text-indigo-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Ramadhan &amp; Syawal</div>
+                                <div class="text-[10px] text-slate-500 font-medium">I'tikaf 10 Malam Terakhir</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=plus" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-plane-departure text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Umroh Plus Wisata Halal</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Turki, Dubai &amp; Mesir</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 2: Layanan (Jadwal, Kalkulator, Tanya Jawab) -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/jadwal" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Layanan</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/jadwal" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-calendar-check text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Jadwal Kloter &amp; Kuota</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Cek tanggal &amp; sisa kursi keberangkatan</div>
+                            </div>
+                        </a>
+                        <a href="/kalkulator" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-calculator text-amber-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Kalkulator Biaya &amp; Estimasi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Simulasi tipe kamar &amp; tabungan syariah</div>
+                            </div>
+                        </a>
+                        <a href="/faq" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-circle-question text-indigo-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Tanya Jawab &amp; Bantuan (FAQ)</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Syarat paspor, visa bio, lansia &amp; refund</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 3: Panduan & Ziarah -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/ziarah" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Panduan &amp; Ziarah</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/ziarah" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Peta Ziarah Haramain</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Makkah, Madinah &amp; Raudhah</div>
+                            </div>
+                        </a>
+                        <a href="/ziarah#manasik" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-book-quran"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Panduan Rukun &amp; Doa Sunnah</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Tata cara manasik sesuai sunnah</div>
+                            </div>
+                        </a>
+                        <a href="/ziarah#asatidz" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-tie"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Asatidz Pembimbing Bersanad</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Alumni Universitas Islam Madinah</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 4: Tentang Kami -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/tentang" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Tentang Kami</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/tentang" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-shield-halved text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Profil &amp; Legalitas Resmi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">PPIU Kemenag RI &amp; Akreditasi A</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#muthawwif" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-users"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Dewan Muthawwif &amp; Kru</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Pendampingan 24 Jam di Tanah Suci</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#testimoni" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-images"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Galeri &amp; Ulasan Jamaah</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Dokumentasi keberangkatan kloter</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Action Capsule: Hotline Pill (Desktop Portal Button Hidden) & Mobile Menu Toggle -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span class="hidden sm:inline">Hotline 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <!-- Mobile Hamburger Button -->
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== MOBILE NAVIGATION DRAWER ==================== -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <!-- Backdrop -->
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <!-- Offcanvas Sidebar -->
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <!-- Drawer Header -->
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Drawer Links -->
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="/" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-black border border-purple-200/80 transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda (Aktif)</span>
+                    </span>
+                    <i class="fa-solid fa-check text-xs text-sdw-pine"></i>
+                </a>
+
+                <!-- Collapsible Sub-menu: Pilihan Paket -->
+                <div class="rounded-xl border border-slate-200/80 overflow-hidden">
+                    <button type="button" onclick="toggleMobileSub('subPaket')" class="w-full flex items-center justify-between p-3 bg-slate-50/70 hover:bg-purple-50 text-slate-800 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-cubes text-sdw-gold text-xs w-4 text-center"></i>
+                            <span>Pilihan Paket</span>
+                        </span>
+                        <i id="subPaketIcon" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="subPaket" class="hidden px-4 py-2 bg-white space-y-1.5 text-xs font-semibold text-slate-600 border-t border-slate-100">
+                        <a href="/paket" class="block py-1.5 hover:text-sdw-pine">Semua Paket (Katalog)</a>
+                        <a href="/paket?cat=reguler" class="block py-1.5 hover:text-sdw-pine">Paket Umroh Reguler</a>
+                        <a href="/paket?cat=vip" class="block py-1.5 hover:text-sdw-pine">Paket VIP Khidmat</a>
+                        <a href="/paket?cat=ramadhan" class="block py-1.5 hover:text-sdw-pine">Paket Ramadhan &amp; Syawal</a>
+                        <a href="/paket?cat=plus" class="block py-1.5 hover:text-sdw-pine">Umroh Plus Wisata Halal</a>
+                    </div>
+                </div>
+
+                <!-- Collapsible Sub-menu: Layanan -->
+                <div class="rounded-xl border border-slate-100 overflow-hidden">
+                    <button type="button" onclick="toggleMobileSub('subLayanan')" class="w-full flex items-center justify-between p-3 bg-slate-50/70 hover:bg-purple-50 text-slate-800 transition">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-hand-holding-heart text-sdw-gold text-xs"></i>
+                            <span>Layanan</span>
+                        </span>
+                        <i id="subLayananIcon" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="subLayanan" class="hidden px-4 py-2 bg-white space-y-1.5 text-xs font-semibold text-slate-600 border-t border-slate-100">
+                        <a href="/jadwal" class="block py-1.5 hover:text-sdw-pine">Jadwal Kloter &amp; Sisa Kuota</a>
+                        <a href="/kalkulator" class="block py-1.5 hover:text-sdw-pine">Kalkulator Biaya &amp; Estimasi</a>
+                        <a href="/faq" class="block py-1.5 hover:text-sdw-pine">Tanya Jawab &amp; Bantuan (FAQ)</a>
+                    </div>
+                </div>
+
+                <!-- Collapsible Sub-menu: Panduan & Ziarah -->
+                <div class="rounded-xl border border-slate-100 overflow-hidden">
+                    <button type="button" onclick="toggleMobileSub('subZiarah')" class="w-full flex items-center justify-between p-3 bg-slate-50/70 hover:bg-purple-50 text-slate-800 transition">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs"></i>
+                            <span>Panduan &amp; Ziarah</span>
+                        </span>
+                        <i id="subZiarahIcon" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="subZiarah" class="hidden px-4 py-2 bg-white space-y-1.5 text-xs font-semibold text-slate-600 border-t border-slate-100">
+                        <a href="/ziarah" class="block py-1.5 hover:text-sdw-pine">Peta Ziarah Haramain</a>
+                        <a href="/ziarah#manasik" class="block py-1.5 hover:text-sdw-pine">Panduan Rukun &amp; Doa Sunnah</a>
+                        <a href="/ziarah#asatidz" class="block py-1.5 hover:text-sdw-pine">Asatidz Pembimbing Bersanad</a>
+                    </div>
+                </div>
+
+                <!-- Collapsible Sub-menu: Tentang Kami -->
+                <div class="rounded-xl border border-slate-100 overflow-hidden">
+                    <button type="button" onclick="toggleMobileSub('subTentang')" class="w-full flex items-center justify-between p-3 bg-slate-50/70 hover:bg-purple-50 text-slate-800 transition">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-sdw-gold text-xs"></i>
+                            <span>Tentang Kami</span>
+                        </span>
+                        <i id="subTentangIcon" class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="subTentang" class="hidden px-4 py-2 bg-white space-y-1.5 text-xs font-semibold text-slate-600 border-t border-slate-100">
+                        <a href="/tentang" class="block py-1.5 hover:text-sdw-pine">Profil &amp; Legalitas Resmi</a>
+                        <a href="/tentang#muthawwif" class="block py-1.5 hover:text-sdw-pine">Dewan Muthawwif &amp; Kru</a>
+                        <a href="/tentang#testimoni" class="block py-1.5 hover:text-sdw-pine">Galeri &amp; Ulasan Jamaah</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drawer Footer -->
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+                <a href="/app" class="w-full py-3 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>Portal Jamaah &amp; Backoffice</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== HERO SECTION (SCENIC TWILIGHT HARAMAIN & 5W+1H WHAT) ==================== -->
+    <section class="relative bg-[#1E062B] text-white overflow-hidden pt-24 sm:pt-28 lg:pt-32 pb-20 sm:pb-24 lg:pb-28">
+        <!-- Background Imagery (High-Definition Scenic Photography of Masjidil Haram at Twilight) -->
+        <div class="absolute inset-0 z-0">
+            <img src="assets/hero-twilight.jpg" alt="Masjidil Haram Makkah saat Senja" class="w-full h-full object-cover object-center scale-100" fetchpriority="high">
+            <!-- Cinematic Twilight Vignette: Transparent on the right/center to clearly showcase Ka'bah & minarets; darker gradient on the left to guarantee 100% white text legibility -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#180424]/92 via-[#220732]/70 to-[#12031B]/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1A0526] via-transparent to-black/25"></div>
+        </div>
+
+        <!-- Atmospheric Ambient Glow Orbs -->
+        <div class="absolute -top-24 left-1/3 -translate-x-1/2 w-[650px] h-[650px] bg-gradient-to-br from-amber-500/15 via-sdw-gold/10 to-transparent rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/4 right-8 w-[500px] h-[500px] bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-4 left-12 w-[400px] h-[400px] bg-emerald-400/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+                <!-- Left Column: Copy & Actions (col-span-6) -->
+                <div class="lg:col-span-6 space-y-6">
+                    <!-- Value Proposition Micro-Badge -->
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold shadow-inner">
+                        <i class="fa-solid fa-shield-halved text-sdw-gold"></i>
+                        <span>Penyelenggara Ibadah Umroh Resmi Kemenag RI</span>
+                    </div>
+
+                    <h1 class="hero-title-shadow text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight min-h-[4.4rem] sm:min-h-[5.5rem] lg:min-h-[6.5rem]">
+                        <span class="hero-white-text block">Perjalanan Ibadah Umroh</span>
+                        <span class="hero-rotating-wrapper inline-block">
+                            <span id="heroAnimatedText" class="text-gold-gradient inline-block hero-text-in">Penuh Ketenangan &amp; Keberkahan.</span>
+                        </span>
+                    </h1>
+
+                    <p class="hero-desc-shadow text-sm sm:text-base text-slate-100 leading-relaxed font-semibold max-w-xl">
+                        Dari konsultasi awal, verifikasi paspor, manasik bersanad, hingga bimbingan thawaf di pelataran Ka'bah. Rasakan pengalaman satu pintu terpadu tanpa biaya tersembunyi.
+                    </p>
+
+                    <!-- Hero CTAs (1 Baris Sejajar di Mobile & Desktop) -->
+                    <div class="pt-2 grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:items-center sm:gap-3.5">
+                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-1.5 sm:gap-2.5 px-2.5 sm:px-7 py-3 sm:py-3.5 rounded-full bg-sdw-gold hover:bg-amber-400 text-sdw-pine font-extrabold text-xs sm:text-sm shadow-xl shadow-amber-950/20 transition transform active:scale-95 cursor-pointer whitespace-nowrap text-center">
+                            <i class="fa-brands fa-whatsapp text-sm sm:text-lg shrink-0"></i>
+                            <span class="hidden sm:inline">Konsultasi via WA</span>
+                            <span class="inline sm:hidden">Konsultasi WA</span>
+                            <span class="w-5 h-5 rounded-full bg-sdw-pine/15 hidden md:flex items-center justify-center text-[10px] ml-0.5">
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </span>
+                        </a>
+                        <a href="#katalogPaket" class="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-6 py-3 sm:py-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white font-bold text-xs sm:text-sm backdrop-blur-md border border-white/25 transition cursor-pointer whitespace-nowrap text-center">
+                            <span class="hidden sm:inline">Lihat Pilihan Paket</span>
+                            <span class="inline sm:hidden">Pilihan Paket</span>
+                            <i class="fa-solid fa-arrow-down text-[10px] sm:text-xs shrink-0"></i>
+                        </a>
+                    </div>
+
+                    <!-- Live Social Proof Banner (3 Poin 1 Baris Sejajar di Mobile & Desktop) -->
+                    <div class="pt-4 sm:pt-5 border-t border-white/15 flex items-center justify-between sm:justify-start gap-1 sm:gap-5 text-[10px] sm:text-xs text-slate-200">
+                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0" title="Seat Saudia &amp; Garuda Terkunci">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-xs sm:text-sm shrink-0"></i>
+                            <span class="hidden sm:inline">Seat Saudia &amp; Garuda Terkunci</span>
+                            <span class="inline sm:hidden font-semibold">Seat Terkunci</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0" title="Hotel Pelataran Haramain">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-xs sm:text-sm shrink-0"></i>
+                            <span class="hidden sm:inline">Hotel Pelataran Haramain</span>
+                            <span class="inline sm:hidden font-semibold">Hotel Pelataran</span>
+                        </div>
+                        <div class="flex items-center gap-1 sm:gap-1.5 shrink-0" title="Muthawwif Alumni UIM">
+                            <i class="fa-solid fa-circle-check text-emerald-400 text-xs sm:text-sm shrink-0"></i>
+                            <span class="hidden sm:inline">Muthawwif Alumni UIM</span>
+                            <span class="inline sm:hidden font-semibold">Muthawwif UIM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Staggered 3-Card Floating Gallery with Golden Aura -->
+                <div class="lg:col-span-6 lg:pl-2 relative">
+                    <!-- Subtle Glow Halo behind Center Card -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-amber-400/25 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3.5 items-center relative z-10">
+                        <!-- Card 1: Madinah (Left, Staggered) -->
+                        <div class="relative h-[270px] sm:h-[340px] lg:h-[380px] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-white/25 shadow-xl group cursor-pointer hover:border-sdw-gold/80 hover:-translate-y-1.5 transition duration-500 mt-6 sm:mt-8">
+                            <img src="assets/pkg-ramadhan.png" alt="Masjid Nabawi Madinah" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                            <div class="absolute top-3 left-2.5 sm:left-3">
+                                <span class="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20 shadow-xs">
+                                    Madinah
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3 left-2.5 right-2.5 sm:left-3 sm:right-3 text-white">
+                                <h4 class="font-extrabold text-xs sm:text-sm leading-tight drop-shadow-md">Masjid Nabawi</h4>
+                                <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Raudhah Syarifah</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Ka'bah Makkah (Center, Hero Principal, Tallest & Elevated with Glow) -->
+                        <div class="relative h-[310px] sm:h-[390px] lg:h-[440px] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-sdw-gold shadow-2xl shadow-sdw-gold/40 group cursor-pointer hover:scale-105 transition duration-500 z-10 -translate-y-2 sm:-translate-y-3 ring-2 ring-sdw-gold/50">
+                            <img src="assets/hero-haram.png" alt="Ka'bah Masjidil Haram" class="w-full h-full object-cover object-[75%_center] group-hover:scale-110 transition duration-700" fetchpriority="high">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent"></div>
+                            <div class="absolute top-3 left-3">
+                                <span class="px-2.5 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-extrabold bg-sdw-gold text-sdw-pine uppercase tracking-wider shadow">
+                                    Makkah
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3.5 left-3 right-3 text-white">
+                                <h4 class="font-extrabold text-xs sm:text-base leading-tight drop-shadow-md text-amber-200">Ka'bah Al-Musyarrafah</h4>
+                                <p class="text-[10px] sm:text-xs text-slate-200 mt-1 line-clamp-2">Pusat Ibadah &amp; Thawaf Bersanad</p>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Hotel Ring-1 (Right, Staggered) -->
+                        <div class="relative h-[280px] sm:h-[350px] lg:h-[390px] rounded-2xl sm:rounded-3xl overflow-hidden border-2 border-white/25 shadow-xl group cursor-pointer hover:border-sdw-gold/80 hover:-translate-y-1.5 transition duration-500 mt-8 sm:mt-12">
+                            <img src="assets/pkg-vip-khidmat.png" alt="Hotel Bintang 5 Pelataran" class="w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                            <div class="absolute top-3 left-2.5 sm:left-3">
+                                <span class="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20 shadow-xs">
+                                    Bintang 5
+                                </span>
+                            </div>
+                            <div class="absolute bottom-3 left-2.5 right-2.5 sm:left-3 sm:right-3 text-white">
+                                <h4 class="font-extrabold text-xs sm:text-sm leading-tight drop-shadow-md">Pelataran Haram</h4>
+                                <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Kenyamanan Maksimal</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FLOATING QUICK FILTER BAR (OVERLAPPING HERO & CONTENT) ==================== -->
+    <div class="relative z-30 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 sm:-mt-12 lg:-mt-14">
+        <div class="bg-white rounded-3xl lg:rounded-full shadow-2xl shadow-purple-950/15 border border-slate-200/90 p-3 sm:p-4 lg:p-3.5 backdrop-blur-md">
+            <form id="heroQuickFilterForm" onsubmit="handleQuickFilter(event)" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 lg:gap-0 lg:divide-x lg:divide-slate-200 items-center">
+                <!-- 1. Pilihan Paket (col-span-3) -->
+                <div class="lg:col-span-3 lg:px-4">
+                    <label for="qfPackage" class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-kaaba text-sdw-pine"></i> Pilihan Paket
+                    </label>
+                    <select id="qfPackage" class="w-full bg-transparent hover:bg-slate-50 focus:bg-white text-sdw-charcoal font-bold text-xs sm:text-sm rounded-lg px-2 py-2 border-0 focus:ring-2 focus:ring-sdw-pine outline-hidden transition cursor-pointer">
+                        <option value="ALL">Semua Paket Pilihan</option>
+                        <option value="VIP_KHIDMAT">VIP Khidmat (Bintang 5)</option>
+                        <option value="REGULER_SYAWAL">Reguler Syawal (Favorit)</option>
+                        <option value="PLUS_TURKI">Plus Wisata Halal Turki</option>
+                    </select>
+                </div>
+
+                <!-- 2. Jadwal / Musim (col-span-3) -->
+                <div class="lg:col-span-3 lg:px-4">
+                    <label for="qfSeason" class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-calendar-days text-sdw-pine"></i> Bulan / Musim
+                    </label>
+                    <select id="qfSeason" class="w-full bg-transparent hover:bg-slate-50 focus:bg-white text-sdw-charcoal font-bold text-xs sm:text-sm rounded-lg px-2 py-2 border-0 focus:ring-2 focus:ring-sdw-pine outline-hidden transition cursor-pointer">
+                        <option value="ALL">Semua Musim Keberangkatan</option>
+                        <option value="SYAWAL_2026">Syawal 1447H (April 2026)</option>
+                        <option value="DZULQADAH_2026">Dzulqa'dah 1447H (Mei 2026)</option>
+                        <option value="AWAL_1448">Awal Musim 1448H (Agustus 2026)</option>
+                        <option value="AKHIR_1448">Akhir Tahun 1448H (Desember 2026)</option>
+                    </select>
+                </div>
+
+                <!-- 3. Tipe Kamar (col-span-2) -->
+                <div class="lg:col-span-2 lg:px-4">
+                    <label for="qfRoom" class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-bed text-sdw-pine"></i> Tipe Kamar
+                    </label>
+                    <select id="qfRoom" class="w-full bg-transparent hover:bg-slate-50 focus:bg-white text-sdw-charcoal font-bold text-xs sm:text-sm rounded-lg px-2 py-2 border-0 focus:ring-2 focus:ring-sdw-pine outline-hidden transition cursor-pointer">
+                        <option value="quad">Quad (4 Orang)</option>
+                        <option value="triple">Triple (3 Orang)</option>
+                        <option value="double">Double (2 Orang)</option>
+                    </select>
+                </div>
+
+                <!-- 4. Jumlah Jamaah (col-span-2) -->
+                <div class="lg:col-span-2 lg:px-4">
+                    <label for="qfPax" class="block text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-users text-sdw-pine"></i> Jamaah
+                    </label>
+                    <select id="qfPax" class="w-full bg-transparent hover:bg-slate-50 focus:bg-white text-sdw-charcoal font-bold text-xs sm:text-sm rounded-lg px-2 py-2 border-0 focus:ring-2 focus:ring-sdw-pine outline-hidden transition cursor-pointer">
+                        <option value="1">1 Orang</option>
+                        <option value="2" selected>2 Orang (Pasangan)</option>
+                        <option value="4">4 Orang (Keluarga)</option>
+                        <option value="6">6+ Orang (Rombongan)</option>
+                    </select>
+                </div>
+
+                <!-- 5. Tombol Aksi (col-span-2) -->
+                <div class="lg:col-span-2 lg:pl-3">
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl lg:rounded-full bg-sdw-pine hover:bg-sdw-pineLight text-white font-extrabold text-xs sm:text-sm shadow-lg hover:shadow-xl transition transform active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-magnifying-glass text-amber-300"></i>
+                        <span>Cari Jadwal</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 1: KATALOG PAKET UMROH (HOT DEALS STYLE) ==================== -->
+    <section id="katalogPaket" class="pt-16 sm:pt-20 lg:pt-24 pb-16 sm:pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-anchor-target">
+        <div class="text-center max-w-3xl mx-auto mb-10">
+            <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider text-rose-700 bg-rose-50 border border-rose-200 shadow-xs">
+                <i class="fa-solid fa-fire text-rose-500"></i> PROGRAM PILIHAN &amp; EARLY BIRD 1448H
+            </span>
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sdw-pine mt-3 tracking-tight">
+                Katalog Paket Umroh Penuh Berkah
+            </h2>
+            <p class="text-xs sm:text-sm text-sdw-muted mt-2 max-w-2xl mx-auto leading-relaxed">
+                Pilih paket perjalanan yang sesuai dengan kebutuhan keluarga Anda. Manfaatkan potongan diskon Early Bird dengan kepastian fasilitas transparan.
+            </p>
+
+            <!-- Filter Kategori Tabs -->
+            <div class="flex flex-wrap items-center justify-center gap-2 mt-7">
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('ALL', this)" data-category="ALL" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-sdw-pine text-white shadow-md">
+                    Semua Paket
+                </button>
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('REGULER', this)" data-category="REGULER" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal border border-sdw-border hover:bg-sdw-sand">
+                    Reguler 9 Hari
+                </button>
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('VIP', this)" data-category="VIP" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal border border-sdw-border hover:bg-sdw-sand">
+                    VIP Clock Tower
+                </button>
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('RAMADHAN', this)" data-category="RAMADHAN" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal border border-sdw-border hover:bg-sdw-sand">
+                    Spesial Ramadhan
+                </button>
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('PLUS_TOUR', this)" data-category="PLUS_TOUR" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal border border-sdw-border hover:bg-sdw-sand">
+                    Plus Turki
+                </button>
+                <button type="button" onclick="SDW_CATALOG.setCategoryFilter('HEMAT', this)" data-category="HEMAT" class="category-filter-btn px-4 py-2 rounded-xl text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal border border-sdw-border hover:bg-sdw-sand">
+                    Syariah Hemat
+                </button>
+            </div>
+        </div>
+
+        <!-- Dynamic Package Grid (Rendered by js/catalog.js) -->
+        <div id="katalog-package-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Loading Placeholder -->
+            <div class="col-span-full text-center py-12">
+                <i class="fa-solid fa-spinner fa-spin text-2xl text-sdw-pine"></i>
+                <p class="text-xs text-sdw-muted mt-2">Memuat daftar paket...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 2: JADWAL KEBERANGKATAN ==================== -->
+    <section id="jadwalKeberangkatan" class="py-16 bg-white border-y border-sdw-border scroll-anchor-target">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-xs font-extrabold uppercase tracking-wider text-sdw-pine bg-sdw-sand px-3.5 py-1.5 rounded-full border border-sdw-border">
+                        Transparansi Kloter
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-sdw-pine mt-2">
+                        Jadwal Keberangkatan &amp; Sisa Kuota Kursi
+                    </h2>
+                    <p class="text-xs sm:text-sm text-sdw-muted mt-1">
+                        Informasi kuota kursi nyata per kloter keberangkatan. Data diperbarui secara berkala.
+                    </p>
+                </div>
+                <div class="text-xs text-sdw-muted">
+                    <i class="fa-solid fa-circle-info text-sdw-gold mr-1"></i>
+                    Batas konfirmasi paspor H-30 sebelum tanggal berangkat.
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="overflow-x-auto rounded-3xl border border-sdw-border shadow-soft bg-white">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-sdw-pine text-white text-xs font-bold uppercase tracking-wider">
+                        <tr>
+                            <th class="py-4 px-4">Tanggal Kloter</th>
+                            <th class="py-4 px-4">Paket Program</th>
+                            <th class="py-4 px-4">Maskapai &amp; Embarkasi</th>
+                            <th class="py-4 px-4">Kapasitas Kursi</th>
+                            <th class="py-4 px-4">Status</th>
+                            <th class="py-4 px-4 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="departures-table-body" class="divide-y divide-sdw-border">
+                        <!-- Rendered by js/departures.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION: BENTO-GRID DESTINASI ZIARAH SUCI ==================== -->
+    <section id="ziarahHaramain" class="py-16 sm:py-20 lg:py-24 bg-sdw-sand/50 border-t border-sdw-border/80 scroll-anchor-target">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header Section (TicketPlan Inspired) -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider text-sdw-gold bg-sdw-goldLight border border-sdw-gold/30">
+                    <i class="fa-solid fa-map-location-dot"></i> Napak Tilas Sirah Nabawiyah
+                </span>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sdw-pine mt-3 tracking-tight">
+                    Rangkaian Ziarah Suci &amp; Saksi Sejarah Islam
+                </h2>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-2.5 max-w-2xl mx-auto leading-relaxed">
+                    Setiap jejak perjalanan ibadah sarat akan hikmah dan keutamaan doa. Dipandu langsung oleh asatidz dan muthawwif bersanad yang memahami sejarah peradaban Islam.
+                </p>
+            </div>
+
+            <!-- Bento-Grid Layout (1 Large Featured Card + 6 Balanced Cards) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-stretch">
+                <!-- Left: Large Featured Card (Makkah Al-Mukarramah & Ka'bah) - Col-Span-5 -->
+                <div class="lg:col-span-5 relative rounded-3xl overflow-hidden shadow-xl border-2 border-sdw-gold/30 group min-h-[440px] sm:min-h-[500px] lg:min-h-[520px] flex flex-col justify-end p-6 sm:p-8 cursor-pointer">
+                    <img src="assets/hero-haram.png" alt="Masjidil Haram Makkah" class="absolute inset-0 w-full h-full object-cover object-[75%_center] group-hover:scale-105 transition duration-700" fetchpriority="high">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10"></div>
+                    
+                    <!-- Top Badge -->
+                    <div class="absolute top-5 left-5">
+                        <span class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[10px] font-extrabold bg-sdw-gold text-sdw-pine uppercase tracking-wider shadow">
+                            <i class="fa-solid fa-kaaba"></i> Pusat Ibadah Haramain
+                        </span>
+                    </div>
+
+                    <!-- Bottom Content -->
+                    <div class="relative z-10 text-white">
+                        <span class="text-xs font-extrabold text-sdw-gold uppercase tracking-wider block">
+                            Makkah Al-Mukarramah
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-black text-white leading-tight mt-1">
+                            Masjidil Haram &amp; Pelataran Ka'bah
+                        </h3>
+                        <p class="text-xs sm:text-sm text-slate-200 mt-2.5 leading-relaxed font-normal">
+                            Tempat tertumpahnya jutaan doa kaum muslimin. Thawaf qudum, sa'i antara bukit Shafa &amp; Marwah, serta shalat di Hijr Ismail dipandu penuh ketenangan tanpa tergesa-gesa.
+                        </p>
+                        <div class="pt-4 flex items-center gap-3">
+                            <a href="#katalogPaket" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-sdw-gold hover:bg-amber-400 text-sdw-pine text-xs font-extrabold transition shadow-md">
+                                <span>Pilihan Paket Makkah</span>
+                                <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: 6 Balanced Grid Cards (2 rows x 3 columns) - Col-Span-7 -->
+                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-4">
+                    <!-- Card 1: Raudhah Syarifah (Madinah) -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-reguler-syawal.png" alt="Masjid Nabawi Madinah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Madinah
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Masjid Nabawi</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Raudhah Syarifah</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Taman Surga &amp; Makam Rasulullah ﷺ</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Jabal Uhud & Makam Syuhada -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-hemat.png" alt="Jabal Uhud Madinah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Ziarah Sirah
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Perang Uhud</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Jabal Uhud &amp; Syuhada</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Bukit yang mencintai kaum mukminin</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Masjid Quba -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-reguler-syawal.png" alt="Masjid Quba Madinah" class="absolute inset-0 w-full h-full object-cover object-[30%_center] group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Sunnah Nabawi
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Masjid Pertama</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Masjid Quba</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Pahala shalat senilai 1x umroh</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4: Kota Sejuk Thaif -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-ramadhan.png" alt="Wisata Sejuk Kota Thaif" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Wisata Alam
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Pegunungan Hijaz</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Kota Sejuk Thaif</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Kebun Mawar &amp; Miqat Qarnul Manazil</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5: Akomodasi Bintang 5 Pelataran -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-vip-khidmat.png" alt="Hotel Bintang 5 Pelataran Ka'bah" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Fasilitas VIP
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Hotel Ring-1</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Pelataran Ka'bah</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Akses jalan kaki &lt;100m ke Masjid</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 6: Istanbul & Selat Bosphorus -->
+                    <div class="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-md hover:shadow-xl border border-sdw-border/80 group h-[220px] sm:h-[245px] cursor-pointer flex flex-col justify-end p-4">
+                        <img src="assets/pkg-plus-turki.png" alt="Hagia Sophia Istanbul Turki" class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent"></div>
+                        <div class="absolute top-3 left-3">
+                            <span class="px-2.5 py-0.5 rounded-full text-[9px] font-bold bg-white/20 backdrop-blur-md text-white border border-white/20">
+                                Plus Wisata Halal
+                            </span>
+                        </div>
+                        <div class="relative z-10 text-white">
+                            <span class="text-[10px] text-sdw-gold font-bold uppercase tracking-wider block">Turki Utsmani</span>
+                            <h4 class="text-sm font-extrabold leading-snug mt-0.5 drop-shadow">Hagia Sophia &amp; Bosphorus</h4>
+                            <p class="text-[10px] text-slate-200 mt-0.5 line-clamp-1">Jejak kejayaan peradaban Islam</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Action Button (TicketPlan Inspired) -->
+            <div class="text-center mt-12">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20rute%20dan%20itinerary%20ziarah." target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-sdw-pine hover:bg-sdw-pineLight text-white font-extrabold text-xs sm:text-sm shadow-xl hover:shadow-2xl transition transform active:scale-95 cursor-pointer border border-sdw-gold/30">
+                    <i class="fa-solid fa-map-location-dot text-sdw-gold text-base"></i>
+                    <span>Konsultasikan Rute &amp; Jadwal Ziarah Lengkap</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION: TRUST & GUARANTEE (WHY TRAVEL WITH US - TICKETPLAN STYLE) ==================== -->
+    <section id="keunggulan" class="relative overflow-hidden py-18 sm:py-24 border-y border-sdw-border/80 scroll-anchor-target">
+        <!-- Panoramic Scenic Background -->
+        <div class="absolute inset-0 z-0">
+            <img src="assets/hero-twilight.jpg" alt="" class="w-full h-full object-cover object-bottom filter brightness-60">
+            <div class="absolute inset-0 bg-[#220732]/85 backdrop-blur-[2px]"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-sdw-gold text-sdw-pine shadow">
+                    <i class="fa-solid fa-shield-halved"></i> 5 Pasti Umroh Kemenag RI
+                </span>
+                <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white mt-3 tracking-tight">
+                    Standar Kepastian &amp; Kenyamanan Ibadah Anda
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-200 mt-2.5 max-w-2xl mx-auto leading-relaxed">
+                    Prinsip keterbukaan penuh tanpa biaya tersembunyi, izin PPIU resmi terakreditasi, dan pendampingan ibadah intensif hingga kembali ke tanah air.
+                </p>
+            </div>
+
+            <!-- 4 Glassmorphic Guarantee Cards (Matches TicketPlan Why Travel With Us) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <!-- Card 1: 100% Seat Terkunci -->
+                <div class="bg-white/95 hover:bg-white rounded-3xl p-6 border border-white/80 shadow-2xl hover:-translate-y-1.5 transition duration-300 flex flex-col justify-between text-sdw-charcoal">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sdw-pine/10 text-sdw-pine flex items-center justify-center text-xl mb-4 border border-sdw-pine/20">
+                            <i class="fa-solid fa-plane-circle-check"></i>
+                        </div>
+                        <span class="text-[10px] text-sdw-gold font-extrabold uppercase tracking-wider block">Pasti Terbang</span>
+                        <h4 class="text-base font-extrabold text-sdw-pine mt-1">Blok Kursi Terkunci</h4>
+                        <p class="text-xs text-sdw-muted mt-2 leading-relaxed">
+                            Seat Saudia &amp; Garuda telah dibooking di awal. Bebas cemas jadwal digeser atau transit tak terjadwal.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-sdw-border/80 flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
+                        <i class="fa-solid fa-check"></i> 100% Kepastian Tiket PP
+                    </div>
+                </div>
+
+                <!-- Card 2: Legalitas PPIU Resmi -->
+                <div class="bg-white/95 hover:bg-white rounded-3xl p-6 border border-white/80 shadow-2xl hover:-translate-y-1.5 transition duration-300 flex flex-col justify-between text-sdw-charcoal">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sdw-pine/10 text-sdw-pine flex items-center justify-center text-xl mb-4 border border-sdw-pine/20">
+                            <i class="fa-solid fa-passport"></i>
+                        </div>
+                        <span class="text-[10px] text-sdw-gold font-extrabold uppercase tracking-wider block">Pasti Visa &amp; Izin</span>
+                        <h4 class="text-base font-extrabold text-sdw-pine mt-1">PPIU No. U.123/2026</h4>
+                        <p class="text-xs text-sdw-muted mt-2 leading-relaxed">
+                            Izin resmi Kemenag RI dengan akreditasi A, asuransi perjalanan syariah, dan visa terbit sebelum berangkat.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-sdw-border/80 flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
+                        <i class="fa-solid fa-check"></i> Terdaftar di Siskopatuh
+                    </div>
+                </div>
+
+                <!-- Card 3: Hotel Ring-1 -->
+                <div class="bg-white/95 hover:bg-white rounded-3xl p-6 border border-white/80 shadow-2xl hover:-translate-y-1.5 transition duration-300 flex flex-col justify-between text-sdw-charcoal">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sdw-pine/10 text-sdw-pine flex items-center justify-center text-xl mb-4 border border-sdw-pine/20">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <span class="text-[10px] text-sdw-gold font-extrabold uppercase tracking-wider block">Pasti Akomodasi</span>
+                        <h4 class="text-base font-extrabold text-sdw-pine mt-1">Pelataran Masjid</h4>
+                        <p class="text-xs text-sdw-muted mt-2 leading-relaxed">
+                            Hotel bintang 4 &amp; 5 berjarak dekat pelataran Ka'bah &amp; Nabawi, ramah untuk lansia dan keluarga.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-sdw-border/80 flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
+                        <i class="fa-solid fa-check"></i> Jarak Jalan Kaki &lt;100m
+                    </div>
+                </div>
+
+                <!-- Card 4: Bimbingan Manasik Bersanad -->
+                <div class="bg-white/95 hover:bg-white rounded-3xl p-6 border border-white/80 shadow-2xl hover:-translate-y-1.5 transition duration-300 flex flex-col justify-between text-sdw-charcoal">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-sdw-pine/10 text-sdw-pine flex items-center justify-center text-xl mb-4 border border-sdw-pine/20">
+                            <i class="fa-solid fa-book-quran"></i>
+                        </div>
+                        <span class="text-[10px] text-sdw-gold font-extrabold uppercase tracking-wider block">Pasti Bimbingan</span>
+                        <h4 class="text-base font-extrabold text-sdw-pine mt-1">Asatidz Bersanad</h4>
+                        <p class="text-xs text-sdw-muted mt-2 leading-relaxed">
+                            Didampingi asatidz alumni UIM &amp; Al-Azhar dari manasik pra-keberangkatan hingga thawaf di Makkah.
+                        </p>
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-sdw-border/80 flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
+                        <i class="fa-solid fa-check"></i> Bimbingan Sunnah Shahih
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 3: KALKULATOR ESTIMASI BIAYA KELUARGA ==================== -->
+    <section id="estimatorBiaya" class="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-anchor-target">
+        <div class="bg-gradient-to-br from-sdw-pine to-sdw-pineLight text-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl overflow-hidden relative">
+            <div class="max-w-3xl mb-8">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-sdw-gold bg-white/10 px-3.5 py-1.5 rounded-full border border-white/20">
+                    Transparansi Anggaran
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-3">
+                    Kalkulator Estimasi Biaya Umroh Keluarga
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-200 mt-2">
+                    Rencanakan keberangkatan bersama orang tua, pasangan, atau anak-anak dengan simulasi biaya dan skema termin pembayaran transparan.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                <!-- Input Controls -->
+                <div class="lg:col-span-7 bg-white text-sdw-charcoal rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+                    <!-- Paket Selector -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-sdw-muted mb-2">Pilih Program Paket</label>
+                        <select id="est-package-select" class="w-full bg-sdw-sand border border-sdw-border rounded-xl px-4 py-3 text-sm font-bold text-sdw-pine outline-none focus:ring-2 focus:ring-sdw-gold transition">
+                            <option value="PKG-000001">Umroh Reguler Syawal Barakah (9 Hari)</option>
+                            <option value="PKG-000002">Umroh VIP Khidmat Akhir Tahun (12 Hari)</option>
+                            <option value="PKG-000003">Umroh Plus Turki Musim Semi (13 Hari)</option>
+                            <option value="PKG-000004">Umroh Awal Ramadhan 1448H (10 Hari)</option>
+                            <option value="PKG-000005">Umroh Syariah Bintang Tiga Hemat (9 Hari)</option>
+                        </select>
+                    </div>
+
+                    <!-- Jumlah Jamaah Dewasa & Anak -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-sdw-sand rounded-xl border border-sdw-border">
+                            <span class="text-xs font-bold text-sdw-pine block">Jamaah Dewasa (≥12 Th)</span>
+                            <div class="flex items-center justify-between mt-3">
+                                <button type="button" onclick="SDW_ESTIMATOR.adjustAdults(-1)" class="w-8 h-8 rounded-lg bg-white border border-sdw-border font-bold text-sdw-pine hover:bg-slate-100 flex items-center justify-center cursor-pointer">-</button>
+                                <span id="est-adult-count" class="text-lg font-extrabold text-sdw-pine">2</span>
+                                <button type="button" onclick="SDW_ESTIMATOR.adjustAdults(1)" class="w-8 h-8 rounded-lg bg-white border border-sdw-border font-bold text-sdw-pine hover:bg-slate-100 flex items-center justify-center cursor-pointer">+</button>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-sdw-sand rounded-xl border border-sdw-border">
+                            <span class="text-xs font-bold text-sdw-pine block">Jamaah Anak (&lt;12 Th)</span>
+                            <div class="flex items-center justify-between mt-3">
+                                <button type="button" onclick="SDW_ESTIMATOR.adjustChildren(-1)" class="w-8 h-8 rounded-lg bg-white border border-sdw-border font-bold text-sdw-pine hover:bg-slate-100 flex items-center justify-center cursor-pointer">-</button>
+                                <span id="est-child-count" class="text-lg font-extrabold text-sdw-pine">0</span>
+                                <button type="button" onclick="SDW_ESTIMATOR.adjustChildren(1)" class="w-8 h-8 rounded-lg bg-white border border-sdw-border font-bold text-sdw-pine hover:bg-slate-100 flex items-center justify-center cursor-pointer">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tipe Kamar -->
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-sdw-muted mb-2">Tipe Kamar Hotel</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button type="button" data-room="QUAD" class="est-room-btn px-3 py-2.5 rounded-xl border border-sdw-border text-xs font-bold transition cursor-pointer bg-sdw-pine text-white shadow">
+                                Quad (Sekamar 4)
+                            </button>
+                            <button type="button" data-room="TRIPLE" class="est-room-btn px-3 py-2.5 rounded-xl border border-sdw-border text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal hover:bg-sdw-sand">
+                                Triple (Sekamar 3)
+                            </button>
+                            <button type="button" data-room="DOUBLE" class="est-room-btn px-3 py-2.5 rounded-xl border border-sdw-border text-xs font-bold transition cursor-pointer bg-white text-sdw-charcoal hover:bg-sdw-sand">
+                                Double (Sekamar 2)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Summary -->
+                <div class="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/20 flex flex-col justify-between space-y-6">
+                    <div>
+                        <span class="text-xs text-sdw-gold uppercase font-bold tracking-wider block">Ringkasan Estimasi Biaya</span>
+                        <div class="text-3xl font-extrabold text-white mt-2" id="est-total-amount">
+                            Rp 0
+                        </div>
+                        <div class="text-xs text-slate-300 mt-1" id="est-total-pax">
+                            2 Jamaah
+                        </div>
+                        <div class="text-xs text-sdw-gold mt-1 font-semibold" id="est-price-per-pax">
+                            -
+                        </div>
+
+                        <!-- Diskon Keluarga Badge -->
+                        <div id="est-discount-box" class="hidden mt-3 p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold flex items-center justify-between">
+                            <span>Diskon Keluarga (≥4 Pax)</span>
+                            <span id="est-discount-amount">- Rp 0</span>
+                        </div>
+                    </div>
+
+                    <!-- Termin DP & Pelunasan -->
+                    <div class="p-4 bg-black/20 rounded-xl space-y-2 text-xs border border-white/10">
+                        <div class="flex justify-between items-center text-slate-300">
+                            <span>Uang Muka (DP Booking Seat)</span>
+                            <span class="font-bold text-white text-sm" id="est-dp-amount">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-slate-300 border-t border-white/10 pt-2">
+                            <span>Pelunasan (H-30 Berangkat)</span>
+                            <span class="font-bold text-sdw-gold text-sm" id="est-pelunasan-amount">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <a id="est-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-3.5 px-4 rounded-xl bg-sdw-gold hover:bg-amber-400 text-sdw-pine font-extrabold text-xs sm:text-sm text-center shadow-lg transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Konsultasi Rencana Biaya Ini</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 4: BIMBINGAN ASATIDZ & ZIARAH ==================== -->
+    <section id="keunggulan" class="py-16 bg-white border-t border-sdw-border scroll-anchor-target">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-sdw-gold bg-sdw-goldLight px-3.5 py-1.5 rounded-full border border-sdw-gold/30">
+                    Bimbingan Ibadah Sesuai Sunnah
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-sdw-pine mt-3">
+                    Didampingi Asatidz Berpengalaman &amp; Bersanad
+                </h2>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-2">
+                    Kami memastikan setiap rukun dan tata cara ibadah umroh dipandu secara teliti, sabar, dan sesuai dalil hadits shahih.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-3xl bg-sdw-sand border border-sdw-border hover:shadow-card transition">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="font-extrabold text-base text-sdw-pine">Ustadz DR. H. Muhammad Salman, Lc., M.A.</h3>
+                    <p class="text-xs text-sdw-gold font-bold mt-1">Al-Azhar Kairo • Sanad Fiqih Manasik</p>
+                    <p class="text-xs text-sdw-muted mt-3 leading-relaxed">
+                        Membimbing manasik teori sebelum berangkat serta pendampingan langsung ihram, thawaf, dan tahallul di Masjidil Haram.
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-3xl bg-sdw-sand border border-sdw-border hover:shadow-card transition">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <h3 class="font-extrabold text-base text-sdw-pine">Ustadz Ahmad Fauzi Ridwan, Lc.</h3>
+                    <p class="text-xs text-sdw-gold font-bold mt-1">Universitas Islam Madinah (UIM)</p>
+                    <p class="text-xs text-sdw-muted mt-3 leading-relaxed">
+                        10 tahun menetap di Madinah, memandu ziarah sirah Nabawiyah di Raudhah Syarifah, Perang Uhud, dan Masjid Quba.
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-3xl bg-sdw-sand border border-sdw-border hover:shadow-card transition">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-person-dress"></i>
+                    </div>
+                    <h3 class="font-extrabold text-base text-sdw-pine">Ustadzah Hj. Fatimah Azzahra, Lc.</h3>
+                    <p class="text-xs text-sdw-gold font-bold mt-1">Ummul Qura Makkah • Fiqih Nisa</p>
+                    <p class="text-xs text-sdw-muted mt-3 leading-relaxed">
+                        Pendampingan khusus ibadah jamaah wanita, fiqih thaharah muslimah, dan asistensi jamaah lanjut usia selama di tanah suci.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SECTION 5: FAQ ACCORDION ==================== -->
+    <section id="faq" class="py-16 sm:py-20 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 scroll-anchor-target">
+        <div class="text-center mb-10">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-sdw-pine bg-sdw-sand px-3.5 py-1.5 rounded-full border border-sdw-border">
+                Pertanyaan Populer
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-sdw-pine mt-3">
+                Pertanyaan yang Sering Diajukan (FAQ)
+            </h2>
+        </div>
+
+        <div class="space-y-4">
+            <details class="group bg-white rounded-2xl border border-sdw-border p-5 transition [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer font-bold text-sm text-sdw-pine">
+                    <span>Kapan batas akhir pengumpulan paspor dan pembayaran pelunasan?</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-sdw-muted transition group-open:rotate-180"></i>
+                </summary>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-3 leading-relaxed border-t border-sdw-border/50 pt-3">
+                    Paspor asli dan berkas dokumen wajib diserahkan maksimal H-30 sebelum tanggal keberangkatan untuk proses pengajuan visa Kemenag/Muassasah. Pelunasan biaya paket dilakukan setelah visa dan tiket terbit (maksimal H-25).
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sdw-border p-5 transition [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer font-bold text-sm text-sdw-pine">
+                    <span>Apakah uang muka (DP) dapat dikembalikan jika terjadi pembatalan?</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-sdw-muted transition group-open:rotate-180"></i>
+                </summary>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-3 leading-relaxed border-t border-sdw-border/50 pt-3">
+                    Kebijakan pengembalian dana (refund) mengacu pada perjanjian akad awal: Pembatalan sebelum penerbitan tiket maskapai dipotong biaya administrasi standar, sedangkan setelah tiket/visa terbit mengikuti regulasi maskapai dan muassasah hotel.
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sdw-border p-5 transition [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer font-bold text-sm text-sdw-pine">
+                    <span>Fasilitas apa saja yang sudah termasuk dalam harga paket?</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-sdw-muted transition group-open:rotate-180"></i>
+                </summary>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-3 leading-relaxed border-t border-sdw-border/50 pt-3">
+                    Semua paket SDW UMROH sudah mencakup: Tiket pesawat PP, visa umroh resmi, akomodasi hotel Makkah &amp; Madinah, konsumsi 3x sehari masakan Indonesia, bus full AC, air zamzam (jika diizinkan maskapai), perlengkapan koper bagasi, muthawwif, dan asuransi perjalanan.
+                </p>
+            </details>
+
+            <details class="group bg-white rounded-2xl border border-sdw-border p-5 transition [&_summary::-webkit-details-marker]:hidden">
+                <summary class="flex items-center justify-between cursor-pointer font-bold text-sm text-sdw-pine">
+                    <span>Bagaimana pendampingan bagi jamaah lansia atau berkebutuhan khusus?</span>
+                    <i class="fa-solid fa-chevron-down text-xs text-sdw-muted transition group-open:rotate-180"></i>
+                </summary>
+                <p class="text-xs sm:text-sm text-sdw-muted mt-3 leading-relaxed border-t border-sdw-border/50 pt-3">
+                    Kami menyediakan pendampingan khusus serta asistensi kursi roda resmi di pelataran Masjidil Haram. Harap mencentang opsi kebutuhan khusus saat pendaftaran agar tim operasional dapat menyiapkan fasilitas sebelum tiba di bandara Jeddah/Madinah.
+                </p>
+            </details>
+        </div>
+    </section>
+
+    <!-- ==================== LEAD MAGNET & CONSULTATION BAR ==================== -->
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mb-16 relative z-20">
+        <div class="bg-sdw-leadmagnet rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl border-2 border-sdw-gold/40 text-white relative overflow-hidden">
+            <!-- Ambient Golden Glow behind form -->
+            <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -left-20 -top-20 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Left: Headline & Value Proposition (col-span-6) -->
+                <div class="lg:col-span-6 space-y-4">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sdw-gold/20 border border-sdw-gold/40 text-sdw-gold text-[11px] font-extrabold uppercase tracking-wider">
+                        <i class="fa-solid fa-file-pdf"></i> Unduh E-Brochure &amp; Panduan 1447H
+                    </span>
+                    <h3 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                        Rencanakan Ibadah Umroh Terbaik Bersama Keluarga Anda.
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed font-normal">
+                        Dapatkan e-katalog lengkap, rincian hotel bintang 5 pelataran Ka'bah, dan simulasi tabungan ibadah umroh langsung dikirimkan ke WhatsApp Anda secara instan.
+                    </p>
+
+                    <!-- Trust Signals -->
+                    <div class="pt-2 flex flex-wrap items-center gap-4 text-[11px] text-slate-300">
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                            <span>100% Bebas Biaya</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-clock text-emerald-400"></i>
+                            <span>Respon Cepat 24 Jam</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <i class="fa-solid fa-file-lines text-emerald-400"></i>
+                            <span>Rincian Transparan</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: High-Converting Quick Lead Form (col-span-6) -->
+                <div class="lg:col-span-6 bg-white/10 backdrop-blur-md rounded-2xl p-5 sm:p-6 border border-white/20 shadow-lg">
+                    <form id="leadMagnetForm" onsubmit="handleLeadMagnet(event)" class="space-y-3.5">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="lmName" class="block text-[11px] font-bold text-slate-200 mb-1">Nama Lengkap</label>
+                                <input type="text" id="lmName" placeholder="Contoh: H. Ahmad Fauzi" required class="w-full bg-white/95 focus:bg-white text-sdw-pine font-medium text-xs sm:text-sm rounded-xl px-3.5 py-2.5 border border-transparent focus:ring-2 focus:ring-sdw-gold outline-hidden transition placeholder:text-slate-400">
+                            </div>
+                            <div>
+                                <label for="lmPhone" class="block text-[11px] font-bold text-slate-200 mb-1">No. WhatsApp</label>
+                                <input type="tel" id="lmPhone" placeholder="Contoh: 081234567890" required class="w-full bg-white/95 focus:bg-white text-sdw-pine font-medium text-xs sm:text-sm rounded-xl px-3.5 py-2.5 border border-transparent focus:ring-2 focus:ring-sdw-gold outline-hidden transition placeholder:text-slate-400">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="lmPackage" class="block text-[11px] font-bold text-slate-200 mb-1">Rencana Paket yang Diminati</label>
+                            <select id="lmPackage" class="w-full bg-white/95 focus:bg-white text-sdw-pine font-medium text-xs sm:text-sm rounded-xl px-3.5 py-2.5 border border-transparent focus:ring-2 focus:ring-sdw-gold outline-hidden transition cursor-pointer">
+                                <option value="Paket Umroh VIP Khidmat (Bintang 5)">Paket VIP Khidmat (Hotel Ring-1 Pelataran Ka'bah)</option>
+                                <option value="Paket Umroh Reguler Syawal">Paket Reguler Syawal (Favorit Keluarga)</option>
+                                <option value="Paket Umroh Plus Turki">Paket Plus Wisata Halal Turki (12 Hari)</option>
+                                <option value="Paket Ramadhan Lailatul Qadr">Paket Ramadhan Itikaf Lailatul Qadr</option>
+                                <option value="Konsultasi Jadwal & Biaya Terlebih Dahulu">Konsultasi Jadwal &amp; Rincian Biaya Dahulu</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 rounded-full bg-sdw-gold hover:bg-amber-400 text-sdw-pine font-extrabold text-xs sm:text-sm shadow-xl shadow-amber-950/30 transition transform active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>Kirim E-Brochure &amp; Rincian via WhatsApp</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== OFFICIAL PARTNERS & ACCREDITATIONS (LUXURY TRUST ECOSYSTEM) ==================== -->
+    <section class="bg-gradient-to-b from-white via-slate-50/60 to-white py-14 sm:py-20 border-t border-slate-200/80 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200/80 text-sdw-pine text-xs font-bold mb-3 shadow-2xs">
+                    <i class="fa-solid fa-handshake text-sdw-gold"></i>
+                    <span>Ekosistem Kemitraan &amp; Legalitas Resmi</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-sdw-pine tracking-tight leading-tight">
+                    Mitra Maskapai, Perbankan Syariah <br class="hidden sm:inline">&amp; Legalitas Resmi
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed font-medium">
+                    SDW UMROH menjamin setiap jengkal perjalanan, kepastian penerbangan langsung, dan keamanan dana ibadah jamaah terlindungi penuh di bawah regulasi resmi Kementerian Agama RI.
+                </p>
+            </div>
+
+            <!-- Partner Cards Grid (8 Cards: Maskapai, Bank Syariah, Legalitas, Asosiasi) -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3.5 sm:gap-5">
+                <!-- 1. Saudia Airlines -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Saudia Airlines</span>
+                    <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full mt-1 border border-emerald-200/60">Direct Flight Madinah</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Maskapai resmi Kerajaan Arab Saudi dengan seat terkonfirmasi.</p>
+                </div>
+
+                <!-- 2. Garuda Indonesia -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-plane-up"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Garuda Indonesia</span>
+                    <span class="text-[10px] text-sky-700 font-bold bg-sky-50 px-2 py-0.5 rounded-full mt-1 border border-sky-200/60">Flag Carrier RI Bintang 5</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Penerbangan langsung Jakarta / Surabaya tanpa transit.</p>
+                </div>
+
+                <!-- 3. Bank Syariah Indonesia (BSI) -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Bank Syariah Indonesia</span>
+                    <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full mt-1 border border-emerald-200/60">Rekening Penampungan</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Setoran jamaah aman di rekening escrow syariah resmi BSI.</p>
+                </div>
+
+                <!-- 4. Bank Muamalat -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Bank Muamalat</span>
+                    <span class="text-[10px] text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded-full mt-1 border border-purple-200/60">Mitra Finansial Syariah</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Pilihan tabungan umroh dan pembayaran terencana syariah.</p>
+                </div>
+
+                <!-- 5. Kemenag RI (SISKOPATUH) -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Kemenag RI</span>
+                    <span class="text-[10px] text-amber-700 font-bold bg-amber-50 px-2 py-0.5 rounded-full mt-1 border border-amber-200/60">PPIU No. U.123/2026</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Terdaftar resmi pada sistem komputerisasi terpadu SISKOPATUH.</p>
+                </div>
+
+                <!-- 6. Akreditasi A -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Akreditasi A</span>
+                    <span class="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-full mt-1 border border-emerald-200/60">Predikat Sangat Baik</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Audit standar kepatuhan layanan, akomodasi, dan manasik.</p>
+                </div>
+
+                <!-- 7. AMPHURI -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-users-line"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">AMPHURI</span>
+                    <span class="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-2 py-0.5 rounded-full mt-1 border border-indigo-200/60">Asosiasi Resmi</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Anggota resmi Asosiasi Muslim Penyelenggara Haji &amp; Umrah RI.</p>
+                </div>
+
+                <!-- 8. Asuransi Perjalanan Syariah -->
+                <div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-sdw-gold/60 transition duration-300 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <span class="font-extrabold text-sm sm:text-base text-slate-800">Asuransi Syariah</span>
+                    <span class="text-[10px] text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded-full mt-1 border border-rose-200/60">Proteksi Medis Penuh</span>
+                    <p class="text-[11px] text-slate-500 mt-2 line-clamp-2">Jaminan proteksi kesehatan, rawat inap, dan kepulangan darurat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== LUXURY FOOTER LENGKAP ==================== -->
+    <footer class="bg-sdw-footer text-white border-t border-sdw-gold/30 pt-16 pb-28 lg:pb-12 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- 4 Main Columns -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 border-b border-white/10">
+                <!-- Col 1: Brand & Legalitas Resmi -->
+                <div class="space-y-4">
+                    <a href="/" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                        <img src="assets/sdw-logo.png" alt="SDW Umroh" class="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                        <div class="flex flex-col">
+                            <span class="font-black text-xl tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>
+                            <span class="text-[9.5px] text-sdw-gold font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                        </div>
+                    </a>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Biro Penyelenggara Perjalanan Ibadah Umroh (PPIU) resmi dengan komitmen bimbingan sesuai tuntunan sunnah, akomodasi hotel terdekat ring-1 pelataran Haramain, dan kepastian tiket pesawat tanpa biaya tersembunyi.
+                    </p>
+                    
+                    <!-- Legal Credentials Badges -->
+                    <div class="pt-2 space-y-2">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-200">
+                            <i class="fa-solid fa-certificate text-sdw-gold"></i>
+                            <span class="font-bold text-white">PPIU Kemenag RI:</span>
+                            <span>No. U.123/2026</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-xs text-slate-300">
+                            <span class="inline-flex items-center gap-1 text-amber-400 font-bold"><i class="fa-solid fa-award"></i> Akreditasi A</span>
+                            <span class="text-white/30">•</span>
+                            <span>Anggota AMPHURI</span>
+                            <span class="text-white/30">•</span>
+                            <span>IATA Partner</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: Program Paket & Ziarah -->
+                <div>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Program Paket Umroh</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="/paket?cat=reguler" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Paket Umroh Reguler Syawal</a></li>
+                        <li><a href="/paket?cat=vip" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Paket VIP Khidmat Bintang 5</a></li>
+                        <li><a href="/paket?cat=plus" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Paket Umroh Plus Wisata Turki</a></li>
+                        <li><a href="/paket?cat=ramadhan" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Umroh Ramadhan Lailatul Qadr</a></li>
+                        <li><a href="/ziarah" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Galeri Ziarah Suci Haramain</a></li>
+                        <li><a href="/jadwal" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Jadwal Kloter 1447H</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Layanan Digital & Bantuan -->
+                <div>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Pusat Layanan</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="/app" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen text-sdw-gold"></i> Portal Jamaah PWA</a></li>
+                        <li><a href="/kalkulator" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-calculator text-sdw-gold"></i> Kalkulator Biaya</a></li>
+                        <li><a href="/faq" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-circle-question text-sdw-gold"></i> Tanya Jawab (FAQ)</a></li>
+                        <li><a href="/tentang" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-sdw-gold"></i> Legalitas &amp; Akreditasi</a></li>
+                        <li><a href="/app" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-passport text-sdw-gold"></i> Tracking Paspor &amp; Visa</a></li>
+                        <li><a href="/app" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-lock text-sdw-gold"></i> Portal Mitra &amp; Staf</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Kantor & Hotline 24 Jam -->
+                <div class="space-y-3.5">
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Kantor &amp; Kontak</h4>
+                    <div class="text-xs text-slate-300 leading-relaxed flex items-start gap-2">
+                        <i class="fa-solid fa-location-dot mt-0.5 text-sdw-gold"></i>
+                        <span><strong>Graha SDW:</strong> Jl. TB Simatupang Kav. 88, Cilandak, Jakarta Selatan 12430</span>
+                    </div>
+                    <div class="text-xs text-slate-300 flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-sdw-gold"></i>
+                        <span>Senin - Sabtu: 08.00 - 17.00 WIB</span>
+                    </div>
+                    <div class="text-xs text-slate-300 flex items-center gap-2">
+                        <i class="fa-solid fa-phone text-sdw-gold"></i>
+                        <span>(021) 7890-1234 (Hunting)</span>
+                    </div>
+                    <div class="text-xs text-slate-300 flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="hover:text-sdw-gold font-bold transition">+62 812-3456-7890 (24 Jam)</a>
+                    </div>
+                    <div class="text-xs text-slate-300 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope text-sdw-gold"></i>
+                        <span>salam@sdwumroh.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Partners Strip: Maskapai & Bank Syariah -->
+            <div class="py-8 border-b border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-300">
+                <div class="flex flex-wrap items-center gap-2.5 sm:gap-4">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px]">Mitra Resmi:</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-semibold text-white">Saudia Airlines</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-semibold text-white">Garuda Indonesia</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-semibold text-white">Flynas</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-semibold text-white">BSI Syariah</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/5 border border-white/10 font-semibold text-white">Bank Muamalat</span>
+                </div>
+
+                <!-- Social Media Channels -->
+                <div class="flex items-center gap-3">
+                    <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px] mr-1">Ikuti Kami:</span>
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-sdw-gold hover:text-sdw-pine transition flex items-center justify-center text-xs cursor-pointer"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-sdw-gold hover:text-sdw-pine transition flex items-center justify-center text-xs cursor-pointer"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-sdw-gold hover:text-sdw-pine transition flex items-center justify-center text-xs cursor-pointer"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-full bg-white/10 hover:bg-sdw-gold hover:text-sdw-pine transition flex items-center justify-center text-xs cursor-pointer"><i class="fa-brands fa-facebook-f"></i></a>
+                </div>
+            </div>
+
+            <!-- Bottom Copyright & Compliance -->
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+                <p>&copy; 2026 PT Sahabat Dhuha Wisata (SDW UMROH). Berizin Resmi &amp; Diawasi Kementerian Agama Republik Indonesia.</p>
+                <div class="flex items-center gap-4 text-[11px]">
+                    <a href="#" class="hover:text-white transition">Syarat &amp; Ketentuan</a>
+                    <span>•</span>
+                    <a href="#" class="hover:text-white transition">Kebijakan Privasi</a>
+                    <span>•</span>
+                    <a href="#" class="hover:text-white transition">Maklumat Pelayanan</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== FLOATING WHATSAPP BUTTON (DESKTOP ONLY) ==================== -->
+    <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="hidden lg:flex fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white items-center justify-center shadow-2xl shadow-emerald-950/40 hover:scale-110 transition-all cursor-pointer group" aria-label="Tanya Kami di WhatsApp">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        <span class="absolute right-16 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-sdw-charcoal text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-white/10">
+            Tanya Kami di WhatsApp
+        </span>
+    </a>
+
+    <!-- ==================== MODAL: DETAIL PAKET LENGKAP ==================== -->
+    <div id="package-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/70 backdrop-blur-xs overflow-y-auto" onclick="if(event.target===this) SDW_CATALOG.closePackageModal()">
+        <div class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-2xl border border-sdw-border my-auto animate-in fade-in zoom-in-95 duration-200">
+            <!-- Modal Header with Image Banner -->
+            <div class="relative h-48 bg-sdw-sand overflow-hidden">
+                <img id="modal-pkg-image" src="" alt="Paket Umroh" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <button type="button" onclick="SDW_CATALOG.closePackageModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/40 hover:bg-black/60 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+                <div class="absolute bottom-4 left-6 right-6">
+                    <span id="modal-pkg-type" class="px-3 py-1 rounded-full text-[10px] font-extrabold uppercase bg-sdw-gold text-sdw-pine">VIP</span>
+                    <h3 id="modal-pkg-title" class="text-xl font-extrabold text-white mt-1 leading-snug">Judul Paket</h3>
+                </div>
+            </div>
+
+            <!-- Modal Body Details -->
+            <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                <div class="flex items-center justify-between pb-4 border-b border-sdw-border">
+                    <div>
+                        <span class="text-xs text-sdw-muted block">Harga Mulai Dari</span>
+                        <span id="modal-pkg-price" class="text-2xl font-extrabold text-sdw-pine">Rp 0</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-sdw-muted block">Durasi Program</span>
+                        <span id="modal-pkg-duration" class="text-sm font-bold text-sdw-charcoal">0 Hari</span>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-sdw-pine uppercase tracking-wider mb-1">Deskripsi Program</h4>
+                    <p id="modal-pkg-desc" class="text-xs text-sdw-muted leading-relaxed"></p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                    <div class="p-3 bg-sdw-sand rounded-xl text-xs">
+                        <span class="text-sdw-muted block">Hotel Makkah</span>
+                        <span id="modal-pkg-makkah" class="font-bold text-sdw-charcoal block mt-0.5">-</span>
+                    </div>
+                    <div class="p-3 bg-sdw-sand rounded-xl text-xs">
+                        <span class="text-sdw-muted block">Hotel Madinah</span>
+                        <span id="modal-pkg-madinah" class="font-bold text-sdw-charcoal block mt-0.5">-</span>
+                    </div>
+                </div>
+
+                <div class="p-3 bg-sdw-sand rounded-xl text-xs flex items-center gap-2">
+                    <i class="fa-solid fa-plane text-sdw-gold text-base"></i>
+                    <div>
+                        <span class="text-sdw-muted block">Penerbangan</span>
+                        <span id="modal-pkg-airline" class="font-bold text-sdw-charcoal">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-sdw-sand border-t border-sdw-border flex items-center justify-between gap-3">
+                <button type="button" onclick="SDW_CATALOG.closePackageModal()" class="px-4 py-2.5 rounded-xl border border-sdw-border text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer">
+                    Tutup
+                </button>
+                <a id="modal-pkg-wa-btn" href="#" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-sdw-pineLight text-white text-xs font-bold transition flex items-center gap-2 shadow cursor-pointer">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span>Booking Paket Ini via WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda (Active) -->
+            <a href="/" class="flex flex-col items-center justify-center py-1 transition group text-sdw-pine">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl bg-purple-100/80 text-sdw-pine shadow-2xs">
+                    <i class="fa-solid fa-house text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-sdw-pine">Beranda</span>
+            </a>
+
+            <!-- 2. Paket -->
+            <a href="/paket" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-cubes text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Paket</span>
+            </a>
+
+            <!-- 3. Konsultasi WA (Elevated Center CTA) -->
+            <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center -mt-4 transition group">
+                <div class="w-12 h-12 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-brands fa-whatsapp text-2xl"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-emerald-600">Konsul WA</span>
+            </a>
+
+            <!-- 4. Jadwal -->
+            <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Jadwal</span>
+            </a>
+
+            <!-- 5. Estimasi / Kalkulator -->
+            <a href="/kalkulator" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calculator text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Estimasi</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== APPLICATION SCRIPTS ==================== -->
+    <script src="js/app-config.js?v=2.1"></script>
+    <script src="js/data-mock.js?v=2.1"></script>
+    <script src="js/api.js?v=2.1"></script>
+    <script src="js/catalog.js?v=2.2"></script>
+    <script src="js/departures.js?v=2.1"></script>
+    <script src="js/estimator.js?v=2.1"></script>
+    <script src="js/pwa.js?v=2.1"></script>
+    <script>
+        // Hero Slider Controller
+        // Quick Filter Form Handler (Floating Filter Bar)
+        function handleQuickFilter(event) {
+            if (event) event.preventDefault();
+            const pkg = document.getElementById('qfPackage')?.value;
+            const room = document.getElementById('qfRoom')?.value;
+            const pax = parseInt(document.getElementById('qfPax')?.value || '2', 10);
+
+            // Filter package catalog if specific package selected
+            if (typeof SDW_CATALOG !== 'undefined' && pkg && pkg !== 'ALL') {
+                SDW_CATALOG.filter(pkg);
+            }
+
+            // Sync with Estimator
+            const estRoom = document.getElementById('estRoom');
+            const estAdults = document.getElementById('estAdults');
+            if (estRoom && room) estRoom.value = room;
+            if (estAdults && pax) estAdults.value = pax;
+            if (typeof SDW_ESTIMATOR !== 'undefined' && typeof SDW_ESTIMATOR.calculate === 'function') {
+                SDW_ESTIMATOR.calculate();
+            }
+
+            // Smooth scroll to either package catalog or departures
+            const targetSection = (pkg && pkg !== 'ALL') ? document.getElementById('katalogPaket') : document.getElementById('jadwalKeberangkatan');
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Lead Magnet Form Handler (E-Brochure & Consultation via WhatsApp)
+        function handleLeadMagnet(event) {
+            if (event) event.preventDefault();
+            const name = document.getElementById('lmName')?.value || 'Calon Jamaah';
+            const phone = document.getElementById('lmPhone')?.value || '-';
+            const pkg = document.getElementById('lmPackage')?.value || 'Umroh';
+            const message = `Assalamualaikum CS SDW UMROH, saya ${name} (${phone}) berminat dengan ${pkg}. Mohon kirimkan E-Brochure lengkap dan informasi jadwal serta rincian biaya. Terima kasih.`;
+            const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+        }
+
+        // Mobile Nav Drawer Controller
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (!drawer || !panel) return;
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                drawer.classList.add('opacity-100');
+                panel.classList.remove('translate-x-full');
+                panel.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                drawer.classList.remove('opacity-100');
+                panel.classList.add('translate-x-full');
+                panel.classList.remove('translate-x-0');
+                document.body.style.overflow = '';
+            }
+        }
+
+        function toggleMobileSub(subId) {
+            const sub = document.getElementById(subId);
+            const icon = document.getElementById(subId + 'Icon');
+            if (!sub) return;
+            const isHidden = sub.classList.contains('hidden');
+            if (isHidden) {
+                sub.classList.remove('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            } else {
+                sub.classList.add('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        // Navbar Scroll Controller (Transparent at top, solid frosted white when scrolled)
+        function handleNavbarScroll() {
+            const nav = document.getElementById('mainNavbar');
+            if (!nav) return;
+            if (window.scrollY > 25) {
+                nav.classList.add('nav-scrolled');
+                nav.classList.remove('nav-transparent');
+            } else {
+                nav.classList.add('nav-transparent');
+                nav.classList.remove('nav-scrolled');
+            }
+        }
+        window.addEventListener('scroll', handleNavbarScroll, { passive: true });
+
+        // Hero Rotating Headline Animation (Alternating Headlines for Mobile & Desktop)
+        function initHeroRotatingText() {
+            const el = document.getElementById('heroAnimatedText');
+            if (!el) return;
+
+            const phrases = [
+                "Penuh Ketenangan & Keberkahan.",
+                "Bimbingan Khidmat Sesuai Sunnah.",
+                "Hotel Pelataran Ring-1 Haramain.",
+                "Pasti Berangkat & Terpercaya."
+            ];
+
+            let currentIndex = 0;
+
+            setInterval(() => {
+                if (document.hidden) return;
+
+                // Step 1: Smoothly fade and slide out upwards
+                el.className = "text-gold-gradient inline-block hero-text-out";
+
+                setTimeout(() => {
+                    // Step 2: Swap text while invisible and position at bottom
+                    currentIndex = (currentIndex + 1) % phrases.length;
+                    el.textContent = phrases[currentIndex];
+                    el.className = "text-gold-gradient inline-block hero-text-prep";
+
+                    // Step 3: Trigger smooth slide-in from bottom to center
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            el.className = "text-gold-gradient inline-block hero-text-in";
+                        });
+                    });
+                }, 350);
+            }, 3600);
+        }
+
+        // Initialize components
+        document.addEventListener('DOMContentLoaded', () => {
+            handleNavbarScroll();
+            initHeroRotatingText();
+            if (typeof SDW_CATALOG !== 'undefined') SDW_CATALOG.init('katalog-package-grid');
+            if (typeof SDW_DEPARTURES !== 'undefined') SDW_DEPARTURES.init('departures-table-body');
+            if (typeof SDW_ESTIMATOR !== 'undefined') SDW_ESTIMATOR.init();
+        });
+        handleNavbarScroll();
+        initHeroRotatingText();
+    </script>
+</body>
+
+</html>

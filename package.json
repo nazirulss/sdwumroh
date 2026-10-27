@@ -1,0 +1,19 @@
+{
+  "name": "sdw-umroh-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SDW UMROH — Digital Umrah Tour & Travel Platform (One Journey, One Platform)",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "build:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --minify",
+    "watch:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --watch",
+    "build": "npm run build:css",
+    "backend:status": "cd backend && clasp status",
+    "backend:push": "cd backend && clasp push -f",
+    "backend:pull": "cd backend && clasp pull"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

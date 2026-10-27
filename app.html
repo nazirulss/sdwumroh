@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDW UMROH App — Portal Jamaah &amp; Backoffice Terpadu</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="canonical" href="https://sdwumroh.com/app">
+
+    <!-- PWA & Mobile Web App Setup -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0F3D2E">
+    <link rel="icon" type="image/png" href="assets/hero-haram.png">
+    <link rel="apple-touch-icon" href="assets/hero-haram.png">
+
+    <!-- Google Fonts & Font Awesome 6 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Pre-compiled Tailwind CSS -->
+    <link rel="stylesheet" href="css/styles.min.css">
+</head>
+
+<body class="bg-slate-100 font-sans text-sdw-charcoal min-h-screen flex flex-col antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== TOP BAR APP SHELL ==================== -->
+    <header class="bg-sdw-pine text-white h-16 px-4 sm:px-6 flex items-center justify-between border-b border-sdw-emerald/40 sticky top-0 z-50 shadow-md">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-2.5 group">
+                <img src="assets/sdw-logo.png" alt="SDW Umroh" class="h-9 w-auto object-contain group-hover:scale-105 transition-transform">
+                <div class="flex flex-col">
+                    <span class="font-black text-base tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>
+                    <span class="text-[9px] text-sdw-gold font-bold uppercase tracking-wider block mt-0.5">Portal Terpadu</span>
+                </div>
+            </a>
+            <span class="text-white/20 hidden sm:inline">|</span>
+            <div class="hidden sm:flex items-center gap-2">
+                <span class="text-xs text-slate-300">Peran Aktif:</span>
+                <span id="current-role-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-sdw-gold text-sdw-pine">
+                    PILGRIM
+                </span>
+            </div>
+        </div>
+
+        <!-- Role Switcher & User Tools -->
+        <div class="flex items-center gap-3">
+            <!-- Development Role Tester Selector -->
+            <div class="flex items-center gap-1.5 bg-black/25 px-2.5 py-1 rounded-xl border border-white/10 text-xs">
+                <span class="text-[11px] text-sdw-gold hidden md:inline">Ganti Peran:</span>
+                <select id="role-switcher-select" onchange="SDW_AUTH.setRole(this.value)" class="bg-transparent text-white font-bold text-xs outline-none cursor-pointer">
+                    <option value="PILGRIM" class="text-sdw-charcoal">Jamaah (Pilgrim)</option>
+                    <option value="SALES" class="text-sdw-charcoal">Sales / Marketing</option>
+                    <option value="DOCUMENT_OFFICER" class="text-sdw-charcoal">Document Officer</option>
+                    <option value="FINANCE" class="text-sdw-charcoal">Finance Staff</option>
+                    <option value="OPERATIONS" class="text-sdw-charcoal">Operations Kloter</option>
+                    <option value="TOUR_LEADER" class="text-sdw-charcoal">Tour Leader</option>
+                    <option value="MUTHAWWIF" class="text-sdw-charcoal">Muthawwif</option>
+                    <option value="PARTNER" class="text-sdw-charcoal">Mitra / Agen</option>
+                    <option value="ADMIN" class="text-sdw-charcoal">Admin Sistem</option>
+                    <option value="OWNER" class="text-sdw-charcoal">Executive Owner</option>
+                </select>
+            </div>
+
+            <a href="/" class="text-xs text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition hidden sm:inline-block">
+                <i class="fa-solid fa-globe mr-1"></i> Web Publik
+            </a>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN BODY LAYOUT ==================== -->
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Sidebar Navigation (Desktop) -->
+        <aside class="w-64 bg-white border-r border-sdw-border hidden md:flex flex-col justify-between p-4 shrink-0 shadow-xs">
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-extrabold uppercase text-sdw-muted tracking-wider px-3 block mb-2">Navigasi Modul</span>
+                
+                <button type="button" data-perm-tab="tab-jamaah" onclick="SDW_AUTH.switchAppTab('tab-jamaah')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-kaaba text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>Portal Jamaah PWA</span>
+                </button>
+
+                <button type="button" data-perm-tab="tab-crm" onclick="SDW_AUTH.switchAppTab('tab-crm')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-users-viewfinder text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>CRM &amp; Sales Leads</span>
+                </button>
+
+                <button type="button" data-perm-tab="tab-documents" onclick="SDW_AUTH.switchAppTab('tab-documents')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-passport text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>Verifikasi Berkas</span>
+                </button>
+
+                <button type="button" data-perm-tab="tab-finance" onclick="SDW_AUTH.switchAppTab('tab-finance')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-file-invoice-dollar text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>Keuangan &amp; Invoice</span>
+                </button>
+
+                <button type="button" data-perm-tab="tab-trips" onclick="SDW_AUTH.switchAppTab('tab-trips')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-bus-simple text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>Kloter &amp; Manifest</span>
+                </button>
+
+                <button type="button" data-perm-tab="tab-audit" onclick="SDW_AUTH.switchAppTab('tab-audit')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
+                    <i class="fa-solid fa-list-check text-sm text-sdw-gold w-5 text-center"></i>
+                    <span>Jejak Audit Sistem</span>
+                </button>
+            </div>
+
+            <div class="pt-4 border-t border-sdw-border/80 text-[11px] text-sdw-muted space-y-1">
+                <div>Versi App: <strong class="text-sdw-pine">1.0.0-ATM</strong></div>
+                <div>Status Database: <span class="text-emerald-700 font-bold">22 Sheet Terhubung</span></div>
+            </div>
+        </aside>
+
+        <!-- Dynamic Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 mb-16 md:mb-0">
+            <!-- ==================== TAB 1: PORTAL JAMAAH PWA ==================== -->
+            <div id="tab-jamaah" class="app-view-container space-y-6 max-w-5xl mx-auto">
+                <!-- Welcome Banner -->
+                <div class="bg-gradient-to-r from-sdw-pine to-sdw-pineLight text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
+                    <div class="relative z-10 space-y-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-sm text-sdw-gold text-xs font-bold border border-white/20">
+                            <i class="fa-solid fa-passport"></i>
+                            <span>No. Registrasi: <span id="jamaah-reg-id">REG-SDW-2701</span></span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">
+                            Ahlan Wa Sahlan, <span id="jamaah-name">Ahmad Jamaah Teladan</span>!
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-200">
+                            Program: <strong id="jamaah-package-title" class="text-white">Umroh Reguler Syawal Barakah</strong>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Commercial Snapshot Info Card -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="p-4 bg-white rounded-2xl border border-sdw-border shadow-xs">
+                        <span class="text-[11px] text-sdw-muted uppercase block font-semibold">Tipe Kamar</span>
+                        <span id="jamaah-room-type" class="text-sm font-bold text-sdw-pine block mt-0.5">-</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl border border-sdw-border shadow-xs">
+                        <span class="text-[11px] text-sdw-muted uppercase block font-semibold">Keberangkatan</span>
+                        <span id="jamaah-departure-date" class="text-sm font-bold text-sdw-pine block mt-0.5">-</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl border border-sdw-border shadow-xs">
+                        <span class="text-[11px] text-sdw-muted uppercase block font-semibold">Penerbangan</span>
+                        <span id="jamaah-flight-info" class="text-xs font-bold text-sdw-pine block mt-0.5 truncate">-</span>
+                    </div>
+                    <div class="p-4 bg-white rounded-2xl border border-sdw-border shadow-xs">
+                        <span class="text-[11px] text-sdw-muted uppercase block font-semibold">Harga Snapshot</span>
+                        <span id="jamaah-snapshot-price" class="text-sm font-extrabold text-sdw-emerald block mt-0.5">-</span>
+                    </div>
+                </div>
+
+                <!-- Next Manasik Card -->
+                <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs">
+                    <div class="flex items-center justify-between pb-3 border-b border-sdw-border/80">
+                        <h3 class="font-extrabold text-sm text-sdw-pine flex items-center gap-2">
+                            <i class="fa-solid fa-graduation-cap text-sdw-gold text-base"></i>
+                            <span>Jadwal Bimbingan Manasik Berikutnya</span>
+                        </h3>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sdw-goldLight text-sdw-pine border border-sdw-gold/30">Wajib Hadir</span>
+                    </div>
+                    <div class="mt-4 space-y-2 text-xs">
+                        <div class="font-bold text-sm text-sdw-charcoal" id="manasik-title">-</div>
+                        <div class="text-sdw-muted flex items-center gap-2">
+                            <i class="fa-regular fa-calendar-check text-sdw-gold w-4"></i>
+                            <span id="manasik-schedule">-</span>
+                        </div>
+                        <div class="text-sdw-muted flex items-center gap-2">
+                            <i class="fa-solid fa-location-dot text-sdw-gold w-4"></i>
+                            <span id="manasik-location">-</span>
+                        </div>
+                        <div class="text-sdw-muted flex items-center gap-2">
+                            <i class="fa-solid fa-user-tie text-sdw-gold w-4"></i>
+                            <span>Pembimbing: <strong id="manasik-ustadz" class="text-sdw-pine">-</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Berkas Persyaratan Section -->
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-extrabold text-base text-sdw-pine">Kelengkapan Berkas Dokumen</h3>
+                        <span class="text-xs text-sdw-muted">Batas waktu verifikasi: H-30 Berangkat</span>
+                    </div>
+                    <div id="jamaah-documents-list" class="space-y-3">
+                        <!-- Rendered by js/jamaah.js -->
+                    </div>
+                </div>
+
+                <!-- Finansial & Tagihan Section -->
+                <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs space-y-4">
+                    <h3 class="font-extrabold text-base text-sdw-pine">Status Pembayaran &amp; Jadwal Termin</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pb-4 border-b border-sdw-border">
+                        <div class="p-3 bg-sdw-sand rounded-xl">
+                            <span class="text-[11px] text-sdw-muted block">Total Biaya Terkunci</span>
+                            <span id="jamaah-inv-total" class="font-extrabold text-base text-sdw-pine">Rp 0</span>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded-xl">
+                            <span class="text-[11px] text-emerald-800 block">Total Sudah Terbayar</span>
+                            <span id="jamaah-inv-paid" class="font-extrabold text-base text-emerald-800">Rp 0</span>
+                        </div>
+                        <div class="p-3 bg-amber-50 rounded-xl">
+                            <span class="text-[11px] text-amber-900 block">Sisa Pelunasan</span>
+                            <span id="jamaah-inv-remaining" class="font-extrabold text-base text-amber-900">Rp 0</span>
+                        </div>
+                    </div>
+                    <div id="jamaah-schedules-list" class="space-y-2">
+                        <!-- Rendered by js/jamaah.js -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 2: CRM & LEADS PIPELINE ==================== -->
+            <div id="tab-crm" class="app-view-container hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-xl font-extrabold text-sdw-pine">CRM Pipeline &amp; Prospek Jamaah</h2>
+                        <p class="text-xs text-sdw-muted">Kelola calon jamaah, tindak lanjut sales, dan status konversi pendaftaran.</p>
+                    </div>
+                    <button type="button" onclick="alert('Formulir prospek baru')" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-sdw-pineLight transition cursor-pointer">
+                        + Tambah Prospek
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
+                                <tr>
+                                    <th class="py-3 px-4">ID Lead</th>
+                                    <th class="py-3 px-4">Nama &amp; Kontak</th>
+                                    <th class="py-3 px-4">Paket Diminati</th>
+                                    <th class="py-3 px-4">Urgensi</th>
+                                    <th class="py-3 px-4">Budget</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4">PIC Sales</th>
+                                    <th class="py-3 px-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crm-leads-tbody">
+                                <!-- Rendered by js/backoffice.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 3: VERIFIKASI BERKAS ==================== -->
+            <div id="tab-documents" class="app-view-container hidden space-y-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-sdw-pine">Antrean Verifikasi Berkas &amp; Visa</h2>
+                    <p class="text-xs text-sdw-muted">Pemeriksaan fisik/scan paspor RI, buku nikah, dan sertifikat vaksin meningitis.</p>
+                </div>
+                <div class="bg-white rounded-3xl p-6 border border-sdw-border shadow-xs text-center py-12">
+                    <i class="fa-solid fa-passport text-3xl text-sdw-gold mb-3"></i>
+                    <h3 class="font-bold text-sm text-sdw-pine">Semua Berkas Jamaah Terverifikasi</h3>
+                    <p class="text-xs text-sdw-muted mt-1">Tidak ada dokumen yang sedang dalam status UNDER_REVIEW saat ini.</p>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 4: KEUANGAN & INVOICE ==================== -->
+            <div id="tab-finance" class="app-view-container hidden space-y-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-sdw-pine">Manajemen Keuangan &amp; Rekonsiliasi</h2>
+                    <p class="text-xs text-sdw-muted">Verifikasi bukti setor transfer bank syariah, termin DP, dan rekonsiliasi invoice.</p>
+                </div>
+                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
+                                <tr>
+                                    <th class="py-3 px-4">ID Registrasi</th>
+                                    <th class="py-3 px-4">Nama Jamaah</th>
+                                    <th class="py-3 px-4">Program Paket</th>
+                                    <th class="py-3 px-4">Keberangkatan</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4">Berkas</th>
+                                    <th class="py-3 px-4">Pembayaran</th>
+                                    <th class="py-3 px-4 text-right">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bo-registrations-tbody">
+                                <!-- Rendered by js/backoffice.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 5: KLOTER & MANIFEST ==================== -->
+            <div id="tab-trips" class="app-view-container hidden space-y-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-sdw-pine">Operasional Kloter &amp; Manifest Jamaah</h2>
+                    <p class="text-xs text-sdw-muted">Pembagian manifest bus tanah suci, alokasi nomor kamar Makkah/Madinah, dan penugasan muthawwif.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs">
+                        <h3 class="font-extrabold text-sm text-sdw-pine mb-3">Manifest Bus Kloter 15 Jan 2027</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="p-3 bg-sdw-sand rounded-xl flex justify-between">
+                                <span>Bus 01 (VIP Haramain): <strong>35 Kursi Terisi</strong></span>
+                                <span class="text-emerald-700 font-bold">Siap</span>
+                            </div>
+                            <div class="p-3 bg-sdw-sand rounded-xl flex justify-between">
+                                <span>Bus 02 (Reguler Barakah): <strong>40 Kursi Terisi</strong></span>
+                                <span class="text-emerald-700 font-bold">Siap</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs">
+                        <h3 class="font-extrabold text-sm text-sdw-pine mb-3">Rooming List Hotel Makkah</h3>
+                        <p class="text-xs text-sdw-muted mb-4">Penguncian kamar Swissotel Clock Tower H-30 keberangkatan.</p>
+                        <button type="button" onclick="alert('Export Manifest PDF')" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-sdw-pineLight transition cursor-pointer">
+                            <i class="fa-solid fa-file-pdf mr-1.5"></i> Export Manifest PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TAB 6: AUDIT TRAIL ==================== -->
+            <div id="tab-audit" class="app-view-container hidden space-y-6">
+                <div>
+                    <h2 class="text-xl font-extrabold text-sdw-pine">Jejak Audit Mutasi Sistem (Append-Only)</h2>
+                    <p class="text-xs text-sdw-muted">Seluruh pencatatan dan perubahan status tercatat permanen di sheet DB_Audit_Logs.</p>
+                </div>
+                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
+                                <tr>
+                                    <th class="py-3 px-4">Audit ID</th>
+                                    <th class="py-3 px-4">Waktu</th>
+                                    <th class="py-3 px-4">Aktor Pengguna</th>
+                                    <th class="py-3 px-4">Aksi</th>
+                                    <th class="py-3 px-4">Entitas Referensi</th>
+                                    <th class="py-3 px-4">Deskripsi Mutasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bo-audit-tbody">
+                                <!-- Rendered by js/backoffice.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== MOBILE BOTTOM NAVIGATION (PWA MODE) ==================== -->
+    <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-sdw-border flex items-center justify-around py-2 px-1 shadow-lg">
+        <button type="button" onclick="SDW_AUTH.switchAppTab('tab-jamaah')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-sdw-pine cursor-pointer">
+            <i class="fa-solid fa-kaaba text-base"></i>
+            <span>Jamaah</span>
+        </button>
+        <button type="button" onclick="SDW_AUTH.switchAppTab('tab-crm')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-sdw-muted cursor-pointer">
+            <i class="fa-solid fa-users text-base"></i>
+            <span>CRM</span>
+        </button>
+        <button type="button" onclick="SDW_AUTH.switchAppTab('tab-finance')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-sdw-muted cursor-pointer">
+            <i class="fa-solid fa-file-invoice text-base"></i>
+            <span>Keuangan</span>
+        </button>
+        <button type="button" onclick="SDW_AUTH.switchAppTab('tab-trips')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-sdw-muted cursor-pointer">
+            <i class="fa-solid fa-bus text-base"></i>
+            <span>Kloter</span>
+        </button>
+    </nav>
+
+    <!-- ==================== APPLICATION SCRIPTS ==================== -->
+    <script src="js/app-config.js"></script>
+    <script src="js/data-mock.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/jamaah.js"></script>
+    <script src="js/backoffice.js"></script>
+    <script src="js/pwa.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof SDW_AUTH !== 'undefined') SDW_AUTH.applyPermissions();
+            if (typeof SDW_JAMAAH !== 'undefined') SDW_JAMAAH.init();
+            if (typeof SDW_BACKOFFICE !== 'undefined') SDW_BACKOFFICE.init();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "SDW UMROH — Digital Umrah Platform",
+  "short_name": "SDW Umroh",
+  "description": "Platform Digital Perjalanan Ibadah Umroh Terpadu (One Journey, One Platform)",
+  "start_url": "/app",
+  "display": "standalone",
+  "background_color": "#0F3D2E",
+  "theme_color": "#0F3D2E",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "assets/hero-haram.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/hero-haram.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

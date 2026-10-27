@@ -1,0 +1,452 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  /* Scroll Margin Utility for Fixed Header Navigation */
+  .scroll-anchor-target {
+    scroll-margin-top: 7rem;
+  }
+
+  /* Utility Class no-scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Status Pulse Animation */
+  .status-pulse {
+    animation: statusPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* Accessible fallback for reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .status-pulse {
+      animation: none !important;
+    }
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Gold Text Gradient for Hero & Titles (Root custom CSS) */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FDE68A 0%, #FBBF24 35%, #F59E0B 70%, #D97706 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  color: transparent !important;
+  display: inline-block;
+}
+
+/* Custom Rich Palettes for Lead Magnet and Footer (TicketPlan Royal Theme) */
+.bg-sdw-footer {
+  background-color: #1F0628 !important;
+}
+
+.bg-sdw-leadmagnet {
+  background: linear-gradient(135deg, #4C1D6B 0%, #682387 55%, #2A0937 100%) !important;
+}
+
+/* ==========================================================================
+   TRANSPARENT NAVBAR & SCROLL TRANSITION (ATM REFERENSI)
+   ========================================================================== */
+#mainNavbar {
+  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, backdrop-filter 0.35s ease;
+}
+
+/* 1. At Top of Page (scrollY <= 20): Merged with scenic hero background */
+#mainNavbar.nav-transparent {
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Logo Image Styles */
+.nav-logo-img {
+  filter: none;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+#mainNavbar.nav-transparent .nav-logo-img {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.85)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.95)) !important;
+}
+
+#mainNavbar.nav-transparent .nav-logo-text {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 1px 3px rgba(0, 0, 0, 0.9) !important;
+}
+
+#mainNavbar.nav-transparent .nav-logo-sub {
+  color: #E5A93C !important;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 1px 2px rgba(0, 0, 0, 0.9) !important;
+}
+
+#mainNavbar.nav-transparent .nav-link-item {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 0.75rem !important;
+}
+
+#mainNavbar.nav-transparent .nav-link-item:hover {
+  color: #FBBF24 !important;
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+#mainNavbar.nav-transparent .nav-link-item.nav-link-active {
+  color: #FDE68A !important;
+  background-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+#mainNavbar.nav-transparent .nav-badge-pill {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  color: #86EFAC !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+#mainNavbar.nav-transparent .nav-hotline-pill {
+  background-color: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+#mainNavbar.nav-transparent .nav-hotline-pill:hover {
+  background-color: rgba(255, 255, 255, 0.28) !important;
+  border-color: #E5A93C !important;
+  color: #FDE68A !important;
+}
+
+#mainNavbar.nav-transparent .nav-mobile-toggle {
+  background-color: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+#mainNavbar.nav-transparent .nav-portal-pill {
+  background-color: #E5A93C !important;
+  color: #240E31 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+#mainNavbar.nav-transparent .nav-portal-pill:hover {
+  background-color: #FBBF24 !important;
+}
+
+/* 2. When Scrolled Down (scrollY > 20): Frosted white header with shadow */
+#mainNavbar.nav-scrolled {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-bottom: 1px solid rgba(232, 223, 238, 0.9) !important;
+  box-shadow: 0 4px 20px -2px rgba(76, 29, 107, 0.1) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+#mainNavbar.nav-scrolled .nav-logo-img,
+#mainNavbar.nav-solid .nav-logo-img {
+  filter: none !important;
+}
+
+#mainNavbar.nav-scrolled .nav-logo-text,
+#mainNavbar.nav-solid .nav-logo-text {
+  color: #4C1D6B !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+#mainNavbar.nav-scrolled .nav-logo-sub,
+#mainNavbar.nav-solid .nav-logo-sub {
+  color: #B45309 !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+#mainNavbar.nav-scrolled .nav-mobile-toggle,
+#mainNavbar.nav-solid .nav-mobile-toggle {
+  background-color: #F5EDFA !important;
+  color: #4C1D6B !important;
+  border: 1px solid #E8DFEE !important;
+  box-shadow: 0 2px 8px rgba(76, 29, 107, 0.08) !important;
+}
+
+#mainNavbar.nav-scrolled .nav-mobile-toggle:hover,
+#mainNavbar.nav-solid .nav-mobile-toggle:hover {
+  background-color: #ECE0F5 !important;
+  color: #381350 !important;
+}
+
+#mainNavbar.nav-scrolled .nav-link-item {
+  color: #240E31 !important;
+  text-shadow: none !important;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 0.75rem !important;
+}
+
+#mainNavbar.nav-scrolled .nav-link-item:hover {
+  color: #4C1D6B !important;
+  background-color: #F8F4FA !important;
+}
+
+#mainNavbar.nav-scrolled .nav-link-item.nav-link-active {
+  color: #4C1D6B !important;
+  background-color: rgba(76, 29, 107, 0.06) !important;
+}
+
+#mainNavbar.nav-scrolled .nav-badge-pill {
+  background-color: #ECFDF5 !important;
+  color: #065F46 !important;
+  border-color: #A7F3D0 !important;
+}
+
+#mainNavbar.nav-scrolled .nav-hotline-pill {
+  background-color: #ECFDF5 !important;
+  color: #065F46 !important;
+  border: 1px solid #A7F3D0 !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.12) !important;
+}
+
+#mainNavbar.nav-scrolled .nav-hotline-pill:hover {
+  background-color: #D1FAE5 !important;
+  border-color: #34D399 !important;
+  color: #047857 !important;
+}
+
+#mainNavbar.nav-scrolled .nav-portal-pill {
+  background-color: #4C1D6B !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(76, 29, 107, 0.25) !important;
+}
+
+#mainNavbar.nav-scrolled .nav-portal-pill:hover {
+  background-color: #632585 !important;
+}
+
+/* 3. Solid Header for Inner Sub-Pages (paket, jadwal, ziarah, etc.) */
+#mainNavbar.nav-solid {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-bottom: 1px solid rgba(232, 223, 238, 0.9) !important;
+  box-shadow: 0 4px 20px -2px rgba(76, 29, 107, 0.08) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+#mainNavbar.nav-solid .nav-logo-text {
+  color: #4C1D6B !important;
+  text-shadow: none !important;
+}
+
+#mainNavbar.nav-solid .nav-link-item {
+  color: #240E31 !important;
+  text-shadow: none !important;
+  padding: 0.45rem 0.85rem !important;
+  border-radius: 0.75rem !important;
+}
+
+#mainNavbar.nav-solid .nav-link-item:hover {
+  color: #4C1D6B !important;
+  background-color: #F8F4FA !important;
+}
+
+#mainNavbar.nav-solid .nav-link-item.nav-link-active {
+  color: #4C1D6B !important;
+  background-color: rgba(76, 29, 107, 0.06) !important;
+}
+
+#mainNavbar.nav-solid .nav-badge-pill {
+  background-color: #ECFDF5 !important;
+  color: #065F46 !important;
+  border-color: #A7F3D0 !important;
+}
+
+#mainNavbar.nav-solid .nav-hotline-pill {
+  background-color: #ECFDF5 !important;
+  color: #065F46 !important;
+  border: 1px solid #A7F3D0 !important;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.12) !important;
+}
+
+#mainNavbar.nav-solid .nav-hotline-pill:hover {
+  background-color: #D1FAE5 !important;
+  border-color: #34D399 !important;
+  color: #047857 !important;
+}
+
+#mainNavbar.nav-solid .nav-portal-pill {
+  background-color: #4C1D6B !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(76, 29, 107, 0.25) !important;
+}
+
+/* 4. Active Link Indicators */
+.nav-link-item {
+  position: relative;
+}
+
+.nav-link-item.nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0.85rem;
+  right: 0.85rem;
+  height: 2.5px;
+  background: #E5A93C;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(229, 169, 60, 0.6);
+}
+
+/* 5. Desktop Dropdown Navigation */
+.nav-dropdown-group {
+  position: relative;
+}
+
+.nav-dropdown-group::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 14px;
+}
+
+.nav-dropdown-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 290px;
+  background-color: #ffffff !important;
+  border: 1px solid rgba(226, 214, 235, 0.95) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 20px 40px -6px rgba(76, 29, 107, 0.22), 0 8px 16px -4px rgba(0, 0, 0, 0.08) !important;
+  padding: 0.5rem !important;
+  z-index: 70 !important;
+}
+
+.nav-dropdown-group:hover .nav-dropdown-menu,
+.nav-dropdown-group:focus-within .nav-dropdown-menu {
+  display: block !important;
+}
+
+.nav-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  color: #240E31;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.nav-dropdown-item:hover {
+  background-color: #F8F4FA;
+  transform: translateX(3px);
+  color: #4C1D6B;
+}
+
+.nav-dropdown-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  background: #F3EAF8;
+  color: #4C1D6B;
+  transition: all 0.2s ease;
+}
+
+.nav-dropdown-item:hover .nav-dropdown-icon {
+  background: #4C1D6B;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   DEEP BLACK TEXT SHADOWS FOR HERO HEADLINE & DESCRIPTION
+   ========================================================================== */
+.hero-title-shadow {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.95)) drop-shadow(0 8px 22px rgba(0, 0, 0, 0.9)) !important;
+}
+
+.hero-white-text {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95), 0 4px 14px rgba(0, 0, 0, 0.9) !important;
+}
+
+.hero-desc-shadow {
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.95), 0 4px 16px rgba(0, 0, 0, 0.9) !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.85));
+}
+
+/* ==========================================================================
+   HERO ROTATING HEADLINE ANIMATION
+   ========================================================================== */
+.hero-rotating-wrapper {
+  display: inline-block;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.hero-text-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  filter: blur(0) !important;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+}
+
+.hero-text-out {
+  opacity: 0 !important;
+  transform: translateY(-14px) !important;
+  filter: blur(4px) !important;
+  transition: opacity 0.35s ease-in, transform 0.35s ease-in, filter 0.35s ease-in;
+}
+
+.hero-text-prep {
+  opacity: 0 !important;
+  transform: translateY(14px) !important;
+  filter: blur(4px) !important;
+  transition: none !important;
+}
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Touch friendly tap highlights */
+* {
+  -webkit-tap-highlight-color: transparent;
+}

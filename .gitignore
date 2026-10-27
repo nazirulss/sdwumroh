@@ -1,0 +1,17 @@
+# Dependencies
+node_modules/
+
+# Local Dev & Build
+.vercel/
+*.log
+.DS_Store
+Thumbs.db
+
+# Clasp & Secrets
+.clasp.json.local
+.env
+.env.local
+.env.production
+credentials.json
+.qoder/
+

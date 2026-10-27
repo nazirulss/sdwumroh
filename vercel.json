@@ -1,0 +1,30 @@
+{
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/admin",
+      "destination": "/app",
+      "permanent": false
+    },
+    {
+      "source": "/jamaah",
+      "destination": "/app",
+      "permanent": false
+    },
+    {
+      "source": "/backoffice",
+      "destination": "/app",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/app",
+      "destination": "/app.html"
+    },
+    {
+      "source": "/app/(.*)",
+      "destination": "/app.html"
+    }
+  ]
+}
