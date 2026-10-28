@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v1';
+const CACHE_NAME = 'sdw-umroh-pwa-v3';
 
 const PRECACHE_URLS = [
   '/',
@@ -53,6 +53,16 @@ self.addEventListener('fetch', (event) => {
     fetch(event.request)
       .then((response) => {
         if (!response || response.status !== 200 || response.type !== 'basic') {
+          // Fallback clean URLs jika server lokal mengembalikan 404 untuk navigasi
+          if (response && response.status === 404 && event.request.mode === 'navigate') {
+            const url = new URL(event.request.url);
+            if (url.pathname.endsWith('/paket')) return caches.match('/paket.html');
+            if (url.pathname.endsWith('/ziarah')) return caches.match('/ziarah.html');
+            if (url.pathname.endsWith('/jadwal')) return caches.match('/jadwal.html');
+            if (url.pathname.endsWith('/kalkulator')) return caches.match('/kalkulator.html');
+            if (url.pathname.endsWith('/tentang')) return caches.match('/tentang.html');
+            if (url.pathname.endsWith('/faq')) return caches.match('/faq.html');
+          }
           return response;
         }
 
@@ -69,8 +79,13 @@ self.addEventListener('fetch', (event) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // Jika navigasi halaman dan tidak ada di cache, arahkan ke index.html
+          // Fallback navigasi offline clean URLs
           if (event.request.mode === 'navigate') {
+            const url = new URL(event.request.url);
+            if (url.pathname.endsWith('/paket')) return caches.match('/paket.html');
+            if (url.pathname.endsWith('/ziarah')) return caches.match('/ziarah.html');
+            if (url.pathname.endsWith('/jadwal')) return caches.match('/jadwal.html');
+            if (url.pathname.endsWith('/kalkulator')) return caches.match('/kalkulator.html');
             return caches.match('/index.html');
           }
         });

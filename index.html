@@ -510,125 +510,111 @@
     <!-- KHUSUS TAMPILAN MOBILE: ISLAMIC SUPER-APP (ASNAWIYYAH REFERENCE)    -->
     <!-- =================================================================== -->
     <div id="sdw-mobile-app-section" class="block lg:hidden max-w-xl mx-auto px-3.5 pt-3 pb-2 space-y-3 relative z-30 -mt-6">
-        <!-- 1. Widget Waktu Sholat Haramain & Masehi/Hijriah (Compact & Aesthetic) -->
+        <!-- 1. Widget Waktu Sholat Haramain & Masehi/Hijriah (2 Kolom Kiri & Kanan) -->
         <section onclick="window.openJadwalSholatModal()" title="Buka Jadwal Lengkap Sholat 5 Waktu Makkah &amp; WIB"
-            class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#4C1D6B] text-white px-3.5 py-3 rounded-2xl shadow-lg border border-sdw-gold/40 relative overflow-hidden space-y-2 cursor-pointer active:scale-[0.99] transition hover:brightness-105">
+            class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#4C1D6B] text-white px-3.5 py-3 rounded-2xl shadow-sm border border-sdw-gold/30 relative overflow-hidden cursor-pointer active:scale-[0.99] transition hover:brightness-105">
             <div class="absolute -right-5 -bottom-5 text-white/5 text-8xl pointer-events-none">
                 <i class="fa-solid fa-kaaba"></i>
             </div>
 
-            <!-- Bagian Atas: Kiri (Lokasi & Jam) | Kanan (Shalat Makkah Terdekat) -->
-            <div class="flex justify-between items-start gap-2 relative z-10">
-                <!-- Sebelah Kiri: Lokasi & Jam Digital Makkah -->
-                <div class="flex flex-col items-start space-y-1 min-w-0 flex-1">
-                    <div class="flex items-center space-x-1.5 font-bold text-white leading-tight min-w-0 w-full text-[11px]">
-                        <i class="fa-solid fa-location-dot text-amber-400 shrink-0 text-xs"></i>
-                        <span class="truncate tracking-tight font-extrabold text-gold-300">Makkah al-Mukarramah</span>
+            <div class="grid grid-cols-2 gap-2 relative z-10 text-[11px] items-center">
+                <!-- BAGIAN KIRI: Lokasi Aktual, Tgl Hijriyah, Tgl Masehi -->
+                <div class="space-y-1.5 pr-1 border-r border-white/10">
+                    <!-- 1. Lokasi Aktual -->
+                    <div class="flex items-center gap-1.5 font-bold text-amber-300">
+                        <i class="fa-solid fa-location-dot text-amber-400 text-[10px] shrink-0"></i>
+                        <span class="truncate tracking-tight">Makkah al-Mukarramah</span>
                     </div>
-                    <div id="home-makkah-clock"
-                        class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded-lg border border-amber-400/20 shadow-inner inline-flex items-center tracking-wide text-[10.5px]">
-                        12:00:00 WAS
+                    <!-- 2. Tgl Hijriyah -->
+                    <div class="flex items-center gap-1.5 text-amber-200/90 text-[10px]">
+                        <i class="fa-solid fa-moon text-amber-300 text-[9px] shrink-0"></i>
+                        <span id="home-date-hijri" class="font-medium whitespace-nowrap">15 Jumadil Ula 1448 H</span>
+                    </div>
+                    <!-- 3. Tgl Masehi -->
+                    <div class="flex items-center gap-1.5 text-slate-300 text-[9.5px]">
+                        <i class="fa-regular fa-calendar text-emerald-300 text-[9px] shrink-0"></i>
+                        <span id="home-date-masehi" class="truncate">Rabu, 28 Oktober 2026</span>
                     </div>
                 </div>
 
-                <!-- Sebelah Kanan: Waktu Sholat Terdekat -->
-                <div class="flex flex-col items-end space-y-1 shrink-0 ml-1">
-                    <div class="font-bold text-white text-right leading-tight text-[11.5px]">
-                        <span id="home-next-prayer-name">Zuhur Makkah</span>
+                <!-- BAGIAN KANAN: Jadwal Shalat terdekat, Countdown, Jam Aktual -->
+                <div class="space-y-1.5 pl-1 flex flex-col items-end text-right">
+                    <!-- 1. Jadwal Shalat Terdekat -->
+                    <div class="flex items-center gap-1.5 justify-end">
+                        <span id="home-next-prayer-name" class="font-semibold text-slate-200 text-[10.5px]">Zuhur Makkah</span>
+                        <span id="home-next-prayer-time" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner">
+                            12:10 WAS
+                        </span>
                     </div>
-                    <div id="home-next-prayer-time"
-                        class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded-lg border border-amber-400/20 shadow-inner inline-flex items-center tracking-wider text-[10.5px]">
-                        12:10 WAS
+                    <!-- 2. Countdown Menuju Sholat -->
+                    <div class="flex items-center gap-1 text-[10px] justify-end">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping shrink-0"></span>
+                        <span class="text-slate-300">Menuju <span id="home-countdown-prayer-name" class="font-bold text-amber-300">Zuhur</span>:</span>
+                        <span id="home-prayer-countdown" class="font-mono font-black text-amber-300 tracking-wider bg-black/30 px-1 rounded">-00:00:00</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Baris Tengah: Real-time Countdown Timer Menuju Sholat -->
-            <div class="flex items-center justify-between bg-black/40 px-2.5 py-1.5 rounded-xl border border-sdw-gold/25 relative z-10 text-[10.5px]">
-                <div class="flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-                    <span class="text-slate-200">Menuju <span id="home-countdown-prayer-name" class="font-bold text-amber-300">Zuhur</span>:</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <span id="home-prayer-countdown" class="font-mono font-black text-xs text-amber-300 tracking-wider">-00:00:00</span>
-                    <span class="text-[9px] text-sdw-gold font-bold bg-sdw-gold/20 px-1.5 py-0.5 rounded border border-sdw-gold/40 flex items-center gap-0.5">
-                        <span>5 Waktu</span>
-                        <i class="fa-solid fa-chevron-right text-[7px]"></i>
-                    </span>
-                </div>
-            </div>
-
-            <!-- Baris Bawah: Tanggal Masehi & Tanggal Hijriyah -->
-            <div class="flex justify-between items-center text-emerald-100/90 relative z-10 pt-0.5 text-[10px] border-t border-white/10">
-                <div id="home-date-masehi" class="flex items-center space-x-1.5 text-slate-200/90 whitespace-nowrap">
-                    <i class="fa-regular fa-calendar text-emerald-300 text-[10px]"></i>
-                    <span class="font-medium">Selasa, 27 Oktober 2026</span>
-                </div>
-                <div id="home-date-hijri" class="flex items-center space-x-1.5 text-amber-200/90 whitespace-nowrap">
-                    <i class="fa-solid fa-moon text-amber-300 text-[10px]"></i>
-                    <span class="font-medium">15 Jumadil Ula 1448 H</span>
+                    <!-- 3. Jam Aktual Makkah -->
+                    <div class="flex items-center gap-1.5 justify-end text-[10px]">
+                        <span class="text-slate-300/80">Jam WAS:</span>
+                        <span id="home-makkah-clock" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner">
+                            12:00:00 WAS
+                        </span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. Grid Layanan Cepat (4 Kolom x 2 Baris = 8 Ikon Squircle Asnawiyyah Style) -->
+        <!-- 2. Grid 8 Menu Utama (4 Kolom x 2 Baris) -->
         <div class="bg-white rounded-2xl p-3.5 shadow-md border border-purple-100/80">
-            <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-100">
-                <span class="text-xs font-black text-sdw-pine flex items-center gap-1.5">
-                    <i class="fa-solid fa-compass text-sdw-gold"></i> Layanan Cepat Jamaah
-                </span>
-                <span class="text-[10px] text-slate-400 font-semibold">One-Click Services</span>
-            </div>
             <div class="grid grid-cols-4 gap-y-3.5 gap-x-2">
                 <!-- 1. Paket Umroh -->
-                <a href="/paket" class="flex flex-col items-center text-center w-full group transition">
+                <a href="paket.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-purple-50 text-sdw-pine rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sdw-pine group-hover:text-white transition-all duration-300 border border-purple-100/80">
                         <i class="fa-solid fa-kaaba"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Paket Umroh</span>
                 </a>
 
-                <!-- 2. Jadwal Kloter -->
-                <a href="/jadwal" class="flex flex-col items-center text-center w-full group transition">
-                    <div class="w-12 h-12 bg-rose-50 text-rose-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition-all duration-300 border border-rose-100/80">
-                        <i class="fa-solid fa-calendar-check"></i>
+                <!-- 2. Titik Hotel (Makkah & Madinah) -->
+                <button type="button" onclick="window.openTitikHotelModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-blue-100/80">
+                        <i class="fa-solid fa-hotel"></i>
                     </div>
-                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Jadwal Kloter</span>
-                </a>
+                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Titik Hotel</span>
+                </button>
 
-                <!-- 3. Kalkulator Biaya -->
-                <a href="/kalkulator" class="flex flex-col items-center text-center w-full group transition">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 border border-amber-100/80">
-                        <i class="fa-solid fa-calculator"></i>
+                <!-- 3. Checklist Koper -->
+                <button type="button" onclick="window.openChecklistKoperModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 border border-amber-100/80">
+                        <i class="fa-solid fa-suitcase-rolling"></i>
                     </div>
-                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Kalkulator</span>
-                </a>
+                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Checklist Koper</span>
+                </button>
 
-                <!-- 4. Panduan Doa (Buku Saku Manasik Offline) -->
-                <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
-                    <div class="w-12 h-12 bg-emerald-50 text-emerald-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
-                        <i class="fa-solid fa-book-quran"></i>
+                <!-- 4. Arah Kiblat -->
+                <button type="button" onclick="window.openArahKiblatModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                    <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
+                        <i class="fa-solid fa-compass"></i>
                     </div>
-                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Buku Doa</span>
+                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Arah Kiblat</span>
                 </button>
 
                 <!-- 5. Peta Ziarah -->
-                <a href="/ziarah" class="flex flex-col items-center text-center w-full group transition">
+                <a href="ziarah.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-teal-600 group-hover:text-white transition-all duration-300 border border-teal-100/80">
                         <i class="fa-solid fa-map-location-dot"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Peta Ziarah</span>
                 </a>
 
-                <!-- 6. Syarat & Dokumen -->
-                <a href="/faq#dokumen" class="flex flex-col items-center text-center w-full group transition">
-                    <div class="w-12 h-12 bg-blue-50 text-blue-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-blue-100/80">
-                        <i class="fa-solid fa-passport"></i>
+                <!-- 6. Galeri Kloter -->
+                <button type="button" onclick="window.openGaleriKloterModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                    <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition-all duration-300 border border-rose-100/80">
+                        <i class="fa-solid fa-photo-film"></i>
                     </div>
-                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Syarat Paspor</span>
-                </a>
+                    <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Galeri Kloter</span>
+                </button>
 
-                <!-- 7. Live Haramain -->
+                <!-- 7. Live Ka'bah -->
                 <a href="https://www.youtube.com/results?search_query=live+makkah+haramain+now" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-red-600 group-hover:text-white transition-all duration-300 border border-red-100/80">
                         <i class="fa-solid fa-tower-broadcast"></i>
@@ -637,7 +623,7 @@
                 </a>
 
                 <!-- 8. CS Khidmat 24/7 -->
-                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20layanan%20jamaah." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
                         <i class="fa-brands fa-whatsapp text-2xl"></i>
                     </div>

@@ -33,17 +33,17 @@
 
     // Role View Permission Mapping
     const PERMISSIONS = {
-        'PILGRIM': ['tab-jamaah'],
-        'SALES': ['tab-crm', 'tab-jamaah'],
-        'DOCUMENT_OFFICER': ['tab-documents', 'tab-jamaah'],
-        'FINANCE': ['tab-finance', 'tab-jamaah', 'tab-audit'],
-        'OPERATIONS': ['tab-trips', 'tab-documents', 'tab-jamaah'],
-        'TOUR_LEADER': ['tab-trips', 'tab-jamaah'],
-        'MUTHAWWIF': ['tab-trips', 'tab-jamaah'],
-        'PARTNER': ['tab-crm'],
-        'ADMIN': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit'],
-        'MANAGER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit'],
-        'OWNER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit']
+        'PILGRIM': ['tab-jamaah', 'tab-profile'],
+        'SALES': ['tab-crm', 'tab-jamaah', 'tab-profile'],
+        'DOCUMENT_OFFICER': ['tab-documents', 'tab-jamaah', 'tab-profile'],
+        'FINANCE': ['tab-finance', 'tab-jamaah', 'tab-audit', 'tab-profile'],
+        'OPERATIONS': ['tab-trips', 'tab-documents', 'tab-jamaah', 'tab-profile'],
+        'TOUR_LEADER': ['tab-trips', 'tab-jamaah', 'tab-profile'],
+        'MUTHAWWIF': ['tab-trips', 'tab-jamaah', 'tab-profile'],
+        'PARTNER': ['tab-crm', 'tab-profile'],
+        'ADMIN': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile'],
+        'MANAGER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile'],
+        'OWNER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile']
     };
 
     function getCurrentRole() {
@@ -100,7 +100,7 @@
             targetView.classList.remove('hidden');
         }
 
-        // Update nav styles
+        // Update desktop nav styles
         const allNavBtns = document.querySelectorAll('[data-perm-tab]');
         allNavBtns.forEach(btn => {
             if (btn.getAttribute('data-perm-tab') === tabId) {
@@ -109,6 +109,36 @@
             } else {
                 btn.classList.remove('bg-sdw-pine', 'text-white', 'shadow');
                 btn.classList.add('text-sdw-charcoal', 'hover:bg-slate-100');
+            }
+        });
+
+        // Update mobile bottom nav styles
+        const allBottomBtns = document.querySelectorAll('[data-bottom-tab]');
+        allBottomBtns.forEach(btn => {
+            const iconWrap = btn.querySelector('div');
+            const label = btn.querySelector('span');
+            if (btn.getAttribute('data-bottom-tab') === tabId) {
+                btn.classList.add('text-sdw-pine');
+                btn.classList.remove('text-slate-500');
+                if (iconWrap) {
+                    iconWrap.classList.add('bg-purple-50', 'text-sdw-pine');
+                    iconWrap.classList.remove('text-slate-500');
+                }
+                if (label) {
+                    label.classList.add('font-extrabold', 'text-sdw-pine');
+                    label.classList.remove('font-semibold');
+                }
+            } else {
+                btn.classList.remove('text-sdw-pine');
+                btn.classList.add('text-slate-500');
+                if (iconWrap) {
+                    iconWrap.classList.remove('bg-purple-50', 'text-sdw-pine');
+                    iconWrap.classList.add('text-slate-500');
+                }
+                if (label) {
+                    label.classList.remove('font-extrabold', 'text-sdw-pine');
+                    label.classList.add('font-semibold');
+                }
             }
         });
     }

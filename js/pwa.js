@@ -652,6 +652,284 @@
       `;
       document.body.appendChild(iModal);
     }
+
+    // G. Modal Titik Hotel (Makkah & Madinah Navigation)
+    if (!document.getElementById('modalTitikHotel')) {
+      const hModal = document.createElement('div');
+      hModal.id = 'modalTitikHotel';
+      hModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      hModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 overflow-y-auto">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-blue-500/10 text-blue-400 flex items-center justify-center border border-blue-500/30 text-lg">
+                <i class="fa-solid fa-hotel text-blue-400"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Titik Hotel &amp; Kumpul</h3>
+                <p class="text-[11px] text-purple-200/80">Panduan Lokasi Hotel Makkah &amp; Madinah</p>
+              </div>
+            </div>
+            <button onclick="window.closeTitikHotelModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Tab Kota -->
+          <div class="flex gap-2 p-1 bg-black/40 rounded-2xl border border-white/5 mb-3 shrink-0">
+            <button id="hotelTabMakkahBtn" onclick="window.switchHotelTab('makkah')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center">
+              Makkah Al-Mukarramah
+            </button>
+            <button id="hotelTabMadinahBtn" onclick="window.switchHotelTab('madinah')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center">
+              Madinah Al-Munawwarah
+            </button>
+          </div>
+
+          <!-- Konten Info Hotel -->
+          <div id="hotelDetailContainer" class="space-y-3">
+            <!-- Diisi otomatis oleh switchHotelTab -->
+          </div>
+        </div>
+      `;
+      document.body.appendChild(hModal);
+    }
+
+    // H. Modal Checklist Koper (Packing List Interaktif)
+    if (!document.getElementById('modalChecklistKoper')) {
+      const kModal = document.createElement('div');
+      kModal.id = 'modalChecklistKoper';
+      kModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      kModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-400 flex items-center justify-center border border-amber-500/30 text-lg">
+                <i class="fa-solid fa-suitcase-rolling text-amber-400"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Checklist Koper Jamaah</h3>
+                <p class="text-[11px] text-purple-200/80">Centang barang yang sudah siap dipacking</p>
+              </div>
+            </div>
+            <button onclick="window.closeChecklistKoperModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="mb-3 shrink-0 bg-black/30 p-2.5 rounded-xl border border-white/5">
+            <div class="flex justify-between text-[11px] mb-1 font-bold">
+              <span class="text-purple-200">Kesiapan Barang Bawaan</span>
+              <span id="koperProgressText" class="text-gold-300">0/12 Siap</span>
+            </div>
+            <div class="w-full h-2 bg-black/50 rounded-full overflow-hidden">
+              <div id="koperProgressBar" class="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Checklist Items Scrollable -->
+          <div id="koperItemsList" class="flex-1 overflow-y-auto space-y-2 pr-1 text-xs">
+            <!-- Diisi otomatis oleh renderKoperChecklist -->
+          </div>
+
+          <!-- Footer Actions -->
+          <div class="mt-3 pt-3 border-t border-gold-500/20 flex items-center justify-between shrink-0 text-xs">
+            <button onclick="window.resetKoperChecklist()" class="text-slate-400 hover:text-rose-400 text-[11px] underline cursor-pointer">
+              Reset Pilihan
+            </button>
+            <button onclick="window.closeChecklistKoperModal()" class="px-4 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold hover:brightness-110 transition-colors cursor-pointer">
+              Selesai
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(kModal);
+    }
+
+    // I. Modal Arah Kiblat Digital
+    if (!document.getElementById('modalArahKiblat')) {
+      const qModal = document.createElement('div');
+      qModal.id = 'modalArahKiblat';
+      qModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      qModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col items-center animate-in fade-in zoom-in-95 text-center">
+          <!-- Header -->
+          <div class="w-full flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
+            <div class="flex items-center gap-2.5 text-left">
+              <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/30 text-lg">
+                <i class="fa-solid fa-compass text-emerald-400"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Penunjuk Arah Kiblat</h3>
+                <p class="text-[11px] text-purple-200/80">Arah Ka'bah Al-Musyarrafah Makkah</p>
+              </div>
+            </div>
+            <button onclick="window.closeArahKiblatModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Compass Dial Graphic -->
+          <div class="relative w-52 h-52 sm:w-56 sm:h-56 my-3 flex items-center justify-center">
+            <!-- Outer Ring -->
+            <div class="absolute inset-0 rounded-full border-4 border-gold-500/30 bg-black/40 shadow-inner flex items-center justify-center">
+              <!-- Cardinal points -->
+              <span class="absolute top-2 font-black text-xs text-amber-400">U (N)</span>
+              <span class="absolute bottom-2 font-black text-xs text-purple-300/70">S</span>
+              <span class="absolute left-2 font-black text-xs text-purple-300/70">B</span>
+              <span class="absolute right-2 font-black text-xs text-purple-300/70">T</span>
+            </div>
+
+            <!-- Rotating Compass Needle -->
+            <div id="compassNeedle" class="relative w-full h-full flex items-center justify-center transition-transform duration-300" style="transform: rotate(295deg)">
+              <!-- Needle Pointer to Qibla (Ka'bah) -->
+              <div class="absolute top-4 flex flex-col items-center">
+                <div class="text-xl">🕋</div>
+                <div class="w-1.5 h-16 bg-gradient-to-b from-amber-400 to-gold-600 rounded-full shadow-md shadow-amber-500/50"></div>
+              </div>
+              <div class="absolute bottom-4 flex flex-col items-center">
+                <div class="w-1.5 h-16 bg-gradient-to-t from-slate-500 to-slate-700 rounded-full"></div>
+              </div>
+              <!-- Center Hub -->
+              <div class="w-7 h-7 rounded-full bg-gold-500 border-2 border-white text-slate-950 flex items-center justify-center shadow-lg text-[10px] font-black z-10">
+                ✦
+              </div>
+            </div>
+          </div>
+
+          <!-- Degree Information -->
+          <div class="bg-black/30 px-4 py-2 rounded-2xl border border-white/10 mt-1 mb-2">
+            <div class="text-lg font-black text-gold-300 font-mono tracking-wider">
+              295&deg; Barat Laut (NW)
+            </div>
+            <p class="text-[10px] text-purple-200/70 mt-0.5">Sudut Acuan Kiblat dari Indonesia &bull; Menghadap Ka'bah</p>
+          </div>
+
+          <p class="text-[11px] text-purple-200/80 mb-3 px-2">
+            Pegang ponsel mendatar sejajar tanah. Jika gawai mendukung sensor magnetik, jarum akan otomatis menyesuaikan arah secara presisi.
+          </p>
+
+          <button onclick="window.closeArahKiblatModal()" class="w-full py-2.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs hover:brightness-110 transition-colors cursor-pointer shrink-0">
+            Tutup Kompas
+          </button>
+        </div>
+      `;
+      document.body.appendChild(qModal);
+    }
+
+    // J. Modal Galeri & E-Sertifikat Kloter
+    if (!document.getElementById('modalGaleriKloter')) {
+      const gModal = document.createElement('div');
+      gModal.id = 'modalGaleriKloter';
+      gModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      gModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 overflow-y-auto">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/30 text-lg">
+                <i class="fa-solid fa-photo-film text-rose-400"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Galeri &amp; E-Sertifikat Kloter</h3>
+                <p class="text-[11px] text-purple-200/80">Dokumentasi Mabrur Kloter Syawal Barakah</p>
+              </div>
+            </div>
+            <button onclick="window.closeGaleriKloterModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Tab Galeri vs Sertifikat -->
+          <div class="flex gap-2 p-1 bg-black/40 rounded-2xl border border-white/5 mb-3 shrink-0">
+            <button id="galeriTabFotoBtn" onclick="window.switchGaleriTab('foto')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center">
+              Foto Rombongan Kloter
+            </button>
+            <button id="galeriTabSertifikatBtn" onclick="window.switchGaleriTab('sertifikat')" class="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center">
+              E-Sertifikat Umroh
+            </button>
+          </div>
+
+          <!-- Konten Galeri -->
+          <div id="galeriTabContentFoto" class="space-y-3">
+            <div class="grid grid-cols-2 gap-2.5">
+              <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
+                <img src="assets/hero-haram.png" alt="Dokumentasi Ka'bah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-2 text-[10px]">
+                  <span class="font-bold text-white block truncate">Thawaf Akbar Bersama</span>
+                  <span class="text-slate-400">Pelataran Mataf Ka'bah</span>
+                </div>
+              </div>
+              <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
+                <img src="assets/hero-twilight.jpg" alt="Dokumentasi Madinah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-2 text-[10px]">
+                  <span class="font-bold text-white block truncate">Ziarah Raudhah Syarif</span>
+                  <span class="text-slate-400">Masjid Nabawi Madinah</span>
+                </div>
+              </div>
+              <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
+                <img src="assets/pkg-vip-khidmat.png" alt="Dokumentasi Manasik" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-2 text-[10px]">
+                  <span class="font-bold text-white block truncate">Napak Tilas Jabal Uhud</span>
+                  <span class="text-slate-400">Bukit Pemanah Rummat</span>
+                </div>
+              </div>
+              <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
+                <img src="assets/hero-haram.png" alt="Dokumentasi Kepulangan" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <div class="p-2 text-[10px]">
+                  <span class="font-bold text-white block truncate">Pelepasan Bandara Jeddah</span>
+                  <span class="text-slate-400">King Abdulaziz Airport</span>
+                </div>
+              </div>
+            </div>
+            <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl bg-gold-500/20 text-gold-300 border border-gold-500/40 hover:bg-gold-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+              <i class="fa-solid fa-cloud-arrow-down"></i>
+              <span>Unduh Seluruh Dokumentasi Kloter (Google Drive)</span>
+            </a>
+          </div>
+
+          <!-- Konten Sertifikat -->
+          <div id="galeriTabContentSertifikat" class="hidden space-y-3">
+            <div class="p-4 sm:p-5 rounded-2xl bg-gradient-to-b from-[#2d1139] to-[#17051f] border-2 border-gold-500/60 shadow-xl text-center relative overflow-hidden">
+              <div class="text-gold-400 font-serif text-sm tracking-widest uppercase mb-1">
+                ✦ SAMIRA ALI WISATA (SDW UMROH) ✦
+              </div>
+              <h4 class="text-base font-black text-white font-serif tracking-wide">SERTIFIKAT UMROH MABRUR</h4>
+              <div class="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto my-2"></div>
+              <p class="text-[10px] text-purple-200/80">Dengan rahmat Allah SWT, dianugerahkan kepada:</p>
+              <div class="text-base sm:text-lg font-black text-amber-300 font-serif my-1.5">
+                Ahmad Jamaah Teladan
+              </div>
+              <p class="text-[10px] text-purple-200/80">Telah menunaikan Rukun &amp; Wajib Ibadah Umroh pada Program:</p>
+              <div class="text-xs font-bold text-white mt-1">
+                Umroh Syawal Barakah 1448 H / 2026 M
+              </div>
+              <div class="mt-3 pt-2 border-t border-white/10 text-[9px] text-slate-400 flex justify-between items-center">
+                <span>No. Reg: REG-SDW-2701</span>
+                <span>Makkah al-Mukarramah</span>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="alert('E-Sertifikat resmi siap diunduh dalam format PDF Resolusi Tinggi.')" class="py-2.5 px-3 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 hover:brightness-110 cursor-pointer">
+                <i class="fa-solid fa-download"></i>
+                <span>Download PDF</span>
+              </button>
+              <a href="https://wa.me/?text=Alhamdulillah%20saya%20telah%20selesai%20menunaikan%20ibadah%20umroh%20mabrur%20bersama%20SDW%20UMROH." target="_blank" rel="noopener noreferrer" class="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5">
+                <i class="fa-brands fa-whatsapp"></i>
+                <span>Bagikan (WA)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(gModal);
+    }
   }
 
   function showPwaPrompt() {
@@ -1123,6 +1401,264 @@
     });
   };
 
+  // ==================== TITIK HOTEL MODAL CONTROLLERS ====================
+  const HOTEL_DATA = {
+    makkah: {
+      name: 'Swissotel Al Maqam Makkah (Bintang 5)',
+      distance: '0 Meter (Pelataran Masjidil Haram)',
+      gate: 'Pintu Utama King Abdulaziz (Gate 1)',
+      address: 'Kompleks Abraj Al Bait (Clock Tower), Ibrahim Al Khalil Rd, Makkah',
+      phone: '+966 12 571 7333',
+      mapUrl: 'https://maps.google.com/?q=Swissotel+Al+Maqam+Makkah',
+      notes: 'Pintu lift hotel terhubung langsung ke pelataran Thawaf dan Clock Tower Mall.'
+    },
+    madinah: {
+      name: 'Dar Al Taqwa Hotel Madinah (Bintang 5)',
+      distance: '50 Meter (Pelataran Masjid Nabawi)',
+      gate: 'Pintu Utama King Fahd (Pintu 21 & Pintu 22)',
+      address: 'Central Area North, Al Haram, Al Madinah Al Munawwarah',
+      phone: '+966 14 829 1111',
+      mapUrl: 'https://maps.google.com/?q=Dar+Al+Taqwa+Hotel+Madinah',
+      notes: 'Dekat dengan pelataran ziarah Raudhah Syarif khusus jamaah wanita & pria.'
+    }
+  };
+
+  window.openTitikHotelModal = function (city = 'makkah') {
+    const modal = document.getElementById('modalTitikHotel');
+    if (!modal) return;
+    window.switchHotelTab(city);
+    modal.classList.remove('hidden');
+  };
+
+  window.closeTitikHotelModal = function () {
+    const modal = document.getElementById('modalTitikHotel');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.switchHotelTab = function (city) {
+    const data = HOTEL_DATA[city] || HOTEL_DATA.makkah;
+    const container = document.getElementById('hotelDetailContainer');
+    const makkahBtn = document.getElementById('hotelTabMakkahBtn');
+    const madinahBtn = document.getElementById('hotelTabMadinahBtn');
+
+    if (makkahBtn && madinahBtn) {
+      if (city === 'makkah') {
+        makkahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        madinahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+      } else {
+        madinahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        makkahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+      }
+    }
+
+    if (!container) return;
+    container.innerHTML = `
+      <div class="p-3.5 bg-black/30 rounded-2xl border border-white/10 space-y-2 text-left">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <span class="text-[9.5px] uppercase font-bold text-amber-300 tracking-wider">Hotel Rombongan Kloter</span>
+            <h4 class="font-bold text-sm text-white">${data.name}</h4>
+          </div>
+          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Bintang 5</span>
+        </div>
+        <div class="space-y-1.5 text-[11px] text-purple-200/90 pt-1 border-t border-white/5">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-person-walking text-gold-400 w-4 text-center"></i>
+            <span>Jarak: <strong class="text-white">${data.distance}</strong></span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-door-open text-gold-400 w-4 text-center"></i>
+            <span>Akses: <strong class="text-white">${data.gate}</strong></span>
+          </div>
+          <div class="flex items-start gap-2">
+            <i class="fa-solid fa-location-dot text-gold-400 w-4 text-center mt-0.5"></i>
+            <span class="text-[10px] text-slate-300">${data.address}</span>
+          </div>
+        </div>
+        <p class="text-[10px] text-purple-200/70 bg-purple-950/40 p-2 rounded-xl border border-purple-800/30">
+          💡 ${data.notes}
+        </p>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <a href="${data.mapUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+          <i class="fa-solid fa-map-location-dot"></i>
+          <span>Buka Petunjuk Arah (Google Maps)</span>
+        </a>
+        <a href="tel:${data.phone}" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-purple-200 border border-white/10 text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+          <i class="fa-solid fa-phone text-xs"></i>
+          <span>Hubungi Resepsionis (${data.phone})</span>
+        </a>
+      </div>
+    `;
+  };
+
+  // ==================== CHECKLIST KOPER CONTROLLERS ====================
+  const KOPER_ITEMS = [
+    { id: 'ihram', cat: 'Pakaian & Ibadah', label: '2 Set Kain Ihram & Sabuk Ikat Pinggang (Pria) / Mukena Putih (Wanita)' },
+    { id: 'sandal', cat: 'Pakaian & Ibadah', label: 'Sandal Nyaman / Sandal Jepit & Kantong Sandal Masuk Masjid' },
+    { id: 'baju', cat: 'Pakaian & Ibadah', label: 'Pakaian Harian Sopan (3-4 Stel) & Jaket / Cardigan Hangat' },
+    { id: 'sabun', cat: 'Perlengkapan Mandi', label: 'Sabun, Sampo, & Deodorant Non-Wangi (Bebas Parfum Ihram)' },
+    { id: 'sikat', cat: 'Perlengkapan Mandi', label: 'Sikat Gigi, Pasta Gigi Travel, & Handuk Ringan Cepat Kering' },
+    { id: 'gunting', cat: 'Perlengkapan Mandi', label: 'Gunting Kecil untuk Tahallul (Wajib masuk bagasi koper besar)' },
+    { id: 'colokan', cat: 'Elektronik & Gadget', label: 'Colokan Adaptor Kaki 3 Standar Saudi (Tipe G)' },
+    { id: 'powerbank', cat: 'Elektronik & Gadget', label: 'Powerbank Maks. 20.000 mAh (Wajib masuk tas kabin tenteng)' },
+    { id: 'semprotan', cat: 'Aksesoris & Medis', label: 'Botol Semprotan Air Wajah (Wudhu & Pelembab Udara Kering)' },
+    { id: 'obat', cat: 'Aksesoris & Medis', label: 'Obat-obatan Pribadi, Minyak Angin, Tolak Angin & Vitamin C/D' },
+    { id: 'dokumen', cat: 'Dokumen', label: 'Paspor RI Asli, Buku Kuning Vaksin Meningitis & Identitas Kloter' },
+    { id: 'kantong_zamzam', cat: 'Dokumen', label: 'Botol Tumbler Kosong & Tas Selempang Passport / Uang Riyal' }
+  ];
+
+  window.openChecklistKoperModal = function () {
+    const modal = document.getElementById('modalChecklistKoper');
+    if (!modal) return;
+    window.renderKoperChecklist();
+    modal.classList.remove('hidden');
+  };
+
+  window.closeChecklistKoperModal = function () {
+    const modal = document.getElementById('modalChecklistKoper');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  function getKoperState() {
+    try {
+      return JSON.parse(localStorage.getItem('sdw_koper_checklist') || '{}');
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveKoperState(state) {
+    try {
+      localStorage.setItem('sdw_koper_checklist', JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  window.toggleKoperItem = function (id) {
+    const state = getKoperState();
+    state[id] = !state[id];
+    saveKoperState(state);
+    window.renderKoperChecklist();
+  };
+
+  window.resetKoperChecklist = function () {
+    if (confirm('Reset seluruh centang checklist koper?')) {
+      saveKoperState({});
+      window.renderKoperChecklist();
+    }
+  };
+
+  window.renderKoperChecklist = function () {
+    const container = document.getElementById('koperItemsList');
+    const progText = document.getElementById('koperProgressText');
+    const progBar = document.getElementById('koperProgressBar');
+    if (!container) return;
+
+    const state = getKoperState();
+    let checkedCount = 0;
+
+    let currentCat = '';
+    let html = '';
+
+    KOPER_ITEMS.forEach((item) => {
+      const isChecked = !!state[item.id];
+      if (isChecked) checkedCount++;
+
+      if (item.cat !== currentCat) {
+        currentCat = item.cat;
+        html += `<div class="font-bold text-[10px] text-amber-300 uppercase tracking-wider pt-2 pb-0.5 border-b border-white/5">${currentCat}</div>`;
+      }
+
+      html += `
+        <div onclick="window.toggleKoperItem('${item.id}')" class="flex items-center gap-2.5 p-2 rounded-xl transition-all cursor-pointer ${isChecked ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-200' : 'bg-black/20 hover:bg-black/30 border border-white/5 text-purple-200'}">
+          <div class="w-4 h-4 rounded-md flex items-center justify-center shrink-0 border ${isChecked ? 'bg-emerald-500 border-emerald-400 text-slate-950 font-black' : 'border-purple-400/40 bg-black/40'}">
+            ${isChecked ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+          </div>
+          <span class="flex-1 ${isChecked ? 'line-through text-purple-300/60' : 'text-purple-100 font-medium'}">${item.label}</span>
+        </div>
+      `;
+    });
+
+    container.innerHTML = html;
+
+    const percent = Math.round((checkedCount / KOPER_ITEMS.length) * 100);
+    if (progText) progText.textContent = `${checkedCount}/${KOPER_ITEMS.length} Siap (${percent}%)`;
+    if (progBar) progBar.style.width = `${percent}%`;
+  };
+
+  // ==================== ARAH KIBLAT CONTROLLERS ====================
+  let compassListenerAttached = false;
+
+  window.openArahKiblatModal = function () {
+    const modal = document.getElementById('modalArahKiblat');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    if (!compassListenerAttached && window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', handleOrientation, true);
+      compassListenerAttached = true;
+    }
+  };
+
+  window.closeArahKiblatModal = function () {
+    const modal = document.getElementById('modalArahKiblat');
+    if (modal) modal.classList.add('hidden');
+    if (compassListenerAttached) {
+      window.removeEventListener('deviceorientation', handleOrientation, true);
+      compassListenerAttached = false;
+    }
+  };
+
+  function handleOrientation(e) {
+    const needle = document.getElementById('compassNeedle');
+    if (!needle) return;
+
+    let heading = e.webkitCompassHeading || (e.alpha ? 360 - e.alpha : null);
+    if (heading !== null) {
+      const qiblaAngle = (295 - heading + 360) % 360;
+      needle.style.transform = `rotate(${qiblaAngle}deg)`;
+    }
+  }
+
+  // ==================== GALERI KLOTER CONTROLLERS ====================
+  window.openGaleriKloterModal = function (tab = 'foto') {
+    const modal = document.getElementById('modalGaleriKloter');
+    if (!modal) return;
+    window.switchGaleriTab(tab);
+    modal.classList.remove('hidden');
+  };
+
+  window.closeGaleriKloterModal = function () {
+    const modal = document.getElementById('modalGaleriKloter');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.switchGaleriTab = function (tab) {
+    const fotoTab = document.getElementById('galeriTabContentFoto');
+    const certTab = document.getElementById('galeriTabContentSertifikat');
+    const fotoBtn = document.getElementById('galeriTabFotoBtn');
+    const certBtn = document.getElementById('galeriTabSertifikatBtn');
+
+    if (!fotoTab || !certTab) return;
+
+    if (tab === 'foto') {
+      fotoTab.classList.remove('hidden');
+      certTab.classList.add('hidden');
+      if (fotoBtn && certBtn) {
+        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+      }
+    } else {
+      fotoTab.classList.add('hidden');
+      certTab.classList.remove('hidden');
+      if (fotoBtn && certBtn) {
+        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+      }
+    }
+  };
+
   // 7. Clock, Haramain Prayer Times & Hijri Calendar with Real-Time Seconds Countdown
   function initPrayerAndClockWidget() {
     function updateClockAndPrayer() {
@@ -1139,7 +1675,7 @@
       const mHours = String(makkahDate.getHours()).padStart(2, '0');
       const mMins = String(makkahDate.getMinutes()).padStart(2, '0');
       const mSecs = String(makkahDate.getSeconds()).padStart(2, '0');
-      const clockMakkah = `${mHours}:${mMins}:${mSecs} WAS (Makkah)`;
+      const clockMakkah = `${mHours}:${mMins}:${mSecs} WAS`;
 
       const clockEl = document.getElementById('home-digital-clock');
       if (clockEl) clockEl.textContent = clockWib;
