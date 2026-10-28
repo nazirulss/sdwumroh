@@ -35,7 +35,7 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#4C1D6B">
     <link rel="icon" type="image/png" href="/assets/icon-192.png">
-    <link rel="apple-touch-icon" href="/assets/icon-192.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
     <script src="/js/pwa.js" defer></script>
 
     <!-- Preconnect & Google Fonts -->
@@ -51,6 +51,45 @@
 </head>
 
 <body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== NATIVE APP SPLASH SCREEN ==================== -->
+    <div id="sdwSplashScreen" class="fixed inset-0 z-[9999] bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] flex flex-col items-center justify-between p-6 sm:p-8 text-white select-none transition-opacity duration-700">
+        <!-- Top Spacer -->
+        <div class="h-6"></div>
+
+        <!-- Center Brand & Logo -->
+        <div class="flex flex-col items-center text-center">
+            <div class="relative flex items-center justify-center mb-6">
+                <div class="absolute w-36 h-36 rounded-full bg-amber-400/15 animate-ping"></div>
+                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-3xl bg-white/5 border border-amber-400/30 p-4 shadow-2xl backdrop-blur-md flex items-center justify-center relative shadow-[0_0_50px_rgba(229,169,60,0.25)]">
+                    <img src="assets/sdw-logo.png" alt="SDW UMROH Logo" class="w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)] animate-pulse">
+                </div>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-black text-white tracking-wider leading-none">
+                SDW <span class="text-amber-400">UMROH</span>
+            </h1>
+            <p class="text-[10px] sm:text-[11px] font-extrabold tracking-[0.25em] text-amber-300 uppercase mt-2">
+                One Journey, One Platform
+            </p>
+            <p class="text-xs text-purple-200/80 mt-1 font-medium">
+                Portal Ibadah &amp; Layanan Jamaah Terpadu
+            </p>
+        </div>
+
+        <!-- Bottom Loading & Accreditations -->
+        <div class="flex flex-col items-center w-full max-w-xs text-center pb-4">
+            <div class="w-48 h-1.5 bg-black/40 rounded-full overflow-hidden border border-white/10 relative mb-3">
+                <div id="splashProgressBar" class="h-full bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 rounded-full transition-all duration-700 ease-out" style="width: 30%"></div>
+            </div>
+            <p id="splashStatusText" class="text-[11px] text-purple-200/80 font-medium">Memuat data ibadah &amp; doa...</p>
+            
+            <div class="mt-4 pt-3 border-t border-white/10 w-full flex items-center justify-center gap-1.5 text-[10px] text-purple-300/60 font-semibold">
+                <i class="fa-solid fa-certificate text-amber-400 text-xs"></i>
+                <span>Penyelenggara Resmi Umroh &amp; Haji Khusus</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ==================== MAIN PUBLIC NAVIGATION (TRANSPARENT AT TOP, FROSTED WHITE ON SCROLL) ==================== -->
     <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-transparent transition-all duration-300">

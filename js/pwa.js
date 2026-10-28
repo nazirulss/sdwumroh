@@ -1268,14 +1268,43 @@
     }, 4500);
   }
 
+  // 10. Native SplashScreen Controller
+  function initSplashScreen() {
+    const splash = document.getElementById('sdwSplashScreen');
+    if (!splash) return;
+
+    const bar = document.getElementById('splashProgressBar');
+    const statusText = document.getElementById('splashStatusText');
+
+    // Smooth simulated progress
+    setTimeout(() => {
+      if (bar) bar.style.width = '70%';
+      if (statusText) statusText.textContent = 'Menyiapkan panduan doa manasik...';
+    }, 350);
+
+    setTimeout(() => {
+      if (bar) bar.style.width = '100%';
+      if (statusText) statusText.textContent = 'Siap melayani ibadah Anda';
+    }, 850);
+
+    setTimeout(() => {
+      splash.classList.add('opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 700);
+    }, 1250);
+  }
+
   // Initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
+      initSplashScreen();
       createPwaUI();
       initPrayerAndClockWidget();
       initAppBannerSlider();
     });
   } else {
+    initSplashScreen();
     createPwaUI();
     initPrayerAndClockWidget();
     initAppBannerSlider();
