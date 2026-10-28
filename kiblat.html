@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompas Arah Kiblat Falakiyah Presisi | SDW UMROH</title>
+    <meta name="description" content="Kompas arah kiblat online falakiyah presisi resmi jamaah SDW UMROH. Akurasi sensor magnetik real-time, perhitungan azimut Ka'bah, jarak ke Masjidil Haram Makkah, dan kalibrasi otomatis.">
+    <link rel="canonical" href="https://sdwumroh.com/kiblat">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <script src="js/pwa.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=calendarColsFinal">
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Pilihan Paket</span>
+                </a>
+                <a href="hotel.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Titik Hotel</span>
+                </a>
+                <a href="koper.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Checklist Koper</span>
+                </a>
+                <a href="kiblat.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Arah Kiblat</span>
+                </a>
+                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Peta Ziarah</span>
+                </a>
+            </div>
+
+            <!-- Header Action Capsule -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20jadwal%20dan%20ibadah." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span class="hidden sm:inline">Bantuan 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda Aplikasi</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-kaaba text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Pilihan Paket</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Titik Hotel</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Checklist Koper</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="kiblat.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-extrabold transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-compass text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Arah Kiblat</span>
+                    </span>
+                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
+                </a>
+                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Peta Ziarah Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE HERO BANNER ==================== -->
+    <header class="pt-28 pb-10 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Navigasi Kembali: Cukup Icon Saja + Nama Menu (Di Bawah Header) -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="app.html" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95 border border-white/15 shadow-sm" title="Kembali ke Beranda" aria-label="Kembali">
+                    <i class="fa-solid fa-arrow-left text-sm text-sdw-gold"></i>
+                </a>
+                <span class="text-sm sm:text-base font-extrabold text-white tracking-wide">Arah Kiblat</span>
+            </div>
+
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
+                    <i class="fa-solid fa-kaaba"></i> Falakiyah Geodesi Presisi
+                </span>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-2">
+                    Kompas Arah Kiblat <span class="text-gold-gradient">Makkah Al-Mukarramah</span>
+                </h1>
+                <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                    Penunjuk arah Ka'bah otomatis menggunakan sensor orientasi kompas perangkat Anda dan formula geodesi falakiyah akurat.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN COMPASS CARD SECTION ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 -mt-6 relative z-20">
+
+        <!-- KARTU UTAMA KOMPAS KIBLAT ROYAL PURPLE & GOLD -->
+        <div class="bg-gradient-to-b from-[#1F0628] via-[#350E46] to-[#1a0522] text-white rounded-3xl shadow-2xl border border-purple-800/50 p-4 sm:p-7 w-full max-w-xl mx-auto flex flex-col justify-between min-h-[580px] relative overflow-hidden select-none">
+            
+            <!-- Ornamen Cahaya Latar Belakang -->
+            <div class="absolute inset-0 opacity-15 pointer-events-none bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-amber-400 via-transparent to-transparent"></div>
+
+            <!-- SUB-HEADER KARTU: LOKASI GPS & OPSI KOTA -->
+            <div class="relative z-10 flex items-center justify-between pb-3 border-b border-white/10 gap-2">
+                <!-- Lokasi Terkoneksi -->
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-[11px] sm:text-xs font-semibold text-amber-200 border border-white/15 shadow-sm max-w-[65%] truncate">
+                    <i class="fa-solid fa-location-dot text-amber-400 shrink-0"></i>
+                    <span id="qibla-current-location" class="truncate">Mendeteksi Lokasi GPS...</span>
+                </div>
+
+                <!-- Aksi Kanan: Refresh GPS & Dropdown Kota Manual -->
+                <div class="flex items-center space-x-1.5 shrink-0">
+                    <button type="button" onclick="ASNKiblat.requestDeviceLocation(true)" title="Perbarui GPS Presisi" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition text-xs border border-white/15">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </button>
+                    <div class="relative inline-block">
+                        <select id="qibla-city-select" onchange="ASNKiblat.changeCity(this.value)" aria-label="Pilihan Kota Manual" class="bg-white/10 hover:bg-white/20 text-white text-[11px] py-1.5 px-2 rounded-xl border border-white/20 outline-none cursor-pointer">
+                            <option value="" class="text-slate-800">Pilih Kota...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFORMASI DERAJAT KIBLAT & STATUS HADAP -->
+            <div class="relative z-10 text-center space-y-1 pt-3">
+                <p class="text-[11px] sm:text-xs text-purple-200 font-medium tracking-wide">
+                    Derajat Sudut Kiblat dari Utara Sejati
+                </p>
+
+                <!-- Angka Derajat Kiblat Raksasa -->
+                <h2 id="qibla-target-deg" class="text-4xl sm:text-5xl font-black tracking-tight text-white font-sans drop-shadow-md">
+                    294.48°
+                </h2>
+
+                <!-- Status Panduan Arah Hadap -->
+                <div class="pt-1">
+                    <div id="qibla-status-badge" class="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md text-white border border-white/20 transition-all duration-300">
+                        <i class="fa-solid fa-compass text-amber-300"></i> Membaca Sensor Kompas...
+                    </div>
+                </div>
+            </div>
+
+            <!-- PIRINGAN KOMPAS PUTIH SOLID & JARUM KA'BAH (ASNAWIYYAH FALAK ENGINE) -->
+            <div class="relative z-10 my-auto py-5">
+                <div class="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto flex items-center justify-center select-none">
+                    
+                    <!-- Glow Halo Hijau saat Tepat Menghadap Ka'bah -->
+                    <div id="qibla-glow-halo" class="absolute inset-0 rounded-full bg-emerald-400/35 blur-2xl opacity-0 transition-opacity duration-500 pointer-events-none"></div>
+
+                    <!-- Tanda Panah Penunjuk Hadap Atas Smartphone (Target Jam 12) -->
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-b-[12px] border-b-amber-400 z-40 drop-shadow"></div>
+
+                    <!-- PIRINGAN KOMPAS YANG BERPUTAR (ROTATING DIAL) -->
+                    <div id="qibla-compass-dial" class="absolute inset-0 rounded-full bg-white shadow-[0_12px_35px_rgba(0,0,0,0.45)] border-4 border-white transition-transform duration-75 ease-out flex items-center justify-center overflow-hidden">
+                        
+                        <!-- Ornamen Geometri Mandala Islami (Watermark Arabesque) -->
+                        <div class="absolute inset-5 rounded-full flex items-center justify-center opacity-15 pointer-events-none">
+                            <svg viewBox="0 0 100 100" class="w-full h-full text-purple-950 fill-current">
+                                <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2,2"/>
+                                <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" stroke-width="1"/>
+                                <g transform="translate(50,50)">
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(45)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(90)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(135)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(180)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(225)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(270)" />
+                                    <path d="M 0,-38 L 8,-20 L 0,-15 L -8,-20 Z" transform="rotate(315)" />
+                                </g>
+                                <circle cx="50" cy="50" r="14" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+
+                        <!-- Garis Derajat Keliling (Tick Marks) -->
+                        <div class="absolute inset-2 rounded-full pointer-events-none">
+                            <div class="absolute top-1 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-slate-900 rounded-full"></div>
+                            <div class="absolute bottom-1 left-1/2 -translate-x-1/2 w-0.5 h-3 bg-slate-900 rounded-full"></div>
+                            <div class="absolute left-1 top-1/2 -translate-y-1/2 w-3 h-0.5 bg-slate-900 rounded-full"></div>
+                            <div class="absolute right-1 top-1/2 -translate-y-1/2 w-3 h-0.5 bg-slate-900 rounded-full"></div>
+
+                            <div class="absolute inset-0 flex items-center justify-center transform rotate-30"><div class="w-full flex justify-between px-1"><span class="w-2.5 h-0.5 bg-slate-400"></span><span class="w-2.5 h-0.5 bg-slate-400"></span></div></div>
+                            <div class="absolute inset-0 flex items-center justify-center transform rotate-60"><div class="w-full flex justify-between px-1"><span class="w-2.5 h-0.5 bg-slate-400"></span><span class="w-2.5 h-0.5 bg-slate-400"></span></div></div>
+                            <div class="absolute inset-0 flex items-center justify-center transform rotate-120"><div class="w-full flex justify-between px-1"><span class="w-2.5 h-0.5 bg-slate-400"></span><span class="w-2.5 h-0.5 bg-slate-400"></span></div></div>
+                            <div class="absolute inset-0 flex items-center justify-center transform rotate-150"><div class="w-full flex justify-between px-1"><span class="w-2.5 h-0.5 bg-slate-400"></span><span class="w-2.5 h-0.5 bg-slate-400"></span></div></div>
+                        </div>
+
+                        <!-- 4 TITIK MATA ANGIN (U - T - S - B) -->
+                        <!-- UTARA (U / 0°) -->
+                        <div class="absolute top-2.5 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+                            <span class="text-sm sm:text-base font-black text-[#240833]">U</span>
+                        </div>
+                        <!-- TIMUR (T / 90°) -->
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <span class="text-sm sm:text-base font-black text-[#240833]">T</span>
+                        </div>
+                        <!-- SELATAN (S / 180°) -->
+                        <div class="absolute bottom-2.5 left-1/2 -translate-x-1/2 text-center pointer-events-none">
+                            <span class="text-sm sm:text-base font-black text-[#240833]">S</span>
+                        </div>
+                        <!-- BARAT (B / 270°) -->
+                        <div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                            <span class="text-sm sm:text-base font-black text-[#240833]">B</span>
+                        </div>
+                    </div>
+
+                    <!-- JARUM KIBLAT MERAH DENGAN KA'BAH DI UJUNGNYA -->
+                    <div id="qibla-compass-needle" class="absolute inset-0 flex items-center justify-center transition-transform duration-75 pointer-events-none z-30" style="transform: rotate(0deg);">
+                        <div class="relative w-full h-full flex flex-col items-center justify-center">
+                            <!-- UJUNG ATAS: Ka'bah Kubus & Jarum Merah Lancip -->
+                            <div class="absolute top-2 flex flex-col items-center">
+                                <div class="w-8 h-8 rounded-full bg-white shadow-md border-2 border-slate-200 flex items-center justify-center text-slate-900 text-xs mb-0.5">
+                                    <i class="fa-solid fa-kaaba text-amber-500"></i>
+                                </div>
+                                <div class="w-0 h-0 border-x-[5px] border-x-transparent border-b-[62px] sm:border-b-[72px] border-b-rose-600 drop-shadow"></div>
+                            </div>
+
+                            <!-- UJUNG BAWAH: Jarum Runcing Perak/Putih -->
+                            <div class="absolute bottom-4 flex flex-col items-center">
+                                <div class="w-0 h-0 border-x-[5px] border-x-transparent border-t-[62px] sm:border-t-[72px] border-t-slate-300 drop-shadow"></div>
+                            </div>
+
+                            <!-- PIVOT TITIK TENGAH (CENTER CAP) -->
+                            <div class="relative z-40 w-4 h-4 rounded-full bg-white border-3 border-rose-600 shadow-md"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- FOOTER DALAM KARTU: JARAK KE MAKKAH & TOMBOL SINKRONISASI -->
+            <div class="relative z-10 space-y-2.5 pt-2 pb-1">
+                <div class="text-center text-xs text-purple-200 font-medium flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-kaaba text-amber-300"></i>
+                    <span>Jarak lurus ke Ka'bah: <strong id="qibla-target-distance-val" class="text-white font-mono">8.335 km</strong></span>
+                </div>
+
+                <!-- Tombol Khusus Izin Sensor iOS (Muncul otomatis di iPhone/iPad) -->
+                <button id="btn-qibla-request-sensor" type="button" onclick="ASNKiblat.requestIosSensorPermission()" class="hidden w-full max-w-sm mx-auto py-3 px-5 bg-amber-400 hover:bg-amber-300 text-slate-900 font-bold text-xs sm:text-sm rounded-2xl shadow-xl transition active:scale-98 flex items-center justify-center gap-2 border border-amber-200 animate-pulse cursor-pointer">
+                    <i class="fa-solid fa-compass text-slate-900 text-base"></i>
+                    <span>Izinkan Akses Sensor Kompas iPhone</span>
+                </button>
+
+                <!-- Tombol Sinkronisasi GPS / Kalibrasi -->
+                <button type="button" onclick="ASNKiblat.syncAllSensorAndLocation(true)" class="w-full max-w-sm mx-auto py-2.5 px-4 bg-white hover:bg-slate-100 text-slate-800 font-bold text-xs rounded-xl shadow-md transition active:scale-98 flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-arrows-rotate text-sdw-pine"></i>
+                    <span>Sinkronkan Lokasi &amp; Sensor Kompas</span>
+                </button>
+
+                <!-- Notice jika perangkat tidak ada sensor magnetik / Laptop -->
+                <div id="qibla-sensor-notice" class="hidden p-2.5 bg-amber-950/60 border border-amber-500/40 rounded-xl text-left text-xs text-amber-200 space-y-0.5">
+                    <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Perangkat Tanpa Magnetometer</span>
+                    <p class="text-[11px] text-amber-300">Sensor kompas magnetik tidak terdeteksi. Pada laptop/PC, gunakan patokan derajat arah di atas secara manual.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== PANDUAN PENGGUNAAN & FIQIH KIBLAT ==================== -->
+        <div class="max-w-xl mx-auto mt-8 space-y-4">
+            <!-- Tips Kalibrasi Sensor -->
+            <div class="bg-white rounded-3xl p-5 sm:p-6 border border-purple-100 shadow-md space-y-3">
+                <h3 class="font-extrabold text-sm sm:text-base text-sdw-pine flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-amber-500"></i>
+                    <span>Panduan Akurasi Kompas Digital</span>
+                </h3>
+                <div class="space-y-2.5 text-xs text-slate-600">
+                    <div class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-purple-50 text-sdw-pine font-bold flex items-center justify-center shrink-0 text-[11px]">1</span>
+                        <p><strong>Pegang atau letakkan ponsel mendatar (flat horizontal):</strong> Jangan memegang ponsel terlalu tegak agar jarum kompas dapat berputar bebas tanpa hambatan gravitasi.</p>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-purple-50 text-sdw-pine font-bold flex items-center justify-center shrink-0 text-[11px]">2</span>
+                        <p><strong>Gerakkan ponsel membentuk angka 8 (kalibrasi sensor):</strong> Jika arah kompas terasa tersendat atau bergeser, putar ponsel di udara membentuk angka delapan sebanyak 2-3 kali.</p>
+                    </div>
+                    <div class="flex items-start gap-2.5">
+                        <span class="w-5 h-5 rounded-full bg-purple-50 text-sdw-pine font-bold flex items-center justify-center shrink-0 text-[11px]">3</span>
+                        <p><strong>Jauhkan dari interferensi magnetik:</strong> Hindari casing smartphone berbahan magnet, speaker, laptop, atau benda logam tebal yang dapat membiaskan medan magnet bumi.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fiqih Menghadap Kiblat -->
+            <div class="bg-amber-50/70 rounded-3xl p-5 sm:p-6 border border-amber-200/80 space-y-2 text-xs text-amber-950">
+                <h4 class="font-bold flex items-center gap-2 text-amber-900">
+                    <i class="fa-solid fa-mosque text-amber-700"></i>
+                    <span>Catatan Fiqih Menghadap Kiblat (Istiqlal al-Qiblah)</span>
+                </h4>
+                <p class="leading-relaxed text-[11.5px] text-amber-900/90">
+                    Bagi orang yang jauh dari Ka'bah (di luar Masjidil Haram), kewajiban syar'i adalah <em>Jihatu al-Ka'bah</em> (menghadap ke arah perkiraan Ka'bah secara ijtihad falakiyah), bukan keharusan tepat ke fisik 'ain Ka'bah secara kasat mata. Toleransi deviasi beberapa derajat tetap sah menurut kesepakatan jumhur ulama mazhab Syafi'i.
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda -->
+            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-kaaba text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
+            </a>
+
+            <!-- 2. Berita -->
+            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
+            </a>
+
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
+            </button>
+
+            <!-- 4. Kalender -->
+            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
+            </a>
+
+            <!-- 5. Profil -->
+            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-circle-user text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== ASNAWIYYAH ADAPTED FALAK KIBLAT ENGINE ==================== -->
+    <script>
+        /**
+         * ====================================================================
+         * ASNAWIYYAH FALAK KIBLAT ENGINE FOR SDW UMROH
+         * Mengadopsi Standar Presisi Lembaga Falakiyah NU & Geodesi Haversine
+         * Sensor Mutlak: DeviceOrientationAbsolute (Android) & WebkitCompassHeading (iOS)
+         * Koordinat Ka'bah: 21° 25' 21" N, 39° 49' 34" E (Makkah al-Mukarramah)
+         * ====================================================================
+         */
+        const ASNKiblat = (function () {
+            // 1. KOORDINAT TITIK PUSAT KA'BAH MAKKAH AL-MUKARRAMAH
+            const KAABA_COORDS = {
+                lat: 21.422487,
+                lng: 39.826206
+            };
+
+            // 2. DATABASE KOORDINAT KOTA LENGKAP (INDONESIA & ARAB SAUDI)
+            const CITIES = {
+                demak: { name: "Kab. Demak (PPTQ Asnawiyyah)", lat: -6.9535, lng: 110.6402 },
+                semarang: { name: "Kota Semarang", lat: -6.9667, lng: 110.4167 },
+                kudus: { name: "Kab. Kudus", lat: -6.8048, lng: 110.8405 },
+                jepara: { name: "Kab. Jepara", lat: -6.5936, lng: 110.6783 },
+                surakarta: { name: "Kota Surakarta (Solo)", lat: -7.5755, lng: 110.8243 },
+                surabaya: { name: "Kota Surabaya", lat: -7.2575, lng: 112.7521 },
+                jakarta: { name: "DKI Jakarta", lat: -6.2088, lng: 106.8456 },
+                bandung: { name: "Kota Bandung", lat: -6.9175, lng: 107.6191 },
+                yogyakarta: { name: "DI Yogyakarta", lat: -7.7956, lng: 110.3695 },
+                makassar: { name: "Kota Makassar", lat: -5.1477, lng: 119.4327 },
+                medan: { name: "Kota Medan", lat: 3.5952, lng: 98.6722 },
+                makkah: { name: "Makkah Al-Mukarramah", lat: 21.4225, lng: 39.8262 },
+                madinah: { name: "Madinah Al-Munawwarah", lat: 24.4672, lng: 39.6111 },
+                jeddah: { name: "Kota Jeddah", lat: 21.5433, lng: 39.1728 }
+            };
+
+            // 3. STATE LOKASI & SENSOR
+            let savedLat = null;
+            let savedLng = null;
+            let savedLocName = null;
+            let savedAccuracy = null;
+
+            try {
+                savedLat = localStorage.getItem("sdw_qibla_lat");
+                savedLng = localStorage.getItem("sdw_qibla_lng");
+                savedLocName = localStorage.getItem("sdw_qibla_loc_name");
+                savedAccuracy = localStorage.getItem("sdw_qibla_acc");
+            } catch (e) {}
+
+            let userCoords = {
+                lat: savedLat ? parseFloat(savedLat) : -6.9535,
+                lng: savedLng ? parseFloat(savedLng) : 110.6402,
+                accuracy: savedAccuracy ? parseFloat(savedAccuracy) : null,
+                locationName: savedLocName || (savedLat ? "Lokasi Presisi Terhubung" : "Menghubungkan GPS..."),
+                isGps: !!savedLat,
+                sourceType: savedLat ? "saved_gps" : "detecting"
+            };
+
+            let qiblaBearing = 294.48; // Standar presisi 2 desimal
+            let qiblaDistance = 8335;
+            let currentHeading = 0;
+            let isCompassListening = false;
+            let hasSensorSupport = false;
+            let lastVibratedState = false;
+            let isRequestingLocation = false;
+            let hasAbsoluteOrientation = false;
+
+            // 4. FORMULA FALAKIYAH GEODESI (SPHERICAL TRIGONOMETRY)
+            function calculateQibla(lat, lng) {
+                const toRad = deg => (deg * Math.PI) / 180;
+                const toDeg = rad => (rad * 180) / Math.PI;
+
+                const phi1 = toRad(lat);
+                const phi2 = toRad(KAABA_COORDS.lat);
+                const deltaLambda = toRad(KAABA_COORDS.lng - lng);
+
+                const y = Math.sin(deltaLambda);
+                const x = Math.cos(phi1) * Math.tan(phi2) - Math.sin(phi1) * Math.cos(deltaLambda);
+
+                let qiblaRad = Math.atan2(y, x);
+                let qiblaDeg = toDeg(qiblaRad);
+
+                // Normalisasi ke 0° - 360°
+                qiblaDeg = (qiblaDeg + 360) % 360;
+
+                // Jarak Great Circle Haversine ke Ka'bah (Radius Bumi = 6371 km)
+                const R = 6371;
+                const dLat = phi2 - phi1;
+                const dLng = deltaLambda;
+                const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                          Math.cos(phi1) * Math.cos(phi2) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                const distanceKm = Math.round(R * c);
+
+                return {
+                    bearing: Number(qiblaDeg.toFixed(2)),
+                    distanceKm: distanceKm
+                };
+            }
+
+            // 5. KALKULASI HEADING SENSOR KOMPAS MUTLAK (TRUE/MAGNETIC NORTH)
+            function extractCompassHeading(event) {
+                // 1. iOS Safari: WebkitCompassHeading memberikan kompas sejati 0-360 derajat
+                if (typeof event.webkitCompassHeading === "number" && !isNaN(event.webkitCompassHeading)) {
+                    return event.webkitCompassHeading;
+                }
+
+                // 2. Android Chrome Absolute Orientation
+                if (typeof event.alpha === "number" && !isNaN(event.alpha)) {
+                    const beta = event.beta || 0;
+                    const gamma = event.gamma || 0;
+
+                    // Jika ponsel diletakkan mendatar di atas meja (flat, pitch & roll < 25°)
+                    if (Math.abs(beta) < 25 && Math.abs(gamma) < 25) {
+                        return (360 - event.alpha + 360) % 360;
+                    }
+
+                    // Jika ponsel dipegang miring: kalkulasi 3D Tilt-Compensated W3C
+                    const degToRad = Math.PI / 180;
+                    const a = event.alpha * degToRad;
+                    const b = beta * degToRad;
+                    const g = gamma * degToRad;
+
+                    const cA = Math.cos(a), sA = Math.sin(a);
+                    const cB = Math.cos(b), sB = Math.sin(b);
+                    const cG = Math.cos(g), sG = Math.sin(g);
+
+                    // Vektor hadap atas smartphone diproyeksikan ke bidang horizontal bumi
+                    const vx = -cA * sG - sA * sB * cG;
+                    const vy = -sA * sG + cA * sB * cG;
+
+                    let h = Math.atan2(vx, vy) * (180 / Math.PI);
+                    return (h + 360) % 360;
+                }
+
+                return null;
+            }
+
+            function onAbsoluteOrientationEvent(event) {
+                hasSensorSupport = true;
+                hasAbsoluteOrientation = true;
+                const heading = extractCompassHeading(event);
+                if (heading !== null) {
+                    currentHeading = (heading + 360) % 360;
+                    updateCompassUI(currentHeading);
+                }
+            }
+
+            function onRelativeOrientationEvent(event) {
+                if (hasAbsoluteOrientation) return;
+                hasSensorSupport = true;
+                const heading = extractCompassHeading(event);
+                if (heading !== null) {
+                    currentHeading = (heading + 360) % 360;
+                    updateCompassUI(currentHeading);
+                }
+            }
+
+            // 6. UPDATE TAMPILAN KOMPAS REAL-TIME
+            function updateCompassUI(heading) {
+                const dialEl = document.getElementById("qibla-compass-dial");
+                const needleEl = document.getElementById("qibla-compass-needle");
+                const statusBadgeEl = document.getElementById("qibla-status-badge");
+                const glowHaloEl = document.getElementById("qibla-glow-halo");
+
+                // Putar piringan mata angin kompas sebesar -heading
+                if (dialEl) {
+                    dialEl.style.transform = `rotate(${-heading}deg)`;
+                }
+
+                // Putar jarum Ka'bah: needleAngle = (qiblaBearing - heading)
+                const diff = (qiblaBearing - heading + 360) % 360;
+                const needleAngle = diff;
+
+                if (needleEl) {
+                    needleEl.style.transform = `rotate(${needleAngle}deg)`;
+                }
+
+                // Toleransi presisi menghadap kiblat (±2.5°)
+                const isFacingQibla = diff <= 2.5 || diff >= 357.5;
+
+                if (statusBadgeEl) {
+                    if (isFacingQibla) {
+                        statusBadgeEl.className = "inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-black bg-emerald-500 text-white shadow-lg animate-pulse border border-emerald-300";
+                        statusBadgeEl.innerHTML = `<i class="fa-solid fa-kaaba text-amber-300"></i> Tepat Menghadap Kiblat`;
+                        if (glowHaloEl) {
+                            glowHaloEl.classList.remove("opacity-0");
+                            glowHaloEl.classList.add("opacity-100");
+                        }
+
+                        // Haptic feedback getaran saat tepat
+                        if (!lastVibratedState) {
+                            lastVibratedState = true;
+                            if (typeof navigator !== "undefined" && navigator.vibrate) {
+                                try {
+                                    navigator.vibrate([40, 60, 40]);
+                                } catch (e) {}
+                            }
+                        }
+                    } else {
+                        lastVibratedState = false;
+                        if (glowHaloEl) {
+                            glowHaloEl.classList.remove("opacity-100");
+                            glowHaloEl.classList.add("opacity-0");
+                        }
+
+                        let turnDirection = "";
+                        if (diff > 180) {
+                            turnDirection = `Putar ponsel ke kiri ${(360 - diff).toFixed(0)}°`;
+                        } else {
+                            turnDirection = `Putar ponsel ke kanan ${diff.toFixed(0)}°`;
+                        }
+
+                        statusBadgeEl.className = "inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold bg-white/20 backdrop-blur-md text-white border border-white/20";
+                        statusBadgeEl.innerHTML = `<i class="fa-solid fa-compass text-amber-300"></i> ${turnDirection}`;
+                    }
+                }
+            }
+
+            // 7. PENANGANAN LISTENER SENSOR KOMPAS
+            function startCompassListener() {
+                if (isCompassListening) return;
+
+                try {
+                    window.addEventListener("deviceorientationabsolute", onAbsoluteOrientationEvent, true);
+                } catch (e) {}
+
+                try {
+                    window.addEventListener("deviceorientation", onRelativeOrientationEvent, true);
+                } catch (e) {}
+
+                isCompassListening = true;
+
+                // Cek izin sensor khusus iOS Safari
+                const needsIosSensorPermission = typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function";
+                if (needsIosSensorPermission) {
+                    const btnIos = document.getElementById("btn-qibla-request-sensor");
+                    if (btnIos) btnIos.classList.remove("hidden");
+                }
+
+                // Cek setelah 2.5 detik jika magnetometer tidak ada (misal laptop/desktop)
+                setTimeout(() => {
+                    const noticeEl = document.getElementById("qibla-sensor-notice");
+                    if (!hasSensorSupport && noticeEl) {
+                        const btnIos = document.getElementById("btn-qibla-request-sensor");
+                        const isWaitingIos = btnIos && !btnIos.classList.contains("hidden");
+                        if (!isWaitingIos) {
+                            noticeEl.classList.remove("hidden");
+                        }
+                    }
+                }, 2500);
+            }
+
+            function requestIosSensorPermission(onSuccessCallback) {
+                if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(response => {
+                            if (response === "granted") {
+                                const btnIos = document.getElementById("btn-qibla-request-sensor");
+                                if (btnIos) btnIos.classList.add("hidden");
+                                const noticeEl = document.getElementById("qibla-sensor-notice");
+                                if (noticeEl) noticeEl.classList.add("hidden");
+
+                                window.addEventListener("deviceorientation", onRelativeOrientationEvent, true);
+                                isCompassListening = true;
+                                hasSensorSupport = true;
+                                if (typeof onSuccessCallback === "function") onSuccessCallback();
+                            } else {
+                                alert("Izin sensor orientasi tidak diberikan. Safari memerlukan izin kompas agar jarum berputar otomatis.");
+                            }
+                        })
+                        .catch(err => {
+                            console.warn("Gagal meminta izin sensor iOS:", err);
+                        });
+                } else if (typeof onSuccessCallback === "function") {
+                    onSuccessCallback();
+                }
+            }
+
+            // 8. LOKASI GPS & REVERSE GEOCODING
+            function requestDeviceLocation(forceGps = false) {
+                if (isRequestingLocation) return;
+                isRequestingLocation = true;
+
+                const locEl = document.getElementById("qibla-current-location");
+                if (locEl) locEl.innerText = "Mencari Koordinat GPS Presisi...";
+
+                if (!navigator.geolocation) {
+                    fallbackToDefaultCity("demak", "GPS tidak didukung perangkat");
+                    isRequestingLocation = false;
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const lat = position.coords.latitude;
+                        const lng = position.coords.longitude;
+                        const acc = position.coords.accuracy || 10;
+
+                        userCoords.lat = lat;
+                        userCoords.lng = lng;
+                        userCoords.accuracy = acc;
+                        userCoords.isGps = true;
+                        userCoords.sourceType = "live_gps";
+
+                        // Recalculate kiblat
+                        const res = calculateQibla(lat, lng);
+                        qiblaBearing = res.bearing;
+                        qiblaDistance = res.distanceKm;
+
+                        updateQiblaValuesUI();
+
+                        // Reverse Geocode
+                        reverseGeocodeCoords(lat, lng);
+
+                        try {
+                            localStorage.setItem("sdw_qibla_lat", lat.toString());
+                            localStorage.setItem("sdw_qibla_lng", lng.toString());
+                            localStorage.setItem("sdw_qibla_acc", acc.toString());
+                        } catch (e) {}
+
+                        isRequestingLocation = false;
+                    },
+                    error => {
+                        console.warn("GPS error:", error);
+                        if (!userCoords.isGps) {
+                            fallbackToDefaultCity("demak", "Izin GPS ditolak/tidak aktif");
+                        } else {
+                            if (locEl) locEl.innerText = userCoords.locationName || "Lokasi Tersimpan";
+                        }
+                        isRequestingLocation = false;
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            }
+
+            function reverseGeocodeCoords(lat, lng) {
+                const locEl = document.getElementById("qibla-current-location");
+                const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=id`;
+
+                fetch(url)
+                    .then(r => r.json())
+                    .then(data => {
+                        let name = "";
+                        if (data.locality) name += data.locality + ", ";
+                        if (data.city) name += data.city;
+                        else if (data.principalSubdivision) name += data.principalSubdivision;
+
+                        if (!name) name = `GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+
+                        userCoords.locationName = name;
+                        if (locEl) locEl.innerText = name;
+                        try {
+                            localStorage.setItem("sdw_qibla_loc_name", name);
+                        } catch (e) {}
+                    })
+                    .catch(() => {
+                        const fallbackName = `GPS: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+                        userCoords.locationName = fallbackName;
+                        if (locEl) locEl.innerText = fallbackName;
+                    });
+            }
+
+            function fallbackToDefaultCity(cityKey, reason) {
+                const city = CITIES[cityKey] || CITIES.demak;
+                userCoords.lat = city.lat;
+                userCoords.lng = city.lng;
+                userCoords.locationName = city.name;
+                userCoords.isGps = false;
+
+                const res = calculateQibla(city.lat, city.lng);
+                qiblaBearing = res.bearing;
+                qiblaDistance = res.distanceKm;
+
+                updateQiblaValuesUI();
+
+                const locEl = document.getElementById("qibla-current-location");
+                if (locEl) locEl.innerText = city.name;
+            }
+
+            function updateQiblaValuesUI() {
+                const degEl = document.getElementById("qibla-target-deg");
+                const distEl = document.getElementById("qibla-target-distance-val");
+                if (degEl) degEl.innerText = `${qiblaBearing.toFixed(2)}°`;
+                if (distEl) distEl.innerText = `${qiblaDistance.toLocaleString('id-ID')} km`;
+                updateCompassUI(currentHeading);
+            }
+
+            function populateCitySelect() {
+                const sel = document.getElementById("qibla-city-select");
+                if (!sel) return;
+
+                sel.innerHTML = `<option value="" class="text-slate-800">Pilih Kota Manual...</option>`;
+                Object.keys(CITIES).forEach(key => {
+                    const c = CITIES[key];
+                    const opt = document.createElement("option");
+                    opt.value = key;
+                    opt.className = "text-slate-800";
+                    opt.innerText = c.name;
+                    sel.appendChild(opt);
+                });
+            }
+
+            function changeCity(cityKey) {
+                if (!cityKey || !CITIES[cityKey]) return;
+                const c = CITIES[cityKey];
+                userCoords.lat = c.lat;
+                userCoords.lng = c.lng;
+                userCoords.locationName = c.name;
+                userCoords.isGps = false;
+
+                const res = calculateQibla(c.lat, c.lng);
+                qiblaBearing = res.bearing;
+                qiblaDistance = res.distanceKm;
+
+                const locEl = document.getElementById("qibla-current-location");
+                if (locEl) locEl.innerText = c.name;
+
+                try {
+                    localStorage.setItem("sdw_qibla_lat", c.lat.toString());
+                    localStorage.setItem("sdw_qibla_lng", c.lng.toString());
+                    localStorage.setItem("sdw_qibla_loc_name", c.name);
+                } catch (e) {}
+
+                updateQiblaValuesUI();
+            }
+
+            function syncAllSensorAndLocation(forceGps = true) {
+                requestDeviceLocation(forceGps);
+                startCompassListener();
+            }
+
+            // 9. INISIALISASI
+            function init() {
+                populateCitySelect();
+
+                // Hitung awal
+                const res = calculateQibla(userCoords.lat, userCoords.lng);
+                qiblaBearing = res.bearing;
+                qiblaDistance = res.distanceKm;
+
+                const locEl = document.getElementById("qibla-current-location");
+                if (locEl) locEl.innerText = userCoords.locationName;
+
+                updateQiblaValuesUI();
+                startCompassListener();
+
+                // Minta lokasi GPS jika belum tersimpan
+                if (!savedLat) {
+                    requestDeviceLocation(false);
+                }
+            }
+
+            return {
+                init: init,
+                requestIosSensorPermission: requestIosSensorPermission,
+                requestDeviceLocation: requestDeviceLocation,
+                changeCity: changeCity,
+                syncAllSensorAndLocation: syncAllSensorAndLocation
+            };
+        })();
+
+        // MOBILE DRAWER TOGGLE
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        // INIT SAAT HALAMAN DIMUAT
+        document.addEventListener("DOMContentLoaded", () => {
+            ASNKiblat.init();
+        });
+    </script>
+</body>
+
+</html>
+

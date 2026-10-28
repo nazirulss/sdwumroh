@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titik Hotel & Panduan Akomodasi Haramain | SDW UMROH</title>
+    <meta name="description" content="Informasi titik hotel resmi jamaah SDW UMROH di Makkah dan Madinah. Jarak ke pelataran, gerbang masuk masjid, fasilitas katering Nusantara, serta panduan rute navigasi anti-tersesat.">
+    <link rel="canonical" href="https://sdwumroh.com/hotel">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <script src="js/pwa.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=calendarColsFinal">
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Pilihan Paket</span>
+                </a>
+                <a href="hotel.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Titik Hotel</span>
+                </a>
+                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Peta Ziarah</span>
+                </a>
+                <a href="jadwal.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Jadwal Kloter</span>
+                </a>
+            </div>
+
+            <!-- Header Action Capsule -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20informasi%20titik%20hotel%20kloter." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span class="hidden sm:inline">Bantuan Hotel 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda Utama</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-cubes text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Katalog Paket Umroh</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Titik Hotel Makkah &amp; Madinah</span>
+                    </span>
+                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
+                </a>
+                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Peta Ziarah Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Checklist Koper</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="jadwal.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-calendar-days text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Jadwal Kloter</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE HERO BANNER ==================== -->
+    <header class="pt-28 pb-12 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Navigasi Kembali: Cukup Icon Saja + Nama Menu (Di Bawah Header) -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="app.html" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95 border border-white/15 shadow-sm" title="Kembali ke Beranda" aria-label="Kembali">
+                    <i class="fa-solid fa-arrow-left text-sm text-sdw-gold"></i>
+                </a>
+                <span class="text-sm sm:text-base font-extrabold text-white tracking-wide">Titik Hotel</span>
+            </div>
+
+            <div class="max-w-3xl">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
+                    <i class="fa-solid fa-hotel"></i> Akomodasi Resmi Bintang 5 &amp; 4
+                </span>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-3">
+                    Titik Hotel &amp; Panduan <span class="text-gold-gradient">Akomodasi Haramain</span>
+                </h1>
+                <p class="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl font-medium">
+                    Panduan lokasi hotel rombongan kloter SDW UMROH di Makkah Al-Mukarramah &amp; Madinah Al-Munawwarah. Dilengkapi estimasi jarak jalan kaki, nomor gerbang masjid terdekat, serta navigasi GPS anti-tersesat.
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub-navigation anchor tabs -->
+    <div class="sticky top-20 z-40 bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2 sm:gap-4 overflow-x-auto py-3 text-xs font-bold no-scrollbar">
+            <a href="#daftar-hotel" class="px-3.5 py-1.5 rounded-full bg-purple-50 text-sdw-pine hover:bg-purple-100 transition whitespace-nowrap">
+                <i class="fa-solid fa-hotel mr-1 text-sdw-gold"></i> Daftar Hotel Mitra
+            </a>
+            <a href="#tips-antinyasar" class="px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-purple-50 hover:text-sdw-pine transition whitespace-nowrap">
+                <i class="fa-solid fa-compass mr-1 text-sdw-gold"></i> Panduan Anti-Tersesat
+            </a>
+            <a href="#fasilitas-layanan" class="px-3.5 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-purple-50 hover:text-sdw-pine transition whitespace-nowrap">
+                <i class="fa-solid fa-utensils mr-1 text-sdw-gold"></i> Standar Katering &amp; Layanan
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+        <!-- Section 1: Katalog Hotel Interaktif -->
+        <section id="daftar-hotel" class="scroll-mt-36">
+            <div class="text-center max-w-2xl mx-auto mb-8">
+                <span class="text-amber-700 font-extrabold text-xs uppercase tracking-wider">Transparansi Fasilitas</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-sdw-pine mt-1">Pilihan Hotel Makkah &amp; Madinah</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-2">Daftar hotel terpercaya yang digunakan pada program Reguler, VIP Khidmat, Ramadhan, dan Umroh Plus.</p>
+            </div>
+
+            <!-- Filter Kota & Search Bar -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-purple-100/80 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 text-xs font-bold no-scrollbar">
+                    <button type="button" onclick="filterHotelCity('ALL', this)" class="hotel-city-filter-btn px-4 py-2 rounded-xl bg-sdw-pine text-white shadow-xs transition whitespace-nowrap">
+                        Semua Hotel (9)
+                    </button>
+                    <button type="button" onclick="filterHotelCity('MAKKAH', this)" class="hotel-city-filter-btn px-4 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition whitespace-nowrap">
+                        <i class="fa-solid fa-kaaba text-amber-500 mr-1.5"></i> Makkah (5 Hotel)
+                    </button>
+                    <button type="button" onclick="filterHotelCity('MADINAH', this)" class="hotel-city-filter-btn px-4 py-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition whitespace-nowrap">
+                        <i class="fa-solid fa-mosque text-emerald-600 mr-1.5"></i> Madinah (4 Hotel)
+                    </button>
+                </div>
+                <div class="relative w-full md:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="hotelSearchInput" oninput="handleHotelSearch(this.value)" placeholder="Cari nama hotel, pintu gerbang, bintang..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 text-xs text-slate-800 focus:outline-none focus:border-sdw-pine">
+                </div>
+            </div>
+
+            <!-- Grid Kartu Hotel Interaktif -->
+            <div id="hotel-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+                
+                <!-- Hotel 1: Swissotel Al Maqam Makkah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MAKKAH" data-name="swissotel al maqam makkah bintang 5 clock tower abraj bait gate 1 king abdulaziz">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-vip-khidmat.png" alt="Swissotel Al Maqam Makkah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-kaaba mr-1"></i> Makkah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-crown text-amber-400 mr-1"></i> Bintang 5
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-amber-400"></i> 0 Meter (Pelataran)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">VIP Khidmat</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Swissotel Al Maqam Makkah
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Terletak di kompleks prestisius Abraj Al Bait (Clock Tower). Lift hotel langsung terhubung ke pelataran Thawaf dan pusat perbelanjaan.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Pintu 1 King Abdulaziz</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Lantai P3</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966125717333" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5" title="Telepon Resepsionis">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Swissotel+Al+Maqam+Makkah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 2: Movenpick Hajar Tower Makkah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MAKKAH" data-name="movenpick hajar tower makkah bintang 5 clock tower gate 1 king abdulaziz">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/hero-haram.png" alt="Mövenpick Hotel Hajar Tower" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-kaaba mr-1"></i> Makkah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-crown text-amber-400 mr-1"></i> Bintang 5
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-amber-400"></i> 0 Meter (Pelataran)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Umroh Plus</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Mövenpick Hotel Hajar Tower
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Berhadapan langsung dengan pintu gerbang Masjidil Haram. Akses eskalator langsung menuju halaman shalat King Abdulaziz.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Gerbang King Abdulaziz</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Hajar Tower G</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966125717171" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Movenpick+Hajar+Tower+Makkah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 3: Pullman Zamzam Makkah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MAKKAH" data-name="pullman zamzam makkah bintang 5 clock tower abraj bait">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-ramadhan.png" alt="Pullman Zamzam Makkah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-kaaba mr-1"></i> Makkah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-crown text-amber-400 mr-1"></i> Bintang 5
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-amber-400"></i> 0 Meter (Pelataran)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Ramadhan &amp; Syawal</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Pullman Zamzam Makkah
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Ikon akomodasi mewah di komplek Menara Jam Makkah. Sangat memudahkan jamaah lansia untuk shalat 5 waktu berjamaah tepat waktu.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Pintu King Abdulaziz Gate 1</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Utama Zamzam P1</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966125715555" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Pullman+Zamzam+Makkah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 4: Retaj Al Rayyan Makkah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MAKKAH" data-name="retaj al rayyan makkah bintang 4 ajyad 350 meter jalan kaki">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-reguler-syawal.png" alt="Retaj Al Rayyan Makkah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-kaaba mr-1"></i> Makkah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-star text-amber-400 mr-1"></i> Bintang 4
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-amber-400"></i> &plusmn; 350 Meter (4 Menit)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Paket Reguler</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Retaj Al Rayyan Makkah
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Terletak di jalan Ajyad yang datar dan nyaman untuk jalan kaki. Dilengkapi restoran masakan nusantara ramah lidah jamaah Indonesia.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Plaza Ajyad / Gate King Abdulaziz</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Utama Depan Restoran</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966125714444" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Retaj+Al+Rayyan+Makkah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 5: Rayyana Ajyad Makkah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MAKKAH" data-name="rayyana ajyad hotel makkah bintang 3 4 shuttle bus gratis 24 jam hemat">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-hemat.png" alt="Rayyana Ajyad Makkah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-kaaba mr-1"></i> Makkah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-star text-amber-400 mr-1"></i> Bintang 3/4
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-bus text-amber-400"></i> Free Shuttle Bus 24 Jam</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Program Hemat</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Rayyana Ajyad Hotel
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Solusi biaya terjangkau dengan fasilitas bersih dan nyaman. Disediakan bus shuttle gratis bolak-balik 24 jam menuju halte terminal Masjidil Haram.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-bus text-sdw-gold w-4 text-center"></i>
+                                    <span>Titik Drop: <strong>Terminal Kudai / Ajyad Bridge</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Halte Bus Depan Hotel</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966125713333" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Rayyana+Ajyad+Hotel+Makkah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 6: Dar Al Taqwa Madinah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MADINAH" data-name="dar al taqwa hotel madinah bintang 5 pelataran nabawi gate 21 22 king fahd raudhah">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-vip-khidmat.png" alt="Dar Al Taqwa Hotel Madinah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-mosque mr-1"></i> Madinah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-crown text-amber-400 mr-1"></i> Bintang 5
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-emerald-400"></i> &plusmn; 50 Meter (1 Menit)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Paling Dekat Raudhah</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Dar Al Taqwa Hotel Madinah
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Tepat berhadapan dengan pelataran utama Masjid Nabawi. Sangat dekat dengan pintu masuk Raudhah Syarifah khusus jamaah wanita &amp; pria.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Pintu 21 &amp; Pintu 22 King Fahd</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Al Taqwa Garden</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966148291111" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Dar+Al+Taqwa+Hotel+Madinah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-emerald-400"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 7: Frontel Al Harithia Madinah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MADINAH" data-name="frontel al harithia hotel madinah bintang 5 markaziyah utara gate 20 22">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/pkg-plus-turki.png" alt="Frontel Al Harithia Madinah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-mosque mr-1"></i> Madinah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-crown text-amber-400 mr-1"></i> Bintang 5
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-emerald-400"></i> &plusmn; 100 Meter (2 Menit)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Favorit Jamaah</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Frontel Al Harithia Hotel
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Terletak di kawasan Markaziyah Central Area North. Kamar luas dengan pemandangan menara Masjid Nabawi serta hidangan buffet melimpah.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Pintu 20 Gerbang King Fahd</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Harithia Mezzanine</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966148206666" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Frontel+Al+Harithia+Hotel+Madinah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-emerald-400"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 8: Concorde Dar Al Khair Madinah -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MADINAH" data-name="concorde dar al khair hotel madinah bintang 4 200 meter markaziyah">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/hero-twilight.jpg" alt="Concorde Dar Al Khair Madinah" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-mosque mr-1"></i> Madinah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-star text-amber-400 mr-1"></i> Bintang 4
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-emerald-400"></i> &plusmn; 200 Meter (3 Menit)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Paket Reguler</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Concorde Dar Al Khair Hotel
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Pilihan hotel terfavorit jamaah reguler dengan jalan setapak rindang menuju pelataran Nabawi. Dekat pertokoan kurma dan oleh-oleh haji.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Pintu Babussalam / Gate 16</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Lantai Dasar</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966148205555" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Concorde+Dar+Al+Khair+Madinah" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-emerald-400"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hotel 9: Rove Al Madinah Hotel -->
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="MADINAH" data-name="rove al madinah hotel bintang 4 150 meter markaziyah utara">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="assets/hero-twilight.jpg" alt="Rove Al Madinah Hotel" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black uppercase tracking-wider shadow-sm">
+                                <i class="fa-solid fa-mosque mr-1"></i> Madinah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                <i class="fa-solid fa-star text-amber-400 mr-1"></i> Bintang 4
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-extrabold flex items-center gap-1.5"><i class="fa-solid fa-person-walking text-emerald-400"></i> &plusmn; 150 Meter (2 Menit)</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">Modern &amp; Bersih</span>
+                        </div>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">
+                                Rove Al Madinah Hotel
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                Akomodasi berkonsep modern dan elegan dengan keramahan staf internasional. Sangat dekat dengan gate utama shalat berjamaah.
+                            </p>
+                            <div class="mt-4 pt-3 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-door-open text-sdw-gold w-4 text-center"></i>
+                                    <span>Akses Utama: <strong>Gate King Fahd Pintu 21</strong></span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-users text-sdw-gold w-4 text-center"></i>
+                                    <span>Meeting Point: <strong>Lobby Cafe Area</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <a href="tel:+966148204444" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-phone text-slate-500 text-xs"></i>
+                                <span>Resepsionis</span>
+                            </a>
+                            <a href="https://maps.google.com/?q=Rove+Al+Madinah+Hotel" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-emerald-400"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Section 2: Panduan Anti-Tersesat di Tanah Suci -->
+        <section id="tips-antinyasar" class="scroll-mt-36 p-6 sm:p-10 rounded-3xl bg-gradient-to-r from-purple-900 via-sdw-pine to-purple-950 text-white shadow-xl">
+            <div class="max-w-3xl mx-auto text-center mb-8">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-amber-300 text-xs font-bold mb-2">
+                    <i class="fa-solid fa-compass"></i> Panduan Praktis Jamaah
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">4 Tips Penting "Anti-Tersesat" Menuju Hotel</h2>
+                <p class="text-xs sm:text-sm text-slate-200 mt-2 leading-relaxed">
+                    Masjidil Haram dan Masjid Nabawi memiliki puluhan pintu gerbang yang tampak serupa. Ikuti tips sederhana ini agar perjalanan ibadah Anda selalu tenang dan aman.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-sm mb-3">1</div>
+                        <h4 class="font-extrabold text-white text-sm">Hafalkan Nomor Pintu</h4>
+                        <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                            Ingat selalu nomor gerbang saat Anda masuk ke masjid (contoh: Gate 1 King Abdulaziz atau Gate 21 King Fahd) dan selalu keluar dari pintu yang sama.
+                        </p>
+                    </div>
+                    <span class="mt-4 text-[11px] font-bold text-amber-300 flex items-center gap-1">
+                        <i class="fa-solid fa-check"></i> Catat Nomor Gate
+                    </span>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-sm mb-3">2</div>
+                        <h4 class="font-extrabold text-white text-sm">Patokan Menara Jam</h4>
+                        <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                            Di Makkah, Menara Jam (Clock Tower) terlihat dari kejauhan. Menara ini berdiri di sisi selatan menghadap langsung pintu King Abdulaziz.
+                        </p>
+                    </div>
+                    <span class="mt-4 text-[11px] font-bold text-amber-300 flex items-center gap-1">
+                        <i class="fa-solid fa-check"></i> Landmark Visual
+                    </span>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-sm mb-3">3</div>
+                        <h4 class="font-extrabold text-white text-sm">Bawa Kartu Hotel</h4>
+                        <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                            Selalu simpan kartu kunci kamar atau kartu nama hotel bertuliskan aksara Arab di dompet / tas paspor Anda jika perlu bertanya kepada petugas Askar.
+                        </p>
+                    </div>
+                    <span class="mt-4 text-[11px] font-bold text-amber-300 flex items-center gap-1">
+                        <i class="fa-solid fa-check"></i> Kartu Aksara Arab
+                    </span>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 flex flex-col justify-between">
+                    <div>
+                        <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-950 font-black flex items-center justify-center text-sm mb-3">4</div>
+                        <h4 class="font-extrabold text-white text-sm">Hubungi Muthawwif</h4>
+                        <p class="text-xs text-slate-200 mt-2 leading-relaxed">
+                            Jangan panik jika terpisah. Duduk tenang di dekat pos keamanan Askar terdekat dan segera kirimkan live location via WhatsApp ke tim Muthawwif kloter.
+                        </p>
+                    </div>
+                    <span class="mt-4 text-[11px] font-bold text-amber-300 flex items-center gap-1">
+                        <i class="fa-solid fa-check"></i> Siaga 24 Jam
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Standar Katering & Layanan Hotel -->
+        <section id="fasilitas-layanan" class="scroll-mt-36 p-6 sm:p-10 rounded-3xl bg-white border border-purple-100 shadow-xl shadow-purple-950/5">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <span class="text-amber-700 font-extrabold text-xs uppercase tracking-wider">Kenyamanan Maksimal</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-sdw-pine mt-1">Standar Layanan Akomodasi SDW UMROH</h2>
+                <p class="text-xs sm:text-sm text-slate-500 mt-2">Komitmen transparansi tanpa biaya tersembunyi demi menjaga stamina ibadah jamaah.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-2xl bg-purple-50/60 border border-purple-100">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-utensils"></i>
+                    </div>
+                    <h4 class="font-extrabold text-slate-900 text-base">Katering Fullboard Nusantara</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Makan 3 kali sehari disajikan prasmanan (buffet) dengan menu masakan khas Indonesia yang dimasak langsung oleh koki nusantara. Tersedia sup hangat, sambal, kerupuk, dan buah segar.
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-purple-50/60 border border-purple-100">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-luggage-cart"></i>
+                    </div>
+                    <h4 class="font-extrabold text-slate-900 text-base">Porter &amp; Handling Koper Penuh</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Jamaah tidak perlu repot mengangkat koper besar. Dari bandara hingga tiba di depan kamar hotel, seluruh distribusi bagasi ditangani secara profesional oleh kru logistik SDW UMROH.
+                    </p>
+                </div>
+
+                <div class="p-6 rounded-2xl bg-purple-50/60 border border-purple-100">
+                    <div class="w-12 h-12 rounded-2xl bg-sdw-pine text-sdw-gold flex items-center justify-center text-xl mb-4">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h4 class="font-extrabold text-slate-900 text-base">Pendampingan Muthawwif Standby</h4>
+                    <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+                        Dewan asatidz dan tour leader menetap di hotel yang sama dengan jamaah. Siap melayani konsultasi fiqih ibadah, bimbingan lansia, dan bantuan darurat medis setiap saat.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== UNIVERSAL FOOTER ==================== -->
+    <footer class="bg-sdw-footer text-white pt-16 pb-28 lg:pb-12 border-t border-purple-950 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-white/10">
+                <div class="space-y-4">
+                    <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                        <img src="assets/sdw-logo.png" alt="SDW Umroh" class="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                        <div class="flex flex-col">
+                            <span class="font-black text-xl tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>
+                            <span class="text-[9.5px] text-sdw-gold font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                        </div>
+                    </a>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Penyelenggara Perjalanan Ibadah Umroh (PPIU) resmi dengan akreditasi A. Melayani sepenuh hati berlandaskan Al-Qur'an dan Sunnah.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Program Paket Umroh</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="paket.html?cat=reguler" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Paket Umroh Reguler Syawal</a></li>
+                        <li><a href="paket.html?cat=vip" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Paket VIP Khidmat Bintang 5</a></li>
+                        <li><a href="hotel.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Titik Hotel Makkah &amp; Madinah</a></li>
+                        <li><a href="ziarah.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Peta Ziarah Suci Haramain</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Pusat Layanan</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="app.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-mobile-screen text-sdw-gold"></i> Portal Jamaah PWA</a></li>
+                        <li><a href="kalkulator.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-calculator text-sdw-gold"></i> Kalkulator Biaya</a></li>
+                        <li><a href="faq.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-circle-question text-sdw-gold"></i> Tanya Jawab (FAQ)</a></li>
+                        <li><a href="tentang.html" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-shield-halved text-sdw-gold"></i> Legalitas &amp; Akreditasi</a></li>
+                    </ul>
+                </div>
+                <div class="space-y-3.5">
+                    <h4 class="font-bold text-sm text-white uppercase tracking-wider mb-4 border-l-2 border-sdw-gold pl-2.5">Kantor &amp; Kontak</h4>
+                    <div class="text-xs text-slate-300 leading-relaxed flex items-start gap-2">
+                        <i class="fa-solid fa-location-dot mt-0.5 text-sdw-gold"></i>
+                        <span><strong>Graha SDW:</strong> Jl. TB Simatupang Kav. 88, Cilandak, Jakarta Selatan 12430</span>
+                    </div>
+                    <div class="text-xs text-slate-300 flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="hover:text-sdw-gold font-bold transition">+62 812-3456-7890 (24 Jam)</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+                <p>&copy; 2026 PT Sahabat Dhuha Wisata (SDW UMROH). Berizin Resmi Kemenag RI.</p>
+                <div class="flex items-center gap-4 text-[11px]">
+                    <a href="faq.html" class="hover:text-white transition">Syarat &amp; Ketentuan</a>
+                    <span>•</span>
+                    <a href="faq.html" class="hover:text-white transition">Kebijakan Privasi</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (!drawer || !panel) return;
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                drawer.classList.add('opacity-100');
+                panel.classList.remove('translate-x-full');
+                panel.classList.add('translate-x-0');
+                document.body.style.overflow = 'hidden';
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                drawer.classList.remove('opacity-100');
+                panel.classList.add('translate-x-full');
+                panel.classList.remove('translate-x-0');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // ==================== HOTEL FILTER & SEARCH CONTROLLER ====================
+        let activeHotelCity = 'ALL';
+        let hotelQuery = '';
+
+        function filterHotelCity(city, btn) {
+            activeHotelCity = city;
+            document.querySelectorAll('.hotel-city-filter-btn').forEach(b => {
+                b.classList.remove('bg-sdw-pine', 'text-white', 'shadow-xs');
+                b.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            if (btn) {
+                btn.classList.add('bg-sdw-pine', 'text-white', 'shadow-xs');
+                btn.classList.remove('bg-slate-100', 'text-slate-700');
+            }
+            applyHotelFilter();
+        }
+
+        function handleHotelSearch(val) {
+            hotelQuery = (val || '').toLowerCase().trim();
+            applyHotelFilter();
+        }
+
+        function applyHotelFilter() {
+            const cards = document.querySelectorAll('.hotel-card');
+            cards.forEach(card => {
+                const cardCity = card.getAttribute('data-city') || '';
+                const cardText = (card.getAttribute('data-name') || '') + ' ' + card.innerText.toLowerCase();
+                const matchCity = (activeHotelCity === 'ALL') || (cardCity === activeHotelCity);
+                const matchSearch = !hotelQuery || cardText.includes(hotelQuery);
+                if (matchCity && matchSearch) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda -->
+            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-kaaba text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
+            </a>
+
+            <!-- 2. Berita -->
+            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
+            </a>
+
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
+            </button>
+
+            <!-- 4. Kalender -->
+            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
+            </a>
+
+            <!-- 5. Profil -->
+            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-circle-user text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+            </a>
+        </div>
+    </nav>
+</body>
+
+</html>
+

@@ -517,13 +517,13 @@
                 <i class="fa-solid fa-kaaba"></i>
             </div>
 
-            <div class="grid grid-cols-2 gap-2 relative z-10 text-[11px] items-center">
+            <div class="flex items-center justify-between gap-2 relative z-10 text-[11px]">
                 <!-- BAGIAN KIRI: Lokasi Aktual, Tgl Hijriyah, Tgl Masehi -->
-                <div class="space-y-1.5 pr-1 border-r border-white/10">
+                <div class="space-y-1.5 pr-2.5 border-r border-white/10 shrink-0">
                     <!-- 1. Lokasi Aktual -->
                     <div class="flex items-center gap-1.5 font-bold text-amber-300">
                         <i class="fa-solid fa-location-dot text-amber-400 text-[10px] shrink-0"></i>
-                        <span class="truncate tracking-tight">Makkah al-Mukarramah</span>
+                        <span class="tracking-tight text-[11px]">Makkah al-Mukarramah</span>
                     </div>
                     <!-- 2. Tgl Hijriyah -->
                     <div class="flex items-center gap-1.5 text-amber-200/90 text-[10px]">
@@ -533,30 +533,30 @@
                     <!-- 3. Tgl Masehi -->
                     <div class="flex items-center gap-1.5 text-slate-300 text-[9.5px]">
                         <i class="fa-regular fa-calendar text-emerald-300 text-[9px] shrink-0"></i>
-                        <span id="home-date-masehi" class="truncate">Rabu, 28 Oktober 2026</span>
+                        <span id="home-date-masehi" class="whitespace-nowrap">Rabu, 28 Oktober 2026</span>
                     </div>
                 </div>
 
                 <!-- BAGIAN KANAN: Jadwal Shalat terdekat, Countdown, Jam Aktual -->
-                <div class="space-y-1.5 pl-1 flex flex-col items-end text-right">
+                <div class="space-y-1.5 pl-1 flex flex-col items-end text-right shrink-0">
                     <!-- 1. Jadwal Shalat Terdekat -->
-                    <div class="flex items-center gap-1.5 justify-end">
-                        <span id="home-next-prayer-name" class="font-semibold text-slate-200 text-[10.5px]">Zuhur Makkah</span>
-                        <span id="home-next-prayer-time" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner">
-                            12:10 WAS
+                    <div class="flex items-center gap-1.5 justify-end whitespace-nowrap">
+                        <span id="home-next-prayer-name" class="font-semibold text-slate-200 text-[10.5px]">Maghrib</span>
+                        <span id="home-next-prayer-time" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner shrink-0 whitespace-nowrap">
+                            17:50 WAS
                         </span>
                     </div>
                     <!-- 2. Countdown Menuju Sholat -->
-                    <div class="flex items-center gap-1 text-[10px] justify-end">
+                    <div class="flex items-center gap-1 text-[10px] justify-end whitespace-nowrap">
                         <span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping shrink-0"></span>
-                        <span class="text-slate-300">Menuju <span id="home-countdown-prayer-name" class="font-bold text-amber-300">Zuhur</span>:</span>
-                        <span id="home-prayer-countdown" class="font-mono font-black text-amber-300 tracking-wider bg-black/30 px-1 rounded">-00:00:00</span>
+                        <span class="text-slate-300">Menuju <span id="home-countdown-prayer-name" class="font-bold text-amber-300">Maghrib</span>:</span>
+                        <span id="home-prayer-countdown" class="font-mono font-black text-amber-300 tracking-wider bg-black/30 px-1.5 py-0.5 rounded text-[10px] shrink-0 whitespace-nowrap">00:00:00</span>
                     </div>
                     <!-- 3. Jam Aktual Makkah -->
-                    <div class="flex items-center gap-1.5 justify-end text-[10px]">
-                        <span class="text-slate-300/80">Jam WAS:</span>
-                        <span id="home-makkah-clock" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner">
-                            12:00:00 WAS
+                    <div class="flex items-center gap-1.5 justify-end text-[10px] whitespace-nowrap">
+                        <span class="text-slate-300/80 shrink-0">Jam WAS:</span>
+                        <span id="home-makkah-clock" class="font-mono font-bold text-amber-300 bg-black/40 px-1.5 py-0.5 rounded text-[10px] border border-amber-400/20 shadow-inner shrink-0 whitespace-nowrap">
+                            17:00:00
                         </span>
                     </div>
                 </div>
@@ -575,28 +575,28 @@
                 </a>
 
                 <!-- 2. Titik Hotel (Makkah & Madinah) -->
-                <button type="button" onclick="window.openTitikHotelModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                <a href="hotel.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-blue-100/80">
                         <i class="fa-solid fa-hotel"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Titik Hotel</span>
-                </button>
+                </a>
 
                 <!-- 3. Checklist Koper -->
-                <button type="button" onclick="window.openChecklistKoperModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
-                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 border border-amber-100/80">
+                <a href="koper.html" class="flex flex-col items-center text-center w-full group transition">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 border border-amber-100/80">
                         <i class="fa-solid fa-suitcase-rolling"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Checklist Koper</span>
-                </button>
+                </a>
 
                 <!-- 4. Arah Kiblat -->
-                <button type="button" onclick="window.openArahKiblatModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                <a href="kiblat.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
                         <i class="fa-solid fa-compass"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Arah Kiblat</span>
-                </button>
+                </a>
 
                 <!-- 5. Peta Ziarah -->
                 <a href="ziarah.html" class="flex flex-col items-center text-center w-full group transition">
@@ -607,15 +607,15 @@
                 </a>
 
                 <!-- 6. Galeri Kloter -->
-                <button type="button" onclick="window.openGaleriKloterModal()" class="flex flex-col items-center text-center w-full group transition cursor-pointer">
+                <a href="galeri.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition-all duration-300 border border-rose-100/80">
                         <i class="fa-solid fa-photo-film"></i>
                     </div>
                     <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Galeri Kloter</span>
-                </button>
+                </a>
 
                 <!-- 7. Live Ka'bah -->
-                <a href="https://www.youtube.com/results?search_query=live+makkah+haramain+now" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition">
+                <a href="live.html" class="flex flex-col items-center text-center w-full group transition">
                     <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-red-600 group-hover:text-white transition-all duration-300 border border-red-100/80">
                         <i class="fa-solid fa-tower-broadcast"></i>
                     </div>

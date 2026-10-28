@@ -1,9 +1,14 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v3';
+const CACHE_NAME = 'sdw-umroh-pwa-v17';
 
 const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/paket.html',
+  '/hotel.html',
+  '/koper.html',
+  '/kiblat.html',
+  '/galeri.html',
+  '/live.html',
   '/jadwal.html',
   '/kalkulator.html',
   '/ziarah.html',
@@ -16,7 +21,8 @@ const PRECACHE_URLS = [
   '/assets/hero-twilight.jpg',
   '/assets/icon-192.png',
   '/assets/icon-512.png',
-  '/js/pwa.js'
+  '/js/pwa.js',
+  '/js/berita-kalender.js'
 ];
 
 self.addEventListener('install', (event) => {

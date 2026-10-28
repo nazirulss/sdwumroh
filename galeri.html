@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Kloter & Sertifikat Umroh Digital | SDW UMROH</title>
+    <meta name="description" content="Arsip dokumentasi resmi foto dan video keberangkatan kloter jamaah SDW UMROH, ziarah Haramain, serta unduh sertifikat umroh digital bertanda tangan resmi.">
+    <link rel="canonical" href="https://sdwumroh.com/galeri">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <script src="js/pwa.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=calendarColsFinal">
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Pilihan Paket</span>
+                </a>
+                <a href="hotel.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Titik Hotel</span>
+                </a>
+                <a href="koper.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Checklist Koper</span>
+                </a>
+                <a href="kiblat.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Arah Kiblat</span>
+                </a>
+                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Peta Ziarah</span>
+                </a>
+                <a href="galeri.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Galeri Kloter</span>
+                </a>
+            </div>
+
+            <!-- Header Action Capsule -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20akses%20foto%20kloter." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span class="hidden sm:inline">CS Dokumentasi</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda Aplikasi</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-kaaba text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Pilihan Paket</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Titik Hotel</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Checklist Koper</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="kiblat.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-compass text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Arah Kiblat</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Peta Ziarah Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="galeri.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-extrabold transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-photo-film text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Galeri Kloter</span>
+                    </span>
+                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
+                </a>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE HERO BANNER ==================== -->
+    <header class="pt-28 pb-10 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Navigasi Kembali: Cukup Icon Saja + Nama Menu (Di Bawah Header) -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="app.html" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95 border border-white/15 shadow-sm" title="Kembali ke Beranda" aria-label="Kembali">
+                    <i class="fa-solid fa-arrow-left text-sm text-sdw-gold"></i>
+                </a>
+                <span class="text-sm sm:text-base font-extrabold text-white tracking-wide">Galeri Kloter</span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div class="max-w-2xl">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
+                        <i class="fa-solid fa-camera-retro"></i> Dokumentasi &amp; Kenangan Jamaah
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-2">
+                        Galeri Kloter &amp; <span class="text-gold-gradient">Sertifikat Umroh</span>
+                    </h1>
+                    <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                        Arsip foto dan video resmi perjalanan ibadah, napak tilas ziarah Haramain, serta unduh sertifikat umroh digital bertanda tangan resmi.
+                    </p>
+                </div>
+
+                <!-- Tab Switcher Capsule -->
+                <div class="bg-black/30 backdrop-blur-md p-1.5 rounded-2xl border border-white/15 flex items-center gap-1.5 self-start lg:self-end">
+                    <button type="button" id="tabBtnFoto" onclick="switchGaleriView('FOTO')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-sdw-gold text-slate-950 font-extrabold text-xs flex items-center gap-2 shadow-md transition cursor-pointer">
+                        <i class="fa-solid fa-images"></i>
+                        <span>Foto &amp; Video Kloter</span>
+                    </button>
+                    <button type="button" id="tabBtnSertifikat" onclick="switchGaleriView('SERTIFIKAT')" class="px-4 sm:px-5 py-2.5 rounded-xl bg-transparent hover:bg-white/10 text-white font-bold text-xs flex items-center gap-2 transition cursor-pointer">
+                        <i class="fa-solid fa-certificate text-sdw-gold"></i>
+                        <span>Sertifikat Umroh Digital</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT SECTION ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-6 relative z-20">
+
+        <!-- ==================== VIEW 1: DOKUMENTASI FOTO & VIDEO KLOTER ==================== -->
+        <div id="viewFotoContainer" class="space-y-6">
+
+            <!-- Filter & Search Toolbar -->
+            <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-xl shadow-purple-950/5 border border-purple-100/60 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <!-- Dropdown Kloter -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-slate-500 whitespace-nowrap">Pilih Kloter:</span>
+                        <select id="kloterSelect" onchange="filterGallery()" class="bg-slate-100 text-slate-800 text-xs font-bold py-2 px-3 rounded-xl border border-slate-200 outline-none cursor-pointer focus:border-sdw-pine">
+                            <option value="ALL">Semua Kloter Keberangkatan</option>
+                            <option value="KLOTER_1447_SYAWAL">Kloter 1447H - Syawal Bintang 5</option>
+                            <option value="KLOTER_1447_RAMADHAN">Kloter 1447H - Ramadhan I'tikaf</option>
+                            <option value="KLOTER_1447_VIP">Kloter 1447H - VIP Khidmat Clock Tower</option>
+                            <option value="KLOTER_1447_REGULER">Kloter 1447H - Reguler Awal Musim</option>
+                        </select>
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs font-bold">
+                        <button type="button" onclick="filterCategory('ALL', this)" class="cat-pill px-3.5 py-1.5 rounded-xl bg-sdw-pine text-white shadow-xs transition whitespace-nowrap">
+                            Semua Momen
+                        </button>
+                        <button type="button" onclick="filterCategory('MAKKAH', this)" class="cat-pill px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:text-sdw-pine transition whitespace-nowrap">
+                            <i class="fa-solid fa-kaaba mr-1 text-sdw-gold"></i> Makkah &amp; Ibadah
+                        </button>
+                        <button type="button" onclick="filterCategory('MADINAH', this)" class="cat-pill px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:text-sdw-pine transition whitespace-nowrap">
+                            <i class="fa-solid fa-mosque mr-1 text-emerald-600"></i> Madinah &amp; Raudhah
+                        </button>
+                        <button type="button" onclick="filterCategory('BANDARA', this)" class="cat-pill px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-600 hover:text-sdw-pine transition whitespace-nowrap">
+                            <i class="fa-solid fa-plane mr-1 text-blue-600"></i> Bandara &amp; Manasik
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Google Drive Full HD Cloud Banner -->
+                <div class="p-3.5 rounded-xl bg-purple-50/80 border border-purple-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-lg bg-sdw-pine text-white flex items-center justify-center shrink-0">
+                            <i class="fa-brands fa-google-drive"></i>
+                        </div>
+                        <div>
+                            <span class="font-extrabold text-sdw-pine">Akses Cloud Google Drive Kloter (Full HD)</span>
+                            <p class="text-[11px] text-slate-500">Seluruh foto mentah beresolusi tinggi tersedia di Google Drive resmi SDW UMROH.</p>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW,%20saya%20minta%20link%20Google%20Drive%20foto%20kloter." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-[11.5px] flex items-center justify-center gap-1.5 shrink-0 transition active:scale-95 shadow-xs">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        <span>Minta Link Folder Drive</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Grid Dokumentasi Foto -->
+            <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically rendered photo cards -->
+            </div>
+
+        </div>
+
+        <!-- ==================== VIEW 2: SERTIFIKAT UMROH DIGITAL (E-CERTIFICATE) ==================== -->
+        <div id="viewSertifikatContainer" class="hidden space-y-8">
+
+            <!-- Kontrol Form Data Sertifikat -->
+            <div class="bg-white rounded-3xl p-5 sm:p-7 shadow-xl border border-purple-100 space-y-4">
+                <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+                    <div class="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg font-bold shadow-xs">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-base sm:text-lg text-sdw-pine">Penerbitan Sertifikat Umroh Digital</h2>
+                        <p class="text-xs text-slate-500">Masukkan nama lengkap dan nomor paspor jamaah untuk mencetak atau mengunduh sertifikat.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap Jamaah</label>
+                        <input type="text" id="certInputName" value="H. Ahmad Fathoni, S.Ag" oninput="updateCertificatePreview()" placeholder="Sesuai Paspor / KTP" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Nomor Paspor RI</label>
+                        <input type="text" id="certInputPassport" value="X12345678" oninput="updateCertificatePreview()" placeholder="Contoh: C1234567" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-slate-800 focus:border-sdw-pine outline-none uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Program Kloter</label>
+                        <select id="certInputKloter" onchange="updateCertificatePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:border-sdw-pine outline-none bg-white">
+                            <option value="Umroh Syawal 1447H (Bintang 5 Clock Tower)">Umroh Syawal 1447H (Bintang 5)</option>
+                            <option value="Umroh Ramadhan I'tikaf 1447H">Umroh Ramadhan I'tikaf 1447H</option>
+                            <option value="Umroh VIP Khidmat 1447H">Umroh VIP Khidmat 1447H</option>
+                            <option value="Umroh Reguler Plus Turki 1447H">Umroh Plus Turki 1447H</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1">Tanggal Selesai Umroh</label>
+                        <input type="text" id="certInputDate" value="28 Oktober 2026 / 15 Jumadil Ula 1448 H" oninput="updateCertificatePreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="printCertificate()" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition active:scale-95 cursor-pointer">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak / Simpan PDF</span>
+                    </button>
+                    <button type="button" onclick="shareCertificateWa()" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-2 shadow-sm transition active:scale-95 cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Bagikan ke WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- E-CERTIFICATE DISPLAY FRAME (GOLD ISLAMIC DIPLOMA ALA SDW) -->
+            <div class="flex justify-center overflow-x-auto pb-4">
+                <div id="printableCertificate" class="bg-[#FFFDF7] text-slate-900 rounded-2xl shadow-2xl border-8 border-[#C59B27] p-6 sm:p-10 w-full max-w-3xl relative select-none">
+                    
+                    <!-- Double Golden Inner Inset Border -->
+                    <div class="border-2 border-[#E5A93C] p-6 sm:p-8 relative">
+                        <!-- Ornamen Sudut Arabesque -->
+                        <div class="absolute -top-3.5 -left-3.5 w-7 h-7 border-t-4 border-l-4 border-[#C59B27]"></div>
+                        <div class="absolute -top-3.5 -right-3.5 w-7 h-7 border-t-4 border-r-4 border-[#C59B27]"></div>
+                        <div class="absolute -bottom-3.5 -left-3.5 w-7 h-7 border-b-4 border-l-4 border-[#C59B27]"></div>
+                        <div class="absolute -bottom-3.5 -right-3.5 w-7 h-7 border-b-4 border-r-4 border-[#C59B27]"></div>
+
+                        <!-- Header Sertifikat: Logo & Bismillah -->
+                        <div class="text-center space-y-2 mb-6">
+                            <div class="flex items-center justify-center gap-3">
+                                <img src="assets/sdw-logo.png" alt="Logo SDW" class="h-12 w-auto object-contain">
+                                <div class="text-left">
+                                    <div class="font-black text-base tracking-tight text-[#240833]">SDW <span class="text-[#C59B27]">UMROH</span></div>
+                                    <div class="text-[9px] font-bold text-amber-800 tracking-widest uppercase">PPIU Kemenag RI Akreditasi A</div>
+                                </div>
+                            </div>
+
+                            <!-- Kaligrafi Basmalah -->
+                            <div class="font-serif text-2xl sm:text-3xl text-amber-900 pt-2 font-normal">
+                                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                            </div>
+
+                            <div class="pt-2">
+                                <span class="text-[10px] font-extrabold uppercase tracking-widest text-[#C59B27] bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                                    Piagam Penghargaan &amp; Kesaksian Ibadah
+                                </span>
+                                <h1 class="font-['Cinzel'] text-2xl sm:text-3xl font-black text-[#240833] tracking-wide mt-2 uppercase">
+                                    Sertifikat Umroh Mabrur
+                                </h1>
+                            </div>
+                        </div>
+
+                        <!-- Badan Isi Pernyataan Sertifikat -->
+                        <div class="text-center space-y-3 max-w-xl mx-auto my-6 text-xs sm:text-sm leading-relaxed text-slate-700">
+                            <p class="font-medium text-slate-600">Dewan Pembimbing Ibadah &amp; Manajemen SDW UMROH menyatakan bahwa:</p>
+                            
+                            <!-- Nama Jamaah (Besar & Elegan) -->
+                            <div class="py-2 border-b-2 border-dashed border-amber-300">
+                                <h2 id="certPreviewName" class="font-['Cinzel'] text-xl sm:text-2xl font-black text-[#240833] tracking-wide">
+                                    H. Ahmad Fathoni, S.Ag
+                                </h2>
+                                <span id="certPreviewPassport" class="text-xs font-mono font-bold text-amber-800 block mt-0.5">
+                                    No. Paspor: X12345678
+                                </span>
+                            </div>
+
+                            <p class="text-xs sm:text-sm text-slate-700 leading-relaxed pt-2">
+                                Telah selesai menunaikan seluruh rangkaian <strong>Rukun dan Wajib Ibadah Umroh</strong> (Ihram dari Miqat, Thawaf Ka'bah, Sa'i Shafa-Marwah, dan Tahallul) serta ziarah maqam Rasulullah ﷺ di Madinah Al-Munawwarah dalam program:
+                            </p>
+
+                            <div id="certPreviewKloter" class="font-bold text-xs sm:text-sm text-sdw-pine bg-amber-100/60 py-1.5 px-4 rounded-xl border border-amber-200 inline-block">
+                                Umroh Syawal 1447H (Bintang 5 Clock Tower)
+                            </div>
+
+                            <p class="text-[11px] text-slate-500 italic">
+                                Semoga Allah Subhanahu wa Ta'ala menerima amal ibadahnya, mengampuni segala dosa-dosanya, dan mengkaruniakan predikat Umroh yang Maqbul dan Mabrur. Aamiin.
+                            </p>
+                        </div>
+
+                        <!-- Footer: Tanda Tangan & QR Code -->
+                        <div class="mt-8 pt-6 border-t border-amber-200 grid grid-cols-3 items-end text-center text-xs">
+                            <!-- Dewan Pembimbing Ibadah -->
+                            <div class="space-y-1">
+                                <div class="font-bold text-[10px] sm:text-xs text-slate-500">Muthawwif Pembimbing,</div>
+                                <div class="h-12 flex items-center justify-center">
+                                    <span class="font-serif italic text-amber-800 text-sm font-bold">Ustadz Bersanad</span>
+                                </div>
+                                <div class="font-bold text-xs text-[#240833] border-t border-slate-400 pt-1">Ust. H. Nur Hidayat, Lc.</div>
+                                <div class="text-[9px] text-slate-500">Alumni Univ. Islam Madinah</div>
+                            </div>
+
+                            <!-- Stempel / QR Verifikasi -->
+                            <div class="flex flex-col items-center justify-center space-y-1">
+                                <div class="w-14 h-14 rounded-xl bg-white border-2 border-[#C59B27] p-1 shadow-xs flex items-center justify-center">
+                                    <i class="fa-solid fa-qrcode text-2xl text-[#240833]"></i>
+                                </div>
+                                <span class="text-[8.5px] font-mono text-slate-500 font-bold">SDW-VERIFIED-1447</span>
+                            </div>
+
+                            <!-- Direktur Utama SDW -->
+                            <div class="space-y-1">
+                                <div class="font-bold text-[10px] sm:text-xs text-slate-500">Direktur Utama,</div>
+                                <div class="h-12 flex items-center justify-center">
+                                    <span class="font-serif italic text-[#C59B27] text-sm font-bold">SDW Umroh Seal</span>
+                                </div>
+                                <div class="font-bold text-xs text-[#240833] border-t border-slate-400 pt-1">H. Ir. Budi Santoso, M.M.</div>
+                                <div class="text-[9px] text-slate-500">SDW Travel Group</div>
+                            </div>
+                        </div>
+
+                        <!-- Tanggal Terbit Sertifikat -->
+                        <div class="text-center pt-4">
+                            <span id="certPreviewDate" class="text-[10px] font-bold text-amber-800 tracking-wide">
+                                Makkah Al-Mukarramah, 28 Oktober 2026 / 15 Jumadil Ula 1448 H
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ==================== LIGHTBOX MODAL FULL SCREEN FOTO ==================== -->
+    <div id="imageLightboxModal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="relative max-w-4xl w-full flex flex-col items-center">
+            <!-- Close Button -->
+            <button type="button" onclick="closeLightbox()" class="absolute -top-12 right-0 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center text-lg transition cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Image Container -->
+            <div class="w-full bg-black/50 rounded-2xl overflow-hidden border border-white/20 shadow-2xl max-h-[75vh] flex items-center justify-center">
+                <img id="lightboxImg" src="" alt="Foto Momen" class="max-w-full max-h-[70vh] object-contain">
+            </div>
+
+            <!-- Lightbox Caption & Actions -->
+            <div class="w-full mt-3 p-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h3 id="lightboxTitle" class="font-bold text-sm">Judul Foto</h3>
+                    <p id="lightboxSubtitle" class="text-xs text-slate-300">Deskripsi momen</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="lightboxDownloadBtn" href="#" download="sdw-umroh-foto.png" class="px-4 py-2 rounded-xl bg-sdw-gold hover:bg-amber-400 text-slate-950 font-extrabold text-xs flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Unduh Foto HD</span>
+                    </a>
+                    <button type="button" onclick="shareCurrentPhoto()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 transition cursor-pointer">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Bagikan</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda -->
+            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-kaaba text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
+            </a>
+
+            <!-- 2. Berita -->
+            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
+            </a>
+
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
+            </button>
+
+            <!-- 4. Kalender -->
+            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
+            </a>
+
+            <!-- 5. Profil -->
+            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-circle-user text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== SCRIPT INTERAKSI GALERI & SERTIFIKAT ==================== -->
+    <script>
+        // MASTER DATA DOKUMENTASI FOTO KLOTER
+        const GALLERY_ITEMS = [
+            {
+                id: "foto_1",
+                kloter: "KLOTER_1447_SYAWAL",
+                kloterName: "Kloter Syawal Bintang 5",
+                category: "MAKKAH",
+                categoryName: "Makkah Al-Mukarramah",
+                title: "Thawaf Qudum Berjamaah di Mataf Ka'bah",
+                desc: "Pelaksanaan rukun thawaf dipandu langsung oleh Muthawwif Bersanad.",
+                date: "24 Oktober 2026",
+                image: "assets/hero-haram.png",
+                tag: "Mataf Ka'bah"
+            },
+            {
+                id: "foto_2",
+                kloter: "KLOTER_1447_SYAWAL",
+                kloterName: "Kloter Syawal Bintang 5",
+                category: "MADINAH",
+                categoryName: "Madinah Al-Munawwarah",
+                title: "Ziarah Raudhah Asy-Syarifah & Maqam Nabi",
+                desc: "Khusyuk berdoa dan sholat sunnah di taman surga Raudhah Nabawi.",
+                date: "26 Oktober 2026",
+                image: "assets/hero-twilight.jpg",
+                tag: "Raudhah Nabawi"
+            },
+            {
+                id: "foto_3",
+                kloter: "KLOTER_1447_VIP",
+                kloterName: "Kloter VIP Khidmat",
+                category: "MAKKAH",
+                categoryName: "Makkah Al-Mukarramah",
+                title: "Sa'i Safa-Marwah & Suasana Tahallul",
+                desc: "Kebahagiaan jamaah usai menyelesaikan 7 putaran Sa'i dan memotong rambut.",
+                date: "22 Oktober 2026",
+                image: "assets/pkg-vip-khidmat.png",
+                tag: "Bukit Safa"
+            },
+            {
+                id: "foto_4",
+                kloter: "KLOTER_1447_RAMADHAN",
+                kloterName: "Kloter Ramadhan I'tikaf",
+                category: "MADINAH",
+                categoryName: "Madinah Al-Munawwarah",
+                title: "Napak Tilas Jabal Uhud & Syuhada Uhud",
+                desc: "Tausiyah sirah nabawiyah di kaki bukit pemanah Jabal Rumah.",
+                date: "18 Oktober 2026",
+                image: "assets/pkg-ramadhan.png",
+                tag: "Jabal Uhud"
+            },
+            {
+                id: "foto_5",
+                kloter: "KLOTER_1447_REGULER",
+                kloterName: "Kloter Reguler Awal Musim",
+                category: "BANDARA",
+                categoryName: "Bandara & Manasik",
+                title: "Pelepasan Jamaah di Bandara Soekarno-Hatta",
+                desc: "Doa bersama dan pembagian paspor sebelum penerbangan Saudia Airlines.",
+                date: "14 Oktober 2026",
+                image: "assets/pkg-reguler-syawal.png",
+                tag: "Terminal 3 Soetta"
+            },
+            {
+                id: "foto_6",
+                kloter: "KLOTER_1447_SYAWAL",
+                kloterName: "Kloter Syawal Bintang 5",
+                category: "MADINAH",
+                categoryName: "Madinah Al-Munawwarah",
+                title: "Sholat Sunnah di Masjid Quba & Kebun Kurma",
+                desc: "Mengejar pahala setara ibadah umroh di masjid pertama dalam sejarah Islam.",
+                date: "27 Oktober 2026",
+                image: "assets/pkg-hemat.png",
+                tag: "Masjid Quba"
+            }
+        ];
+
+        let selectedKloter = 'ALL';
+        let selectedCategory = 'ALL';
+        let currentLightboxItem = null;
+
+        // TAB SWITCHING: FOTO vs SERTIFIKAT
+        function switchGaleriView(view) {
+            const fotoView = document.getElementById('viewFotoContainer');
+            const certView = document.getElementById('viewSertifikatContainer');
+            const btnFoto = document.getElementById('tabBtnFoto');
+            const btnCert = document.getElementById('tabBtnSertifikat');
+
+            if (view === 'FOTO') {
+                fotoView.classList.remove('hidden');
+                certView.classList.add('hidden');
+
+                btnFoto.className = "px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-sdw-gold text-slate-950 font-extrabold text-xs flex items-center gap-2 shadow-md transition cursor-pointer";
+                btnCert.className = "px-4 sm:px-5 py-2.5 rounded-xl bg-transparent hover:bg-white/10 text-white font-bold text-xs flex items-center gap-2 transition cursor-pointer";
+            } else {
+                fotoView.classList.add('hidden');
+                certView.classList.remove('hidden');
+
+                btnCert.className = "px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-sdw-gold text-slate-950 font-extrabold text-xs flex items-center gap-2 shadow-md transition cursor-pointer";
+                btnFoto.className = "px-4 sm:px-5 py-2.5 rounded-xl bg-transparent hover:bg-white/10 text-white font-bold text-xs flex items-center gap-2 transition cursor-pointer";
+                updateCertificatePreview();
+            }
+        }
+
+        // FILTER FUNCTIONS
+        function filterGallery() {
+            selectedKloter = document.getElementById('kloterSelect').value;
+            renderGalleryGrid();
+        }
+
+        function filterCategory(cat, btn) {
+            selectedCategory = cat;
+            document.querySelectorAll('.cat-pill').forEach(b => {
+                b.classList.remove('bg-sdw-pine', 'text-white', 'shadow-xs');
+                b.classList.add('bg-slate-100', 'text-slate-600');
+            });
+            btn.classList.add('bg-sdw-pine', 'text-white', 'shadow-xs');
+            btn.classList.remove('bg-slate-100', 'text-slate-600');
+            renderGalleryGrid();
+        }
+
+        // RENDER PHOTO GRID
+        function renderGalleryGrid() {
+            const grid = document.getElementById('galleryGrid');
+            const filtered = GALLERY_ITEMS.filter(item => {
+                const matchKloter = (selectedKloter === 'ALL' || item.kloter === selectedKloter);
+                const matchCat = (selectedCategory === 'ALL' || item.category === selectedCategory);
+                return matchKloter && matchCat;
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center bg-white rounded-3xl border border-dashed border-slate-300">
+                        <i class="fa-solid fa-images text-4xl text-slate-300 mb-3"></i>
+                        <h4 class="font-extrabold text-base text-slate-700">Belum ada foto pada kloter ini</h4>
+                        <p class="text-xs text-slate-500 mt-1">Silakan pilih kloter lain atau pilih 'Semua Momen' untuk melihat koleksi lainnya.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(item => {
+                html += `
+                <div class="bg-white rounded-3xl overflow-hidden border border-purple-100/80 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group">
+                    <!-- Photo Header & Preview -->
+                    <div class="relative h-56 sm:h-64 overflow-hidden bg-slate-900 cursor-pointer" onclick="openLightbox('${item.id}')">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                        
+                        <!-- Badges -->
+                        <div class="absolute top-3 left-3 flex flex-wrap gap-1.5">
+                            <span class="px-2.5 py-1 rounded-full bg-black/50 backdrop-blur-md text-[10px] font-bold text-amber-300 border border-white/20">
+                                <i class="fa-solid fa-location-dot mr-1"></i> ${item.tag}
+                            </span>
+                        </div>
+
+                        <!-- Date Badge -->
+                        <div class="absolute bottom-3 left-3 text-white">
+                            <span class="text-[10px] font-semibold text-slate-300 block">${item.kloterName}</span>
+                            <span class="text-xs font-bold">${item.date}</span>
+                        </div>
+
+                        <!-- Zoom Pip -->
+                        <div class="absolute bottom-3 right-3 w-8 h-8 rounded-full bg-white/20 backdrop-blur-md hover:bg-white/40 text-white flex items-center justify-center text-xs transition">
+                            <i class="fa-solid fa-magnifying-glass-plus"></i>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-4">
+                        <div class="space-y-1">
+                            <h3 class="font-black text-sm sm:text-base text-slate-900 group-hover:text-sdw-pine transition leading-snug">
+                                ${item.title}
+                            </h3>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                ${item.desc}
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <button type="button" onclick="openLightbox('${item.id}')" class="flex-1 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer">
+                                <i class="fa-solid fa-eye"></i>
+                                <span>Lihat Foto</span>
+                            </button>
+                            <a href="${item.image}" download="${item.id}.png" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs transition" title="Unduh Foto">
+                                <i class="fa-solid fa-download"></i>
+                            </a>
+                            <a href="https://wa.me/?text=${encodeURIComponent('Foto Dokumentasi Umroh SDW: ' + item.title + ' - https://sdwumroh.com/galeri')}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs transition" title="Bagikan ke WhatsApp">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // LIGHTBOX CONTROLS
+        function openLightbox(itemId) {
+            const item = GALLERY_ITEMS.find(i => i.id === itemId);
+            if (!item) return;
+
+            currentLightboxItem = item;
+            document.getElementById('lightboxImg').src = item.image;
+            document.getElementById('lightboxTitle').innerText = item.title;
+            document.getElementById('lightboxSubtitle').innerText = `${item.kloterName} • ${item.date}`;
+            document.getElementById('lightboxDownloadBtn').href = item.image;
+
+            const modal = document.getElementById('imageLightboxModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('imageLightboxModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function shareCurrentPhoto() {
+            if (!currentLightboxItem) return;
+            const text = encodeURIComponent(`Foto Dokumentasi Umroh SDW: ${currentLightboxItem.title}\nhttps://sdwumroh.com/galeri`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        // CERTIFICATE CONTROLLER
+        function updateCertificatePreview() {
+            const name = document.getElementById('certInputName').value.trim() || 'H. Ahmad Fathoni, S.Ag';
+            const passport = document.getElementById('certInputPassport').value.trim() || 'X12345678';
+            const kloter = document.getElementById('certInputKloter').value;
+            const date = document.getElementById('certInputDate').value.trim() || '28 Oktober 2026';
+
+            document.getElementById('certPreviewName').innerText = name;
+            document.getElementById('certPreviewPassport').innerText = `No. Paspor: ${passport.toUpperCase()}`;
+            document.getElementById('certPreviewKloter').innerText = kloter;
+            document.getElementById('certPreviewDate').innerText = `Makkah Al-Mukarramah, ${date}`;
+        }
+
+        function printCertificate() {
+            window.print();
+        }
+
+        function shareCertificateWa() {
+            const name = document.getElementById('certInputName').value.trim();
+            const text = encodeURIComponent(`Alhamdulillah, saya telah menyelesaikan seluruh rangkaian ibadah Umroh bersama SDW UMROH.\n\nNama: ${name}\nUnduh Sertifikat Resmi: https://sdwumroh.com/galeri`);
+            window.open(`https://wa.me/?text=${text}`, '_blank');
+        }
+
+        // MOBILE DRAWER TOGGLE
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        // INITIALIZE ON LOAD
+        document.addEventListener('DOMContentLoaded', () => {
+            renderGalleryGrid();
+            updateCertificatePreview();
+        });
+    </script>
+</body>
+
+</html>
+

@@ -33,17 +33,17 @@
 
     // Role View Permission Mapping
     const PERMISSIONS = {
-        'PILGRIM': ['tab-jamaah', 'tab-profile'],
-        'SALES': ['tab-crm', 'tab-jamaah', 'tab-profile'],
-        'DOCUMENT_OFFICER': ['tab-documents', 'tab-jamaah', 'tab-profile'],
-        'FINANCE': ['tab-finance', 'tab-jamaah', 'tab-audit', 'tab-profile'],
-        'OPERATIONS': ['tab-trips', 'tab-documents', 'tab-jamaah', 'tab-profile'],
-        'TOUR_LEADER': ['tab-trips', 'tab-jamaah', 'tab-profile'],
-        'MUTHAWWIF': ['tab-trips', 'tab-jamaah', 'tab-profile'],
-        'PARTNER': ['tab-crm', 'tab-profile'],
-        'ADMIN': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile'],
-        'MANAGER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile'],
-        'OWNER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-profile']
+        'PILGRIM': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'SALES': ['tab-crm', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'DOCUMENT_OFFICER': ['tab-documents', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'FINANCE': ['tab-finance', 'tab-jamaah', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'OPERATIONS': ['tab-trips', 'tab-documents', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'TOUR_LEADER': ['tab-trips', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'MUTHAWWIF': ['tab-trips', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'PARTNER': ['tab-crm', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'ADMIN': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'MANAGER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
+        'OWNER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile']
     };
 
     function getCurrentRole() {
@@ -98,6 +98,14 @@
         const targetView = document.getElementById(tabId);
         if (targetView) {
             targetView.classList.remove('hidden');
+        }
+
+        // Trigger renderer jika tab kalender atau berita dibuka
+        if (tabId === 'tab-kalender' && typeof window.renderSdwCalendar === 'function') {
+            window.renderSdwCalendar();
+        }
+        if (tabId === 'tab-berita' && typeof window.renderSdwNews === 'function') {
+            window.renderSdwNews();
         }
 
         // Update desktop nav styles

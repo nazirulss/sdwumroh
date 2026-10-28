@@ -1675,7 +1675,7 @@
       const mHours = String(makkahDate.getHours()).padStart(2, '0');
       const mMins = String(makkahDate.getMinutes()).padStart(2, '0');
       const mSecs = String(makkahDate.getSeconds()).padStart(2, '0');
-      const clockMakkah = `${mHours}:${mMins}:${mSecs} WAS`;
+      const clockMakkah = `${mHours}:${mMins}:${mSecs}`;
 
       const clockEl = document.getElementById('home-digital-clock');
       if (clockEl) clockEl.textContent = clockWib;
@@ -1722,12 +1722,14 @@
       const cHours = Math.floor(diffSecs / 3600);
       const cMins = Math.floor((diffSecs % 3600) / 60);
       const cSecs = diffSecs % 60;
-      const countdownStr = `-${String(cHours).padStart(2, '0')}:${String(cMins).padStart(2, '0')}:${String(cSecs).padStart(2, '0')}`;
+      const countdownStr = `${String(cHours).padStart(2, '0')}:${String(cMins).padStart(2, '0')}:${String(cSecs).padStart(2, '0')}`;
 
       // Update widget text elements across app.html and index.html
+      const cleanPrayerName = nextP.name.replace(/\s+(Makkah|WIB)$/i, '');
+
       const prayerNameEls = document.querySelectorAll('#home-next-prayer-name');
       prayerNameEls.forEach((el) => {
-        el.textContent = nextP.name;
+        el.textContent = cleanPrayerName;
       });
 
       const prayerTimeEls = document.querySelectorAll('#home-next-prayer-time');
@@ -1737,7 +1739,7 @@
 
       const countdownPrayerNameEls = document.querySelectorAll('#home-countdown-prayer-name');
       countdownPrayerNameEls.forEach((el) => {
-        el.textContent = nextP.name.replace(' Makkah', '');
+        el.textContent = cleanPrayerName;
       });
 
       const countdownEls = document.querySelectorAll('#home-prayer-countdown');

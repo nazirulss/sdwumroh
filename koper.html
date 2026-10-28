@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist Koper & Panduan Packing Umroh | SDW UMROH</title>
+    <meta name="description" content="Checklist koper interaktif dan panduan packing resmi jamaah SDW UMROH. Aturan bagasi vs kabin pesawat Saudia & Garuda, perlengkapan ihram, obat pribadi, dan ceklis tersimpan otomatis.">
+    <link rel="canonical" href="https://sdwumroh.com/koper">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <script src="js/pwa.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=calendarColsFinal">
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Pilihan Paket</span>
+                </a>
+                <a href="hotel.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Titik Hotel</span>
+                </a>
+                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Peta Ziarah</span>
+                </a>
+                <a href="koper.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Checklist Koper</span>
+                </a>
+            </div>
+
+            <!-- Header Action Capsule -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20persiapan%20barang%20koper." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span class="hidden sm:inline">Konsultasi Barang 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda Aplikasi</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-kaaba text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Pilihan Paket</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Titik Hotel</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Peta Ziarah Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-extrabold transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Checklist Koper</span>
+                    </span>
+                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
+                </a>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE HERO BANNER ==================== -->
+    <header class="pt-28 pb-12 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Navigasi Kembali: Cukup Icon Saja + Nama Menu (Di Bawah Header) -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="app.html" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95 border border-white/15 shadow-sm" title="Kembali ke Beranda" aria-label="Kembali">
+                    <i class="fa-solid fa-arrow-left text-sm text-sdw-gold"></i>
+                </a>
+                <span class="text-sm sm:text-base font-extrabold text-white tracking-wide">Checklist Koper</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div class="lg:col-span-7">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
+                        <i class="fa-solid fa-clipboard-check"></i> Panduan Packing Resmi Jamaah SDW
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-3">
+                        Checklist Koper &amp; <span class="text-gold-gradient">Bagasi Umroh</span>
+                    </h1>
+                    <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                        Ceklis interaktif barang bawaan ibadah Anda. Bebas rasa cemas dari razia bandara, pemisahan jelas antara tas paspor, kabin pesawat, dan koper bagasi besar.
+                    </p>
+                </div>
+
+                <!-- Progress Meter Card -->
+                <div class="lg:col-span-5 bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-5 border border-white/20 shadow-xl">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-bold text-amber-200 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fa-solid fa-chart-pie"></i> Progres Kesiapan
+                        </span>
+                        <span id="koperPercentText" class="text-lg sm:text-xl font-black text-white">0%</span>
+                    </div>
+
+                    <div class="w-full bg-black/30 rounded-full h-3 p-0.5 mb-3 overflow-hidden">
+                        <div id="koperProgressBar" class="h-full rounded-full bg-gradient-to-r from-amber-400 to-sdw-gold transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="flex items-center justify-between text-xs text-slate-200">
+                        <span id="koperCountText">0 dari 24 item siap</span>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="openAddItemModal()" class="text-[11px] font-bold text-amber-300 hover:text-white underline cursor-pointer">
+                                + Tambah Item
+                            </button>
+                            <span class="text-white/30">•</span>
+                            <button type="button" onclick="resetAllChecklist()" class="text-[11px] font-bold text-rose-300 hover:text-white underline cursor-pointer">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN CONTENT SECTION ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-6 relative z-20">
+
+        <!-- Filter & Search Toolbar -->
+        <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-xl shadow-purple-950/5 border border-purple-100/60 mb-8 space-y-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <!-- Gender Filter -->
+                <div class="flex items-center gap-1.5 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                    <span class="text-[11px] text-slate-500 px-2">Kategori:</span>
+                    <button type="button" onclick="filterGender('ALL', this)" class="gender-btn px-3 py-1.5 rounded-lg bg-sdw-pine text-white shadow-xs transition">
+                        Semua
+                    </button>
+                    <button type="button" onclick="filterGender('PRIA', this)" class="gender-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-sdw-pine transition">
+                        <i class="fa-solid fa-mars mr-1 text-blue-500"></i> Ikhwan (Pria)
+                    </button>
+                    <button type="button" onclick="filterGender('WANITA', this)" class="gender-btn px-3 py-1.5 rounded-lg text-slate-600 hover:text-sdw-pine transition">
+                        <i class="fa-solid fa-venus mr-1 text-rose-500"></i> Akhwat (Wanita)
+                    </button>
+                </div>
+
+                <!-- Bag Placement Filter -->
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs font-bold">
+                    <button type="button" onclick="filterBag('ALL', this)" class="bag-btn px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 shadow-xs transition whitespace-nowrap">
+                        Semua Tas
+                    </button>
+                    <button type="button" onclick="filterBag('PASPOR', this)" class="bag-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition whitespace-nowrap">
+                        <i class="fa-solid fa-passport mr-1 text-amber-600"></i> Tas Dokumen
+                    </button>
+                    <button type="button" onclick="filterBag('KABIN', this)" class="bag-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition whitespace-nowrap">
+                        <i class="fa-solid fa-briefcase mr-1 text-blue-600"></i> Kabin (7kg)
+                    </button>
+                    <button type="button" onclick="filterBag('BAGASI', this)" class="bag-btn px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition whitespace-nowrap">
+                        <i class="fa-solid fa-box mr-1 text-purple-700"></i> Bagasi (30kg)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                <input type="text" id="koperSearchInput" oninput="searchKoperItems()" placeholder="Cari barang bawaan (misal: ihram, colokan, mukena, obat, powerbank)..." class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine text-xs text-slate-800 placeholder:text-slate-400 outline-none transition">
+            </div>
+        </div>
+
+        <!-- Warning Bandara Banner -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 text-sm shadow-xs">
+                    <i class="fa-solid fa-battery-half"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-amber-900">Powerbank Wajib di Kabin!</h4>
+                    <p class="text-[11px] text-amber-800/90 mt-0.5 leading-snug">
+                        Maksimal kapasitas 20.000 mAh. Dilarang keras dimasukkan ke koper bagasi besar karena dapat memicu alarm pemindai bandara.
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-rose-50 border border-rose-200/80 flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shrink-0 text-sm shadow-xs">
+                    <i class="fa-solid fa-scissors"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-rose-900">Benda Tajam Masuk Bagasi!</h4>
+                    <p class="text-[11px] text-rose-800/90 mt-0.5 leading-snug">
+                        Gunting tahallul, gunting kuku, pisau cukur, dan cairan > 100ml wajib masuk koper bagasi tercatat. Jika di kabin, akan disita petugas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-emerald-50 border border-emerald-200/80 flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 text-sm shadow-xs">
+                    <i class="fa-solid fa-bottle-water"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-emerald-900">Air Zamzam Resmi 5 Liter</h4>
+                    <p class="text-[11px] text-emerald-800/90 mt-0.5 leading-snug">
+                        Setiap jamaah resmi mendapat 1 jeriken Zamzam (5L) di bandara kedatangan. Dilarang memasukkan botol Zamzam ke dalam koper bagasi.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== INTERACTIVE CHECKLIST CONTAINER ==================== -->
+        <div id="checklistCategoriesContainer" class="space-y-6">
+            <!-- Will be dynamically populated or rendered via JS with LocalStorage sync -->
+        </div>
+
+        <!-- Custom User Items Section -->
+        <div id="customItemsSection" class="mt-8 bg-white rounded-2xl p-5 sm:p-6 border border-purple-100 shadow-md">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-purple-50 text-sdw-pine flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm text-sdw-pine">Barang Tambahan Pribadi</h3>
+                        <p class="text-[11px] text-slate-500">Tambahkan barang khusus yang tidak tertera pada daftar umum</p>
+                    </div>
+                </div>
+                <button type="button" onclick="openAddItemModal()" class="px-3 py-1.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>Tambah Item</span>
+                </button>
+            </div>
+
+            <div id="customItemsList" class="space-y-2">
+                <!-- Dynamically rendered custom items -->
+            </div>
+        </div>
+
+        <!-- ==================== LUGGAGE REGULATIONS & AIRLINE POLICIES ==================== -->
+        <section class="mt-12 bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-xl">
+            <div class="max-w-3xl mb-6">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-50 text-sdw-pine text-xs font-bold mb-2">
+                    <i class="fa-solid fa-plane-departure"></i> Kebijakan Maskapai
+                </span>
+                <h2 class="text-xl sm:text-2xl font-black text-sdw-pine tracking-tight">
+                    Ketentuan Berat &amp; Dimensi Bagasi Penerbangan
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+                    Standar penerbangan internasional Saudi Arabian Airlines (SV), Garuda Indonesia (GA), dan Oman Air.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-600 uppercase">Koper Bagasi Utama</span>
+                        <i class="fa-solid fa-box text-sdw-pine text-base"></i>
+                    </div>
+                    <div class="text-2xl font-black text-sdw-pine">23 - 30 Kg</div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Maksimal 1 koper besar (28-30 inci) per jamaah atau 2 koper sesuai ketentuan kelas tiket kloter. Dilengkapi cover resmi &amp; name tag SDW.
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-600 uppercase">Tas Kabin Pesawat</span>
+                        <i class="fa-solid fa-briefcase text-amber-600 text-base"></i>
+                    </div>
+                    <div class="text-2xl font-black text-amber-600">Maks. 7 Kg</div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Koper troli kabin kecil (maks. 20 inci) atau ransel. Untuk pakaian darurat, kain ihram cadangan, jaket, dan obat pribadi selama transit.
+                    </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-600 uppercase">Tas Selempang Dokumen</span>
+                        <i class="fa-solid fa-passport text-emerald-600 text-base"></i>
+                    </div>
+                    <div class="text-2xl font-black text-emerald-600">Selalu Melekat</div>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">
+                        Tas kecil di dada berisi paspor, tiket, visa, uang saku Riyal, ID card jamaah, dan handphone. Tidak boleh dimasukkan koper saat bepergian.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- WhatsApp Consultation CTA -->
+        <section class="mt-8 bg-gradient-to-r from-emerald-800 to-teal-900 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6 relative z-10">
+                <div class="space-y-1 text-center sm:text-left">
+                    <h3 class="text-lg sm:text-xl font-black">Masih Ragu Membawa Barang Tertentu?</h3>
+                    <p class="text-xs sm:text-sm text-emerald-100 max-w-xl">
+                        Tanyakan langsung pada Tim Muthawwif &amp; Perlengkapan Kloter SDW UMROH melalui layanan konsultasi WhatsApp 24 jam.
+                    </p>
+                </div>
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20Tim%20Perlengkapan%20SDW,%20saya%20ingin%20tanya%20aturan%20barang%20koper." target="_blank" rel="noopener noreferrer" class="px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-emerald-950 font-extrabold text-xs flex items-center gap-2 shadow-lg transition active:scale-95 shrink-0">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-base"></i>
+                    <span>Tanya CS Perlengkapan</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MODAL: TAMBAH BARANG PRIBADI ==================== -->
+    <div id="addItemModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-purple-100 transform scale-95 transition-transform duration-300">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-purple-50 text-sdw-pine flex items-center justify-center text-sm font-bold">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <h3 class="font-extrabold text-sm text-sdw-pine">Tambah Barang Bawaan Pribadi</h3>
+                </div>
+                <button type="button" onclick="closeAddItemModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form onsubmit="handleSaveCustomItem(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Nama Barang Bawaan</label>
+                    <input type="text" id="customItemName" required placeholder="Contoh: Kacamata baca, sajadah saku, biskuit gandum..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Penempatan Tas</label>
+                    <select id="customItemBag" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none bg-white">
+                        <option value="PASPOR">Tas Dokumen (Melekat)</option>
+                        <option value="KABIN">Tas Kabin Pesawat (7 Kg)</option>
+                        <option value="BAGASI" selected>Koper Bagasi Utama (30 Kg)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Kategori Jamaah</label>
+                    <select id="customItemGender" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none bg-white">
+                        <option value="ALL" selected>Semua Jamaah</option>
+                        <option value="PRIA">Khusus Ikhwan (Pria)</option>
+                        <option value="WANITA">Khusus Akhwat (Wanita)</option>
+                    </select>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end gap-2">
+                    <button type="button" onclick="closeAddItemModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer">
+                        Simpan ke Daftar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda -->
+            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-kaaba text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
+            </a>
+
+            <!-- 2. Berita -->
+            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
+            </a>
+
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
+            </button>
+
+            <!-- 4. Kalender -->
+            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
+            </a>
+
+            <!-- 5. Profil -->
+            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-circle-user text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== CLIENT INTERACTION JAVASCRIPT ==================== -->
+    <script>
+        // MASTER PACKING ITEMS DATA
+        const DEFAULT_CHECKLIST_DATA = [
+            {
+                category: "Dokumen & Barang Berharga (Tas Selempang/Melekat)",
+                icon: "fa-passport",
+                color: "text-amber-600",
+                bg: "bg-amber-50",
+                items: [
+                    { id: "doc_paspor", name: "Paspor RI Asli (Masa aktif minimal 7 bulan sebelum keberangkatan)", bag: "PASPOR", gender: "ALL", tag: "Wajib" },
+                    { id: "doc_visa", name: "Lembar Visa Umroh / Akses Akun Aplikasi Nusuk Terverifikasi", bag: "PASPOR", gender: "ALL", tag: "Wajib" },
+                    { id: "doc_vaksin", name: "Buku Kuning / Sertifikat Vaksin Meningitis & Polio", bag: "PASPOR", gender: "ALL", tag: "Wajib" },
+                    { id: "doc_idcard", name: "Kartu Tanda Jamaah SDW UMROH + Gantungan Lanyard Kloter", bag: "PASPOR", gender: "ALL", tag: "Wajib" },
+                    { id: "doc_uang", name: "Uang Saku Riyal Saudi (Pecahan 1, 5, 10 SAR) & Kartu ATM Debit Visa", bag: "PASPOR", gender: "ALL", tag: "Penting" },
+                    { id: "doc_fotokopi", name: "Fotokopi KTP, KK, Buku Nikah & Pasfoto 4x6 Background Putih", bag: "PASPOR", gender: "ALL", tag: "Cadangan" }
+                ]
+            },
+            {
+                category: "Pakaian & Perlengkapan Ibadah (Kabin & Koper Bagasi)",
+                icon: "fa-kaaba",
+                color: "text-sdw-pine",
+                bg: "bg-purple-50",
+                items: [
+                    { id: "ibadah_ihram", name: "2 Lembar Kain Ihram Katun/Handuk Menyerap Keringat (Khusus Pria)", bag: "BAGASI", gender: "PRIA", tag: "Ikhwan" },
+                    { id: "ibadah_sabuk", name: "Sabuk / Ikat Pinggang Ihram Tanpa Jahitan dengan Kantong Resleting", bag: "BAGASI", gender: "PRIA", tag: "Ikhwan" },
+                    { id: "ibadah_mukena", name: "3-4 Stel Mukena Katun Adem (Atasan & Bawahan / Terusan Syar'i)", bag: "BAGASI", gender: "WANITA", tag: "Akhwat" },
+                    { id: "ibadah_inner", name: "Ciput Jilbab, Manset Tangan, & Kaos Kaki Tawaf Anti-Slip (3 Pasang)", bag: "BAGASI", gender: "WANITA", tag: "Akhwat" },
+                    { id: "ibadah_harian", name: "4-5 Stel Pakaian Harian Sopan (Gamis, Jubah, Koko, atau Celana Longgar)", bag: "BAGASI", gender: "ALL", tag: "Harian" },
+                    { id: "ibadah_jaket", name: "Jaket Tebal / Sweater Hangat (Subuh Madinah & AC Masjidil Haram sangat dingin)", bag: "KABIN", gender: "ALL", tag: "Kabin" },
+                    { id: "ibadah_sandal", name: "Sandal Jepit Wudhu & Sepatu Sandal Empuk untuk Jalan Jauh", bag: "BAGASI", gender: "ALL", tag: "Alas Kaki" },
+                    { id: "ibadah_kantong_sandal", name: "Tas Serut / Kantong Sandal Praktis untuk Masuk ke Dalam Masjid", bag: "KABIN", gender: "ALL", tag: "Praktis" }
+                ]
+            },
+            {
+                category: "Perlengkapan Mandi & Toiletries (Bebas Wangi / Ihram Friendly)",
+                icon: "fa-pump-soap",
+                color: "text-emerald-600",
+                bg: "bg-emerald-50",
+                items: [
+                    { id: "mandi_sabun", name: "Sabun Mandi & Shampo Bebas Parfum / Non-Fragrance (Aman saat ihram)", bag: "BAGASI", gender: "ALL", tag: "Ihram Safe" },
+                    { id: "mandi_pelembab", name: "Lip Balm & Petroleum Jelly / Vaseline (Cegah bibir pecah & lecet selangkangan saat tawaf)", bag: "BAGASI", gender: "ALL", tag: "Penting" },
+                    { id: "mandi_sunscreen", name: "Sunscreen Tabir Surya SPF 50+ & Pelembab Kulit Udara Kering", bag: "BAGASI", gender: "ALL", tag: "Pelindung" },
+                    { id: "mandi_sikat", name: "Sikat Gigi, Pasta Gigi Travel & Handuk Ringan Cepat Kering", bag: "BAGASI", gender: "ALL", tag: "Toiletries" },
+                    { id: "mandi_gunting", name: "Gunting Kecil untuk Tahallul & Gunting Kuku (WAJIB masuk koper bagasi besar!)", bag: "BAGASI", gender: "ALL", tag: "Wajib Bagasi" }
+                ]
+            },
+            {
+                category: "Obat-Obatan Pribadi & P3K Mandiri",
+                icon: "fa-notes-medical",
+                color: "text-rose-600",
+                bg: "bg-rose-50",
+                items: [
+                    { id: "medis_rutin", name: "Obat Rutin Pribadi (Hipertensi, Diabetes, Asma, Jantung) + Salinan Resep Dokter", bag: "KABIN", gender: "ALL", tag: "Wajib Kabin" },
+                    { id: "medis_flu", name: "Obat Flu, Batuk, Tablet Hisap Radang Tenggorokan, & Paracetamol", bag: "BAGASI", gender: "ALL", tag: "Kesehatan" },
+                    { id: "medis_pencernaan", name: "Obat Maag Lambung (Antasida) & Obat Diare (Oralit, Diapet/Entrostop)", bag: "BAGASI", gender: "ALL", tag: "Pencernaan" },
+                    { id: "medis_pegal", name: "Koyo Hangat (Salonpas), Balsam, atau Salep Pereda Pegal Otot Betis & Kaki", bag: "BAGASI", gender: "ALL", tag: "Otot & Sendi" },
+                    { id: "medis_vitamin", name: "Vitamin C, Multivitamin, Madu Sachet, & Minyak Angin / Tolak Angin", bag: "KABIN", gender: "ALL", tag: "Stamina" }
+                ]
+            },
+            {
+                category: "Elektronik, Gadget & Aksesoris Perjalanan",
+                icon: "fa-plug",
+                color: "text-blue-600",
+                bg: "bg-blue-50",
+                items: [
+                    { id: "gadget_colokan", name: "Adaptor Steker Kaki 3 Standar Arab Saudi (Tipe G)", bag: "BAGASI", gender: "ALL", tag: "Wajib Saudi" },
+                    { id: "gadget_powerbank", name: "Powerbank Maksimal 20.000 mAh (WAJIB bawa ke kabin pesawat, DILARANG bagasi)", bag: "KABIN", gender: "ALL", tag: "Wajib Kabin" },
+                    { id: "gadget_spray", name: "Botol Semprotan Air Mini (Water Spray) untuk basuh wajah & wudhu darurat", bag: "BAGASI", gender: "ALL", tag: "Segar" },
+                    { id: "gadget_masker", name: "Masker Medis & Masker Kain Pelindung Debu Gurun (1 Kotak)", bag: "BAGASI", gender: "ALL", tag: "Perlindungan" }
+                ]
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let currentGenderFilter = 'ALL';
+        let currentBagFilter = 'ALL';
+        let searchQuery = '';
+
+        function getStorageChecklist() {
+            try {
+                return JSON.parse(localStorage.getItem('sdw_koper_checklist') || '{}');
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveStorageChecklist(data) {
+            try {
+                localStorage.setItem('sdw_koper_checklist', JSON.stringify(data));
+            } catch (e) {
+                console.error("Gagal simpan checklist:", e);
+            }
+        }
+
+        function getCustomItems() {
+            try {
+                return JSON.parse(localStorage.getItem('sdw_koper_custom_items') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveCustomItems(items) {
+            try {
+                localStorage.setItem('sdw_koper_custom_items', JSON.stringify(items));
+            } catch (e) {
+                console.error("Gagal simpan custom items:", e);
+            }
+        }
+
+        // TOGGLE CHECK ITEM
+        function toggleCheckItem(id) {
+            const state = getStorageChecklist();
+            state[id] = !state[id];
+            saveStorageChecklist(state);
+            renderChecklist();
+            updateProgress();
+        }
+
+        // RESET ALL
+        function resetAllChecklist() {
+            if (confirm("Reset seluruh tanda centang checklist koper Anda?")) {
+                saveStorageChecklist({});
+                renderChecklist();
+                updateProgress();
+            }
+        }
+
+        // FILTERS
+        function filterGender(gender, btn) {
+            currentGenderFilter = gender;
+            document.querySelectorAll('.gender-btn').forEach(b => {
+                b.classList.remove('bg-sdw-pine', 'text-white', 'shadow-xs');
+                b.classList.add('text-slate-600');
+            });
+            btn.classList.add('bg-sdw-pine', 'text-white', 'shadow-xs');
+            btn.classList.remove('text-slate-600');
+            renderChecklist();
+        }
+
+        function filterBag(bag, btn) {
+            currentBagFilter = bag;
+            document.querySelectorAll('.bag-btn').forEach(b => {
+                b.classList.remove('bg-amber-500', 'text-slate-950', 'shadow-xs');
+                b.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            btn.classList.add('bg-amber-500', 'text-slate-950', 'shadow-xs');
+            btn.classList.remove('bg-slate-100', 'text-slate-700');
+            renderChecklist();
+        }
+
+        function searchKoperItems() {
+            searchQuery = document.getElementById('koperSearchInput').value.toLowerCase().trim();
+            renderChecklist();
+        }
+
+        // PROGRESS CALCULATOR
+        function updateProgress() {
+            const state = getStorageChecklist();
+            let total = 0;
+            let checked = 0;
+
+            // Hitung item default
+            DEFAULT_CHECKLIST_DATA.forEach(cat => {
+                cat.items.forEach(item => {
+                    total++;
+                    if (state[item.id]) checked++;
+                });
+            });
+
+            // Hitung item kustom
+            const customItems = getCustomItems();
+            customItems.forEach(ci => {
+                total++;
+                if (state[ci.id]) checked++;
+            });
+
+            const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+            document.getElementById('koperPercentText').innerText = `${percent}%`;
+            document.getElementById('koperProgressBar').style.width = `${percent}%`;
+            document.getElementById('koperCountText').innerText = `${checked} dari ${total} item siap`;
+        }
+
+        // RENDER CHECKLIST CATEGORIES
+        function renderChecklist() {
+            const container = document.getElementById('checklistCategoriesContainer');
+            const state = getStorageChecklist();
+            let html = '';
+
+            DEFAULT_CHECKLIST_DATA.forEach((catGroup, idx) => {
+                // Filter items
+                const filteredItems = catGroup.items.filter(item => {
+                    const matchGender = (currentGenderFilter === 'ALL' || item.gender === 'ALL' || item.gender === currentGenderFilter);
+                    const matchBag = (currentBagFilter === 'ALL' || item.bag === currentBagFilter);
+                    const matchSearch = (!searchQuery || item.name.toLowerCase().includes(searchQuery));
+                    return matchGender && matchBag && matchSearch;
+                });
+
+                if (filteredItems.length === 0) return;
+
+                html += `
+                <div class="bg-white rounded-3xl p-5 sm:p-6 border border-purple-100 shadow-md">
+                    <div class="flex items-center gap-3 pb-3 mb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 rounded-2xl ${catGroup.bg} ${catGroup.color} flex items-center justify-center text-base shadow-xs shrink-0">
+                            <i class="fa-solid ${catGroup.icon}"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-sm sm:text-base text-slate-900">${catGroup.category}</h3>
+                            <span class="text-[11px] font-semibold text-slate-400">${filteredItems.length} barang terdaftar</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                `;
+
+                filteredItems.forEach(item => {
+                    const isChecked = !!state[item.id];
+                    const bagBadge = item.bag === 'PASPOR' ? '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Tas Dokumen</span>' :
+                                     item.bag === 'KABIN' ? '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">Kabin 7kg</span>' :
+                                     '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">Bagasi 30kg</span>';
+
+                    html += `
+                        <label class="flex items-start gap-3 p-3 rounded-2xl border transition-all cursor-pointer select-none ${isChecked ? 'bg-purple-50/70 border-purple-200 text-slate-800' : 'bg-slate-50/60 hover:bg-slate-100 border-slate-200/70 text-slate-700'}">
+                            <input type="checkbox" onchange="toggleCheckItem('${item.id}')" ${isChecked ? 'checked' : ''} class="w-5 h-5 rounded-lg border-2 border-slate-300 text-sdw-pine focus:ring-sdw-pine mt-0.5 cursor-pointer accent-[#240833]">
+                            <div class="flex-1">
+                                <div class="flex flex-wrap items-center gap-2 mb-0.5">
+                                    <span class="text-xs sm:text-sm font-bold ${isChecked ? 'line-through text-slate-400' : 'text-slate-800'}">${item.name}</span>
+                                    ${bagBadge}
+                                </div>
+                            </div>
+                        </label>
+                    `;
+                });
+
+                html += `
+                    </div>
+                </div>
+                `;
+            });
+
+            if (html === '') {
+                html = `
+                <div class="bg-white rounded-3xl p-8 text-center border border-dashed border-slate-300">
+                    <i class="fa-solid fa-box-open text-3xl text-slate-300 mb-2"></i>
+                    <h4 class="font-bold text-sm text-slate-700">Tidak ada barang yang cocok dengan filter</h4>
+                    <p class="text-xs text-slate-500 mt-1">Coba ubah filter kategori, penempatan tas, atau kata kunci pencarian Anda.</p>
+                </div>
+                `;
+            }
+
+            container.innerHTML = html;
+            renderCustomItems();
+        }
+
+        // RENDER CUSTOM USER ITEMS
+        function renderCustomItems() {
+            const listContainer = document.getElementById('customItemsList');
+            const customItems = getCustomItems();
+            const state = getStorageChecklist();
+
+            if (customItems.length === 0) {
+                listContainer.innerHTML = `
+                    <p class="text-xs text-slate-400 italic py-2">Belum ada barang tambahan pribadi. Klik tombol "+ Tambah Item" di atas untuk menambahkan barang sendiri.</p>
+                `;
+                return;
+            }
+
+            let html = '';
+            customItems.forEach(ci => {
+                const isChecked = !!state[ci.id];
+                const bagBadge = ci.bag === 'PASPOR' ? '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">Tas Dokumen</span>' :
+                                 ci.bag === 'KABIN' ? '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800">Kabin 7kg</span>' :
+                                 '<span class="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-purple-100 text-purple-800">Bagasi 30kg</span>';
+
+                html += `
+                    <div class="flex items-center justify-between p-3 rounded-2xl border transition-all ${isChecked ? 'bg-purple-50/70 border-purple-200' : 'bg-slate-50 border-slate-200'}">
+                        <label class="flex items-center gap-3 cursor-pointer select-none flex-1">
+                            <input type="checkbox" onchange="toggleCheckItem('${ci.id}')" ${isChecked ? 'checked' : ''} class="w-5 h-5 rounded-lg border-2 border-slate-300 text-sdw-pine focus:ring-sdw-pine cursor-pointer accent-[#240833]">
+                            <div>
+                                <span class="text-xs sm:text-sm font-bold ${isChecked ? 'line-through text-slate-400' : 'text-slate-800'}">${ci.name}</span>
+                                <div class="mt-0.5">${bagBadge}</div>
+                            </div>
+                        </label>
+                        <button type="button" onclick="deleteCustomItem('${ci.id}')" class="text-rose-500 hover:text-rose-700 p-2 text-xs transition" title="Hapus Barang">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+            });
+
+            listContainer.innerHTML = html;
+        }
+
+        // MODAL ADD CUSTOM ITEM
+        function openAddItemModal() {
+            const m = document.getElementById('addItemModal');
+            m.classList.remove('opacity-0', 'pointer-events-none');
+            m.children[0].classList.remove('scale-95');
+            document.getElementById('customItemName').focus();
+        }
+
+        function closeAddItemModal() {
+            const m = document.getElementById('addItemModal');
+            m.classList.add('opacity-0', 'pointer-events-none');
+            m.children[0].classList.add('scale-95');
+            document.getElementById('customItemName').value = '';
+        }
+
+        function handleSaveCustomItem(e) {
+            e.preventDefault();
+            const name = document.getElementById('customItemName').value.trim();
+            const bag = document.getElementById('customItemBag').value;
+            const gender = document.getElementById('customItemGender').value;
+            if (!name) return;
+
+            const newItem = {
+                id: 'custom_' + Date.now(),
+                name: name,
+                bag: bag,
+                gender: gender
+            };
+
+            const list = getCustomItems();
+            list.push(newItem);
+            saveCustomItems(list);
+
+            closeAddItemModal();
+            renderChecklist();
+            updateProgress();
+        }
+
+        function deleteCustomItem(id) {
+            if (confirm("Hapus barang pribadi ini dari daftar?")) {
+                let list = getCustomItems();
+                list = list.filter(item => item.id !== id);
+                saveCustomItems(list);
+
+                const state = getStorageChecklist();
+                delete state[id];
+                saveStorageChecklist(state);
+
+                renderChecklist();
+                updateProgress();
+            }
+        }
+
+        // MOBILE DRAWER TOGGLE
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        // INIT ON DOM LOAD
+        document.addEventListener('DOMContentLoaded', () => {
+            renderChecklist();
+            updateProgress();
+        });
+    </script>
+</body>
+
+</html>
+

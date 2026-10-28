@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siaran Langsung Ka'bah & Masjid Nabawi 24 Jam | SDW UMROH</title>
+    <meta name="description" content="Saksikan siaran langsung live streaming 24 jam suasana thawaf di Ka'bah Masjidil Haram Makkah dan ketenangan Masjid Nabawi Madinah Al-Munawwarah. Lengkap dengan jam digital Makkah AST dan doa melihat Ka'bah.">
+    <link rel="canonical" href="https://sdwumroh.com/live">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4C1D6B">
+    <link rel="icon" type="image/png" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <script src="js/pwa.js" defer></script>
+
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.min.css?v=calendarColsFinal">
+
+    <!-- HLS.js Live Video Stream Player Engine (Bebas Blokir YouTube) -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <!-- Dedicated Live Haramain Styles (Adopted from The Islamic Information) -->
+    <style>
+        .mlh-hero-box {
+            background: linear-gradient(135deg, #0d281c 0%, #16402c 100%) !important;
+            border-radius: 20px;
+            padding: 24px 20px;
+            color: #ffffff !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        @media (max-width: 640px) {
+            .mlh-hero-box {
+                padding: 16px 14px;
+                border-radius: 16px;
+            }
+        }
+        .mlh-video-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            min-height: 220px;
+            height: auto;
+            border-radius: 14px;
+            overflow: hidden;
+            background-color: #000000;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin: 14px 0 18px 0;
+        }
+        .mlh-video-container iframe,
+        .mlh-video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            border-radius: 14px;
+            display: block;
+        }
+        .mlh-tab-btn {
+            padding: 9px 16px;
+            border-radius: 9999px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 1.5px solid rgba(255, 255, 255, 0.28);
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff !important;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .mlh-tab-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        .mlh-tab-btn.active {
+            background: #ffffff !important;
+            color: #0d281c !important;
+            border-color: #ffffff !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .mlh-pulse-dot {
+            width: 10px;
+            height: 10px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            display: inline-block;
+            animation: mlhPulse 1.8s infinite;
+            vertical-align: middle;
+            margin-right: 6px;
+        }
+        @keyframes mlhPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+    </style>
+</head>
+
+<body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
+
+    <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
+    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Pilihan Paket</span>
+                </a>
+                <a href="hotel.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Titik Hotel</span>
+                </a>
+                <a href="koper.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Checklist Koper</span>
+                </a>
+                <a href="kiblat.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Arah Kiblat</span>
+                </a>
+                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Peta Ziarah</span>
+                </a>
+                <a href="galeri.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
+                    <span>Galeri Kloter</span>
+                </a>
+                <a href="live.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Live Haramain</span>
+                </a>
+            </div>
+
+            <!-- Header Action Capsule -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20ibadah." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                    <span class="hidden sm:inline">Bantuan 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
+        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
+        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+                <div class="flex items-center gap-3">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
+                    <div>
+                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
+                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
+                    </div>
+                </div>
+                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
+                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Beranda Aplikasi</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-kaaba text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Pilihan Paket</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Titik Hotel</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-suitcase-rolling text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Checklist Koper</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="kiblat.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-compass text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Arah Kiblat</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Peta Ziarah Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="galeri.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-photo-film text-sdw-gold text-xs w-4 text-center"></i>
+                        <span>Galeri Kloter</span>
+                    </span>
+                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
+                </a>
+                <a href="live.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-extrabold transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid fa-tower-broadcast text-sdw-pine text-xs w-4 text-center"></i>
+                        <span>Live Haramain</span>
+                    </span>
+                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
+                </a>
+            </div>
+            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
+                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i>
+                    <span>Hotline WhatsApp 24 Jam</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PAGE HERO BANNER ==================== -->
+    <header class="pt-28 pb-10 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Navigasi Kembali: Cukup Icon Saja + Nama Menu (Di Bawah Header) -->
+            <div class="flex items-center gap-3 mb-4">
+                <a href="app.html" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition active:scale-95 border border-white/15 shadow-sm" title="Kembali ke Beranda" aria-label="Kembali">
+                    <i class="fa-solid fa-arrow-left text-sm text-sdw-gold"></i>
+                </a>
+                <span class="text-sm sm:text-base font-extrabold text-white tracking-wide">Live Ka'bah &amp; Haramain</span>
+            </div>
+
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+                <div class="max-w-2xl">
+                    <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
+                        <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                        <span class="w-2 h-2 rounded-full bg-rose-500 -ml-3.5"></span>
+                        Siaran Langsung 24 Jam Nonstop
+                    </span>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-2">
+                        Live Streaming <span class="text-gold-gradient">Ka'bah &amp; Nabawi</span>
+                    </h1>
+                    <p class="text-sm sm:text-base text-slate-200 leading-relaxed font-medium">
+                        Saksikan kekhusyukan thawaf di pelataran Ka'bah Makkah Al-Mukarramah dan ketenangan ziarah Masjid Nabawi Madinah Al-Munawwarah secara real-time.
+                    </p>
+                </div>
+
+                <!-- Dual Digital Clock Bar (AST vs WIB) -->
+                <div class="bg-black/35 backdrop-blur-md p-3.5 rounded-2xl border border-white/15 flex items-center gap-4 self-start lg:self-end">
+                    <!-- Clock 1: Makkah AST -->
+                    <div class="text-center px-2">
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-amber-300 uppercase tracking-wider">
+                            <span>🇸🇦 Makkah (AST)</span>
+                        </div>
+                        <div id="makkahClock" class="text-lg sm:text-xl font-black font-mono text-white tracking-wider">
+                            --:--:--
+                        </div>
+                    </div>
+
+                    <div class="h-8 w-px bg-white/20"></div>
+
+                    <!-- Clock 2: Indonesia WIB -->
+                    <div class="text-center px-2">
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold text-slate-300 uppercase tracking-wider">
+                            <span>🇮🇩 Jakarta (WIB)</span>
+                        </div>
+                        <div id="jakartaClock" class="text-lg sm:text-xl font-black font-mono text-slate-200 tracking-wider">
+                            --:--:--
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== MAIN STREAMING CONTAINER ==================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 -mt-6 relative z-20 space-y-8">
+
+        <!-- STREAM PLAYER CARD (PERSIS DESAIN THE ISLAMIC INFORMATION) -->
+        <div class="mlh-hero-box space-y-4">
+            
+            <!-- Stream Header & Status -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-white/15">
+                <div>
+                    <h2 id="streamHeading" class="font-extrabold text-base sm:text-lg text-white flex items-center gap-2">
+                        <span class="mlh-pulse-dot"></span>
+                        <span>Makkah Live — Masjid al-Haram HD Stream</span>
+                    </h2>
+                    <p id="channelDescription" class="text-xs text-emerald-100/80 mt-1">
+                        Watch live prayers from the Kaaba in Makkah, Saudi Arabia. Streaming 24/7.
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <span id="activeStreamBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-600/35 text-rose-200 border border-rose-500/40 text-[10.5px] font-bold">
+                        STREAM 1 (MAIN)
+                    </span>
+                    <a id="openYoutubeBtn" href="https://www.youtube.com/watch?v=eC4LfEVxvKg" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-full bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold flex items-center gap-1.5 transition shadow-sm active:scale-95" title="Buka di YouTube Langsung">
+                        <i class="fa-brands fa-youtube text-sm"></i>
+                        <span>Buka di YouTube</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Responsive Video Player Container (16:9 Aspect Ratio Tetap & Anti-Collapsing) -->
+            <div class="mlh-video-container" id="mlhVideoWrapper">
+                <!-- 1. Iframe YouTube (Strict-Origin Referrer Policy ala The Islamic Information) -->
+                <iframe id="mlhIframe" src="https://www.youtube.com/embed/eC4LfEVxvKg?rel=0" title="Makkah Live Stream from Masjid al-Haram" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+                <!-- 2. Video Satelit HLS Asli (Muncul saat memilih tab Satelit) -->
+                <video id="hlsLivePlayer" controls playsinline class="hidden"></video>
+            </div>
+
+            <!-- Multi-Stream Source Tabs (Persis Tombol Rounded Pills The Islamic Information) -->
+            <div class="space-y-3 pt-1">
+                <div class="flex flex-wrap items-center justify-center gap-2" id="mlhStreamTabs">
+                    <!-- Tab 1: Stream 1 - Main (Makkah) -->
+                    <button type="button" onclick="setMlhStream('main', this)" class="mlh-tab-btn active">
+                        <i class="fa-solid fa-kaaba text-xs"></i>
+                        <span>Stream 1 — Main</span>
+                    </button>
+
+                    <!-- Tab 2: Stream 2 - Backup (Makkah) -->
+                    <button type="button" onclick="setMlhStream('backup', this)" class="mlh-tab-btn">
+                        <i class="fa-solid fa-tower-broadcast text-xs"></i>
+                        <span>Stream 2 — Backup</span>
+                    </button>
+
+                    <!-- Tab 3: Stream 3 - Alternate (Makkah) -->
+                    <button type="button" onclick="setMlhStream('quran', this)" class="mlh-tab-btn">
+                        <i class="fa-solid fa-tv text-xs"></i>
+                        <span>Stream 3 — Quran TV</span>
+                    </button>
+
+                    <!-- Tab 4: Stream 4 - Madinah Nabawi -->
+                    <button type="button" onclick="setMlhStream('madinah', this)" class="mlh-tab-btn">
+                        <i class="fa-solid fa-mosque text-xs text-emerald-300"></i>
+                        <span>Madinah — Nabawi</span>
+                    </button>
+
+                    <!-- Tab 5: Stream Satelit HLS Asli -->
+                    <button type="button" onclick="setMlhStream('satelit', this)" class="mlh-tab-btn">
+                        <i class="fa-solid fa-satellite text-xs"></i>
+                        <span>Satelit HLS Asli</span>
+                    </button>
+                </div>
+
+                <!-- Footer Informasi & Manual Link -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 text-[11px] text-emerald-100/70 border-t border-white/10">
+                    <div class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-amber-300"></i>
+                        <span>Jika siaran mengalami buffering, klik tombol tab jalur siaran lainnya di atas.</span>
+                    </div>
+                    <button type="button" onclick="openCustomUrlModal()" class="text-amber-300 hover:text-white underline font-medium cursor-pointer self-start sm:self-auto">
+                        + Input Link YouTube Manual
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== DO'A KETIKA MEMANDANG KA'BAH ==================== -->
+        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-purple-100/80 relative overflow-hidden space-y-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-purple-50 text-sdw-pine flex items-center justify-center text-lg font-bold shadow-xs shrink-0">
+                    <i class="fa-solid fa-hands-praying"></i>
+                </div>
+                <div>
+                    <span class="text-[10.5px] font-extrabold uppercase text-amber-700 tracking-wider">Sunnah &amp; Adab Ibadah</span>
+                    <h2 class="text-lg sm:text-xl font-black text-sdw-pine">Do'a Ketika Memandang Ka'bah</h2>
+                </div>
+            </div>
+
+            <!-- Doa Box -->
+            <div class="bg-[#FFFDF7] p-6 rounded-2xl border-2 border-amber-200/80 shadow-xs space-y-4 text-center">
+                <!-- Teks Arab -->
+                <p class="font-['Amiri_Quran'] text-xl sm:text-2xl lg:text-3xl text-slate-900 leading-[2.2] tracking-wide text-right sm:text-center" dir="rtl">
+                    اللَّهُمَّ زِدْ هَذَا الْبَيْتَ تَشْرِيفًا وَتَعْظِيمًا وَتَكْرِيمًا وَمَهَابَةً، وَزِدْ مَنْ شَرَّفَهُ وَعَظَّمَهُ مِمَّنْ حَجَّهُ أَوِ اعْتَمَرَهُ تَشْرِيفًا وَتَكْرِيمًا وَتَعْظِيمًا وَبِرًّا
+                </p>
+
+                <!-- Transliterasi Latin -->
+                <p class="text-xs sm:text-sm text-slate-600 italic font-medium">
+                    "Allahumma zid hadzal baita tasyriifan wa ta'dhiiman wa takriiman wa mahaabah, wa zid man syarrafahu wa 'adh-dhamahu mimman hajjahu awi'tamarahu tasyriifan wa takriiman wa ta'dhiiman wa birran."
+                </p>
+
+                <!-- Terjemahan -->
+                <div class="pt-3 border-t border-amber-200/60 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <strong>Artinya:</strong> "Ya Allah, tambahkanlah kemuliaan, keagungan, kehormatan, dan wibawa pada Rumah (Baitullah) ini. Serta tambahkanlah pula kemuliaan, kehormatan, keagungan, dan kebaikan bagi orang-orang yang memuliakan dan mengagungkannya dari kalangan mereka yang berhaji atau berumroh."
+                </div>
+            </div>
+
+            <p class="text-xs text-slate-500 leading-relaxed">
+                📌 <em>Dianjurkan bagi setiap muslim ketika pertama kali pandangannya tertuju pada Ka'bah untuk mengangkat kedua tangan dan memanjatkan doa, sebab pintu langit terbuka dan doa pada saat itu termasuk doa yang mustajab.</em>
+            </p>
+        </div>
+
+        <!-- ==================== JADWAL WAKTU SHOLAT HARI INI DI MAKKAH (ALADHAN LIVE API) ==================== -->
+        <div class="bg-gradient-to-br from-purple-900 to-[#1F0628] rounded-3xl p-6 sm:p-8 text-white shadow-xl border border-purple-800/40 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <span class="text-[10px] font-bold text-amber-300 uppercase tracking-widest">Waktu Sholat Tanah Suci (Umm Al-Qura)</span>
+                    <h3 class="text-xl sm:text-2xl font-black text-white">Jadwal Sholat Masjidil Haram (Makkah AST)</h3>
+                    <p class="text-xs text-purple-200 mt-0.5">Waktu azan dan sholat fardhu terupdate otomatis secara real-time</p>
+                </div>
+                <div class="bg-white/10 px-4 py-2 rounded-2xl border border-white/15 text-xs text-center sm:text-right">
+                    <span class="text-amber-300 font-bold block">Tanggal Makkah</span>
+                    <span id="makkahLiveDate" class="text-[11px] text-slate-200">--</span>
+                </div>
+            </div>
+
+            <!-- Grid 6 Waktu Sholat -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                <!-- Subuh -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Subuh</span>
+                    <div id="prayer-Fajr" class="text-xl font-black text-white font-mono">05:08</div>
+                    <span class="text-[9.5px] text-amber-300">Waktu Makkah</span>
+                </div>
+
+                <!-- Syuruq -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Syuruq</span>
+                    <div id="prayer-Sunrise" class="text-xl font-black text-slate-300 font-mono">06:26</div>
+                    <span class="text-[9.5px] text-slate-400">Terbit Fajar</span>
+                </div>
+
+                <!-- Dzuhur -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Dzuhur</span>
+                    <div id="prayer-Dhuhr" class="text-xl font-black text-white font-mono">12:12</div>
+                    <span class="text-[9.5px] text-amber-300">Waktu Makkah</span>
+                </div>
+
+                <!-- Ashar -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Ashar</span>
+                    <div id="prayer-Asr" class="text-xl font-black text-white font-mono">15:32</div>
+                    <span class="text-[9.5px] text-amber-300">Waktu Makkah</span>
+                </div>
+
+                <!-- Maghrib -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Maghrib</span>
+                    <div id="prayer-Maghrib" class="text-xl font-black text-amber-300 font-mono">17:50</div>
+                    <span class="text-[9.5px] text-amber-300">Waktu Makkah</span>
+                </div>
+
+                <!-- Isya -->
+                <div class="p-4 rounded-2xl bg-white/10 border border-white/15 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-slate-300 uppercase">Isya</span>
+                    <div id="prayer-Isha" class="text-xl font-black text-white font-mono">19:20</div>
+                    <span class="text-[9.5px] text-amber-300">Waktu Makkah</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- ==================== MODAL: ATUR / TEMPEL URL YOUTUBE LIVE ==================== -->
+    <div id="customUrlModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs transition-opacity duration-300 opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-purple-100 transform scale-95 transition-transform duration-300 space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-purple-50 text-sdw-pine flex items-center justify-center text-sm font-bold">
+                        <i class="fa-brands fa-youtube text-red-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm text-sdw-pine">Ganti Tautan YouTube Live</h3>
+                        <p class="text-[10px] text-slate-500">Tempel URL siaran langsung Makkah / Madinah aktif</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeCustomUrlModal()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cara Mendapatkan Link -->
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200/70 text-xs text-amber-900 space-y-1">
+                <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> Cara Cepat Ambil Link dari YouTube:</span>
+                <ol class="list-decimal list-inside text-[11px] text-amber-800 space-y-0.5">
+                    <li>Buka YouTube, cari <strong>"Makkah Live"</strong> atau <strong>"Saudi Quran TV"</strong>.</li>
+                    <li>Pilih video yang berlabel <span class="text-rose-600 font-bold">LIVE</span>.</li>
+                    <li>Klik tombol <strong>Bagikan (Share)</strong> lalu pilih <strong>Salin Tautan</strong>.</li>
+                    <li>Tempelkan tautan tersebut pada kolom di bawah ini.</li>
+                </ol>
+            </div>
+
+            <form onsubmit="handleSaveCustomLiveUrl(event)" class="space-y-3.5">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Target Saluran</label>
+                    <select id="modalChannelSelect" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:border-sdw-pine outline-none bg-white">
+                        <option value="MAKKAH">🕋 Makkah Al-Mukarramah (Ka'bah)</option>
+                        <option value="MADINAH">🕌 Madinah Al-Munawwarah (Nabawi)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Tautan / URL YouTube</label>
+                    <input type="text" id="modalInputUrl" required placeholder="Contoh: https://www.youtube.com/watch?v=... atau https://youtu.be/..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs text-slate-800 focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none">
+                </div>
+
+                <div class="pt-2 flex items-center justify-between gap-2">
+                    <button type="button" onclick="resetDefaultLiveUrl()" class="text-xs text-slate-400 hover:text-rose-500 underline cursor-pointer">
+                        Reset Default
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="closeCustomUrlModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition cursor-pointer">
+                            Batal
+                        </button>
+                        <button type="submit" class="px-5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer">
+                            Simpan &amp; Putar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
+    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
+        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
+            <!-- 1. Beranda -->
+            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-kaaba text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
+            </a>
+
+            <!-- 2. Berita -->
+            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
+            </a>
+
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
+                </div>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
+            </button>
+
+            <!-- 4. Kalender -->
+            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-calendar-days text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
+            </a>
+
+            <!-- 5. Profil -->
+            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-circle-user text-sm"></i>
+                </div>
+                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ==================== LIVE STREAMING & DUAL CLOCK ENGINE ==================== -->
+    <script>
+        // DAFTAR STREAM RESMI (ADAPTASI DARI THEISLAMICINFORMATION.COM & SAUDI MEDIA)
+        const STREAMS = {
+            main: {
+                id: 'eC4LfEVxvKg',
+                name: 'Makkah Live — Stream 1 (Utama)',
+                badge: 'STREAM 1 (MAIN)',
+                heading: 'Makkah Live — Masjid al-Haram HD Stream',
+                desc: 'Siaran Langsung Utama Ka\'bah & Thawaf 24 Jam Nonstop',
+                isHls: false,
+                youtubeUrl: 'https://www.youtube.com/watch?v=eC4LfEVxvKg'
+            },
+            backup: {
+                id: '-KNckpxJres',
+                name: 'Makkah Live — Stream 2 (Backup)',
+                badge: 'STREAM 2 (BACKUP)',
+                heading: 'Makkah Live — Jalur Cadangan (Backup)',
+                desc: 'Siaran Langsung Cadangan Masjidil Haram Makkah',
+                isHls: false,
+                youtubeUrl: 'https://www.youtube.com/watch?v=-KNckpxJres'
+            },
+            quran: {
+                id: 'tt3PoNVDONY',
+                name: 'Makkah Live — Stream 3 (Quran TV)',
+                badge: 'STREAM 3 (QURAN TV)',
+                heading: 'Saudi Quran TV — Siaran Resmi Makkah',
+                desc: 'Siaran Langsung Resmi Saudi Quran TV dengan Tilawah Al-Qur\'an',
+                isHls: false,
+                youtubeUrl: 'https://www.youtube.com/watch?v=tt3PoNVDONY'
+            },
+            madinah: {
+                id: 'Rs7St51oDDc',
+                name: 'Madinah Live — Nabawi Stream',
+                badge: 'MADINAH (NABAWI)',
+                heading: 'Madinah Live — Masjid an-Nabawi HD Stream',
+                desc: 'Siaran Langsung Pelataran Masjid Nabawi, Kubah Hijau & Raudhah',
+                isHls: false,
+                youtubeUrl: 'https://www.youtube.com/watch?v=Rs7St51oDDc'
+            },
+            satelit: {
+                hlsUrl: 'https://cdn-globecast.akamaized.net/live/eds/saudi_quran/hls_roku/index.m3u8',
+                name: 'Satelit Globecast HLS Asli',
+                badge: 'SATELIT HLS ASLI',
+                heading: 'Siaran Langsung Satelit Globecast HLS Asli (Saudi Quran TV)',
+                desc: 'Feed Satelit Langsung Akamai CDN — Bebas Kuota YouTube & Anti-Blokir',
+                isHls: true,
+                youtubeUrl: 'https://www.youtube.com/results?search_query=makkah+live+stream'
+            }
+        };
+
+        let currentStreamKey = 'main';
+        let currentHlsInstance = null;
+
+        // EKSTRAKSI YOUTUBE VIDEO ID DARI BERBAGAI FORMAT TAUTAN
+        function extractYoutubeId(input) {
+            if (!input) return null;
+            input = input.trim();
+            if (/^[a-zA-Z0-9_-]{11}$/.test(input)) return input;
+            
+            const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|live)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+            const match = input.match(regExp);
+            return match ? match[1] : null;
+        }
+
+        function getSavedCustomYoutubeId(key) {
+            try {
+                return localStorage.getItem(`sdw_live_custom_yt_${key}`);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveCustomYoutubeId(key, id) {
+            try {
+                if (id) {
+                    localStorage.setItem(`sdw_live_custom_yt_${key}`, id);
+                } else {
+                    localStorage.removeItem(`sdw_live_custom_yt_${key}`);
+                }
+            } catch (e) {}
+        }
+
+        // FUNGSI GANTI STREAM (PERSIS THEISLAMICINFORMATION.COM)
+        function setMlhStream(streamKey, btnEl) {
+            const stream = STREAMS[streamKey];
+            if (!stream) return;
+            currentStreamKey = streamKey;
+
+            // 1. Update Tab Highlight Styling
+            const allTabs = document.querySelectorAll('.mlh-tab-btn');
+            allTabs.forEach(t => t.classList.remove('active'));
+
+            if (btnEl) {
+                btnEl.classList.add('active');
+            } else {
+                // Cari tab yang sesuai jika dipanggil secara programatis
+                allTabs.forEach(t => {
+                    if (t.getAttribute('onclick')?.includes(`'${streamKey}'`)) {
+                        t.classList.add('active');
+                    }
+                });
+            }
+
+            // 2. Update Header & Badges
+            const headingEl = document.getElementById('streamHeading');
+            const badgeEl = document.getElementById('activeStreamBadge');
+            const descEl = document.getElementById('channelDescription');
+            const ytBtn = document.getElementById('openYoutubeBtn');
+
+            if (headingEl) {
+                headingEl.innerHTML = `<span class="mlh-pulse-dot"></span><span>${stream.heading}</span>`;
+            }
+            if (badgeEl) badgeEl.innerText = stream.badge;
+            if (descEl) descEl.innerText = stream.desc;
+
+            const iframeEl = document.getElementById('mlhIframe');
+            const videoEl = document.getElementById('hlsLivePlayer');
+
+            // 3. Play Stream
+            if (stream.isHls) {
+                // Sembunyikan Iframe, jalankan Player HLS
+                if (iframeEl) {
+                    iframeEl.classList.add('hidden');
+                    iframeEl.src = '';
+                }
+                if (videoEl) {
+                    videoEl.classList.remove('hidden');
+                    playHlsStream(stream.hlsUrl);
+                }
+                if (ytBtn) ytBtn.href = stream.youtubeUrl;
+            } else {
+                // Matikan HLS, jalankan YouTube Iframe
+                if (currentHlsInstance) {
+                    currentHlsInstance.destroy();
+                    currentHlsInstance = null;
+                }
+                if (videoEl) {
+                    videoEl.pause();
+                    videoEl.classList.add('hidden');
+                }
+
+                // Cek apakah ada custom YouTube ID dari user
+                const customYtId = getSavedCustomYoutubeId(streamKey);
+                const activeId = customYtId || stream.id;
+
+                if (iframeEl) {
+                    iframeEl.classList.remove('hidden');
+                    // Menggunakan format persis The Islamic Information dengan rel=0 dan strict-origin-when-cross-origin
+                    iframeEl.src = `https://www.youtube.com/embed/${activeId}?autoplay=1&rel=0`;
+                }
+
+                if (ytBtn) {
+                    ytBtn.href = `https://www.youtube.com/watch?v=${activeId}`;
+                }
+            }
+        }
+
+        // PEMUTAR HLS NATIVE / HLS.JS (UNTUK SATELIT GLOBECAST AKAMAI DIRECT)
+        function playHlsStream(streamUrl) {
+            const videoEl = document.getElementById('hlsLivePlayer');
+            if (!videoEl) return;
+
+            if (currentHlsInstance) {
+                currentHlsInstance.destroy();
+                currentHlsInstance = null;
+            }
+
+            if (window.Hls && Hls.isSupported()) {
+                const hls = new Hls({
+                    enableWorker: true,
+                    lowLatencyMode: true,
+                    backBufferLength: 60
+                });
+                currentHlsInstance = hls;
+                hls.loadSource(streamUrl);
+                hls.attachMedia(videoEl);
+
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    videoEl.play().catch(e => {
+                        console.log("Autoplay HLS memerlukan interaksi klik:", e);
+                    });
+                });
+
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    console.warn("HLS Warning:", data);
+                    if (data.fatal) {
+                        switch (data.type) {
+                            case Hls.ErrorTypes.NETWORK_ERROR:
+                                hls.startLoad();
+                                break;
+                            case Hls.ErrorTypes.MEDIA_ERROR:
+                                hls.recoverMediaError();
+                                break;
+                            default:
+                                hls.destroy();
+                                break;
+                        }
+                    }
+                });
+            } else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+                // Native HLS untuk Safari iOS / macOS
+                videoEl.src = streamUrl;
+                videoEl.addEventListener('loadedmetadata', function () {
+                    videoEl.play().catch(() => {});
+                });
+            } else {
+                alert("Browser Anda belum mendukung streaming HLS langsung.");
+            }
+        }
+
+        // MODAL CUSTOM URL CONTROLS
+        function openCustomUrlModal() {
+            const modal = document.getElementById('customUrlModal');
+            const selectEl = document.getElementById('modalChannelSelect');
+            if (selectEl) {
+                selectEl.value = (currentStreamKey === 'madinah') ? 'MADINAH' : 'MAKKAH';
+            }
+            const currentSaved = getSavedCustomYoutubeId(currentStreamKey) || '';
+            const inputEl = document.getElementById('modalInputUrl');
+            if (inputEl) {
+                inputEl.value = currentSaved ? `https://www.youtube.com/watch?v=${currentSaved}` : '';
+            }
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-95');
+            if (inputEl) inputEl.focus();
+        }
+
+        function closeCustomUrlModal() {
+            const modal = document.getElementById('customUrlModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.add('scale-95');
+        }
+
+        function handleSaveCustomLiveUrl(event) {
+            event.preventDefault();
+            const inputVal = document.getElementById('modalInputUrl').value.trim();
+            const extractedId = extractYoutubeId(inputVal);
+
+            if (!extractedId) {
+                alert("Format URL YouTube tidak dikenali. Silakan salin tautan lengkap dari aplikasi/website YouTube (contoh: https://www.youtube.com/watch?v=XXXXX atau https://youtu.be/XXXXX).");
+                return;
+            }
+
+            saveCustomYoutubeId(currentStreamKey, extractedId);
+            closeCustomUrlModal();
+            setMlhStream(currentStreamKey);
+
+            if (typeof showToast === 'function') {
+                showToast("✅ Berhasil memutar link siaran pilihan Anda!");
+            } else {
+                alert("Berhasil memutar link siaran pilihan Anda!");
+            }
+        }
+
+        function resetDefaultLiveUrl() {
+            if (confirm("Kembalikan siaran ke link resmi bawaan?")) {
+                Object.keys(STREAMS).forEach(k => saveCustomYoutubeId(k, null));
+                closeCustomUrlModal();
+                setMlhStream(currentStreamKey);
+            }
+        }
+
+        // JADWAL WAKTU SHOLAT MAKKAH (ALADHAN LIVE API DENGAN LOCALSTORAGE CACHE)
+        async function loadMakkahPrayerTimes() {
+            const now = new Date();
+            // Format tanggal DD-MM-YYYY untuk API Aladhan
+            const d = String(now.getDate()).padStart(2, '0');
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            const y = now.getFullYear();
+            const dateParam = `${d}-${m}-${y}`;
+            const cacheKey = `sdw_makkah_prayer_${dateParam}`;
+
+            // Format tanggal cantik
+            const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Riyadh' };
+            const makkahDateFormatted = new Intl.DateTimeFormat('id-ID', dateOptions).format(now);
+            const dateEl = document.getElementById('makkahLiveDate');
+            if (dateEl) dateEl.innerText = makkahDateFormatted;
+
+            // 1. Cek Cache LocalStorage
+            try {
+                const cached = localStorage.getItem(cacheKey);
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    applyPrayerTimings(parsed);
+                    return;
+                }
+            } catch (e) {}
+
+            // 2. Fetch API dari Aladhan (Method 4: Umm al-Qura University, Makkah)
+            try {
+                const res = await fetch(`https://api.aladhan.com/v1/timingsByCity/${dateParam}?city=Makkah&country=Saudi%20Arabia&method=4&school=0`);
+                if (!res.ok) throw new Error('Gagal mengambil jadwal sholat');
+                const data = await res.json();
+                if (data && data.data && data.data.timings) {
+                    const timings = data.data.timings;
+                    localStorage.setItem(cacheKey, JSON.stringify(timings));
+                    applyPrayerTimings(timings);
+                }
+            } catch (err) {
+                console.warn("Menggunakan jadwal sholat estimasi Makkah:", err);
+            }
+        }
+
+        function applyPrayerTimings(timings) {
+            if (!timings) return;
+            const fields = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            fields.forEach(f => {
+                const el = document.getElementById(`prayer-${f}`);
+                if (el && timings[f]) {
+                    // Hanya ambil HH:mm jika ada timezone offset
+                    const cleanTime = timings[f].split(' ')[0];
+                    el.innerText = cleanTime;
+                }
+            });
+        }
+
+        // DUAL CLOCK TICKER (MAKKAH AST UTC+3 vs JAKARTA WIB UTC+7)
+        function updateDualClocks() {
+            const now = new Date();
+
+            // Makkah AST (UTC+3)
+            const makkahTimeStr = now.toLocaleTimeString('id-ID', {
+                timeZone: 'Asia/Riyadh',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            // Jakarta WIB (UTC+7)
+            const jakartaTimeStr = now.toLocaleTimeString('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            const makkahEl = document.getElementById('makkahClock');
+            const jakartaEl = document.getElementById('jakartaClock');
+
+            if (makkahEl) makkahEl.innerText = makkahTimeStr.replace(/\./g, ':');
+            if (jakartaEl) jakartaEl.innerText = jakartaTimeStr.replace(/\./g, ':');
+        }
+
+        // MOBILE DRAWER TOGGLE
+        function toggleMobileNav(open) {
+            const drawer = document.getElementById('mobileNavDrawer');
+            const panel = document.getElementById('mobileNavPanel');
+            if (open) {
+                drawer.classList.remove('opacity-0', 'pointer-events-none');
+                panel.classList.remove('translate-x-full');
+            } else {
+                drawer.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        // HELPER MODAL IBADAH
+        window.openIbadahModal = function() {
+            window.location.href = 'app.html?open=ibadah';
+        };
+
+        // INIT SAAT HALAMAN DIMUAT
+        document.addEventListener('DOMContentLoaded', () => {
+            setMlhStream('main');
+            updateDualClocks();
+            setInterval(updateDualClocks, 1000);
+            loadMakkahPrayerTimes();
+        });
+    </script>
+</body>
+
+</html>
+
