@@ -124,17 +124,17 @@
       banner.className =
         'fixed bottom-20 left-3 right-3 sm:left-auto sm:right-6 sm:w-96 z-50 transform translate-y-36 opacity-0 transition-all duration-300 pointer-events-none';
       banner.innerHTML = `
-        <div class="glass-nav bg-[#0F281E]/95 backdrop-blur-md p-3.5 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] border border-gold-500/30 flex items-center gap-3 pointer-events-auto">
-          <img src="/assets/icon-192.png" alt="Logo SDW UMROH" class="w-11 h-11 rounded-xl object-contain shadow-xs bg-[#143528] p-1 shrink-0 border border-gold-500/40">
+        <div class="glass-nav bg-[#240833]/95 backdrop-blur-md p-3.5 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.5)] border border-gold-500/30 flex items-center gap-3 pointer-events-auto">
+          <img src="/assets/icon-192.png" alt="Logo SDW UMROH" class="w-11 h-11 rounded-xl object-contain shadow-xs bg-[#3E165B] p-1 shrink-0 border border-gold-500/40">
           <div class="flex-1 min-w-0">
             <h4 class="text-xs sm:text-sm font-bold text-gold-400 leading-tight truncate">Pasang Aplikasi SDW UMROH</h4>
-            <p class="text-[11px] text-emerald-200/80 line-clamp-2 mt-0.5">Panduan doa manasik offline &amp; cek sisa kursi kloter langsung dari layar HP.</p>
+            <p class="text-[11px] text-purple-200/80 line-clamp-2 mt-0.5">Panduan doa manasik offline &amp; cek sisa kursi kloter langsung dari layar HP.</p>
           </div>
           <div class="flex flex-col gap-1.5 shrink-0">
             <button id="pwaAcceptBtn" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-slate-950 font-black text-xs shadow-xs transition-colors cursor-pointer text-center">
               Pasang
             </button>
-            <button id="pwaDismissBtn" class="px-3 py-1 rounded-xl text-emerald-400 hover:text-white text-[10px] font-semibold transition-colors cursor-pointer text-center">
+            <button id="pwaDismissBtn" class="px-3 py-1 rounded-xl text-purple-300 hover:text-white text-[10px] font-semibold transition-colors cursor-pointer text-center">
               Nanti
             </button>
           </div>
@@ -156,21 +156,21 @@
       modal.className =
         'fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
       modal.innerHTML = `
-        <div class="bg-[#0F281E] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-emerald-100 animate-in fade-in zoom-in-95">
+        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-purple-100 animate-in fade-in zoom-in-95">
           <div class="flex items-start justify-between gap-3 mb-4">
             <div class="flex items-center gap-3">
-              <img src="/assets/icon-192.png" alt="SDW UMROH" class="w-12 h-12 rounded-2xl p-1 bg-[#143528] border border-gold-500/40 shadow-xs">
+              <img src="/assets/icon-192.png" alt="SDW UMROH" class="w-12 h-12 rounded-2xl p-1 bg-[#3E165B] border border-gold-500/40 shadow-xs">
               <div>
                 <h3 class="font-bold text-base sm:text-lg text-gold-400">Instal Aplikasi SDW UMROH</h3>
-                <p class="text-xs text-emerald-300/80">Panduan untuk HP Android &amp; iPhone (iOS)</p>
+                <p class="text-xs text-purple-200/80">Panduan untuk HP Android &amp; iPhone (iOS)</p>
               </div>
             </div>
-            <button onclick="window.closePWAInstructionModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-emerald-300 flex items-center justify-center cursor-pointer">
+            <button onclick="window.closePWAInstructionModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
 
-          <div id="pwaModalContent" class="space-y-3.5 text-xs sm:text-sm text-emerald-200/90">
+          <div id="pwaModalContent" class="space-y-3.5 text-xs sm:text-sm text-purple-200/90">
             <!-- Content injected dynamically based on device -->
           </div>
 
@@ -192,7 +192,7 @@
       doaModal.className =
         'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
       doaModal.innerHTML = `
-        <div class="bg-[#0A1C14] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-emerald-100 max-h-[88vh] flex flex-col">
+        <div class="bg-[#1F0628] rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[88vh] flex flex-col">
           <!-- Header -->
           <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
             <div class="flex items-center gap-2.5">
@@ -201,10 +201,10 @@
               </div>
               <div>
                 <h3 class="font-bold text-base text-gold-400 leading-tight">Buku Saku Doa Manasik</h3>
-                <p class="text-[11px] text-emerald-300/80">Panduan Thawaf &amp; Sa'i (Dapat Dibuka Offline)</p>
+                <p class="text-[11px] text-purple-200/80">Panduan Thawaf &amp; Sa'i (Dapat Dibuka Offline)</p>
               </div>
             </div>
-            <button onclick="window.closeDoaModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-emerald-300 flex items-center justify-center cursor-pointer">
+            <button onclick="window.closeDoaModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
@@ -212,19 +212,19 @@
           <!-- Body Tabs -->
           <div class="flex gap-2 mb-3 shrink-0">
             <button onclick="window.switchDoaTab('niat')" id="tabNiatBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center">Niat Ihram</button>
-            <button onclick="window.switchDoaTab('talbiyah')" id="tabTalbiyahBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-emerald-200 border border-white/10 transition-all cursor-pointer text-center">Talbiyah</button>
-            <button onclick="window.switchDoaTab('thawaf')" id="tabThawafBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-emerald-200 border border-white/10 transition-all cursor-pointer text-center">Thawaf</button>
-            <button onclick="window.switchDoaTab('sai')" id="tabSaiBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-emerald-200 border border-white/10 transition-all cursor-pointer text-center">Sa'i</button>
+            <button onclick="window.switchDoaTab('talbiyah')" id="tabTalbiyahBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 transition-all cursor-pointer text-center">Talbiyah</button>
+            <button onclick="window.switchDoaTab('thawaf')" id="tabThawafBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 transition-all cursor-pointer text-center">Thawaf</button>
+            <button onclick="window.switchDoaTab('sai')" id="tabSaiBtn" class="flex-1 py-1.5 px-2 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 transition-all cursor-pointer text-center">Sa'i</button>
           </div>
 
           <!-- Content (Scrollable) -->
-          <div id="doaContentArea" class="flex-1 overflow-y-auto pr-1 space-y-4 text-xs sm:text-sm text-emerald-100">
+          <div id="doaContentArea" class="flex-1 overflow-y-auto pr-1 space-y-4 text-xs sm:text-sm text-purple-100">
             <!-- Injected dynamically -->
           </div>
 
           <!-- Footer -->
           <div class="mt-4 pt-3 border-t border-gold-500/20 flex items-center justify-between shrink-0">
-            <span class="text-[11px] text-emerald-400/80">Disusun sesuai Sunnah Rasulullah SAW</span>
+            <span class="text-[11px] text-purple-300/80">Disusun sesuai Sunnah Rasulullah SAW</span>
             <button onclick="window.closeDoaModal()" class="px-4 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs hover:brightness-110 transition-colors cursor-pointer">
               Tutup
             </button>
@@ -241,7 +241,7 @@
       settingsModal.className =
         'fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
       settingsModal.innerHTML = `
-        <div class="bg-[#0F281E] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-emerald-100 animate-in fade-in zoom-in-95 max-h-[85vh] overflow-y-auto">
+        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-purple-100 animate-in fade-in zoom-in-95 max-h-[85vh] overflow-y-auto">
           <!-- Header -->
           <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-4">
             <div class="flex items-center gap-3">
@@ -250,10 +250,10 @@
               </div>
               <div>
                 <h3 class="font-bold text-base text-gold-400 leading-tight">Pengaturan Aplikasi</h3>
-                <p class="text-[11px] text-emerald-300/80">SDW UMROH &bull; PWA Super-App v1.0</p>
+                <p class="text-[11px] text-purple-200/80">SDW UMROH &bull; PWA Super-App v1.0</p>
               </div>
             </div>
-            <button onclick="window.closeSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-emerald-300 flex items-center justify-center cursor-pointer">
+            <button onclick="window.closeSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
           </div>
@@ -266,14 +266,14 @@
                   <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                   <span>Gaya Tampilan Mobile</span>
                 </span>
-                <span id="currentModeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-emerald-300 font-bold">Otomatis</span>
+                <span id="currentModeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-purple-200 font-bold">Otomatis</span>
               </div>
-              <p class="text-[11px] text-emerald-300/70 mb-2.5">Pilih tampilan Dashboard Aplikasi (ala Asnawiyyah) atau Web Profil Lengkap.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Pilih tampilan Dashboard Aplikasi (ala Asnawiyyah) atau Web Profil Lengkap.</p>
               <div class="grid grid-cols-2 gap-2">
                 <button onclick="window.setMobileExperienceMode('app')" class="py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center bg-gold-500/20 text-gold-300 border-gold-500/50 shadow-2xs">
                   Dashboard App
                 </button>
-                <button onclick="window.setMobileExperienceMode('web')" class="py-2 px-3 rounded-xl text-xs font-bold border border-white/10 bg-white/5 text-emerald-200 hover:bg-white/10 transition-all cursor-pointer text-center">
+                <button onclick="window.setMobileExperienceMode('web')" class="py-2 px-3 rounded-xl text-xs font-bold border border-white/10 bg-white/5 text-purple-200 hover:bg-white/10 transition-all cursor-pointer text-center">
                   Web Profil
                 </button>
               </div>
@@ -286,9 +286,9 @@
                   <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 5v14M16 11h5M18.5 11v8"/></svg>
                   <span>Ukuran Teks Bacaan</span>
                 </span>
-                <span id="currentFontSizeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-emerald-300 font-bold">Normal</span>
+                <span id="currentFontSizeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-purple-200 font-bold">Normal</span>
               </div>
-              <p class="text-[11px] text-emerald-300/70 mb-2.5">Sangat membantu jamaah lansia agar doa dan jadwal terbaca lebih nyaman.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Sangat membantu jamaah lansia agar doa dan jadwal terbaca lebih nyaman.</p>
               <div class="grid grid-cols-2 gap-2">
                 <button id="fontNormalBtn" onclick="window.setFontSize('normal')" class="py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center">
                   A (Normal)
@@ -305,7 +305,7 @@
                 <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <span>Sinkronisasi Data Kloter</span>
               </span>
-              <p class="text-[11px] text-emerald-300/70 mb-2.5">Segarkan data jadwal kloter dan kuota seat terbaru dari server pusat.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Segarkan data jadwal kloter dan kuota seat terbaru dari server pusat.</p>
               <button onclick="window.refreshAppCache()" class="w-full py-2 px-3 rounded-xl bg-white/5 border border-gold-500/30 hover:bg-gold-500/10 text-gold-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer">
                 <svg class="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
                 <span>Bersihkan Cache &amp; Muat Ulang</span>
@@ -321,8 +321,8 @@
                 </span>
                 <span id="settingsCurrentRoleBadge" class="text-[10px] bg-gold-500/20 px-2 py-0.5 rounded-full border border-gold-500/30 text-gold-300 font-bold">PILGRIM</span>
               </div>
-              <p class="text-[11px] text-emerald-300/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, atau Admin.</p>
-              <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2.5 px-3 rounded-xl bg-[#143528] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, atau Admin.</p>
+              <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2.5 px-3 rounded-xl bg-[#3E165B] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
                 <option value="PILGRIM">Jamaah (Pilgrim)</option>
                 <option value="SALES">Sales / Marketing</option>
                 <option value="DOCUMENT_OFFICER">Document Officer</option>
@@ -451,7 +451,7 @@
       toast = document.createElement('div');
       toast.id = 'sdw-notif-toast';
       toast.className =
-        'fixed top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 bg-[#0A1C14]/95 text-emerald-100 p-4 rounded-2xl shadow-2xl border border-gold-500/40 backdrop-blur-md transition-all duration-300 transform -translate-y-8 opacity-0 pointer-events-none flex items-start gap-3';
+        'fixed top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 bg-[#240833]/95 text-purple-100 p-4 rounded-2xl shadow-2xl border border-gold-500/40 backdrop-blur-md transition-all duration-300 transform -translate-y-8 opacity-0 pointer-events-none flex items-start gap-3';
       document.body.appendChild(toast);
     }
     toast.innerHTML = `
@@ -719,7 +719,7 @@
   function showToast(msg) {
     const toast = document.createElement('div');
     toast.className =
-      'fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#0F281E]/95 text-gold-300 border border-gold-500/40 px-4 py-2.5 rounded-full text-xs font-semibold shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300';
+      'fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-[#240833]/95 text-gold-300 border border-gold-500/40 px-4 py-2.5 rounded-full text-xs font-semibold shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-4 duration-300';
     toast.innerHTML = `<span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span><span>${msg}</span>`;
     document.body.appendChild(toast);
     setTimeout(() => {
@@ -732,11 +732,11 @@
   function showUpdateToast() {
     const toast = document.createElement('div');
     toast.className =
-      'fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-50 bg-[#0A1C14] text-white p-3.5 rounded-2xl shadow-2xl border border-gold-500/40 flex items-center justify-between gap-3';
+      'fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-50 bg-[#1F0628] text-white p-3.5 rounded-2xl shadow-2xl border border-gold-500/40 flex items-center justify-between gap-3';
     toast.innerHTML = `
       <div class="text-xs">
         <p class="font-bold text-gold-400">Pembaruan Jadwal Tersedia</p>
-        <p class="text-[11px] text-emerald-200/80">Muat ulang untuk melihat jadwal kloter termutakhir.</p>
+        <p class="text-[11px] text-purple-200/80">Muat ulang untuk melihat jadwal kloter termutakhir.</p>
       </div>
       <button onclick="window.location.reload()" class="px-3 py-1.5 bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-bold rounded-xl text-xs transition-colors shrink-0 cursor-pointer">
         Perbarui
