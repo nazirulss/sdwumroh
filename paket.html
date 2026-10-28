@@ -705,41 +705,41 @@
             <!-- 1. Beranda -->
             <a href="/" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-house text-sm"></i>
+                    <i class="fa-solid fa-kaaba text-sm"></i>
                 </div>
                 <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
             </a>
 
-            <!-- 2. Paket (Active) -->
-            <a href="/paket" class="flex flex-col items-center justify-center py-1 transition group text-sdw-pine">
-                <div class="w-8 h-8 flex items-center justify-center rounded-xl bg-purple-100/80 text-sdw-pine shadow-2xs">
-                    <i class="fa-solid fa-cubes text-sm"></i>
+            <!-- 2. Berita -->
+            <a href="/app#section-warta-feed" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
+                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
+                    <i class="fa-solid fa-newspaper text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-extrabold mt-1 text-sdw-pine">Paket</span>
+                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
             </a>
 
-            <!-- 3. Buku Doa Offline (Elevated Center Action Button) -->
-            <button type="button" onclick="window.openDoaModal('niat')" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer" aria-label="Buka Buku Doa Manasik">
+            <!-- 3. Ibadah (Elevated Center Action Button) -->
+            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
-                    <i class="fa-solid fa-book-quran text-lg text-slate-950"></i>
+                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
                 </div>
-                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Buku Doa</span>
+                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
             </button>
 
-            <!-- 4. Kloter -->
-            <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine">
+            <!-- 4. Kalender -->
+            <a href="/jadwal" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Jadwal Kloter">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-calendar-days text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-semibold mt-1">Kloter</span>
+                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
             </a>
 
-            <!-- 5. Pengaturan (Aksesibilitas & PWA Settings) -->
-            <button type="button" onclick="window.openSettingsModal()" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer" aria-label="Buka Pengaturan">
+            <!-- 5. Pengaturan -->
+            <button type="button" onclick="window.openSettingsModal()" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer" aria-label="Pengaturan Aplikasi">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-gear text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-semibold mt-1">Setelan</span>
+                <span class="text-[9.5px] font-semibold mt-1">Pengaturan</span>
             </button>
         </div>
     </nav>

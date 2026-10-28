@@ -320,61 +320,61 @@
       document.body.appendChild(doaModal);
     }
 
-    // D. Settings Modal
+    // D. Settings Modal ("Pengaturan Aplikasi" ala Asnawiyyah)
     if (!document.getElementById('settingsModal')) {
       const settingsModal = document.createElement('div');
       settingsModal.id = 'settingsModal';
       settingsModal.className =
         'fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
       settingsModal.innerHTML = `
-        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-purple-100 animate-in fade-in zoom-in-95 max-h-[85vh] overflow-y-auto">
+        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-purple-100 animate-in fade-in zoom-in-95 max-h-[88vh] overflow-y-auto">
           <!-- Header -->
           <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-2xl bg-gold-500/10 text-gold-400 flex items-center justify-center border border-gold-500/30 shrink-0">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <i class="fa-solid fa-gear text-base text-gold-400"></i>
               </div>
               <div>
                 <h3 class="font-bold text-base text-gold-400 leading-tight">Pengaturan Aplikasi</h3>
-                <p class="text-[11px] text-purple-200/80">SDW UMROH &bull; PWA Super-App v1.0</p>
+                <p class="text-[11px] text-purple-200/80">SDW UMROH &bull; Portal Jamaah PWA v1.0.0-ATM</p>
               </div>
             </div>
             <button onclick="window.closeSettingsModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              <i class="fa-solid fa-xmark text-sm"></i>
             </button>
           </div>
 
           <div class="space-y-3.5">
             <!-- 1. Pilihan Gaya Tampilan Mobile -->
-            <div class="p-3.5 bg-black/20 rounded-2xl border border-white/5">
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                  <i class="fa-solid fa-mobile-screen text-gold-400 text-xs"></i>
                   <span>Gaya Tampilan Mobile</span>
                 </span>
-                <span id="currentModeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-purple-200 font-bold">Otomatis</span>
+                <span id="currentModeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-purple-200 font-bold">Dashboard App</span>
               </div>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Pilih tampilan Dashboard Aplikasi (ala Asnawiyyah) atau Web Profil Lengkap.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Pilih tampilan Dashboard Aplikasi PWA atau Web Publik SDW UMROH.</p>
               <div class="grid grid-cols-2 gap-2">
                 <button onclick="window.setMobileExperienceMode('app')" class="py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center bg-gold-500/20 text-gold-300 border-gold-500/50 shadow-2xs">
                   Dashboard App
                 </button>
                 <button onclick="window.setMobileExperienceMode('web')" class="py-2 px-3 rounded-xl text-xs font-bold border border-white/10 bg-white/5 text-purple-200 hover:bg-white/10 transition-all cursor-pointer text-center">
-                  Web Profil
+                  Web Publik
                 </button>
               </div>
             </div>
 
             <!-- 2. Aksesibilitas: Ukuran Teks Bacaan (Lansia-Friendly) -->
-            <div class="p-3.5 bg-black/20 rounded-2xl border border-white/5">
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 5v14M16 11h5M18.5 11v8"/></svg>
+                  <i class="fa-solid fa-text-height text-gold-400 text-xs"></i>
                   <span>Ukuran Teks Bacaan</span>
                 </span>
                 <span id="currentFontSizeLabel" class="text-[10px] bg-white/10 px-2 py-0.5 rounded-full border border-white/10 text-purple-200 font-bold">Normal</span>
               </div>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Sangat membantu jamaah lansia agar doa dan jadwal terbaca lebih nyaman.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Sangat membantu jamaah lansia agar doa manasik dan jadwal sholat terbaca lebih nyaman.</p>
               <div class="grid grid-cols-2 gap-2">
                 <button id="fontNormalBtn" onclick="window.setFontSize('normal')" class="py-2 px-3 rounded-xl text-xs font-bold border transition-all cursor-pointer text-center">
                   A (Normal)
@@ -385,29 +385,40 @@
               </div>
             </div>
 
-            <!-- 3. Status PWA & Cache -->
-            <div class="p-3.5 bg-black/20 rounded-2xl border border-white/5">
+            <!-- 3. Status Instalasi PWA & Offline Engine -->
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
               <span class="text-xs font-bold text-gold-300 flex items-center gap-2 mb-1">
-                <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                <span>Sinkronisasi Data Kloter</span>
+                <i class="fa-solid fa-mobile-screen-button text-gold-400 text-xs"></i>
+                <span>Status Instalasi Aplikasi (PWA)</span>
               </span>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Segarkan data jadwal kloter dan kuota seat terbaru dari server pusat.</p>
-              <button onclick="window.refreshAppCache()" class="w-full py-2 px-3 rounded-xl bg-white/5 border border-gold-500/30 hover:bg-gold-500/10 text-gold-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer">
-                <svg class="w-3.5 h-3.5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+              <div id="pwaStatusBox" class="mt-2 text-xs">
+                <!-- Diisi otomatis oleh updateSettingsPwaStatus() -->
+              </div>
+            </div>
+
+            <!-- 4. Sinkronisasi Data Kloter & Cache -->
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
+              <span class="text-xs font-bold text-gold-300 flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-arrows-rotate text-gold-400 text-xs"></i>
+                <span>Sinkronisasi Data Kloter &amp; Cache</span>
+              </span>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Bersihkan cache aplikasi untuk mengambil pengumuman warta manasik &amp; jadwal kloter paling mutakhir.</p>
+              <button onclick="window.refreshAppCache()" class="w-full py-2.5 px-3 rounded-xl bg-white/5 border border-gold-500/30 hover:bg-gold-500/10 text-gold-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs">
+                <i class="fa-solid fa-rotate text-gold-400 text-xs"></i>
                 <span>Bersihkan Cache &amp; Muat Ulang</span>
               </button>
             </div>
 
-            <!-- 4. Mode Peran Pengguna (Role Switcher Testing Backoffice & Jamaah) -->
-            <div class="p-3.5 bg-black/20 rounded-2xl border border-white/5">
+            <!-- 5. Mode Peran Pengguna (Role Switcher Testing Backoffice & Jamaah) -->
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
               <div class="flex items-center justify-between mb-1.5">
                 <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
-                  <svg class="w-4 h-4 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                  <i class="fa-solid fa-user-shield text-gold-400 text-xs"></i>
                   <span>Simulasi Peran Pengguna</span>
                 </span>
                 <span id="settingsCurrentRoleBadge" class="text-[10px] bg-gold-500/20 px-2 py-0.5 rounded-full border border-gold-500/30 text-gold-300 font-bold">PILGRIM</span>
               </div>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, atau Admin.</p>
+              <p class="text-[11px] text-purple-200/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, Tour Leader, atau Admin.</p>
               <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2.5 px-3 rounded-xl bg-[#3E165B] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
                 <option value="PILGRIM">Jamaah (Pilgrim)</option>
                 <option value="SALES">Sales / Marketing</option>
@@ -420,6 +431,24 @@
                 <option value="ADMIN">Admin Sistem</option>
                 <option value="OWNER">Executive Owner</option>
               </select>
+            </div>
+
+            <!-- 6. Layanan Bantuan & Khidmat 24/7 (ala Asnawiyyah) -->
+            <div class="space-y-2 pt-1">
+              <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Admin%20SDW%20UMROH,%20saya%20butuh%20bantuan%20terkait%20layanan%20ibadah%20umroh." target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-600 text-white text-xs font-bold flex items-center justify-between transition-colors shadow-sm">
+                <span class="flex items-center gap-2">
+                  <i class="fa-brands fa-whatsapp text-base text-white"></i>
+                  <span>Hubungi Bantuan / Khidmat 24/7 (WA)</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-white/70"></i>
+              </a>
+              <button type="button" onclick="window.closeSettingsModal(); window.openDoaModal('niat');" class="w-full py-2.5 px-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-purple-200 text-xs font-bold flex items-center justify-between transition-colors border border-white/5 cursor-pointer">
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-book-open text-gold-400 text-xs"></i>
+                  <span>Buka Panduan Doa Manasik Offline</span>
+                </span>
+                <i class="fa-solid fa-chevron-right text-xs text-purple-400"></i>
+              </button>
             </div>
           </div>
         </div>
@@ -539,6 +568,89 @@
         </div>
       `;
       document.body.appendChild(wModal);
+    }
+
+    // G. Modal Layanan Ibadah Terpadu ("Ibadah Super Hub" ala Asnawiyyah)
+    if (!document.getElementById('ibadahHubModal')) {
+      const iModal = document.createElement('div');
+      iModal.id = 'ibadahHubModal';
+      iModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      iModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 overflow-y-auto">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-4 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/30 text-base font-bold">
+                <i class="fa-solid fa-hands-praying"></i>
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Pusat Ibadah &amp; Manasik</h3>
+                <p class="text-[11px] text-purple-200/80">Panduan Manasik, Doa &amp; Sholat Haramain</p>
+              </div>
+            </div>
+            <button onclick="window.closeIbadahModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Quick Access Grid -->
+          <div class="grid grid-cols-2 gap-2.5 mb-4">
+            <!-- 1. Buku Saku Doa Offline -->
+            <button onclick="window.closeIbadahModal(); window.openDoaModal('niat');" class="p-3.5 rounded-2xl bg-black/30 border border-gold-500/30 hover:border-gold-500/60 text-left transition-all group cursor-pointer active:scale-98">
+              <div class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-book-quran text-sm"></i>
+              </div>
+              <h4 class="font-bold text-xs text-white leading-tight">Buku Saku Doa</h4>
+              <p class="text-[10px] text-purple-200/70 mt-1">Niat Ihram, Talbiyah, Thawaf &amp; Sa'i</p>
+              <span class="inline-block mt-2 text-[9px] font-bold text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">Akses Offline</span>
+            </button>
+
+            <!-- 2. Jadwal Sholat 5 Waktu -->
+            <button onclick="window.closeIbadahModal(); window.openJadwalSholatModal();" class="p-3.5 rounded-2xl bg-black/30 border border-gold-500/30 hover:border-gold-500/60 text-left transition-all group cursor-pointer active:scale-98">
+              <div class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-kaaba text-sm"></i>
+              </div>
+              <h4 class="font-bold text-xs text-white leading-tight">Jadwal Sholat</h4>
+              <p class="text-[10px] text-purple-200/70 mt-1">Waktu Makkah (WAS) &amp; Jakarta (WIB)</p>
+              <span class="inline-block mt-2 text-[9px] font-bold text-emerald-300 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/20">Live Detik</span>
+            </button>
+
+            <!-- 3. Arah Kiblat & Koordinat Ka'bah -->
+            <div class="p-3.5 rounded-2xl bg-black/30 border border-white/10 text-left">
+              <div class="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center mb-2">
+                <i class="fa-solid fa-compass text-sm"></i>
+              </div>
+              <h4 class="font-bold text-xs text-white leading-tight">Arah Kiblat</h4>
+              <p class="text-[10px] text-purple-200/70 mt-1">295&deg; Barat Laut dari Indonesia</p>
+              <span class="inline-block mt-2 text-[9px] font-bold text-purple-300 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">Makkah 21&deg;25'N</span>
+            </div>
+
+            <!-- 4. Panduan Tata Cara Miqat -->
+            <button onclick="window.closeIbadahModal(); window.openWartaModal('miqat-guide');" class="p-3.5 rounded-2xl bg-black/30 border border-gold-500/30 hover:border-gold-500/60 text-left transition-all group cursor-pointer active:scale-98">
+              <div class="w-8 h-8 rounded-xl bg-gold-500/20 text-gold-400 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                <i class="fa-solid fa-person-praying text-sm"></i>
+              </div>
+              <h4 class="font-bold text-xs text-white leading-tight">Tata Cara Miqat</h4>
+              <p class="text-[10px] text-purple-200/70 mt-1">Niat, Sunnah &amp; Larangan Ihram</p>
+              <span class="inline-block mt-2 text-[9px] font-bold text-gold-300 bg-gold-500/10 px-2 py-0.5 rounded-full border border-gold-500/20">Fiqih Sunnah</span>
+            </button>
+          </div>
+
+          <!-- Quick CTA Buttons -->
+          <div class="space-y-2 pt-2 border-t border-gold-500/20">
+            <button onclick="window.closeIbadahModal(); window.openDoaModal('thawaf');" class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-md hover:brightness-110 transition-all cursor-pointer">
+              <i class="fa-solid fa-book-open"></i>
+              <span>Buka Doa Thawaf &amp; Sa'i Sekarang</span>
+            </button>
+            <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Muthawwif%20SDW%20Umroh,%20saya%20ingin%20berkonsultasi%20tentang%20manasik%20ibadah." target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-4 rounded-xl bg-white/5 hover:bg-white/10 text-purple-200 border border-white/10 text-xs font-bold flex items-center justify-center gap-2 transition-colors">
+              <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+              <span>Konsultasi Muthawwif Pembimbing (WA)</span>
+            </a>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(iModal);
     }
   }
 
@@ -822,7 +934,64 @@
         ? 'Dashboard App'
         : 'Web Profil';
     }
+
+    const box = document.getElementById('pwaStatusBox');
+    if (!box) return;
+
+    const currentlyStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true ||
+      document.body.classList.contains('is-pwa-standalone') ||
+      localStorage.getItem('sdw_pwa_installed') === 'true';
+
+    if (currentlyStandalone) {
+      box.innerHTML = `
+        <div class="p-2.5 bg-emerald-500/20 border border-emerald-500/40 rounded-xl flex items-center gap-2.5 text-emerald-200 font-semibold">
+          <i class="fa-solid fa-circle-check text-emerald-400 shrink-0 text-sm"></i>
+          <span class="leading-tight text-[11px]">Aplikasi Terpasang di Layar HP (Mode Mandiri PWA Offline)</span>
+        </div>
+      `;
+    } else {
+      box.innerHTML = `
+        <div class="flex items-center justify-between p-2.5 bg-black/20 border border-white/10 rounded-xl gap-2">
+          <div class="min-w-0">
+            <span class="font-bold text-white block leading-tight text-xs">Terbuka di Browser</span>
+            <span class="text-[10px] text-purple-200/70">Dapat dipasang ke layar utama HP tanpa App Store</span>
+          </div>
+          <button onclick="window.triggerPwaInstall()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-bold text-xs shadow-xs hover:brightness-110 transition-all shrink-0 cursor-pointer">
+            Pasang PWA
+          </button>
+        </div>
+      `;
+    }
   }
+
+  // ==================== IBADAH & SCROLL CONTROLLERS ====================
+  window.openIbadahModal = function () {
+    const modal = document.getElementById('ibadahHubModal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      hidePwaPrompt();
+    }
+  };
+
+  window.closeIbadahModal = function () {
+    const modal = document.getElementById('ibadahHubModal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  window.scrollToWartaFeed = function () {
+    const section = document.getElementById('section-warta-feed');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      section.classList.add('ring-2', 'ring-gold-500', 'transition-all');
+      setTimeout(() => {
+        section.classList.remove('ring-2', 'ring-gold-500');
+      }, 2000);
+    } else {
+      window.location.href = '/app#section-warta-feed';
+    }
+  };
 
   // Font Size Settings
   window.setFontSize = function (size) {
