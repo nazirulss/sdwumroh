@@ -86,6 +86,92 @@
     document.documentElement.classList.add('text-lg-active');
   }
 
+  // ==================== DATA SHOLAT & WARTA MANASIK (PRIORITY 2) ====================
+  const PRAYER_SCHEDULES = {
+    MAKKAH: [
+      { id: 'imsak', name: 'Imsak', time: '04:50', icon: 'fa-moon', h: 4, m: 50 },
+      { id: 'subuh', name: 'Subuh Makkah', time: '05:02', icon: 'fa-cloud-sun', h: 5, m: 2 },
+      { id: 'syuruq', name: 'Terbit (Syuruq)', time: '06:18', icon: 'fa-sun', h: 6, m: 18 },
+      { id: 'zuhur', name: 'Zuhur Makkah', time: '12:10', icon: 'fa-sun', h: 12, m: 10 },
+      { id: 'ashar', name: 'Ashar Makkah', time: '15:25', icon: 'fa-cloud-sun', h: 15, m: 25 },
+      { id: 'maghrib', name: 'Maghrib Makkah', time: '17:50', icon: 'fa-sun', h: 17, m: 50 },
+      { id: 'isya', name: 'Isya Makkah', time: '19:20', icon: 'fa-star-and-crescent', h: 19, m: 20 }
+    ],
+    WIB: [
+      { id: 'imsak', name: 'Imsak', time: '04:05', icon: 'fa-moon', h: 4, m: 5 },
+      { id: 'subuh', name: 'Subuh WIB', time: '04:15', icon: 'fa-cloud-sun', h: 4, m: 15 },
+      { id: 'syuruq', name: 'Terbit (Syuruq)', time: '05:32', icon: 'fa-sun', h: 5, m: 32 },
+      { id: 'zuhur', name: 'Zuhur WIB', time: '11:42', icon: 'fa-sun', h: 11, m: 42 },
+      { id: 'ashar', name: 'Ashar WIB', time: '14:55', icon: 'fa-cloud-sun', h: 14, m: 55 },
+      { id: 'maghrib', name: 'Maghrib WIB', time: '17:48', icon: 'fa-sun', h: 17, m: 48 },
+      { id: 'isya', name: 'Isya WIB', time: '18:59', icon: 'fa-star-and-crescent', h: 18, m: 59 }
+    ]
+  };
+
+  let activeJadwalTz = 'MAKKAH';
+
+  const SDW_WARTA_DATA = {
+    'nusuk-pass': {
+      title: 'Aturan & Kebijakan Baru Tasreh Masuk Raudhah Melalui Aplikasi Nusuk 1448H',
+      category: 'REGULASI SAUDI',
+      badgeClass: 'bg-amber-400 text-slate-950',
+      date: '28 Oktober 2026',
+      image: 'assets/hero-haram.png',
+      content: `
+        <p>Kementerian Haji dan Umrah Kerajaan Arab Saudi secara resmi memberlakukan pembaruan jadwal dan kuota penerbitan <strong>Tasreh Raudhah Syarifah</strong> melalui sistem Nusuk Pass untuk musim umrah 1448H.</p>
+        <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
+          <p class="font-bold text-amber-300">Poin Kunci untuk Jamaah SDW UMROH:</p>
+          <ul class="list-disc pl-4 space-y-1 text-purple-100">
+            <li>Pendaftaran Tasreh Raudhah jamaah dikoordinasikan terpusat oleh Muthawwif &amp; Tour Leader Kloter H-3 sebelum ketibaan di Madinah.</li>
+            <li>Jamaah Pria: Jadwal ziarah Raudhah dialokasikan ba'da Subuh dan ba'da Isya.</li>
+            <li>Jamaah Wanita: Jadwal ziarah Raudhah dialokasikan pagi pkl 06.30 - 11.00 WAS dan ba'da Dzuhur.</li>
+            <li>Wajib membawa gelang identitas SDW UMROH dan paspor aktif/e-visa.</li>
+          </ul>
+        </div>
+        <p>Seluruh jamaah kloter SDW UMROH akan didampingi langsung oleh Muthawwif hingga gerbang pintu Bab as-Salam &amp; Bab an-Nisa.</p>
+      `
+    },
+    'panduan-miqat': {
+      title: 'Tata Cara Miqat Yalamlam di Udara: Niat, Doa, & Larangan Kain Ihram',
+      category: 'PANDUAN SUNNAH',
+      badgeClass: 'bg-purple-500 text-white',
+      date: '25 Oktober 2026',
+      image: 'assets/pkg-vip-khidmat.png',
+      content: `
+        <p>Bagi penerbangan langsung Jakarta/Surabaya menuju Bandara King Abdulaziz Jeddah (JED), miqat jamaah adalah di atas wilayah <strong>Yalamlam</strong>, kira-kira 30 menit sebelum pesawat mendarat.</p>
+        <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
+          <p class="font-bold text-amber-300">Urutan Pelaksanaan Miqat di Pesawat:</p>
+          <ol class="list-decimal pl-4 space-y-1 text-purple-100">
+            <li>Mandi sunnah ihram &amp; wudhu telah dikerjakan di bandara keberangkatan di Indonesia.</li>
+            <li>Mengenakan pakaian ihram saat berada di ruang tunggu bandara atau 1 jam sebelum pengumuman pilot.</li>
+            <li>Saat kapten pilot mengumumkan melintasi Miqat Yalamlam, jamaah serentak berniat ihram: <em>"Labbaikallaahumma 'Umratan"</em>.</li>
+            <li>Mulai memperbanyak melantunkan Talbiyah hingga thawaf pertama di Ka'bah.</li>
+            <li>Menjauhi seluruh larangan ihram (memotong kuku/rambut, minyak wangi, menutup kepala bagi pria, menutup wajah bagi wanita).</li>
+          </ol>
+        </div>
+      `
+    },
+    'manasik-akbar': {
+      title: 'Jadwal Manasik Akbar & Distribusi Koper Swissotel Kloter 15 Januari',
+      category: 'AGENDA KLOTER',
+      badgeClass: 'bg-blue-500 text-white',
+      date: '22 Oktober 2026',
+      image: 'assets/hero-twilight.jpg',
+      content: `
+        <p>Sebagai ikhtiar memberikan pelayanan terbaik dan kesiapan mental spiritual para tamu Allah, Manajemen SDW UMROH mengundang seluruh calon jamaah kloter Swissotel 15 Januari 2027.</p>
+        <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
+          <p class="font-bold text-amber-300">Detail Acara Manasik Akbar:</p>
+          <ul class="list-disc pl-4 space-y-1 text-purple-100">
+            <li><strong>Hari/Tanggal:</strong> Ahad, 20 Desember 2026</li>
+            <li><strong>Pukul:</strong> 08.00 - 15.00 WIB (Sholat Dzuhur Berjamaah &amp; Makan Siang Bersama)</li>
+            <li><strong>Lokasi:</strong> Grand Ballroom Hotel Bintang Wisata Mandiri</li>
+            <li><strong>Agenda:</strong> Praktek Thawaf &amp; Sa'i miniatur Ka'bah, serah terima koper bagasi, id card, tas paspor, dan kain ihram/mukena resmi.</li>
+          </ul>
+        </div>
+      `
+    }
+  };
+
   let deferredPrompt = null;
 
   // Listen for Chrome/Edge install prompt
@@ -340,6 +426,120 @@
       `;
       document.body.appendChild(settingsModal);
     }
+
+    // E. Modal Jadwal Sholat Lengkap 5 Waktu (Makkah & WIB)
+    if (!document.getElementById('jadwalSholatModal')) {
+      const jModal = document.createElement('div');
+      jModal.id = 'jadwalSholatModal';
+      jModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      jModal.innerHTML = `
+        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-3 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-10 h-10 rounded-2xl bg-gold-500/10 text-gold-400 flex items-center justify-center border border-gold-500/30 text-lg">
+                🕋
+              </div>
+              <div>
+                <h3 class="font-bold text-base text-gold-400 leading-tight">Jadwal Sholat Fardhu</h3>
+                <p class="text-[11px] text-purple-200/80">Waktu Makkah (WAS) &amp; Indonesia (WIB)</p>
+              </div>
+            </div>
+            <button onclick="window.closeJadwalSholatModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 flex items-center justify-center cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Timezone Switcher Tabs -->
+          <div class="grid grid-cols-2 gap-2 mb-3.5 shrink-0">
+            <button id="tzMakkahBtn" onclick="window.switchJadwalTz('MAKKAH')" class="py-2 px-2.5 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 border border-gold-400 shadow-sm transition-all cursor-pointer text-center flex items-center justify-center gap-1.5">
+              <span>🕋 Makkah (WAS)</span>
+            </button>
+            <button id="tzWibBtn" onclick="window.switchJadwalTz('WIB')" class="py-2 px-2.5 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center flex items-center justify-center gap-1.5">
+              <span>🇮🇩 Jakarta (WIB)</span>
+            </button>
+          </div>
+
+          <!-- Prayer List Container -->
+          <div id="jadwalListContainer" class="flex-1 overflow-y-auto space-y-2 pr-1">
+            <!-- Injected by window.renderJadwalList() -->
+          </div>
+
+          <!-- Sunnah & Doa Adzan Reminder Box -->
+          <div class="mt-3.5 p-3 rounded-2xl bg-black/30 border border-gold-500/20 text-[11px] space-y-1.5 shrink-0">
+            <div class="flex items-center gap-1.5 text-gold-300 font-bold">
+              <i class="fa-solid fa-hands-praying text-xs"></i>
+              <span>Keutamaan Doa Antara Adzan &amp; Iqamah</span>
+            </div>
+            <p class="text-purple-200/80 italic leading-snug">"Doa antara adzan dan iqamah tidak tertolak." (HR. Abu Dawud &amp; Tirmidzi)</p>
+          </div>
+
+          <!-- Footer -->
+          <div class="mt-3.5 pt-3 border-t border-gold-500/20 flex items-center justify-between shrink-0">
+            <button onclick="window.openDoaModal('niat'); window.closeJadwalSholatModal();" class="text-xs font-bold text-gold-300 hover:text-white flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-book-quran"></i>
+              <span>Buka Buku Doa</span>
+            </button>
+            <button onclick="window.closeJadwalSholatModal()" class="px-4 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs hover:brightness-110 transition-colors cursor-pointer">
+              Tutup
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(jModal);
+    }
+
+    // F. Modal Detail Warta & Panduan Manasik
+    if (!document.getElementById('wartaDetailModal')) {
+      const wModal = document.createElement('div');
+      wModal.id = 'wartaDetailModal';
+      wModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-5 transition-opacity';
+      wModal.innerHTML = `
+        <div class="bg-[#240833] rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-gold-500/40 flex flex-col relative text-purple-100 animate-in fade-in zoom-in-95">
+          <!-- Close Button -->
+          <button onclick="window.closeWartaModal()" class="absolute top-3.5 right-3.5 z-20 w-8 h-8 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center backdrop-blur-md transition-colors cursor-pointer" title="Tutup">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+
+          <!-- Banner Image -->
+          <div class="relative aspect-video w-full overflow-hidden bg-black/40 shrink-0 rounded-t-3xl">
+            <img id="wartaModalImg" src="assets/hero-haram.png" alt="Warta Gambar" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#240833] via-transparent to-transparent"></div>
+            <span id="wartaModalBadge" class="absolute bottom-3 left-4 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gold-500 text-slate-950 shadow-md"></span>
+          </div>
+
+          <!-- Body Content -->
+          <div class="p-5 sm:p-6 space-y-3.5 flex-1 overflow-y-auto">
+            <div class="flex items-center gap-2 text-xs text-purple-300/80 font-semibold">
+              <i class="fa-regular fa-calendar"></i>
+              <span id="wartaModalDate"></span>
+              <span>&bull;</span>
+              <span class="text-gold-400 font-bold">SDW UMROH Official</span>
+            </div>
+
+            <h3 id="wartaModalTitle" class="text-base sm:text-lg font-black text-white leading-snug"></h3>
+            
+            <div id="wartaModalContent" class="text-purple-100/90 text-xs sm:text-sm leading-relaxed space-y-3 border-t border-gold-500/20 pt-3">
+              <!-- Injected dynamically -->
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="pt-4 border-t border-gold-500/20 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+              <button onclick="window.closeWartaModal()" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-purple-200 font-bold text-xs transition-colors cursor-pointer text-center">
+                Tutup Bacaan
+              </button>
+              <a id="wartaModalWaBtn" href="https://wa.me/6281234567890?text=Halo%20Admin%20SDW%20Umroh,%20saya%20ingin%20konsultasi%20mengenai%20panduan%20manasik" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+                <span>Tanya Muthawwif (WA)</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(wModal);
+    }
   }
 
   function showPwaPrompt() {
@@ -498,6 +698,110 @@
     if (modal) modal.classList.add('hidden');
   };
 
+  // ==================== JADWAL SHOLAT MODAL CONTROLLERS ====================
+  window.renderJadwalList = function (tz) {
+    activeJadwalTz = tz || activeJadwalTz || 'MAKKAH';
+    const container = document.getElementById('jadwalListContainer');
+    if (!container) return;
+
+    const list = PRAYER_SCHEDULES[activeJadwalTz] || PRAYER_SCHEDULES.MAKKAH;
+    const now = new Date();
+    // Time for comparison
+    const tzDate = activeJadwalTz === 'MAKKAH'
+      ? new Date(now.getTime() - 4 * 3600 * 1000)
+      : now;
+    const currentMins = tzDate.getHours() * 60 + tzDate.getMinutes();
+
+    let nextPrayer = list.find((p) => p.h * 60 + p.m > currentMins);
+    if (!nextPrayer) nextPrayer = list[0];
+
+    container.innerHTML = list.map((item) => {
+      const isNext = item.name === nextPrayer.name;
+      return `
+        <div class="flex items-center justify-between p-2.5 rounded-xl transition-all ${
+          isNext
+            ? 'bg-gold-500/20 border border-gold-500/50 shadow-inner text-white'
+            : 'bg-black/20 border border-white/5 text-purple-200/90'
+        }">
+          <div class="flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-lg ${isNext ? 'bg-gold-500 text-slate-950 font-bold' : 'bg-white/10 text-gold-300'} flex items-center justify-center text-xs">
+              <i class="fa-solid ${item.icon}"></i>
+            </div>
+            <div>
+              <span class="font-bold text-xs ${isNext ? 'text-gold-300 font-extrabold' : 'text-white'}">${item.name}</span>
+              ${isNext ? '<span class="text-[9px] bg-gold-500 text-slate-950 px-1.5 py-0.2 rounded font-black ml-1.5 uppercase">Akan Datang</span>' : ''}
+            </div>
+          </div>
+          <div class="font-mono font-bold text-xs ${isNext ? 'text-amber-300' : 'text-slate-300'}">
+            ${item.time} ${activeJadwalTz === 'MAKKAH' ? 'WAS' : 'WIB'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  window.switchJadwalTz = function (tz) {
+    activeJadwalTz = tz;
+    const makkahBtn = document.getElementById('tzMakkahBtn');
+    const wibBtn = document.getElementById('tzWibBtn');
+
+    if (makkahBtn && wibBtn) {
+      if (tz === 'MAKKAH') {
+        makkahBtn.className = 'py-2 px-2.5 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 border border-gold-400 shadow-sm transition-all cursor-pointer text-center flex items-center justify-center gap-1.5';
+        wibBtn.className = 'py-2 px-2.5 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center flex items-center justify-center gap-1.5';
+      } else {
+        wibBtn.className = 'py-2 px-2.5 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 border border-gold-400 shadow-sm transition-all cursor-pointer text-center flex items-center justify-center gap-1.5';
+        makkahBtn.className = 'py-2 px-2.5 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center flex items-center justify-center gap-1.5';
+      }
+    }
+    window.renderJadwalList(tz);
+  };
+
+  window.openJadwalSholatModal = function (tz) {
+    const modal = document.getElementById('jadwalSholatModal');
+    if (!modal) return;
+    window.switchJadwalTz(tz || 'MAKKAH');
+    modal.classList.remove('hidden');
+  };
+
+  window.closeJadwalSholatModal = function () {
+    const modal = document.getElementById('jadwalSholatModal');
+    if (modal) modal.classList.add('hidden');
+  };
+
+  // ==================== WARTA & PANDUAN MANASIK CONTROLLERS ====================
+  window.openWartaModal = function (articleId) {
+    const modal = document.getElementById('wartaDetailModal');
+    if (!modal) return;
+    const data = SDW_WARTA_DATA[articleId] || SDW_WARTA_DATA['nusuk-pass'];
+
+    const imgEl = document.getElementById('wartaModalImg');
+    const badgeEl = document.getElementById('wartaModalBadge');
+    const dateEl = document.getElementById('wartaModalDate');
+    const titleEl = document.getElementById('wartaModalTitle');
+    const contentEl = document.getElementById('wartaModalContent');
+    const waBtn = document.getElementById('wartaModalWaBtn');
+
+    if (imgEl) imgEl.src = data.image;
+    if (badgeEl) {
+      badgeEl.textContent = data.category;
+      badgeEl.className = `absolute bottom-3 left-4 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${data.badgeClass} shadow-md`;
+    }
+    if (dateEl) dateEl.textContent = data.date;
+    if (titleEl) titleEl.textContent = data.title;
+    if (contentEl) contentEl.innerHTML = data.content;
+    if (waBtn) {
+      waBtn.href = `https://wa.me/6281234567890?text=${encodeURIComponent('Assalamu\'alaikum Muthawwif SDW Umroh, saya ingin bertanya tentang: ' + data.title)}`;
+    }
+
+    modal.classList.remove('hidden');
+  };
+
+  window.closeWartaModal = function () {
+    const modal = document.getElementById('wartaDetailModal');
+    if (modal) modal.classList.add('hidden');
+  };
+
   window.setMobileExperienceMode = function (mode) {
     if (mode === 'app') {
       document.body.classList.add('is-pwa-standalone');
@@ -650,7 +954,7 @@
     });
   };
 
-  // 7. Clock, Haramain Prayer Times & Hijri Calendar
+  // 7. Clock, Haramain Prayer Times & Hijri Calendar with Real-Time Seconds Countdown
   function initPrayerAndClockWidget() {
     function updateClockAndPrayer() {
       const now = new Date();
@@ -665,7 +969,8 @@
       const makkahDate = new Date(now.getTime() - 4 * 3600 * 1000);
       const mHours = String(makkahDate.getHours()).padStart(2, '0');
       const mMins = String(makkahDate.getMinutes()).padStart(2, '0');
-      const clockMakkah = `${mHours}:${mMins} WAS (Makkah)`;
+      const mSecs = String(makkahDate.getSeconds()).padStart(2, '0');
+      const clockMakkah = `${mHours}:${mMins}:${mSecs} WAS (Makkah)`;
 
       const clockEl = document.getElementById('home-digital-clock');
       if (clockEl) clockEl.textContent = clockWib;
@@ -689,26 +994,51 @@
         hijriEl.textContent = '15 Jumadil Ula 1448 H';
       }
 
-      // Waktu Sholat Makkah (Umm al-Qura standard approx)
-      const makkahPrayers = [
-        { name: 'Subuh Makkah', h: 5, m: 2 },
-        { name: 'Terbit', h: 6, m: 18 },
-        { name: 'Zuhur Makkah', h: 12, m: 10 },
-        { name: 'Ashar Makkah', h: 15, m: 25 },
-        { name: 'Maghrib Makkah', h: 17, m: 50 },
-        { name: 'Isya Makkah', h: 19, m: 20 }
-      ];
+      // Waktu Sholat Makkah (Umm al-Qura standard)
+      const makkahPrayers = PRAYER_SCHEDULES.MAKKAH.filter((p) => p.id !== 'imsak' && p.id !== 'syuruq');
 
+      const currentMakkahSecs = makkahDate.getHours() * 3600 + makkahDate.getMinutes() * 60 + makkahDate.getSeconds();
       const currentMakkahMins = makkahDate.getHours() * 60 + makkahDate.getMinutes();
-      let nextP = makkahPrayers.find((p) => p.h * 60 + p.m > currentMakkahMins);
-      if (!nextP) nextP = makkahPrayers[0];
 
-      const prayerNameEl = document.getElementById('home-next-prayer-name');
-      const prayerTimeEl = document.getElementById('home-next-prayer-time');
-      if (prayerNameEl && prayerTimeEl) {
-        prayerNameEl.textContent = nextP.name;
-        prayerTimeEl.textContent = `${String(nextP.h).padStart(2, '0')}:${String(nextP.m).padStart(2, '0')} WAS`;
+      let nextP = makkahPrayers.find((p) => p.h * 60 + p.m > currentMakkahMins);
+      let isNextDay = false;
+      if (!nextP) {
+        nextP = makkahPrayers[0]; // Subuh next day
+        isNextDay = true;
       }
+
+      // Calculate exact seconds countdown
+      let targetSecs = nextP.h * 3600 + nextP.m * 60;
+      if (isNextDay || targetSecs <= currentMakkahSecs) {
+        targetSecs += 24 * 3600;
+      }
+      const diffSecs = Math.max(0, targetSecs - currentMakkahSecs);
+
+      const cHours = Math.floor(diffSecs / 3600);
+      const cMins = Math.floor((diffSecs % 3600) / 60);
+      const cSecs = diffSecs % 60;
+      const countdownStr = `-${String(cHours).padStart(2, '0')}:${String(cMins).padStart(2, '0')}:${String(cSecs).padStart(2, '0')}`;
+
+      // Update widget text elements across app.html and index.html
+      const prayerNameEls = document.querySelectorAll('#home-next-prayer-name');
+      prayerNameEls.forEach((el) => {
+        el.textContent = nextP.name;
+      });
+
+      const prayerTimeEls = document.querySelectorAll('#home-next-prayer-time');
+      prayerTimeEls.forEach((el) => {
+        el.textContent = `${String(nextP.h).padStart(2, '0')}:${String(nextP.m).padStart(2, '0')} WAS`;
+      });
+
+      const countdownPrayerNameEls = document.querySelectorAll('#home-countdown-prayer-name');
+      countdownPrayerNameEls.forEach((el) => {
+        el.textContent = nextP.name.replace(' Makkah', '');
+      });
+
+      const countdownEls = document.querySelectorAll('#home-prayer-countdown');
+      countdownEls.forEach((el) => {
+        el.textContent = countdownStr;
+      });
     }
 
     updateClockAndPrayer();

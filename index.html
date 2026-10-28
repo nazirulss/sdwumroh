@@ -472,7 +472,7 @@
     <!-- =================================================================== -->
     <div id="sdw-mobile-app-section" class="block lg:hidden max-w-xl mx-auto px-3.5 pt-3 pb-2 space-y-3 relative z-30 -mt-6">
         <!-- 1. Widget Waktu Sholat Haramain & Masehi/Hijriah (Compact & Aesthetic) -->
-        <section onclick="window.openDoaModal('niat')" title="Buka Panduan Doa Ibadah"
+        <section onclick="window.openJadwalSholatModal()" title="Buka Jadwal Lengkap Sholat 5 Waktu Makkah &amp; WIB"
             class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#4C1D6B] text-white px-3.5 py-3 rounded-2xl shadow-lg border border-sdw-gold/40 relative overflow-hidden space-y-2 cursor-pointer active:scale-[0.99] transition hover:brightness-105">
             <div class="absolute -right-5 -bottom-5 text-white/5 text-8xl pointer-events-none">
                 <i class="fa-solid fa-kaaba"></i>
@@ -488,7 +488,7 @@
                     </div>
                     <div id="home-makkah-clock"
                         class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded-lg border border-amber-400/20 shadow-inner inline-flex items-center tracking-wide text-[10.5px]">
-                        12:00 WAS (Makkah)
+                        12:00:00 WAS
                     </div>
                 </div>
 
@@ -501,6 +501,21 @@
                         class="font-mono font-bold text-amber-300 bg-black/40 px-2 py-0.5 rounded-lg border border-amber-400/20 shadow-inner inline-flex items-center tracking-wider text-[10.5px]">
                         12:10 WAS
                     </div>
+                </div>
+            </div>
+
+            <!-- Baris Tengah: Real-time Countdown Timer Menuju Sholat -->
+            <div class="flex items-center justify-between bg-black/40 px-2.5 py-1.5 rounded-xl border border-sdw-gold/25 relative z-10 text-[10.5px]">
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+                    <span class="text-slate-200">Menuju <span id="home-countdown-prayer-name" class="font-bold text-amber-300">Zuhur</span>:</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span id="home-prayer-countdown" class="font-mono font-black text-xs text-amber-300 tracking-wider">-00:00:00</span>
+                    <span class="text-[9px] text-sdw-gold font-bold bg-sdw-gold/20 px-1.5 py-0.5 rounded border border-sdw-gold/40 flex items-center gap-0.5">
+                        <span>5 Waktu</span>
+                        <i class="fa-solid fa-chevron-right text-[7px]"></i>
+                    </span>
                 </div>
             </div>
 
@@ -633,6 +648,79 @@
                 <span class="app-banner-dot w-5 h-1.5 rounded-full bg-sdw-gold transition-all duration-300"></span>
                 <span class="app-banner-dot w-1.5 h-1.5 rounded-full bg-slate-300 transition-all duration-300"></span>
                 <span class="app-banner-dot w-1.5 h-1.5 rounded-full bg-slate-300 transition-all duration-300"></span>
+            </div>
+        </section>
+
+        <!-- ==================== WARTA & PANDUAN MANASIK TERKINI (ASNAWIYYAH HEADLINE REFERENCE) ==================== -->
+        <section class="bg-white p-3.5 rounded-2xl border border-sdw-border shadow-xs space-y-2.5">
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-lg bg-purple-50 text-sdw-pine flex items-center justify-center text-xs">
+                        <i class="fa-solid fa-newspaper"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-black text-xs text-sdw-pine leading-tight">Warta &amp; Panduan Manasik</h3>
+                        <p class="text-[9.5px] text-sdw-muted">Regulasi Nusuk &amp; Fiqih Ibadah Haramain 1448H</p>
+                    </div>
+                </div>
+                <button type="button" onclick="window.openWartaModal('nusuk-pass')" class="text-[10px] font-extrabold text-sdw-pine hover:text-sdw-pineLight flex items-center gap-1 cursor-pointer">
+                    <span>Lihat</span>
+                    <i class="fa-solid fa-arrow-right text-[8px]"></i>
+                </button>
+            </div>
+
+            <!-- 3 Article Cards -->
+            <div class="space-y-2">
+                <!-- Item 1: Nusuk -->
+                <div onclick="window.openWartaModal('nusuk-pass')" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 border border-slate-100/80 transition-all cursor-pointer group active:scale-[0.99]">
+                    <img src="assets/hero-haram.png" alt="Aturan Nusuk" class="w-16 h-14 rounded-lg object-cover shrink-0 border border-slate-200">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="px-1.5 py-0.2 rounded bg-amber-100 text-amber-900 font-extrabold text-[8px] tracking-wider uppercase">REGULASI NUSUK</span>
+                            <span class="text-[9px] text-slate-400 flex items-center gap-0.5">
+                                <i class="fa-regular fa-eye text-[8px]"></i> 348
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-[11px] text-sdw-charcoal group-hover:text-sdw-pine line-clamp-2 leading-tight transition-colors">
+                            Aturan Baru Tasreh Raudhah &amp; Jadwal Khusus Jamaah Pria/Wanita
+                        </h4>
+                        <span class="text-[9px] text-slate-400 mt-0.5 block">28 Okt 2026 &bull; Kementerian Haji Saudi</span>
+                    </div>
+                </div>
+
+                <!-- Item 2: Miqat -->
+                <div onclick="window.openWartaModal('panduan-miqat')" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 border border-slate-100/80 transition-all cursor-pointer group active:scale-[0.99]">
+                    <img src="assets/pkg-vip-khidmat.png" alt="Panduan Miqat" class="w-16 h-14 rounded-lg object-cover shrink-0 border border-slate-200">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="px-1.5 py-0.2 rounded bg-purple-100 text-purple-900 font-extrabold text-[8px] tracking-wider uppercase">PANDUAN SUNNAH</span>
+                            <span class="text-[9px] text-slate-400 flex items-center gap-0.5">
+                                <i class="fa-regular fa-eye text-[8px]"></i> 521
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-[11px] text-sdw-charcoal group-hover:text-sdw-pine line-clamp-2 leading-tight transition-colors">
+                            Tata Cara Miqat Yalamlam di Udara: Niat, Doa, &amp; Larangan Kain Ihram
+                        </h4>
+                        <span class="text-[9px] text-slate-400 mt-0.5 block">25 Okt 2026 &bull; Tim Muthawwif Madinah</span>
+                    </div>
+                </div>
+
+                <!-- Item 3: Manasik Akbar -->
+                <div onclick="window.openWartaModal('manasik-akbar')" class="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 border border-slate-100/80 transition-all cursor-pointer group active:scale-[0.99]">
+                    <img src="assets/hero-twilight.jpg" alt="Manasik Akbar" class="w-16 h-14 rounded-lg object-cover shrink-0 border border-slate-200">
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-1.5 mb-0.5">
+                            <span class="px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 font-extrabold text-[8px] tracking-wider uppercase">AGENDA KLOTER</span>
+                            <span class="text-[9px] text-slate-400 flex items-center gap-0.5">
+                                <i class="fa-regular fa-eye text-[8px]"></i> 415
+                            </span>
+                        </div>
+                        <h4 class="font-bold text-[11px] text-sdw-charcoal group-hover:text-sdw-pine line-clamp-2 leading-tight transition-colors">
+                            Manasik Akbar &amp; Pembagian Koper Swissotel Kloter 15 Jan
+                        </h4>
+                        <span class="text-[9px] text-slate-400 mt-0.5 block">22 Okt 2026 &bull; Hotel Bintang Wisata Mandiri</span>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
