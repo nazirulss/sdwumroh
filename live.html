@@ -63,7 +63,10 @@
             height: 100%;
             border: 0;
             border-radius: 14px;
-            display: block;
+        }
+        .mlh-video-container video.hidden,
+        .mlh-video-container iframe.hidden {
+            display: none !important;
         }
         .mlh-tab-btn {
             padding: 9px 16px;
@@ -338,10 +341,10 @@
             <!-- Responsive Video Player Container (16:9 Aspect Ratio Tetap & Anti-Collapsing) -->
             <div class="mlh-video-container" id="mlhVideoWrapper">
                 <!-- 1. Iframe YouTube (Strict-Origin Referrer Policy ala The Islamic Information) -->
-                <iframe id="mlhIframe" src="https://www.youtube.com/embed/eC4LfEVxvKg?rel=0" title="Makkah Live Stream from Masjid al-Haram" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                <iframe id="mlhIframe" src="https://www.youtube.com/embed/eC4LfEVxvKg?rel=0" title="Makkah Live Stream from Masjid al-Haram" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="display: block;"></iframe>
 
                 <!-- 2. Video Satelit HLS Asli (Muncul saat memilih tab Satelit) -->
-                <video id="hlsLivePlayer" controls playsinline class="hidden"></video>
+                <video id="hlsLivePlayer" controls playsinline class="hidden" style="display: none;"></video>
             </div>
 
             <!-- Multi-Stream Source Tabs (Persis Tombol Rounded Pills The Islamic Information) -->
@@ -716,10 +719,12 @@
             if (stream.isHls) {
                 // Sembunyikan Iframe, jalankan Player HLS
                 if (iframeEl) {
+                    iframeEl.style.display = 'none';
                     iframeEl.classList.add('hidden');
                     iframeEl.src = '';
                 }
                 if (videoEl) {
+                    videoEl.style.display = 'block';
                     videoEl.classList.remove('hidden');
                     playHlsStream(stream.hlsUrl);
                 }
@@ -732,6 +737,7 @@
                 }
                 if (videoEl) {
                     videoEl.pause();
+                    videoEl.style.display = 'none';
                     videoEl.classList.add('hidden');
                 }
 
@@ -740,9 +746,13 @@
                 const activeId = customYtId || stream.id;
 
                 if (iframeEl) {
+                    iframeEl.style.display = 'block';
                     iframeEl.classList.remove('hidden');
                     // Menggunakan format persis The Islamic Information dengan rel=0 dan strict-origin-when-cross-origin
-                    iframeEl.src = `https://www.youtube.com/embed/${activeId}?autoplay=1&rel=0`;
+                    const targetSrc = `https://www.youtube.com/embed/${activeId}?autoplay=1&rel=0`;
+                    if (iframeEl.src !== targetSrc) {
+                        iframeEl.src = targetSrc;
+                    }
                 }
 
                 if (ytBtn) {

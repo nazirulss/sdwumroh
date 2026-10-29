@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v17';
+const CACHE_NAME = 'sdw-umroh-pwa-v18';
 
 const PRECACHE_URLS = [
   '/',
