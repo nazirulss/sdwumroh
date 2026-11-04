@@ -3,22 +3,21 @@
   "cleanUrls": true,
   "redirects": [
     {
-      "source": "/admin",
-      "destination": "/app",
-      "permanent": false
-    },
-    {
       "source": "/jamaah",
       "destination": "/app",
       "permanent": false
     },
     {
       "source": "/backoffice",
-      "destination": "/app",
+      "destination": "/admin",
       "permanent": false
     }
   ],
   "rewrites": [
+    {
+      "source": "/admin",
+      "destination": "/admin.html"
+    },
     {
       "source": "/app",
       "destination": "/app.html"

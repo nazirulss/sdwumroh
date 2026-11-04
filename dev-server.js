@@ -28,11 +28,11 @@ const server = http.createServer((req, res) => {
   // Clean routing matching vercel.json
   if (reqPath === '/' || reqPath === '') {
     reqPath = '/index.html';
+  } else if (reqPath === '/admin' || reqPath === '/backoffice') {
+    reqPath = '/admin.html';
   } else if (
     reqPath === '/app' ||
-    reqPath === '/admin' ||
     reqPath === '/jamaah' ||
-    reqPath === '/backoffice' ||
     reqPath.startsWith('/app/')
   ) {
     reqPath = '/app.html';

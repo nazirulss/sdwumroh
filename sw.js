@@ -1,8 +1,9 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v18';
+const CACHE_NAME = 'sdw-umroh-pwa-v19';
 
 const PRECACHE_URLS = [
   '/',
   '/index.html',
+  '/admin.html',
   '/paket.html',
   '/hotel.html',
   '/koper.html',
@@ -22,6 +23,7 @@ const PRECACHE_URLS = [
   '/assets/icon-192.png',
   '/assets/icon-512.png',
   '/js/pwa.js',
+  '/js/admin-core.js',
   '/js/berita-kalender.js'
 ];
 
