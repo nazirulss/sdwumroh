@@ -1,0 +1,3170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SDW UMROH — One Journey, One Platform</title>
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Amiri for Arabic/Islamic elegance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sdw: {
+              pine: '#0F3D2E',        /* Primary Deep Pine */
+              pineLight: '#185340',   /* Secondary Pine */
+              emerald: '#165B44',     /* Accent Emerald */
+              gold: '#C5A059',        /* Warm Gold */
+              goldLight: '#F5EEDB',   /* Soft Gold Background */
+              sand: '#F8F7F4',        /* Warm Off-White / Sand */
+              surface: '#FFFFFF',     /* Pure White Card Surface */
+              charcoal: '#1A1C1E',    /* Body Text Dark */
+              muted: '#64748B',       /* Subtle Label Slate */
+              border: '#E2E8F0',      /* Border Tone */
+              badgeBg: '#EDF4F0'      /* Gentle Pine Tint */
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            arabic: ['Amiri', 'serif']
+          },
+          boxShadow: {
+            'soft': '0 2px 12px -2px rgba(15, 61, 46, 0.06), 0 1px 4px -1px rgba(0, 0, 0, 0.04)',
+            'card': '0 4px 20px -3px rgba(15, 61, 46, 0.08)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar & Micro-transitions */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    
+    .status-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+    
+    /* Touch friendly tap highlights */
+    * { -webkit-tap-highlight-color: transparent; }
+    
+    /* Smooth tab switching transition */
+    .fade-in { animation: fadeIn 0.22s ease-in-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Audit 21 — C3: sembunyikan scrollbar pada strip horizontal
+       (kelas dipakai di strip nav mobile tapi belum pernah didefinisikan) */
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+
+    /* Audit 21 — C6: hormati preferensi reduced-motion pengguna */
+    @media (prefers-reduced-motion: reduce) {
+      .status-pulse, .fade-in { animation: none; }
+      .status-pulse { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-sdw-sand text-sdw-charcoal min-h-screen flex flex-col font-sans antialiased selection:bg-sdw-goldLight selection:text-sdw-pine overflow-x-hidden">
+
+  <!-- GLOBAL APPLICATION SHELL HEADER -->
+  <header class="bg-sdw-pine text-white sticky top-0 z-50 border-b border-sdw-emerald shadow-sm w-full max-w-full">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+      <div class="h-16 flex items-center justify-between gap-1 sm:gap-4">
+        
+        <!-- Brand identity -->
+        <div class="flex items-center space-x-2 sm:space-x-3 cursor-pointer shrink-0" onclick="switchSurface('PUBLIC')">
+          <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-sdw-emerald border border-sdw-gold/40 flex items-center justify-center font-extrabold text-sdw-gold text-sm sm:text-base tracking-wider shadow-inner">
+            SDW
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center space-x-1.5 sm:space-x-2">
+              <span class="font-extrabold text-sm sm:text-base tracking-tight leading-none text-white whitespace-nowrap">SDW UMROH</span>
+              <span class="hidden sm:inline-block text-[9px] font-bold tracking-wider uppercase bg-sdw-gold/20 text-sdw-gold border border-sdw-gold/30 px-1.5 py-0.5 rounded-full">
+                Step 1A.1 Hardened
+              </span>
+            </div>
+            <p class="hidden sm:block text-[10px] text-emerald-200/80 font-medium tracking-wide">ONE JOURNEY, ONE PLATFORM</p>
+          </div>
+        </div>
+
+        <!-- Surface Switcher Tabs (Desktop: lg and above, 1024px+) -->
+        <nav class="hidden lg:flex items-center bg-black/25 p-1 rounded-xl border border-white/10 text-xs font-semibold shrink-0" aria-label="Surface Navigation">
+          <button id="nav-PUBLIC" onclick="switchSurface('PUBLIC')" class="px-2.5 py-1.5 rounded-lg transition-all text-white bg-sdw-emerald shadow-sm flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+            <span>Public Web</span>
+          </button>
+          <button id="nav-PILGRIM" onclick="switchSurface('PILGRIM')" class="px-2.5 py-1.5 rounded-lg transition-all text-slate-300 hover:text-white flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+            <span>Jamaah (PWA)</span>
+          </button>
+          <button id="nav-PARTNER" onclick="switchSurface('PARTNER')" class="px-2.5 py-1.5 rounded-lg transition-all text-slate-300 hover:text-white flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <span>Mitra Partner</span>
+          </button>
+          <button id="nav-BACKOFFICE" onclick="switchSurface('BACKOFFICE')" class="px-2.5 py-1.5 rounded-lg transition-all text-slate-300 hover:text-white flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <span>Backoffice</span>
+          </button>
+          <button id="nav-FOUNDATION" onclick="switchSurface('FOUNDATION')" class="px-2.5 py-1.5 rounded-lg transition-all text-sdw-gold hover:text-white flex items-center space-x-1.5">
+            <svg class="w-3.5 h-3.5 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            <span>Diagnostic</span>
+          </button>
+        </nav>
+
+        <!-- Right Side: Role Selector & Mode Badge -->
+        <div class="flex items-center space-x-1 sm:space-x-2 shrink-0">
+          <!-- Role Selector -->
+          <div class="flex items-center text-xs bg-black/30 border border-white/10 rounded-lg px-1.5 sm:px-2.5 py-1 max-w-[105px] sm:max-w-none">
+            <span class="text-emerald-300 mr-1 hidden md:inline text-[11px]">Role:</span>
+            <select id="roleSelector" onchange="handleRoleChange(this.value)" aria-label="Pilih Role Simulasi" class="bg-transparent text-white font-semibold text-[10px] sm:text-xs focus:outline-none cursor-pointer truncate max-w-[90px] sm:max-w-none">
+              <option value="VISITOR" class="text-slate-900">Visitor (Calon Jamaah)</option>
+              <option value="PILGRIM" class="text-slate-900">Pilgrim (Jamaah Aktif)</option>
+              <option value="PARTNER" class="text-slate-900">Mitra / Agen</option>
+              <option value="SALES" class="text-slate-900">Sales Consultant</option>
+              <option value="DOCUMENT_OFFICER" class="text-slate-900">Document Officer</option>
+              <option value="FINANCE" class="text-slate-900">Finance Officer</option>
+              <option value="OPERATIONS" class="text-slate-900">Operations Staf</option>
+              <option value="ADMIN" class="text-slate-900">Administrator</option>
+            </select>
+          </div>
+
+          <!-- Connection Mode Pill -->
+          <div id="connBadge" onclick="switchSurface('FOUNDATION')" title="Klik untuk membuka diagnostik backend" class="cursor-pointer flex items-center space-x-1 sm:space-x-1.5 px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-semibold bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 shrink-0">
+            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-400 status-pulse shrink-0"></span>
+            <span id="connBadgeText" class="hidden sm:inline">SIMULATED / DEMO</span>
+            <span class="sm:hidden font-mono text-[9px] font-bold">DEMO</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Mobile & Tablet Surface Navigation Strip (Active for screens < lg, i.e. < 1024px) -->
+    <div class="lg:hidden flex items-center justify-start sm:justify-center bg-sdw-pineLight border-t border-sdw-emerald text-xs font-medium py-1 px-2 overflow-x-auto space-x-1 no-scrollbar w-full max-w-full">
+      <button onclick="switchSurface('PUBLIC')" id="mobnav-PUBLIC" class="py-1.5 px-3 rounded-lg font-bold text-white bg-sdw-emerald whitespace-nowrap min-h-[36px] flex items-center">Public Web</button>
+      <button onclick="switchSurface('PILGRIM')" id="mobnav-PILGRIM" class="py-1.5 px-3 rounded-lg text-emerald-200 hover:text-white whitespace-nowrap min-h-[36px] flex items-center">Jamaah (PWA)</button>
+      <button onclick="switchSurface('PARTNER')" id="mobnav-PARTNER" class="py-1.5 px-3 rounded-lg text-emerald-200 hover:text-white whitespace-nowrap min-h-[36px] flex items-center">Mitra Partner</button>
+      <button onclick="switchSurface('BACKOFFICE')" id="mobnav-BACKOFFICE" class="py-1.5 px-3 rounded-lg text-emerald-200 hover:text-white whitespace-nowrap min-h-[36px] flex items-center">Backoffice</button>
+      <button onclick="switchSurface('FOUNDATION')" id="mobnav-FOUNDATION" class="py-1.5 px-3 rounded-lg text-sdw-gold hover:text-white whitespace-nowrap min-h-[36px] flex items-center">Diagnostic</button>
+    </div>
+  </header>
+
+  <main id="mainViewport" class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Dynamic Surface Views will be injected here -->
+  </main>
+
+  <!-- Contextual Notification Toast (No browser alert) -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 pointer-events-none transition-all duration-300"></div>
+
+  <!-- Reusable Action Modal Overlay -->
+  <div id="actionModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="handleModalBackdropClick(event)" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <!-- Audit 21 — C4: batasi tinggi modal agar form panjang tetap terjangkau di layar pendek -->
+    <div onclick="event.stopPropagation()" class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-100 space-y-4 fade-in">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <h3 id="modalTitle" class="font-bold text-base text-slate-900">Aksi Prototype</h3>
+        <button onclick="closeModal()" aria-label="Tutup Modal" class="text-slate-400 hover:text-slate-600 text-lg leading-none p-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-sdw-pine">&times;</button>
+      </div>
+      <div id="modalBody" class="text-xs text-slate-600 space-y-3 leading-relaxed">
+        <!-- Injected Content -->
+      </div>
+      <div class="pt-3 border-t border-slate-100 flex justify-end space-x-2" id="modalActions">
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-6 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+      <div>
+        <span class="font-semibold text-sdw-pine">SDW UMROH</span> &mdash; ONE JOURNEY, ONE PLATFORM
+        <span class="text-slate-400 ml-2">&bull; Prototype Frontend Step 1A</span>
+      </div>
+      <div class="flex items-center space-x-3 text-[11px] text-slate-400">
+        <span>Kepatuhan Spesifikasi 00–19</span>
+        <span>&bull;</span>
+        <button onclick="switchSurface('FOUNDATION')" class="text-sdw-emerald hover:underline font-medium">Buka Diagnostic Console</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ========================================================================
+       1. CENTRALIZED APPLICATION STATE (State Machine & Navigation Store)
+       ======================================================================== */
+    const appState = {
+      surface: 'PUBLIC', // 'PUBLIC' | 'PILGRIM' | 'PARTNER' | 'BACKOFFICE' | 'FOUNDATION'
+      role: 'VISITOR',    // 'VISITOR' | 'PILGRIM' | 'PARTNER' | 'SALES' | 'DOCUMENT_OFFICER' | 'FINANCE' | 'OPERATIONS' | 'ADMIN'
+      bridgeMode: 'MOCK', // 'MOCK' (Simulated) | 'GAS' (Google Apps Script Runtime)
+      
+      // UI Sub-routes
+      pilgrimTab: 'OVERVIEW',       // 'OVERVIEW' | 'DOCUMENTS' | 'PAYMENT' | 'PREPARATION' | 'MANASIK'
+      backofficeTab: 'LEADS',       // 'LEADS' | 'REGISTRATIONS' | 'DOCUMENTS' | 'DEPARTURES'
+      
+      // Public 5W+1H States
+      publicCategory: 'ALL',        // 'ALL' | 'REGULER' | 'VIP' | 'PLUS_TOUR' | 'RAMADHAN' | 'HEMAT'
+      estimator: {
+        packageId: 'PKG-000001',
+        roomType: 'QUAD',           // 'QUAD' (+0) | 'TRIPLE' (+1500000) | 'DOUBLE' (+3000000)
+        paxCount: 2
+      },
+
+      // Viewport State Simulation Toggles
+      viewState: 'SUCCESS',         // 'SUCCESS' | 'EMPTY' | 'ERROR' | 'LOADING'
+      
+      // Diagnostic Store (from Step 1)
+      diagnostic: {
+        isRunning: false,
+        latencyMs: 0,
+        logs: []
+      }
+    };
+
+    /* ========================================================================
+       2. MOCK DATA CONFORMING TO SPREADSHEET_SCHEMA.md (Fictional Demo Data)
+       ======================================================================== */
+    const MOCK_DATA = {
+      packages: [
+        {
+          id: 'PKG-000001',
+          name: 'Umroh Reguler Syawal Barakah',
+          slug: 'umroh-reguler-syawal',
+          image: 'assets/pkg-reguler-syawal.png',
+          package_type: 'REGULER',
+          duration_days: 9,
+          status: 'PUBLISHED',
+          description: 'Perjalanan ibadah penuh kekhusyukan dengan bimbingan asatidz berpengalaman, hotel bintang 4 dekat pelataran masjid.',
+          starting_price: 29500000,
+          currency: 'IDR',
+          hotel_makkah: 'Retaj Al Rayyan / Setaraf (350m)',
+          hotel_madinah: 'Concorde Dar Al Khair (200m)',
+          airline: 'Saudia Airlines (Direct SV)',
+          rating: '4.9/5 (182 ulasan simulasi)'
+        },
+        {
+          id: 'PKG-000002',
+          name: 'Umroh VIP Khidmat Akhir Tahun',
+          slug: 'umroh-vip-akhir-tahun',
+          image: 'assets/pkg-vip-khidmat.png',
+          package_type: 'VIP',
+          duration_days: 12,
+          status: 'PUBLISHED',
+          description: 'Akomodasi bintang 5 di pelataran Ka\'bah (Clock Tower), kereta cepat Haramain High Speed Rail Makkah–Madinah.',
+          starting_price: 43500000,
+          currency: 'IDR',
+          hotel_makkah: 'Swissotel Makkah Clock Tower (0m)',
+          hotel_madinah: 'Dar Al Taqwa Madinah (50m)',
+          airline: 'Garuda Indonesia (GA980)',
+          rating: '5.0/5 (94 ulasan simulasi)'
+        },
+        {
+          id: 'PKG-000003',
+          name: 'Umroh Plus Turki Musim Semi',
+          slug: 'umroh-plus-turki-spring',
+          image: 'assets/pkg-plus-turki.png',
+          package_type: 'PLUS_TOUR',
+          duration_days: 13,
+          status: 'PUBLISHED',
+          description: 'Ziarah jejak peradaban Utsmaniyah di Istanbul, Selat Bosphorus, dilanjutkan manasik intensif dan ibadah di dua Tanah Suci.',
+          starting_price: 38900000,
+          currency: 'IDR',
+          hotel_makkah: 'Anjum Hotel Makkah',
+          hotel_madinah: 'Rove Al Madinah',
+          airline: 'Turkish Airlines',
+          rating: '4.8/5 (65 ulasan simulasi)'
+        },
+        {
+          id: 'PKG-000004',
+          name: 'Umroh Awal Ramadhan 1448H',
+          slug: 'umroh-ramadhan-awal',
+          image: 'assets/pkg-ramadhan.png',
+          package_type: 'RAMADHAN',
+          duration_days: 10,
+          status: 'PUBLISHED',
+          description: 'Meraih keutamaan pahala haji bersama Rasulullah dengan tarawih di Masjidil Haram pada fase awal bulan suci.',
+          starting_price: 36500000,
+          currency: 'IDR',
+          hotel_makkah: 'Pullman Zamzam Makkah',
+          hotel_madinah: 'Grand Plaza Madinah',
+          airline: 'Saudia Airlines',
+          rating: '4.9/5 (120 ulasan simulasi)'
+        },
+        {
+          id: 'PKG-000005',
+          name: 'Umroh Syariah Bintang Tiga Hemat',
+          slug: 'umroh-hemat-syariah',
+          image: 'assets/pkg-hemat.png',
+          package_type: 'HEMAT',
+          duration_days: 9,
+          status: 'PUBLISHED',
+          description: 'Program umroh ekonomis mengutamakan kenyamanan esensial, bus full AC dan bimbingan ibadah terstruktur.',
+          starting_price: 26800000,
+          currency: 'IDR',
+          hotel_makkah: 'Olayan Ajyad (600m Shuttle)',
+          hotel_madinah: 'Durrat Al Eiman',
+          airline: 'Lion Air Umrah Direct',
+          rating: '4.7/5 (210 ulasan simulasi)'
+        }
+      ],
+
+      // Asatidz & Pembimbing Ibadah (WHO Section — 5W+1H)
+      asatidz: [
+        {
+          id: 'AST-01',
+          name: 'Ustadz DR. H. Muhammad Salman, Lc., M.A.',
+          role: 'Pembimbing Fiqih & Rukun Ibadah',
+          sanad: 'Al-Azhar Kairo • Sanad Fiqih Manasik',
+          experience: '14 Tahun Berpengalaman',
+          desc: 'Membimbing rukun ihram, thawaf, sai, dan tahallul dengan ketelitian dalil shahih dan kesabaran tinggi.'
+        },
+        {
+          id: 'AST-02',
+          name: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+          role: 'Muthawwif & Tour Leader Utama',
+          sanad: 'Universitas Islam Madinah (UIM)',
+          experience: '10 Tahun Menetap di Haramain',
+          desc: 'Pemandu ziarah napak tilas sejarah Perang Uhud, Masjid Quba, Jabal Tsur, dan sirah Nabawiyah.'
+        },
+        {
+          id: 'AST-03',
+          name: 'Ustadzah Hj. Fatimah Azzahra, Lc.',
+          role: 'Pembimbing Ibadah Jamaah Wanita',
+          sanad: 'Ummul Qura Makkah • Fiqih Nisa',
+          experience: '8 Tahun Pendampingan Khusus',
+          desc: 'Membimbing adab ibadah muslimah di Raudhah Syarifah, fiqih thaharah wanita, dan asistensi lansia.'
+        }
+      ],
+
+      departures: [
+        {
+          id: 'DEP-000001',
+          package_id: 'PKG-000001',
+          departure_date: '15 Jan 2027',
+          return_date: '23 Jan 2027',
+          airline: 'Saudia SV819',
+          origin_airport: 'CGK (Soekarno-Hatta Jakarta)',
+          capacity_total: 45,
+          capacity_booked: 38,
+          status: 'OPEN'
+        },
+        {
+          id: 'DEP-000002',
+          package_id: 'PKG-000002',
+          departure_date: '28 Feb 2027',
+          return_date: '11 Mar 2027',
+          airline: 'Garuda GA980',
+          origin_airport: 'CGK (Soekarno-Hatta Jakarta)',
+          capacity_total: 35,
+          capacity_booked: 35,
+          status: 'FULL'
+        },
+        {
+          id: 'DEP-000003',
+          package_id: 'PKG-000003',
+          departure_date: '18 Apr 2027',
+          return_date: '30 Apr 2027',
+          airline: 'Turkish TK57',
+          origin_airport: 'SUB (Juanda Surabaya)',
+          capacity_total: 40,
+          capacity_booked: 22,
+          status: 'OPEN'
+        },
+        {
+          id: 'DEP-000004',
+          package_id: 'PKG-000004',
+          departure_date: '02 Mar 2027',
+          return_date: '12 Mar 2027',
+          airline: 'Saudia SV825',
+          origin_airport: 'CGK (Soekarno-Hatta Jakarta)',
+          capacity_total: 45,
+          capacity_booked: 41,
+          status: 'OPEN'
+        },
+        {
+          id: 'DEP-000005',
+          package_id: 'PKG-000005',
+          departure_date: '20 Mei 2027',
+          return_date: '28 Mei 2027',
+          airline: 'Lion Air JT112',
+          origin_airport: 'KNO (Kualanamu Medan)',
+          capacity_total: 50,
+          capacity_booked: 14,
+          status: 'OPEN'
+        }
+      ],
+
+      // Active Pilgrim Profile (Explicit Fictional Demo Entity)
+      currentPilgrim: {
+        id: 'CUS-DEMO-001',
+        full_name: 'Ahmad Demo Jamaah',
+        phone: '0812-0000-0001',
+        email: 'ahmad.demo@example.test',
+        registration_id: 'REG-DEMO-001',
+        package_name: 'Umroh Reguler Syawal Barakah',
+        duration_days: 9,
+        departure_date: '15 Januari 2027',
+        flight_info: 'Saudia Airlines SV-819 (Direct CGK–JED)',
+        room_type: 'Double (Berdua)',
+        current_stage: 'Persiapan',
+        registration_status: 'CONFIRMED',
+        // Commercial Snapshot (Immutable rule)
+        agreed_price_snapshot: 34500000,
+        discount_snapshot: 1000000,
+        final_price_snapshot: 33500000
+      },
+
+      // Document Requirements & Pilgrim Document Records (Simulated references)
+      pilgrimDocuments: [
+        {
+          id: 'DOC-000001',
+          code: 'PASSPORT',
+          title: 'Paspor RI (Masa Berlaku Min. 7 Bulan)',
+          is_mandatory: true,
+          status: 'REVISION_REQUIRED',
+          file_name: 'paspor_ahmad_demo_scan.jpg',
+          review_notes: 'Foto paspor demo terpotong pada bagian MRZ barcode bawah. Harap upload ulang scan halaman data diri secara utuh.',
+          updated_at: '2 jam yang lalu'
+        },
+        {
+          id: 'DOC-000002',
+          code: 'KTP',
+          title: 'Kartu Tanda Penduduk (e-KTP)',
+          is_mandatory: true,
+          status: 'VERIFIED',
+          file_name: 'ktp_ahmad_demo_clear.pdf',
+          review_notes: 'KTP demo telah divalidasi sesuai data dummy kependudukan.',
+          updated_at: 'Kemarin, 14:20'
+        },
+        {
+          id: 'DOC-000003',
+          code: 'PHOTO',
+          title: 'Pas Foto Latar Putih (4x6)',
+          is_mandatory: true,
+          status: 'UNDER_REVIEW',
+          file_name: 'pasfoto_demo_white_bg.jpg',
+          review_notes: 'Sedang dalam antrean verifikasi staf dokumen (Simulasi).',
+          updated_at: '3 hari yang lalu'
+        },
+        {
+          id: 'DOC-000004',
+          code: 'BUKU_NIKAH',
+          title: 'Buku Nikah / Akta Lahir (Bila Suami-Istri)',
+          is_mandatory: true,
+          status: 'VERIFIED',
+          file_name: 'buku_nikah_demo_scan.pdf',
+          review_notes: 'Tervalidasi (Simulasi).',
+          updated_at: '5 hari yang lalu'
+        },
+        {
+          id: 'DOC-000005',
+          code: 'VAKSIN_MENINGITIS',
+          title: 'Sertifikat Vaksin Meningitis (ICV)',
+          is_mandatory: false,
+          status: 'NOT_UPLOADED',
+          file_name: null,
+          review_notes: 'Wajib diserahkan maksimal H-20 keberangkatan.',
+          updated_at: '-'
+        }
+      ],
+
+      // Payment & Invoice Data (Authoritative base for computed paid & outstanding)
+      invoice: {
+        id: 'INV-DEMO-001',
+        registration_id: 'REG-DEMO-001',
+        invoice_number: 'INV/2026/SDW-DEMO-001',
+        total_amount: 33500000,
+        due_date: '25 Desember 2026',
+        status: 'PARTIAL',
+        schedules: [
+          { term: 1, title: 'Uang Muka (DP Booking Seat)', amount: 15000000, due_date: '01 Nov 2026', status: 'PAID' },
+          { term: 2, title: 'Pelunasan Biaya & Perlengkapan', amount: 18500000, due_date: '25 Des 2026', status: 'PENDING' }
+        ],
+        // Authoritative payments record list
+        payments: [
+          { id: 'PAY-DEMO-001', amount: 15000000, method: 'Bank Transfer (BSI Syariah Demo)', ref: 'REF-DEMO-TX9901', date: '01 Nov 2026', status: 'VERIFIED' }
+        ]
+      },
+
+      // Preparation Milestones
+      preparationItems: [
+        { id: 'PRP-01', category: 'Administrasi', item_name: 'Registrasi & Akad Umroh', status: 'COMPLETED', notes: 'Akad digital disetujui (Simulasi).' },
+        { id: 'PRP-02', category: 'Dokumen', item_name: 'Kelengkapan Berkas & Paspor', status: 'IN_PROGRESS', notes: '1 dokumen revisi dibutuhkan.' },
+        { id: 'PRP-03', category: 'Pembayaran', item_name: 'Pelunasan Biaya Paket', status: 'IN_PROGRESS', notes: 'Sisa tagihan menunggu pelunasan termin 2.' },
+        { id: 'PRP-04', category: 'Perlengkapan', item_name: 'Koper, Kain Ihram & Seragam Batik', status: 'NOT_STARTED', notes: 'Distribusi dijadwalkan saat Manasik 2.' },
+        { id: 'PRP-05', category: 'Manasik', item_name: 'Bimbingan Teori & Praktik Thawaf', status: 'IN_PROGRESS', notes: 'Sesi 1 tuntas, Sesi 2 dijadwalkan.' },
+        { id: 'PRP-06', category: 'Keberangkatan', item_name: 'Briefing Bandara & Penyerahan Paspor Asli', status: 'NOT_STARTED', notes: 'H-1 keberangkatan di Terminal 3 Soetta.' }
+      ],
+
+      // Next Manasik Event (Fictional Instructor)
+      nextManasik: {
+        id: 'MAN-000002',
+        session_title: 'Manasik Praktik Tawaf, Sai, & Ziarah Napak Tilas',
+        scheduled_at: 'Sabtu, 12 Desember 2026 &bull; 08:30 - 12:00 WIB',
+        location: 'Asrama Haji Pondok Gede / Miniatur Ka\'bah Jakarta Timur',
+        muthawwif: 'Ustadz Pembimbing Demo, Lc.',
+        status: 'SCHEDULED',
+        notes: 'Membawa kain ihram bagi ikhwan & sandal cadangan.'
+      },
+
+      // Backoffice Operational Feed
+      backofficeAlerts: [
+        { level: 'WARNING', title: 'Perbaikan Paspor Jamaah', desc: 'Ahmad Demo Jamaah (REG-DEMO-001) diminta re-upload foto paspor.', time: '10 menit lalu' },
+        { level: 'INFO', title: 'Jatuh Tempo Pembayaran', desc: '14 Jamaah Kloter 15 Jan (Simulasi) memiliki invoice jatuh tempo minggu ini.', time: '1 jam lalu' },
+        { level: 'CRITICAL', title: 'Batas Konfirmasi Rooming', desc: 'Hotel Swissotel Clock Tower meminta manifest rooming H-30 (Simulasi).', time: '3 jam lalu' }
+      ],
+
+      // Fictional Demo Leads (No real personal identifiers)
+      leads: [
+        { id: 'LED-DEMO-001', name: 'Calon Jamaah Demo 01', phone: '0812-0000-0101', package: 'Umroh VIP Akhir Tahun', urgency: 'HIGH', budget: 'Rp 40jt-50jt', status: 'PROPOSAL', owner: 'Staf Sales Demo A' },
+        { id: 'LED-DEMO-002', name: 'Calon Jamaah Demo 02', phone: '0813-0000-0102', package: 'Umroh Reguler Syawal', urgency: 'MEDIUM', budget: 'Rp 28jt-32jt', status: 'CONSULTATION', owner: 'Staf Sales Demo B' },
+        { id: 'LED-DEMO-003', name: 'Keluarga Demo 03 (4 Jamaah)', phone: '0856-0000-0103', package: 'Umroh Plus Turki', urgency: 'HIGH', budget: 'Rp 150jt Total', status: 'QUALIFIED', owner: 'Staf Sales Demo A' },
+        { id: 'LED-DEMO-004', name: 'Calon Jamaah Demo 04', phone: '0818-0000-0104', package: 'Umroh Awal Ramadhan', urgency: 'LOW', budget: 'Rp 35jt', status: 'NEW', owner: 'Belum Ditugaskan' }
+      ],
+
+      // Fictional Demo Registrations
+      registrations: [
+        { id: 'REG-DEMO-001', customer: 'Ahmad Demo Jamaah', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/5', payment: 'Rp 15jt / 33.5jt' },
+        { id: 'REG-DEMO-002', customer: 'Jamaah Demo Fatimah', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'UNDER_REVIEW', docs: '2/5', payment: 'Rp 5jt / 29.5jt' },
+        { id: 'REG-DEMO-003', customer: 'Jamaah Demo Gunawan', package: 'Umroh VIP 12H', departure: '28 Feb 2027', status: 'APPROVED', docs: '5/5', payment: 'LUNAS (Rp 43.5jt)' },
+        { id: 'REG-DEMO-004', customer: 'Jamaah Demo Bambang', package: 'Umroh Syariah Hemat', departure: '20 Mei 2027', status: 'DRAFT', docs: '0/5', payment: 'Belum Ada' }
+      ]
+    };
+  </script>
+
+  <script>
+    /* ========================================================================
+       3. REUSABLE COMPONENT RENDERERS
+       ======================================================================== */
+
+    // Component: Status Badge
+    function renderStatusBadge(status, type = 'DEFAULT') {
+      const s = String(status || '').toUpperCase();
+      let colorClass = 'bg-slate-100 text-slate-700 border-slate-200';
+      let label = status;
+
+      switch (s) {
+        case 'CONFIRMED':
+        case 'VERIFIED':
+        case 'COMPLETED':
+        case 'PAID':
+        case 'PUBLISHED':
+          colorClass = 'bg-emerald-50 text-sdw-emerald border-emerald-200';
+          label = s === 'PAID' ? 'LUNAS' : (s === 'CONFIRMED' ? 'TERKONFIRMASI' : (s === 'VERIFIED' ? 'TERVERIFIKASI' : label));
+          break;
+        case 'REVISION_REQUIRED':
+        case 'NEEDS_REVISION':
+        case 'OVERDUE':
+        case 'CRITICAL':
+          colorClass = 'bg-red-50 text-red-700 border-red-200 font-bold';
+          label = s === 'REVISION_REQUIRED' ? 'PERLU PERBAIKAN' : label;
+          break;
+        case 'UNDER_REVIEW':
+        case 'IN_PROGRESS':
+        case 'PARTIAL':
+        case 'CONSULTATION':
+        case 'PROPOSAL':
+          colorClass = 'bg-amber-50 text-amber-800 border-amber-200';
+          label = s === 'UNDER_REVIEW' ? 'DALAM PENGECEKAN' : (s === 'PARTIAL' ? 'SEBAGIAN (DP)' : label);
+          break;
+        case 'OPEN':
+        case 'QUALIFIED':
+        case 'NEW':
+        case 'SCHEDULED':
+          colorClass = 'bg-blue-50 text-blue-800 border-blue-200';
+          label = s === 'OPEN' ? 'TERSEDIA' : label;
+          break;
+        case 'FULL':
+        case 'CLOSED':
+          colorClass = 'bg-slate-200 text-slate-800 border-slate-300';
+          label = 'PENUH';
+          break;
+        case 'NOT_UPLOADED':
+        case 'NOT_STARTED':
+        case 'DRAFT':
+          colorClass = 'bg-slate-100 text-slate-500 border-slate-200';
+          label = s === 'NOT_UPLOADED' ? 'BELUM UPLOAD' : (s === 'NOT_STARTED' ? 'BELUM MULAI' : 'DRAFT');
+          break;
+      }
+
+      return `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${colorClass}">${escapeHtml(label)}</span>`;
+    }
+
+    // Component: Package Card
+    function renderPackageCard(pkg) {
+      const priceFmt = pkg.starting_price 
+        ? `Rp ${pkg.starting_price.toLocaleString('id-ID')}` 
+        : 'Mulai dari — TBD';
+
+      return `
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-soft hover:shadow-card transition-all duration-200 flex flex-col justify-between overflow-hidden group">
+          <!-- Audit 21 — A1: slot gambar paket (placeholder AI; ganti foto asli saat aset brand tersedia) -->
+          <div class="relative aspect-video overflow-hidden bg-sdw-badgeBg">
+            <img src="${pkg.image || ''}" alt="Foto ilustrasi: ${escapeHtml(pkg.name)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]">
+            <span class="absolute top-3 right-3 px-2 py-0.5 rounded-md text-[9px] font-bold tracking-wider bg-black/45 text-white/90 backdrop-blur-sm border border-white/20">FOTO ILUSTRASI</span>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-sdw-emerald bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-100">
+                ${pkg.duration_days} Hari Perjalanan
+              </span>
+              <span class="text-xs text-slate-500 font-medium">${escapeHtml(pkg.package_type)}</span>
+            </div>
+            
+            <h3 class="font-bold text-slate-900 text-lg group-hover:text-sdw-pine transition-colors leading-snug">
+              ${escapeHtml(pkg.name)}
+            </h3>
+            
+            <p class="text-xs text-slate-500 mt-2 line-clamp-2 leading-relaxed">
+              ${escapeHtml(pkg.description)}
+            </p>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-sdw-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                <span class="truncate">Makkah: <b>${escapeHtml(pkg.hotel_makkah)}</b></span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <svg class="w-4 h-4 text-sdw-gold shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                <span class="truncate">${escapeHtml(pkg.airline)}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="px-6 py-4 bg-slate-50/70 border-t border-slate-100 flex items-center justify-between">
+            <div>
+              <div class="text-[10px] text-slate-400 font-medium">Mulai dari (Quad)</div>
+              <div class="text-base font-extrabold text-sdw-pine tracking-tight">${priceFmt}</div>
+            </div>
+            <button onclick="openPackageDetailModal('${pkg.id}')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald transition shadow-sm">
+              Lihat Detail
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Departure Card
+    function renderDepartureCard(dep) {
+      const pkg = MOCK_DATA.packages.find(p => p.id === dep.package_id) || { name: 'Paket Umroh' };
+      const sisaSeat = dep.capacity_total - dep.capacity_booked;
+      const bookedPct = Math.round((dep.capacity_booked / dep.capacity_total) * 100);
+
+      return `
+        <div class="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-soft hover:shadow-card transition flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 flex-1 min-w-0">
+            <div class="flex items-center space-x-2">
+              <span class="font-extrabold text-sm text-slate-900">${dep.departure_date} &ndash; ${dep.return_date}</span>
+              ${renderStatusBadge(dep.status)}
+            </div>
+            <div class="text-xs text-sdw-pine font-bold truncate">${escapeHtml(pkg.name)}</div>
+            <div class="text-[11px] text-slate-400 flex flex-wrap items-center gap-2">
+              <span>✈ <b>${escapeHtml(dep.airline)}</b></span>
+              <span>&bull;</span>
+              <span>Dari: <b>${escapeHtml(dep.origin_airport)}</b></span>
+            </div>
+
+            <!-- Seat Capacity Progress Bar -->
+            <div class="pt-1 max-w-xs">
+              <div class="flex items-center justify-between text-[10px] text-slate-500 mb-1">
+                <span>Kapasitas Terisi: ${dep.capacity_booked}/${dep.capacity_total} Kursi</span>
+                <span class="font-bold ${sisaSeat <= 5 ? 'text-red-600' : 'text-sdw-pine'}">${sisaSeat} Seat Tersisa</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                <div class="h-full rounded-full ${sisaSeat <= 5 ? 'bg-red-500' : 'bg-sdw-emerald'}" style="width: ${bookedPct}%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between md:justify-end space-x-4 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 shrink-0">
+            <button onclick="openBookingModal({ packageId: '${dep.package_id}', departureId: '${dep.id}' })" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald shadow-sm transition flex items-center space-x-1.5">
+              <span>Booking Seat</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Journey Card (Pilgrim PWA)
+    function renderJourneyCard(pilgrim) {
+      return `
+        <div class="bg-gradient-to-br from-sdw-pine to-sdw-emerald text-white p-6 rounded-2xl shadow-card relative overflow-hidden">
+          <div class="absolute -right-8 -bottom-8 w-44 h-44 bg-white/5 rounded-full pointer-events-none"></div>
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 relative z-10 pb-4 border-b border-white/15">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-sdw-gold/30 text-sdw-goldLight px-2 py-0.5 rounded-md border border-sdw-gold/30">
+                Pendaftaran #${pilgrim.registration_id} (DEMO)
+              </span>
+              <h2 class="text-xl font-extrabold mt-1 tracking-tight text-white">${escapeHtml(pilgrim.package_name)}</h2>
+              <p class="text-xs text-emerald-200/90">Kamar: ${pilgrim.room_type} &bull; ${pilgrim.duration_days} Hari &bull; <span class="text-sdw-goldLight font-mono">[SIMULASI]</span></p>
+            </div>
+            <div class="sm:text-right">
+              <div class="text-[10px] text-emerald-200">Jadwal Berangkat</div>
+              <div class="text-base font-extrabold text-sdw-gold">${pilgrim.departure_date}</div>
+              <div class="text-[11px] text-emerald-200/80">${pilgrim.flight_info}</div>
+            </div>
+          </div>
+
+          <!-- Journey Stage Progression Visualizer -->
+          <div class="mt-5 relative z-10">
+            <div class="text-[11px] font-medium text-emerald-100 mb-3 flex items-center justify-between">
+              <span>Alur Perjalanan Jamaah</span>
+              <span class="text-sdw-gold font-bold">Fase: ${pilgrim.current_stage}</span>
+            </div>
+
+            <!-- Steps bar -->
+            <div class="grid grid-cols-5 gap-1 text-center">
+              <div class="space-y-1.5">
+                <div class="h-2 rounded-full bg-emerald-400"></div>
+                <span class="text-[10px] font-semibold text-emerald-200 block truncate">1. Registrasi ✓</span>
+              </div>
+              <div class="space-y-1.5">
+                <div class="h-2 rounded-full bg-emerald-400"></div>
+                <span class="text-[10px] font-semibold text-emerald-200 block truncate">2. Dokumen ✓</span>
+              </div>
+              <div class="space-y-1.5">
+                <div class="h-2 rounded-full bg-emerald-400"></div>
+                <span class="text-[10px] font-semibold text-emerald-200 block truncate">3. Bayar DP ✓</span>
+              </div>
+              <div class="space-y-1.5">
+                <div class="h-2 rounded-full bg-sdw-gold status-pulse"></div>
+                <span class="text-[10px] font-bold text-white block truncate">4. Persiapan ●</span>
+              </div>
+              <div class="space-y-1.5">
+                <div class="h-2 rounded-full bg-white/20"></div>
+                <span class="text-[10px] font-medium text-emerald-200/50 block truncate">5. Berangkat ○</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Helper: Dynamic Financial Calculation (paid = SUM(payments), outstanding = total - paid)
+    function calculateInvoiceFinance(inv) {
+      const verifiedPaid = (inv.payments || [])
+        .filter(p => p.status === 'VERIFIED')
+        .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+      const total = Number(inv.total_amount) || 0;
+      const outstanding = Math.max(0, total - verifiedPaid);
+      return {
+        ...inv,
+        calculated_paid: verifiedPaid,
+        calculated_outstanding: outstanding
+      };
+    }
+
+    // Component: Next Action Engine (Section 29 — Data-driven Priority Ordering)
+    function getNextAction() {
+      // Priority 1: Blocking Condition on Documents (REVISION_REQUIRED)
+      const docRevision = MOCK_DATA.pilgrimDocuments.find(d => d.status === 'REVISION_REQUIRED');
+      if (docRevision) {
+        return {
+          type: 'BLOCKING_REVISION',
+          severity: 'HIGH',
+          title: 'Perbaikan Berkas Dibutuhkan',
+          message: `Dokumen <b>${escapeHtml(docRevision.title)}</b> ditandai perlu perbaikan oleh petugas verifikator (Simulasi).`,
+          actionLabel: 'Upload Revisi Sekarang',
+          targetTab: 'DOCUMENTS',
+          actionPayload: docRevision.id
+        };
+      }
+
+      // Priority 2: Payment Outstanding (Calculated dynamically: total - paid)
+      const fin = calculateInvoiceFinance(MOCK_DATA.invoice);
+      if (fin.calculated_outstanding > 0) {
+        return {
+          type: 'PAYMENT_PENDING',
+          severity: 'MEDIUM',
+          title: 'Pelunasan Biaya Umroh (Sisa Tagihan)',
+          message: `Sisa tagihan Rp ${fin.calculated_outstanding.toLocaleString('id-ID')} jatuh tempo pada ${fin.due_date}. Terverifikasi: Rp ${fin.calculated_paid.toLocaleString('id-ID')}.`,
+          actionLabel: 'Lihat Rincian & Konfirmasi Bayar',
+          targetTab: 'PAYMENT',
+          actionPayload: null
+        };
+      }
+
+      // Priority 3: Existing Preparation / Manasik Action
+      const activePrep = MOCK_DATA.preparationItems.find(p => p.status === 'IN_PROGRESS');
+      if (activePrep) {
+        return {
+          type: 'PREPARATION_PROGRESS',
+          severity: 'INFO',
+          title: 'Persiapan Keberangkatan',
+          message: `Tahap persiapan aktif: <b>${escapeHtml(activePrep.item_name)}</b> (${escapeHtml(activePrep.notes)}).`,
+          actionLabel: 'Lihat Agenda Persiapan',
+          targetTab: 'PREPARATION',
+          actionPayload: activePrep.id
+        };
+      }
+
+      return {
+        type: 'READY',
+        severity: 'INFO',
+        title: 'Seluruh Persiapan Berjalan Lancar',
+        message: 'Tidak ada tindakan darurat yang memblokir perjalanan Anda. Hadiri sesi manasik berikutnya.',
+        actionLabel: 'Lihat Jadwal Manasik',
+        targetTab: 'MANASIK',
+        actionPayload: null
+      };
+    }
+
+    function renderNextActionCard() {
+      const next = getNextAction();
+      const isUrgent = next.severity === 'HIGH';
+
+      return `
+        <div class="rounded-2xl border p-5 ${isUrgent ? 'bg-amber-50/80 border-amber-300' : 'bg-emerald-50/80 border-emerald-200'} shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="flex items-start space-x-3.5">
+            <div class="w-10 h-10 rounded-xl ${isUrgent ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-sdw-pine'} flex items-center justify-center shrink-0 text-lg">
+              ${isUrgent ? '&#9888;' : '&#10003;'}
+            </div>
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-bold uppercase tracking-wider ${isUrgent ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-sdw-pine'} px-2 py-0.5 rounded">
+                  NEXT ACTION
+                </span>
+                <span class="font-bold text-slate-900 text-sm">${next.title}</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">${next.message}</p>
+            </div>
+          </div>
+
+          <button onclick="handleNextActionClick('${next.targetTab}', '${next.actionPayload || ''}')" class="px-4 py-2.5 rounded-xl text-xs font-bold ${isUrgent ? 'bg-amber-600 hover:bg-amber-700 text-white' : 'bg-sdw-pine hover:bg-sdw-emerald text-white'} transition shadow-sm whitespace-nowrap self-start sm:self-center">
+            ${next.actionLabel} &rarr;
+          </button>
+        </div>
+      `;
+    }
+
+    // Component: Document Card
+    function renderDocumentCard(doc) {
+      return `
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-start justify-between gap-2">
+              <span class="font-bold text-xs text-slate-900 leading-snug">${escapeHtml(doc.title)}</span>
+              ${renderStatusBadge(doc.status)}
+            </div>
+            
+            <div class="mt-2 text-[11px] text-slate-500">
+              ${doc.file_name 
+                ? `<span class="font-mono text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded truncate block">&bull; ${escapeHtml(doc.file_name)}</span>` 
+                : `<span class="italic text-slate-400">Belum ada file diunggah</span>`}
+            </div>
+
+            ${doc.review_notes ? `
+              <div class="mt-2 p-2 rounded-lg text-[11px] ${doc.status === 'REVISION_REQUIRED' ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-slate-50 text-slate-600'} leading-relaxed">
+                <b>Catatan Verifikator:</b> ${escapeHtml(doc.review_notes)}
+              </div>
+            ` : ''}
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+            <span class="text-[10px] text-slate-400">${doc.updated_at}</span>
+            <button onclick="openSimulatedUploadModal('${doc.id}', '${escapeHtml(doc.title)}')" class="px-3 py-1.5 rounded-lg font-semibold text-xs ${doc.status === 'REVISION_REQUIRED' ? 'bg-red-600 text-white hover:bg-red-700' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'} transition">
+              ${doc.status === 'NOT_UPLOADED' ? 'Upload File' : 'Unggah Ulang'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Payment Summary Card (Computed dynamically: paid = sum(payments), outstanding = total - paid)
+    function renderPaymentSummary(inv) {
+      const fin = calculateInvoiceFinance(inv);
+      const isPaidOff = fin.calculated_outstanding === 0;
+
+      return `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-soft space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-2">
+            <div>
+              <div class="flex items-center space-x-2">
+                <span class="text-[10px] font-mono text-slate-400">NO. INVOICE</span>
+                <span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 text-[9px] font-bold">DATA SIMULASI</span>
+              </div>
+              <h3 class="font-extrabold text-base text-slate-900">${fin.invoice_number}</h3>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-slate-500">Status Pembayaran:</span>
+              ${renderStatusBadge(isPaidOff ? 'PAID' : (fin.calculated_paid > 0 ? 'PARTIAL' : 'UNPAID'))}
+            </div>
+          </div>
+
+          <!-- 3 Figures Overview — Computed Authoritatively from Demo Payments -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+              <div class="text-[11px] text-slate-500 font-medium">Total Biaya Paket (Snapshot)</div>
+              <div class="text-lg font-extrabold text-slate-900 mt-1">Rp ${fin.total_amount.toLocaleString('id-ID')}</div>
+              <div class="text-[10px] text-emerald-700 mt-0.5">Terkunci saat booking &bull; Tidak berubah</div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200/80">
+              <div class="text-[11px] text-sdw-pine font-medium">Sudah Dibayar [SUM(Payments)]</div>
+              <div class="text-lg font-extrabold text-sdw-emerald mt-1">Rp ${fin.calculated_paid.toLocaleString('id-ID')}</div>
+              <div class="text-[10px] text-emerald-600 mt-0.5">Dihitung dari riwayat mutasi terverifikasi</div>
+            </div>
+
+            <div class="p-4 rounded-xl bg-amber-50 border border-amber-200/80">
+              <div class="text-[11px] text-amber-900 font-medium">Sisa Outstanding [Total - Paid]</div>
+              <div class="text-lg font-extrabold text-amber-900 mt-1">Rp ${fin.calculated_outstanding.toLocaleString('id-ID')}</div>
+              <div class="text-[10px] text-amber-700 mt-0.5">Jatuh tempo: ${fin.due_date}</div>
+            </div>
+          </div>
+
+          <!-- Payment Schedule Terms -->
+          <div>
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-500 mb-3">Rencana Termin Pembayaran</h4>
+            <div class="space-y-2">
+              ${fin.schedules.map(s => `
+                <div class="p-3 rounded-xl border border-slate-100 flex items-center justify-between text-xs bg-slate-50/60">
+                  <div>
+                    <span class="font-bold text-slate-800">Termin ${s.term}: ${s.title}</span>
+                    <span class="text-slate-400 block text-[11px]">Jatuh Tempo: ${s.due_date}</span>
+                  </div>
+                  <div class="flex items-center space-x-3">
+                    <span class="font-bold text-slate-900">Rp ${s.amount.toLocaleString('id-ID')}</span>
+                    ${renderStatusBadge(s.status)}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- History -->
+          <div class="pt-2">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-slate-500 mb-2">Riwayat Pembayaran Masuk (Authoritative)</h4>
+            ${fin.payments.map(p => `
+              <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between text-xs">
+                <div>
+                  <div class="font-bold text-slate-800">${p.method}</div>
+                  <div class="text-[11px] text-slate-400 font-mono">Ref: ${p.ref} &bull; ${p.date}</div>
+                </div>
+                <div class="flex items-center space-x-2">
+                  <span class="font-extrabold text-sdw-pine">Rp ${p.amount.toLocaleString('id-ID')}</span>
+                  ${renderStatusBadge(p.status)}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="pt-4 border-t border-slate-100 flex justify-end">
+            <button onclick="openSimulatedPaymentModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald shadow-sm transition">
+              Upload Bukti Transfer Pelunasan (Simulasi)
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Preparation Item
+    function renderPreparationItem(item) {
+      return `
+        <div class="p-4 rounded-xl border border-slate-200 bg-white flex items-start justify-between gap-3 shadow-sm">
+          <div class="space-y-1">
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] font-bold uppercase text-slate-400 font-mono">${item.category}</span>
+              ${renderStatusBadge(item.status)}
+            </div>
+            <h4 class="font-bold text-xs text-slate-900">${escapeHtml(item.item_name)}</h4>
+            <p class="text-[11px] text-slate-500 leading-normal">${escapeHtml(item.notes)}</p>
+          </div>
+          <button onclick="showToast('Catatan persiapan diperbarui: ${escapeHtml(item.item_name)}')" class="shrink-0 text-slate-400 hover:text-sdw-pine p-1 text-xs">
+            &#9432;
+          </button>
+        </div>
+      `;
+    }
+
+    // Component: Manasik Card
+    function renderManasikCard(manasik) {
+      return `
+        <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-soft space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-sdw-emerald bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+              Agenda Manasik Jamaah
+            </span>
+            ${renderStatusBadge(manasik.status)}
+          </div>
+
+          <h3 class="font-extrabold text-base text-slate-900 leading-snug">
+            ${escapeHtml(manasik.session_title)}
+          </h3>
+
+          <div class="space-y-2 text-xs text-slate-600 bg-slate-50 p-4 rounded-xl border border-slate-100">
+            <div class="flex items-start space-x-2.5">
+              <span class="text-sdw-gold text-base shrink-0">&#128197;</span>
+              <div>
+                <span class="font-semibold text-slate-800">Waktu & Tanggal:</span>
+                <div class="text-slate-600">${manasik.scheduled_at}</div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-2.5 pt-2 border-t border-slate-200/60">
+              <span class="text-sdw-gold text-base shrink-0">&#128205;</span>
+              <div>
+                <span class="font-semibold text-slate-800">Lokasi:</span>
+                <div class="text-slate-600">${escapeHtml(manasik.location)}</div>
+              </div>
+            </div>
+            <div class="flex items-start space-x-2.5 pt-2 border-t border-slate-200/60">
+              <span class="text-sdw-gold text-base shrink-0">&#128100;</span>
+              <div>
+                <span class="font-semibold text-slate-800">Pembimbing Muthawwif:</span>
+                <div class="text-slate-600">${escapeHtml(manasik.muthawwif)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs text-amber-800 bg-amber-50/70 p-3 rounded-xl border border-amber-200/60 flex items-center justify-between">
+            <span><b>Catatan:</b> ${escapeHtml(manasik.notes)}</span>
+            <button onclick="showToast('Lokasi manasik telah disalin ke kalender Anda.')" class="px-2.5 py-1 rounded bg-white text-slate-700 border text-[11px] font-semibold hover:bg-slate-50">
+              Simpan Kalender
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Reusable Data Table (Backoffice & Partner with Client-Side Filtering)
+    function renderDataTable(config) {
+      const { headers, rows, searchPlaceholder = 'Cari data...', onSearchId = 'tableSearch' } = config;
+
+      return `
+        <div data-table-wrapper class="bg-white rounded-2xl border border-slate-200 shadow-soft overflow-hidden space-y-0">
+          <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50">
+            <div class="relative w-full sm:w-72">
+              <input type="text" id="${onSearchId}" oninput="filterDataTable(this)" placeholder="${searchPlaceholder}" class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine">
+              <span class="absolute left-2.5 top-2.5 text-slate-400 text-xs">&#128269;</span>
+            </div>
+            <div class="flex items-center space-x-2 text-xs text-slate-500 self-end sm:self-center">
+              <span data-count-display>Menampilkan ${rows.length} entri</span>
+              <span class="px-2 py-0.5 rounded bg-slate-200 font-mono text-[10px] text-slate-700 font-bold">PROTOTYPE VIEW</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-600">
+              <thead class="bg-slate-100/70 text-slate-700 font-bold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                <tr>
+                  ${headers.map(h => `<th class="px-4 py-3">${h}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                ${rows.length === 0 
+                  ? `<tr><td colspan="${headers.length}" class="p-8 text-center text-slate-400 italic">Tidak ada data ditemukan.</td></tr>`
+                  : rows.map(r => `
+                    <tr class="hover:bg-slate-50/80 transition" data-row>
+                      ${r.map(cell => `<td class="px-4 py-3 whitespace-nowrap">${cell}</td>`).join('')}
+                    </tr>
+                  `).join('')
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <div class="p-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400 bg-slate-50/50">
+            <span>Halaman 1 dari 1 (Semua data ditampilkan)</span>
+            <div class="space-x-1">
+              <button class="px-2 py-1 rounded bg-white border border-slate-200 text-slate-600 disabled:opacity-50" disabled>&larr; Prev</button>
+              <button class="px-2 py-1 rounded bg-white border border-slate-200 text-slate-600 disabled:opacity-50" disabled>Next &rarr;</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Client-side table filter engine (Section 18 & PRD Search requirement)
+    function filterDataTable(inputEl) {
+      const query = (inputEl.value || '').toLowerCase().trim();
+      const wrapper = inputEl.closest('[data-table-wrapper]');
+      if (!wrapper) return;
+
+      const rows = wrapper.querySelectorAll('tbody tr[data-row]');
+      const countBadge = wrapper.querySelector('[data-count-display]');
+      let visibleCount = 0;
+
+      rows.forEach(row => {
+        const text = (row.textContent || '').toLowerCase();
+        if (!query || text.includes(query)) {
+          row.style.display = '';
+          visibleCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      // Handle empty state row if no search matches
+      let emptyRow = wrapper.querySelector('[data-empty-search-row]');
+      if (visibleCount === 0 && rows.length > 0) {
+        if (!emptyRow) {
+          emptyRow = document.createElement('tr');
+          emptyRow.setAttribute('data-empty-search-row', 'true');
+          const colCount = wrapper.querySelectorAll('thead th').length || 5;
+          emptyRow.innerHTML = `<td colspan="${colCount}" class="p-8 text-center text-slate-400 italic">Tidak ada data yang cocok dengan "${escapeHtml(inputEl.value)}".</td>`;
+          wrapper.querySelector('tbody').appendChild(emptyRow);
+        } else {
+          emptyRow.style.display = '';
+          emptyRow.querySelector('td').innerHTML = `Tidak ada data yang cocok dengan "${escapeHtml(inputEl.value)}".`;
+        }
+      } else if (emptyRow) {
+        emptyRow.style.display = 'none';
+      }
+
+      if (countBadge) {
+        countBadge.textContent = query 
+          ? `Menampilkan ${visibleCount} dari ${rows.length} entri`
+          : `Menampilkan ${rows.length} entri`;
+      }
+    }
+
+    // Component: Empty State
+    function renderEmptyState(title, desc, actionText = null, actionFn = null) {
+      return `
+        <div class="bg-white rounded-2xl p-10 border border-slate-200 text-center space-y-3 my-6 shadow-sm">
+          <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl">
+            &#128237;
+          </div>
+          <h3 class="font-bold text-slate-800 text-base">${escapeHtml(title)}</h3>
+          <p class="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">${escapeHtml(desc)}</p>
+          ${actionText ? `
+            <div class="pt-2">
+              <button onclick="${actionFn}" class="px-4 py-2 rounded-xl text-xs font-semibold bg-sdw-pine text-white hover:bg-sdw-emerald transition">
+                ${actionText}
+              </button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    // Component: Error State
+    function renderErrorState(title, desc, retryFn = 'location.reload()') {
+      return `
+        <div class="bg-red-50/60 rounded-2xl p-8 border border-red-200 text-center space-y-3 my-6">
+          <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto font-bold text-lg">
+            !
+          </div>
+          <h3 class="font-bold text-red-900 text-base">${escapeHtml(title)}</h3>
+          <p class="text-xs text-red-700 max-w-sm mx-auto">${escapeHtml(desc)}</p>
+          <div class="pt-2">
+            <button onclick="${retryFn}" class="px-4 py-2 rounded-xl text-xs font-semibold bg-red-600 text-white hover:bg-red-700 transition">
+              Coba Ulangi
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // Component: Loading State
+    function renderLoadingState(msg = 'Memuat data antarmuka...') {
+      return `
+        <div class="bg-white rounded-2xl p-12 border border-slate-200 text-center space-y-3 my-6 shadow-sm">
+          <div class="w-8 h-8 rounded-full border-2 border-sdw-pine border-t-transparent animate-spin mx-auto"></div>
+          <div class="text-xs font-semibold text-slate-600">${escapeHtml(msg)}</div>
+          <div class="text-[10px] text-slate-400">Sinkronisasi state prototype</div>
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       4. SURFACE 1: PUBLIC WEBSITE (Landing Page — 5W+1H Narrative Flow)
+       ======================================================================== */
+
+    // Filter Controller for Public Packages
+    function setPublicCategory(cat) {
+      appState.publicCategory = cat;
+      if (appState.surface === 'PUBLIC') {
+        renderCurrentSurface();
+      }
+    }
+
+    // Interactive Cost Estimator Controller
+    function updateCostEstimator(field, val) {
+      if (!appState.estimator) {
+        appState.estimator = { packageId: 'PKG-000001', roomType: 'QUAD', paxCount: 2 };
+      }
+      if (field === 'paxCount') {
+        const current = appState.estimator.paxCount || 2;
+        const nextVal = Math.max(1, Math.min(10, current + val));
+        appState.estimator.paxCount = nextVal;
+      } else {
+        appState.estimator[field] = val;
+      }
+      if (appState.surface === 'PUBLIC') {
+        renderCurrentSurface();
+      }
+    }
+
+    // Booking Action from Cost Estimator
+    function handleEstimatorBooking() {
+      const est = appState.estimator || { packageId: 'PKG-000001', roomType: 'QUAD', paxCount: 2 };
+      openBookingModal({
+        packageId: est.packageId,
+        roomType: est.roomType,
+        paxCount: est.paxCount
+      });
+    }
+
+    // Component: Interactive Family Cost Estimator Widget
+    function renderCostEstimatorWidget() {
+      const est = appState.estimator || { packageId: 'PKG-000001', roomType: 'QUAD', paxCount: 2 };
+      const pkg = MOCK_DATA.packages.find(p => p.id === est.packageId) || MOCK_DATA.packages[0];
+      const basePrice = pkg.starting_price || 29500000;
+      
+      const roomSurcharges = {
+        'QUAD': 0,
+        'TRIPLE': 1500000,
+        'DOUBLE': 3000000
+      };
+      
+      const surcharge = roomSurcharges[est.roomType] || 0;
+      const pricePerPax = basePrice + surcharge;
+      const paxCount = est.paxCount || 2;
+      const totalCost = pricePerPax * paxCount;
+      const dpPerPax = 5000000;
+      const totalDp = dpPerPax * paxCount;
+      const sisaPelunasan = Math.max(0, totalCost - totalDp);
+
+      return `
+        <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-3xl p-6 sm:p-10 border border-slate-700/80 shadow-card">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-700/70">
+            <div>
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Simulasi Biaya Transparan &bull; Tanpa Biaya Tersembunyi</span>
+              </div>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-white mt-2">Kalkulator Estimasi Biaya Ibadah Keluarga</h3>
+              <p class="text-xs text-slate-300 mt-1 max-w-xl">
+                Pilih program dan konfigurasi kamar yang Anda rencanakan. Nilai total yang dihitung merupakan estimasi snapshot resmi yang dapat Anda kunci saat booking.
+              </p>
+            </div>
+            <div class="flex items-center space-x-2 shrink-0">
+              <span class="px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300 text-[10px] font-mono">ESTIMATOR V2</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
+            <!-- Form Kontrol (Col 1-7) -->
+            <div class="lg:col-span-7 space-y-6">
+              <!-- Step A: Pilih Paket -->
+              <div class="space-y-2">
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">1. Pilih Program / Paket Umroh</label>
+                <select onchange="updateCostEstimator('packageId', this.value)" class="w-full bg-slate-800/90 text-white text-xs sm:text-sm font-semibold p-3.5 rounded-xl border border-slate-600 focus:outline-none focus:border-sdw-gold">
+                  ${MOCK_DATA.packages.map(p => `
+                    <option value="${p.id}" ${p.id === est.packageId ? 'selected' : ''}>
+                      ${escapeHtml(p.name)} (${p.duration_days} Hari &bull; ${escapeHtml(p.package_type)}) &mdash; Mulai Rp ${p.starting_price.toLocaleString('id-ID')}
+                    </option>
+                  `).join('')}
+                </select>
+                <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+                  <span>Hotel Makkah: <b class="text-white">${escapeHtml(pkg.hotel_makkah)}</b></span>
+                  <span>Maskapai: <b class="text-white">${escapeHtml(pkg.airline)}</b></span>
+                </div>
+              </div>
+
+              <!-- Step B: Tipe Kamar -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">2. Pilihan Tipe Kamar</label>
+                  <span class="text-[11px] text-emerald-400">Tersedia 3 Opsi</span>
+                </div>
+                <div class="grid grid-cols-3 gap-2.5">
+                  ${[
+                    { type: 'QUAD', name: 'Quad (Sekamar 4)', badge: 'Standar Paket', extra: 0 },
+                    { type: 'TRIPLE', name: 'Triple (Sekamar 3)', badge: '+Rp 1.5jt/pax', extra: 1500000 },
+                    { type: 'DOUBLE', name: 'Double (Sekamar 2)', badge: '+Rp 3.0jt/pax', extra: 3000000 }
+                  ].map(r => `
+                    <button type="button" onclick="updateCostEstimator('roomType', '${r.type}')" class="p-3 rounded-xl border text-left transition ${est.roomType === r.type ? 'bg-sdw-pine border-emerald-400 text-white shadow-md' : 'bg-slate-800/60 border-slate-700 text-slate-300 hover:border-slate-500'}">
+                      <div class="font-bold text-xs">${r.type}</div>
+                      <div class="text-[10px] text-slate-300 truncate mt-0.5">${r.name}</div>
+                      <div class="text-[10px] font-semibold ${est.roomType === r.type ? 'text-sdw-gold' : 'text-emerald-400'} mt-1">${r.badge}</div>
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+
+              <!-- Step C: Jumlah Jamaah -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-300">3. Jumlah Jamaah yang Berangkat</label>
+                  <span class="text-[11px] text-slate-400">Minimal 1, Maksimal 10 pax</span>
+                </div>
+                <div class="flex items-center space-x-3 bg-slate-800/70 p-2.5 rounded-xl border border-slate-700 max-w-xs">
+                  <button type="button" onclick="updateCostEstimator('paxCount', -1)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-extrabold flex items-center justify-center transition disabled:opacity-40" ${paxCount <= 1 ? 'disabled' : ''}>
+                    &minus;
+                  </button>
+                  <div class="flex-1 text-center font-extrabold text-base text-white">
+                    ${paxCount} <span class="text-xs font-normal text-slate-400">Orang</span>
+                  </div>
+                  <button type="button" onclick="updateCostEstimator('paxCount', 1)" class="w-9 h-9 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-extrabold flex items-center justify-center transition disabled:opacity-40" ${paxCount >= 10 ? 'disabled' : ''}>
+                    &#43;
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Receipt Breakdown (Col 8-12) -->
+            <div class="lg:col-span-5 bg-slate-800/90 rounded-2xl p-6 border border-slate-700 flex flex-col justify-between space-y-6">
+              <div class="space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Ringkasan Estimasi</span>
+                  <span class="text-[10px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded">TERKUNCI SIMULASI</span>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                  <div class="flex items-center justify-between text-slate-300">
+                    <span>Tarif Dasar (${pkg.package_type})</span>
+                    <span class="font-mono">Rp ${basePrice.toLocaleString('id-ID')} /pax</span>
+                  </div>
+                  <div class="flex items-center justify-between text-slate-300">
+                    <span>Penyesuaian Kamar (${est.roomType})</span>
+                    <span class="font-mono text-sdw-gold">${surcharge > 0 ? '+Rp ' + surcharge.toLocaleString('id-ID') : 'Rp 0'}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-slate-300">
+                    <span>Biaya Efektif per Orang</span>
+                    <span class="font-mono font-bold text-white">Rp ${pricePerPax.toLocaleString('id-ID')}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-slate-300">
+                    <span>Jumlah Rombongan</span>
+                    <span class="font-mono font-bold text-white">${paxCount} Jamaah</span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-700/80 space-y-2">
+                  <div class="p-3 rounded-xl bg-sdw-pine/40 border border-emerald-500/30 space-y-1">
+                    <div class="text-[10px] uppercase font-bold text-emerald-300">Total Estimasi Keseluruhan</div>
+                    <div class="text-2xl font-black text-white tracking-tight">Rp ${totalCost.toLocaleString('id-ID')}</div>
+                  </div>
+
+                  <div class="grid grid-cols-2 gap-2 text-[11px]">
+                    <div class="p-2.5 bg-slate-900/60 rounded-lg border border-slate-700">
+                      <span class="text-slate-400 block text-[10px]">DP Diperlukan</span>
+                      <span class="font-bold text-sdw-gold font-mono">Rp ${totalDp.toLocaleString('id-ID')}</span>
+                      <span class="text-[9px] text-slate-400 block mt-0.5">(Rp 5jt &times; ${paxCount})</span>
+                    </div>
+                    <div class="p-2.5 bg-slate-900/60 rounded-lg border border-slate-700">
+                      <span class="text-slate-400 block text-[10px]">Sisa Pelunasan</span>
+                      <span class="font-bold text-emerald-400 font-mono">Rp ${sisaPelunasan.toLocaleString('id-ID')}</span>
+                      <span class="text-[9px] text-slate-400 block mt-0.5">Jatuh tempo H-30</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-2 pt-2">
+                <button onclick="handleEstimatorBooking()" class="w-full py-3.5 px-4 rounded-xl text-xs sm:text-sm font-bold bg-sdw-gold hover:bg-yellow-500 text-slate-950 shadow-md transition flex items-center justify-center space-x-2 group">
+                  <span>Lanjutkan Booking dengan Estimasi Ini</span>
+                  <span class="group-hover:translate-x-1 transition-transform">&rarr;</span>
+                </button>
+                <p class="text-[10px] text-slate-400 text-center leading-tight">
+                  *Estimasi mengikat dalam snapshot setelah konfirmasi pendaftaran.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPublicSurface() {
+      const activeCategory = appState.publicCategory || 'ALL';
+      const filteredPackages = activeCategory === 'ALL'
+        ? MOCK_DATA.packages
+        : MOCK_DATA.packages.filter(p => p.package_type === activeCategory);
+
+      const categoryTabs = [
+        { id: 'ALL', label: 'Semua Program' },
+        { id: 'REGULER', label: 'Reguler Syawal' },
+        { id: 'VIP', label: 'VIP Khidmat' },
+        { id: 'PLUS_TOUR', label: 'Plus Turki' },
+        { id: 'RAMADHAN', label: 'Ramadhan' },
+        { id: 'HEMAT', label: 'Syariah Hemat' }
+      ];
+
+      return `
+        <div class="space-y-16 fade-in pb-16">
+          
+          <!-- =================================================================
+               1. WHAT: HERO SECTION WITH VALUE PROPOSITION & PILLARS
+               ================================================================= -->
+          <!-- Audit 21 — A1: hero foto latar (placeholder AI) + overlay pine; teks putih untuk kontras AA -->
+          <section class="relative rounded-3xl overflow-hidden shadow-card border border-sdw-pine/40">
+            <img src="assets/hero-haram.png" alt="Foto ilustrasi: Masjidil Haram di waktu senja" class="absolute inset-0 w-full h-full object-cover" fetchpriority="high">
+            <div class="absolute inset-0 bg-sdw-pine/70"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-sdw-pine/90 via-sdw-pine/60 to-transparent"></div>
+            <div class="absolute -right-24 -top-24 w-96 h-96 bg-sdw-gold/20 rounded-full blur-3xl pointer-events-none"></div>
+            
+            <div class="relative z-10 max-w-3xl space-y-6 p-8 sm:p-14">
+              <div class="space-y-2">
+                <!-- Audit 21 — A5: Amiri + lang/dir agar tipografi & pembacaan Arab benar -->
+                <div lang="ar" dir="rtl" class="font-arabic text-sdw-goldLight font-semibold text-base sm:text-lg">
+                  بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+                </div>
+                <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/25 backdrop-blur-sm text-white text-xs font-bold tracking-wide">
+                  <span class="w-2 h-2 rounded-full bg-sdw-gold animate-pulse"></span>
+                  <span>Platform Resmi Perjalanan Ibadah Terpadu &bull; One Journey, One Platform</span>
+                </div>
+              </div>
+
+              <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                Kekhusyukan Ibadah dalam <span class="text-sdw-gold underline decoration-sdw-gold/70 decoration-wavy">Satu Ekosistem Terpadu.</span>
+              </h1>
+
+              <p class="text-emerald-100/90 text-sm sm:text-base leading-relaxed max-w-2xl font-normal">
+                SDW UMROH memadukan ketulusan bimbingan ibadah bersanad sesuai Sunnah dengan kenyamanan ekosistem digital satu pintu &mdash; mulai dari pemilihan paket, transparansi biaya, pelacakan dokumen paspor & visa, manasik intensif, hingga kepulangan penuh berkah.
+              </p>
+
+              <!-- 3 Core Pillars in Hero -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                <div class="p-3.5 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm space-y-1">
+                  <div class="text-sdw-goldLight font-bold text-xs flex items-center space-x-1.5">
+                    <span class="text-sdw-gold">&#10003;</span>
+                    <span>Bimbingan Sunnah</span>
+                  </div>
+                  <p class="text-[11px] text-emerald-100/80 leading-snug">Asatidz bersanad Timur Tengah & muthawwif berdedikasi.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm space-y-1">
+                  <div class="text-sdw-goldLight font-bold text-xs flex items-center space-x-1.5">
+                    <span class="text-sdw-gold">&#10003;</span>
+                    <span>Fasilitas Ring-1</span>
+                  </div>
+                  <p class="text-[11px] text-emerald-100/80 leading-snug">Hotel pelataran Ka'bah & Nabawi, penerbangan direct.</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-white/10 border border-white/20 backdrop-blur-sm space-y-1">
+                  <div class="text-sdw-goldLight font-bold text-xs flex items-center space-x-1.5">
+                    <span class="text-sdw-gold">&#10003;</span>
+                    <span>Harga Terkunci</span>
+                  </div>
+                  <p class="text-[11px] text-emerald-100/80 leading-snug">Snapshot harga mengikat tanpa biaya siluman.</p>
+                </div>
+              </div>
+
+              <!-- Audit 21 — A2: satu CTA primer + satu sekunder (UX-003 One Primary Action);
+                   simulasi PWA dipindah ke surface switcher di header -->
+              <div class="pt-2 flex flex-wrap items-center gap-3">
+                <button onclick="openConsultationModal()" class="px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-sdw-gold hover:bg-yellow-500 text-slate-950 shadow-md transition flex items-center space-x-2">
+                  <span>Konsultasi Gratis</span>
+                  <span>&rarr;</span>
+                </button>
+                <button onclick="scrollToSection('katalogPaket')" class="px-5 py-3.5 rounded-xl text-xs sm:text-sm font-semibold text-white border border-white/40 hover:bg-white/10 transition flex items-center space-x-2">
+                  <span>Lihat Pilihan Paket</span>
+                  <span>&darr;</span>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               CREDIBILITY / TRUST STATS BAR
+               ================================================================= -->
+          <section class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-soft">
+              <div class="text-2xl font-black text-sdw-pine">Bersanad</div>
+              <div class="text-xs font-bold text-slate-800 mt-1">Asatidz Al-Azhar & UIM</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Pembimbing Fiqih & Rukun Ibadah</div>
+            </div>
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-soft">
+              <div class="text-2xl font-black text-sdw-pine">Blok Kursi</div>
+              <div class="text-xs font-bold text-slate-800 mt-1">Kerja Sama Maskapai Resmi</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Garuda Indonesia & Saudia Airlines</div>
+            </div>
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-soft">
+              <div class="text-2xl font-black text-sdw-pine">Terkunci</div>
+              <div class="text-xs font-bold text-slate-800 mt-1">Harga Saat Booking</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Sesuai Agreed Price Snapshot</div>
+            </div>
+            <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-soft">
+              <div class="text-2xl font-black text-sdw-pine">Satu Pintu</div>
+              <div class="text-xs font-bold text-slate-800 mt-1">Aplikasi Portal Jamaah</div>
+              <div class="text-[11px] text-slate-500 mt-0.5">Tracking Paspor, Visa & Manasik</div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               2. WHY: 4 PEACE-OF-MIND GUARANTEES
+               ================================================================= -->
+          <section class="bg-sdw-pine text-white rounded-3xl p-8 sm:p-12 shadow-card space-y-8 relative overflow-hidden">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-2xl relative z-10">
+              <span class="text-xs font-bold text-sdw-gold uppercase tracking-wider">JAMINAN KETENANGAN HATI</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold mt-1 text-white">Mengapa Menyerahkan Rencana Ibadah Bersama SDW UMROH?</h2>
+              <p class="text-xs sm:text-sm text-emerald-200/90 mt-2 leading-relaxed">
+                Kami memahami bahwa Umroh adalah safar spiritual agung seumur hidup. Karena itu kami menghadirkan 4 pilar jaminan ketenangan ibadah tanpa keraguan.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-slate-800 relative z-10">
+              <div class="bg-white p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 font-black flex items-center justify-center text-base">1</div>
+                  <h3 class="font-extrabold text-sm text-slate-900">Jaminan Harga Pasti (Agreed Price Snapshot)</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Nilai pendaftaran dikunci permanen dalam lembar pendaftaran resmi. Fluktuasi kurs mata uang asing dan lonjakan harga musiman di Tanah Suci tidak dibebankan susulan kepada jamaah yang telah memiliki booking sah.
+                </p>
+                <div class="text-[11px] font-semibold text-sdw-pine flex items-center space-x-1">
+                  <span>&#10003; Sesuai Snapshot Harga &bull; Kepastian Anggaran Keluarga</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-100 text-sdw-pine font-black flex items-center justify-center text-base">2</div>
+                  <h3 class="font-extrabold text-sm text-slate-900">Bimbingan Sesuai Sunnah Shahih</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Didampingi asatidz bersanad resmi dari universitas Islam terkemuka Timur Tengah (Al-Azhar, Madinah, Ummul Qura). Manasik tatap muka komprehensif, panduan doa terstruktur, dan pendampingan thawaf-sai tanpa terburu-buru.
+                </p>
+                <div class="text-[11px] font-semibold text-sdw-pine flex items-center space-x-1">
+                  <span>&#10003; Rasio Pembimbing Ideal &bull; Fiqih Manasik Valid</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-100 text-sdw-pine font-black flex items-center justify-center text-base">3</div>
+                  <h3 class="font-extrabold text-sm text-slate-900">Aplikasi Pendamping Digital Satu Pintu (PWA)</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Pantau verifikasi berkas paspor, validasi visa, pengiriman koper ihram, manifes nomor kamar hotel, hingga jadwal kumpul bus secara transparan langsung dari ponsel tanpa perlu bertanya berulang kali ke kantor cabang.
+                </p>
+                <div class="text-[11px] font-semibold text-sdw-pine flex items-center space-x-1">
+                  <span>&#10003; Update Status Terpantau &bull; Notifikasi Tahapan Ibadah</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-2xl space-y-3 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center space-x-3">
+                  <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-900 font-black flex items-center justify-center text-base">4</div>
+                  <h3 class="font-extrabold text-sm text-slate-900">Kepastian Tiket Direct & Hotel Ring-1 Pelataran</h3>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Kerjasama blok kursi resmi maskapai (Saudia & Garuda Indonesia) serta akomodasi hotel walking distance di pelataran Ka'bah dan Masjid Nabawi, sangat memudahkan lansia dan keluarga menunaikan shalat berjamaah 5 waktu di masjid.
+                </p>
+                <div class="text-[11px] font-semibold text-sdw-pine flex items-center space-x-1">
+                  <span>&#10003; Tanpa Transit Melelahkan &bull; Bebas Shuttle Bus</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               3. WHO: FILTERABLE CATALOG & ASATIDZ PROFILES
+               ================================================================= -->
+          <section id="katalogPaket" class="space-y-8 scroll-mt-28">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">UNTUK SIAPA &bull; PILIHAN PROGRAM</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Katalog Paket Sesuai Kebutuhan Anda</h2>
+                <p class="text-xs text-slate-500 mt-1 max-w-xl">
+                  Pilih program yang paling sesuai untuk keluarga, orang tua lanjut usia, maupun perjalanan personal dengan jaminan standar fasilitas prima.
+                </p>
+              </div>
+
+              <!-- Persona Filter Tabs -->
+              <div class="flex flex-wrap items-center gap-1.5 bg-slate-100/80 p-1.5 rounded-2xl border border-slate-200">
+                ${categoryTabs.map(t => `
+                  <button onclick="setPublicCategory('${t.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition ${activeCategory === t.id ? 'bg-sdw-pine text-white shadow-sm' : 'text-slate-600 hover:text-slate-900 hover:bg-white'}">
+                    ${t.label}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Packages Grid -->
+            ${filteredPackages.length === 0 ? `
+              <div class="p-12 text-center bg-white rounded-2xl border border-slate-200 space-y-2">
+                <div class="text-2xl">&#128269;</div>
+                <div class="text-sm font-bold text-slate-800">Tidak ada paket dalam kategori ini</div>
+                <button onclick="setPublicCategory('ALL')" class="text-xs text-sdw-pine font-bold underline">Tampilkan Semua Paket</button>
+              </div>
+            ` : `
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                ${filteredPackages.map(renderPackageCard).join('')}
+              </div>
+            `}
+
+            <!-- Bersama Siapa: Asatidz Pembimbing & Muthawwif Section -->
+            <div class="pt-8 border-t border-slate-200/80 space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">BERSAMA SIAPA &bull; PEMBIMBING IBADAH</span>
+                  <h3 class="text-xl font-extrabold text-slate-900">Didampingi Asatidz Bersanad & Muthawwif Khidmat</h3>
+                </div>
+                <span class="text-xs text-slate-500">Pendampingan Penuh dari Tanah Air hingga Kepulangan</span>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                ${(MOCK_DATA.asatidz || []).map(ast => `
+                  <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-soft hover:shadow-card transition flex flex-col justify-between space-y-4">
+                    <div class="space-y-3">
+                      <div class="flex items-start justify-between gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-sdw-pine font-bold flex items-center justify-center text-2xl border border-emerald-200/80 shrink-0">
+                          &#128100;
+                        </div>
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-sdw-pine bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 text-right">
+                          ${escapeHtml(ast.role)}
+                        </span>
+                      </div>
+                      <div>
+                        <h4 class="font-extrabold text-slate-900 text-sm leading-snug">${escapeHtml(ast.name)}</h4>
+                        <div class="text-[11px] font-semibold text-sdw-emerald mt-0.5">${escapeHtml(ast.sanad)}</div>
+                        <div class="text-[10px] text-slate-400 font-mono mt-0.5">${escapeHtml(ast.experience)}</div>
+                      </div>
+                      <p class="text-xs text-slate-600 leading-relaxed">${escapeHtml(ast.desc)}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                      <span class="text-[10px] text-slate-400">Konsultasi Fiqih</span>
+                      <button onclick="openConsultationModal()" class="text-sdw-pine font-bold text-xs hover:underline flex items-center space-x-1">
+                        <span>Tanya Pembimbing</span>
+                        <span>&rarr;</span>
+                      </button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               4. WHERE: LOKASI & JARAK STRATEGIS HARAMAIN
+               ================================================================= -->
+          <section class="space-y-6">
+            <div class="text-center max-w-2xl mx-auto space-y-2">
+              <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">KE MANA &bull; DESTINASI & JARAK STRATEGIS</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Hotel Pelataran & Akses Ibadah Terdekat</h2>
+              <p class="text-xs sm:text-sm text-slate-500">
+                Memaksimalkan waktu bermunajat dan thawaf tanpa kelelahan mobilitas. Akses mudah bahkan untuk jamaah lansia dan anak-anak.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Makkah -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-soft hover:shadow-card transition space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-sdw-pine text-[10px] font-bold border border-emerald-200">
+                    RING-1 PELATARAN
+                  </span>
+                  <span class="text-xs font-extrabold text-sdw-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <h3 class="text-lg font-extrabold text-slate-900">Makkah Al-Mukarramah</h3>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1">
+                  <div class="font-bold text-slate-800">Swissotel Clock Tower / Retaj Al Rayyan</div>
+                  <div class="text-sdw-pine font-extrabold">Jarak: 0m &ndash; 350m ke Pelataran Ka'bah</div>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Dapat melangkah langsung ke pelataran Ka'bah saat adzan berkumandang tanpa perlu menunggu shuttle bus. Memudahkan shalat sunnah dan thawaf malam hari.
+                </p>
+              </div>
+
+              <!-- Madinah -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-soft hover:shadow-card transition space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-sdw-pine text-[10px] font-bold border border-emerald-200">
+                    DEKAT RAUDHAH
+                  </span>
+                  <span class="text-xs font-extrabold text-sdw-gold">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                </div>
+                <h3 class="text-lg font-extrabold text-slate-900">Madinah Al-Munawwarah</h3>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1">
+                  <div class="font-bold text-slate-800">Dar Al Taqwa / Concorde Dar Al Khair</div>
+                  <div class="text-sdw-pine font-extrabold">Jarak: 50m &ndash; 200m ke Gerbang Nabawi</div>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Berada di baris depan pelataran Masjid Nabawi. Sangat memuliakan jamaah wanita dan lansia saat antre masuk Raudhah Syarifah dan ziarah makam Rasulullah SAW.
+                </p>
+              </div>
+
+              <!-- Airlines & Transport -->
+              <div class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-soft hover:shadow-card transition space-y-4">
+                <div class="flex items-center justify-between">
+                  <span class="px-2.5 py-1 rounded-md bg-emerald-50 text-sdw-pine text-[10px] font-bold border border-emerald-200">
+                    DIRECT & EXPRESS
+                  </span>
+                  <span class="text-xs font-mono font-bold text-slate-400">HARAMAIN RAIL</span>
+                </div>
+                <h3 class="text-lg font-extrabold text-slate-900">Transportasi & Penerbangan</h3>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs space-y-1">
+                  <div class="font-bold text-slate-800">Garuda Indonesia & Saudia Airlines</div>
+                  <div class="text-sdw-pine font-extrabold">Direct Jakarta/Surabaya &bull; Kereta Cepat</div>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                  Penerbangan langsung tanpa transit melelahkan, serta opsi Kereta Cepat Haramain Express (kecepatan 300 km/jam, waktu tempuh Makkah-Madinah hanya 2 jam 20 menit).
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               5. WHEN: UPCOMING DEPARTURES & REALTIME SEAT AVAILABILITY
+               ================================================================= -->
+          <section class="space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <div>
+                <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">KAPAN BERANGKAT &bull; JADWAL RESMI</span>
+                <h2 class="text-2xl font-extrabold text-slate-900">Jadwal Keberangkatan & Ketersediaan Kursi</h2>
+                <!-- Audit 21 — B7: klaim realtime dihindari selama data masih simulasi -->
+                <p class="text-xs text-slate-500 mt-1">Transparansi sisa kursi terisi terkini untuk setiap kloter keberangkatan (data simulasi).</p>
+              </div>
+              <div class="flex items-center space-x-2 text-xs">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-slate-600 font-semibold">Kuota Terkini (Simulasi)</span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              ${MOCK_DATA.departures.map(renderDepartureCard).join('')}
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-50 border border-slate-200/90 text-xs text-slate-600 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <span>Ingin request jadwal khusus rombongan keluarga besar atau instansi perusahaan?</span>
+              <button onclick="openConsultationModal()" class="px-4 py-2 rounded-lg bg-sdw-pine text-white font-bold hover:bg-sdw-emerald transition shrink-0">
+                Ajukan Jadwal Custom &rarr;
+              </button>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               6. HOW: 4-STEP STEPPER & INTERACTIVE FAMILY COST ESTIMATOR
+               ================================================================= -->
+          <section id="journeyDanEstimator" class="space-y-10 scroll-mt-28">
+            <!-- 4-Step Journey Stepper -->
+            <div class="space-y-6">
+              <div class="text-center max-w-xl mx-auto space-y-2">
+                <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">BAGAIMANA CARANYA &bull; 4 LANGKAH MUDAH</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Alur Pendaftaran Hingga Keberangkatan</h2>
+                <p class="text-xs sm:text-sm text-slate-500">Transparan, terstruktur, dan terpantau dalam satu genggaman aplikasi.</p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-soft space-y-2.5 relative">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-50 text-sdw-pine font-black text-sm flex items-center justify-center border border-emerald-200">
+                    1
+                  </div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Pilih Paket & Simulasi Biaya</h4>
+                  <p class="text-xs text-slate-500 leading-relaxed">
+                    Tentukan program, tipe kamar, dan hitung estimasi biaya keluarga secara instan menggunakan kalkulator di bawah ini.
+                  </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-soft space-y-2.5 relative">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-50 text-sdw-pine font-black text-sm flex items-center justify-center border border-emerald-200">
+                    2
+                  </div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Booking Seat & Kunci Harga</h4>
+                  <p class="text-xs text-slate-500 leading-relaxed">
+                    Amankan nomor kursi resmi dengan DP. Dapatkan lembar konfirmasi Agreed Price Snapshot permanen tanpa risiko kenaikan kurs.
+                  </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-soft space-y-2.5 relative">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-50 text-sdw-pine font-black text-sm flex items-center justify-center border border-emerald-200">
+                    3
+                  </div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Lengkapi Dokumen Mandiri</h4>
+                  <p class="text-xs text-slate-500 leading-relaxed">
+                    Unggah paspor dan identitas melalui portal jamaah. Status verifikasi petugas dan penerbitan visa terpantau realtime.
+                  </p>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-soft space-y-2.5 relative">
+                  <div class="w-8 h-8 rounded-xl bg-emerald-50 text-sdw-pine font-black text-sm flex items-center justify-center border border-emerald-200">
+                    4
+                  </div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Manasik & Berangkat Khusyuk</h4>
+                  <p class="text-xs text-slate-500 leading-relaxed">
+                    Ikuti manasik tatap muka, terima koper ihram lengkap, dan berangkat bersama muthawwif berdedikasi ke Tanah Suci.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Family Cost Estimator Widget -->
+            ${renderCostEstimatorWidget()}
+          </section>
+
+          <!-- =================================================================
+               7. SOCIAL PROOF & TESTIMONIALS
+               ================================================================= -->
+          <section class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 space-y-6 shadow-soft">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">KISAH JAMAAH &bull; TESTIMONI</span>
+                <h2 class="text-2xl font-extrabold text-slate-900">Pengalaman Ibadah Penuh Ketenangan</h2>
+              </div>
+              <span class="px-2.5 py-1 rounded bg-slate-100 text-slate-500 text-[10px] font-mono font-bold">TESTIMONI SIMULASI</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                <div class="text-sdw-gold text-base">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="text-xs text-slate-600 italic leading-relaxed">
+                  "Sistem pelacakan berkas di aplikasi sangat membantu saya yang sibuk bekerja. Saya tahu persis kapan paspor saya diverifikasi dan kapan jadwal manasik tatap muka dimulai. Sangat transparan dan tidak perlu bolak-balik telepon ke travel."
+                </p>
+                <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-slate-900">&mdash; H. Budi Santoso & Keluarga</span>
+                  <span class="text-slate-400 text-[11px]">Kloter Reguler Syawal</span>
+                </div>
+              </div>
+
+              <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+                <div class="text-sdw-gold text-base">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="text-xs text-slate-600 italic leading-relaxed">
+                  "Ustadz pembimbing sangat sabar menerangkan tata cara thawaf dan sai sesuai Sunnah. Hotel di Makkah benar-benar di pelataran Ka'bah seperti yang tertera di rincian awal tanpa ada kenaikan biaya sepeser pun. Luar biasa profesional."
+                </p>
+                <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-slate-900">&mdash; Hj. Siti Rahmawati</span>
+                  <span class="text-slate-400 text-[11px]">Kloter VIP Khidmat</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- =================================================================
+               8. FAQ ACCORDION (5W+1H CLARITY)
+               ================================================================= -->
+          <section class="space-y-4 max-w-3xl mx-auto">
+            <div class="text-center space-y-1 mb-6">
+              <span class="text-xs font-bold text-sdw-emerald uppercase tracking-wider">PERTANYAAN UMUM &bull; FAQ</span>
+              <h2 class="text-2xl font-extrabold text-slate-900">Hal yang Sering Ditanyakan Jamaah</h2>
+            </div>
+
+            ${[
+              { q: 'Bagaimana cara menjamin harga paket tidak berubah setelah mendaftar?', a: 'SDW UMROH mengunci harga paket dalam Agreed Price Snapshot pada lembar pendaftaran resmi Anda. Fluktuasi kurs live mata uang asing tidak akan dibebankan kepada jamaah yang telah memiliki booking sah.' },
+              { q: 'Apakah jamaah lansia dan berkursi roda mendapat pendampingan khusus?', a: 'Ya, kami menyediakan layanan muthawwif pendamping dan fasilitas asistensi kursi roda saat pelaksanaan Thawaf dan Sai di Masjidil Haram agar ibadah tetap lancar dan khusyuk.' },
+              { q: 'Bagaimana cara melacak berkas dan visa umroh saya?', a: 'Setelah pendaftaran, Anda akan mendapatkan akses ke Portal Jamaah (PWA) di mana status paspor, validasi dokumen, hingga penerbitan visa dari Kemenag/MoFA dapat dipantau langsung setiap saat.' },
+              { q: 'Kapan perlengkapan umroh (koper & kain ihram) dibagikan?', a: 'Perlengkapan dibagikan saat sesi Manasik tatap muka atau dikirimkan langsung ke alamat rumah jamaah maksimal H-21 sebelum tanggal keberangkatan.' }
+            ].map((faq, idx) => `
+              <details class="bg-white rounded-xl border border-slate-200 p-4 text-xs group cursor-pointer shadow-sm">
+                <summary class="font-bold text-slate-800 list-none flex items-center justify-between">
+                  <span>${faq.q}</span>
+                  <span class="text-slate-400 group-open:rotate-180 transition-transform">&darr;</span>
+                </summary>
+                <p class="mt-3 text-slate-600 leading-relaxed pt-2 border-t border-slate-100">${faq.a}</p>
+              </details>
+            `).join('')}
+          </section>
+
+          <!-- =================================================================
+               9. FINAL CALL TO ACTION
+               ================================================================= -->
+          <section class="bg-gradient-to-r from-sdw-pine via-sdw-emerald to-sdw-pine text-white rounded-3xl p-8 sm:p-14 text-center space-y-5 shadow-card">
+            <div lang="ar" dir="rtl" class="font-arabic text-emerald-200/90 text-base">
+              لَبَّيْكَ اللَّهُمَّ عُمْرَةً
+            </div>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white">Niatkan Langkah Ibadah Suci Anda Hari Ini</h2>
+            <p class="text-xs sm:text-base text-emerald-100 max-w-xl mx-auto leading-relaxed">
+              Konsultasikan jadwal terbaik bersama keluarga dan raih kemudahan manasik bimbingan langsung dalam genggaman.
+            </p>
+            <div class="pt-2 flex flex-wrap justify-center gap-3">
+              <button onclick="openConsultationModal()" class="px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-sdw-gold hover:bg-yellow-500 text-slate-950 transition shadow-md">
+                Hubungi Konsultan Kami
+              </button>
+              <button onclick="scrollToSection('journeyDanEstimator')" class="px-5 py-3.5 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 hover:bg-white/20 text-white transition border border-white/20">
+                Hitung Estimasi Biaya &darr;
+              </button>
+              <button onclick="switchSurface('PILGRIM')" class="px-5 py-3.5 rounded-xl text-xs sm:text-sm font-semibold bg-white text-sdw-pine hover:bg-emerald-50 transition shadow-sm">
+                Masuk ke Portal Jamaah &rarr;
+              </button>
+            </div>
+          </section>
+
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       5. SURFACE 2: PILGRIM PWA APP
+       ======================================================================== */
+    function renderPilgrimSurface() {
+      // Periksa viewState testing
+      if (appState.viewState === 'LOADING') return renderLoadingState('Memuat data status jamaah...');
+      if (appState.viewState === 'EMPTY') return renderEmptyState('Belum Ada Pendaftaran Aktif', 'Akun Anda belum terdaftar dalam paket keberangkatan. Silakan pilih paket di halaman utama.', 'Lihat Paket Umroh', "switchSurface('PUBLIC')");
+      if (appState.viewState === 'ERROR') return renderErrorState('Gagal Memuat Data Perjalanan', 'Koneksi ke backend Apps Script sedang terganggu. Silakan muat ulang.', 'retryView()');
+
+      return `
+        <div class="max-w-4xl mx-auto space-y-6 fade-in pb-16">
+          
+          <!-- View State Tester Bar (Section 18 & 33 Compliance) -->
+          <div class="flex items-center justify-between text-xs bg-white p-2.5 rounded-xl border border-slate-200">
+            <span class="text-slate-500 text-[11px] font-medium">Uji Tampilan State:</span>
+            <div class="flex items-center space-x-1.5">
+              <button onclick="setViewState('SUCCESS')" class="px-2 py-1 rounded text-[10px] font-semibold ${appState.viewState === 'SUCCESS' ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700'}">Normal</button>
+              <button onclick="setViewState('EMPTY')" class="px-2 py-1 rounded text-[10px] font-semibold ${appState.viewState === 'EMPTY' ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700'}">Empty</button>
+              <button onclick="setViewState('ERROR')" class="px-2 py-1 rounded text-[10px] font-semibold ${appState.viewState === 'ERROR' ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700'}">Error</button>
+              <button onclick="setViewState('LOADING')" class="px-2 py-1 rounded text-[10px] font-semibold ${appState.viewState === 'LOADING' ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700'}">Loading</button>
+            </div>
+          </div>
+
+          <!-- 1. GREETING & CONTEXT HEADER -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <div lang="ar" dir="rtl" class="font-arabic text-sdw-gold text-base font-bold">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+              <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">
+                Assalamu'alaikum, ${escapeHtml(MOCK_DATA.currentPilgrim.full_name)}
+              </h1>
+              <p class="text-xs text-slate-500">Selamat datang di portal pendamping satu pintu ibadah Anda.</p>
+            </div>
+            
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-100 text-sdw-pine border border-emerald-200">
+                Jamaah Terkonfirmasi
+              </span>
+            </div>
+          </div>
+
+          <!-- 2. PILGRIM SUB-NAVIGATION (Tabs) -->
+          <div class="flex border-b border-slate-200 text-xs font-semibold space-x-6 overflow-x-auto">
+            <button onclick="setPilgrimTab('OVERVIEW')" class="py-3 border-b-2 transition ${appState.pilgrimTab === 'OVERVIEW' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Ringkasan & Next Action
+            </button>
+            <button onclick="setPilgrimTab('DOCUMENTS')" class="py-3 border-b-2 transition ${appState.pilgrimTab === 'DOCUMENTS' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'} flex items-center space-x-1.5">
+              <span>Dokumen Saya</span>
+              <span class="w-2 h-2 rounded-full bg-red-500"></span>
+            </button>
+            <button onclick="setPilgrimTab('PAYMENT')" class="py-3 border-b-2 transition ${appState.pilgrimTab === 'PAYMENT' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Pembayaran & Invoice
+            </button>
+            <button onclick="setPilgrimTab('PREPARATION')" class="py-3 border-b-2 transition ${appState.pilgrimTab === 'PREPARATION' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Persiapan
+            </button>
+            <button onclick="setPilgrimTab('MANASIK')" class="py-3 border-b-2 transition ${appState.pilgrimTab === 'MANASIK' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Bimbingan Manasik
+            </button>
+          </div>
+
+          <!-- 3. PILGRIM CONTENT DEPENDING ON TAB -->
+          <div class="space-y-6">
+            ${appState.pilgrimTab === 'OVERVIEW' ? `
+              <!-- Journey Card -->
+              ${renderJourneyCard(MOCK_DATA.currentPilgrim)}
+
+              <!-- Next Action Engine -->
+              ${renderNextActionCard()}
+
+              <!-- Manasik Preview & Quick Alert -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                ${renderManasikCard(MOCK_DATA.nextManasik)}
+                
+                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-soft space-y-4 flex flex-col justify-between">
+                  <div>
+                    <span class="text-xs font-bold text-sdw-pine uppercase tracking-wider">Informasi Penerbangan</span>
+                    <h3 class="font-extrabold text-base text-slate-900 mt-1">Keberangkatan Langsung (Direct)</h3>
+                    <div class="mt-3 space-y-2 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100">
+                      <div><b>Maskapai:</b> Saudia Airlines SV-819</div>
+                      <div><b>Rute:</b> CGK (Jakarta) &rarr; JED (Jeddah King Abdulaziz)</div>
+                      <div><b>Bagasi:</b> 2x 23kg + 1 Tas Kabin 7kg + Air Zamzam 5L</div>
+                    </div>
+                  </div>
+
+                  <div class="pt-2 border-t border-slate-100 flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Terminal 3 Soekarno-Hatta</span>
+                    <button onclick="showToast('Rincian eticket akan diaktifkan setelah visa stamp selesai.')" class="text-sdw-emerald font-semibold hover:underline">
+                      Rincian Tiket &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ` : ''}
+
+            ${appState.pilgrimTab === 'DOCUMENTS' ? `
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="font-bold text-slate-900 text-base">Kelengkapan Dokumen Perjalanan</h3>
+                    <p class="text-xs text-slate-500">Berkas wajib diunggah untuk pengajuan visa umroh resmi.</p>
+                  </div>
+                  <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-100 text-amber-900">
+                    1 Revisi Dibutuhkan
+                  </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  ${MOCK_DATA.pilgrimDocuments.map(renderDocumentCard).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${appState.pilgrimTab === 'PAYMENT' ? `
+              ${renderPaymentSummary(MOCK_DATA.invoice)}
+            ` : ''}
+
+            ${appState.pilgrimTab === 'PREPARATION' ? `
+              <div class="space-y-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Matriks Kesiapan Keberangkatan</h3>
+                  <p class="text-xs text-slate-500">Pantau kelengkapan administrasi, fisik, dan perlengkapan ibadah Anda.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  ${MOCK_DATA.preparationItems.map(renderPreparationItem).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${appState.pilgrimTab === 'MANASIK' ? `
+              <div class="space-y-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base">Bimbingan & Teori Manasik</h3>
+                  <p class="text-xs text-slate-500">Jadwal pembekalan fiqih ibadah umroh sebelum terbang ke Tanah Suci.</p>
+                </div>
+                ${renderManasikCard(MOCK_DATA.nextManasik)}
+              </div>
+            ` : ''}
+          </div>
+
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       6. SURFACE 3: PARTNER PORTAL
+       ======================================================================== */
+    function renderPartnerSurface() {
+      return `
+        <div class="space-y-6 fade-in pb-12">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-sdw-gold/20 text-sdw-pine border border-sdw-gold/30 px-2.5 py-0.5 rounded-full">
+                Portal Kemitraan & Syiar &bull; SIMULASI
+              </span>
+              <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
+                Dashboard Mitra: Mitra Demo Syiar 01 (SIMULASI)
+              </h1>
+              <p class="text-xs text-slate-500">Pantau referral prospek calon jamaah dan estimasi bagi hasil syiar (Data Demo Fiktif).</p>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <button onclick="copyReferralLink()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald transition shadow-sm flex items-center space-x-1.5">
+                <span>&#128279; Salin Link Referral</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Partner KPI Cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft">
+              <div class="text-xs text-slate-500 font-medium">Total Klik Referral</div>
+              <div class="text-2xl font-extrabold text-slate-900 mt-1">148</div>
+              <div class="text-[10px] text-emerald-600 mt-0.5">+12 minggu ini (Demo)</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft">
+              <div class="text-xs text-slate-500 font-medium">Prospek / Leads Aktif</div>
+              <div class="text-2xl font-extrabold text-sdw-pine mt-1">8 Jamaah</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">3 tahap konsultasi</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft">
+              <div class="text-xs text-slate-500 font-medium">Jamaah Terkonfirmasi</div>
+              <div class="text-2xl font-extrabold text-sdw-emerald mt-1">5 Seat</div>
+              <div class="text-[10px] text-emerald-600 mt-0.5">DP & Berkas Lengkap</div>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-soft">
+              <div class="text-xs text-slate-500 font-medium">Ujrah Syiar (Demo)</div>
+              <div class="text-2xl font-extrabold text-sdw-gold mt-1">Rp 7.500.000</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Formula: TBD / Sesuai Akad</div>
+            </div>
+          </div>
+
+          <!-- Referral Lead Table with fictional demo names -->
+          <div>
+            <h3 class="font-bold text-sm text-slate-900 mb-3">Daftar Prospek dari Kode Referral Anda (Demo)</h3>
+            ${renderDataTable({
+              headers: ['Nama Calon Jamaah', 'Paket Diminati', 'Status Alur', 'Tanggal Registrasi', 'Aksi'],
+              rows: [
+                ['Calon Jamaah Demo A', 'Umroh VIP Akhir Tahun', renderStatusBadge('CONSULTATION'), '20 Nov 2026', '<button onclick="showToast(\'Detail prospek simulasi dibuka\')" class="text-sdw-pine font-bold">Detail</button>'],
+                ['Calon Jamaah Demo B (Keluarga)', 'Umroh Reguler Syawal', renderStatusBadge('CONFIRMED'), '15 Nov 2026', '<button onclick="showToast(\'Detail prospek simulasi dibuka\')" class="text-sdw-pine font-bold">Detail</button>'],
+                ['Calon Jamaah Demo C', 'Umroh Plus Turki', renderStatusBadge('QUALIFIED'), '08 Nov 2026', '<button onclick="showToast(\'Detail prospek simulasi dibuka\')" class="text-sdw-pine font-bold">Detail</button>']
+              ]
+            })}
+          </div>
+
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       7. SURFACE 4: BACKOFFICE OPERATIONAL DASHBOARD
+       ======================================================================== */
+    function renderBackofficeSurface() {
+      return `
+        <div class="space-y-6 fade-in pb-12">
+          
+          <!-- Backoffice Header -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-800 px-2 py-0.5 rounded font-mono">
+                OPS & CRM CONSOLE
+              </span>
+              <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-1">
+                Backoffice Operational Center
+              </h1>
+              <p class="text-xs text-slate-500">"Apa yang membutuhkan perhatian hari ini?" &mdash; Monitor pipeline, berkas jamaah, dan kloter.</p>
+            </div>
+
+            <!-- Role Badge in Backoffice -->
+            <div class="flex items-center space-x-2 text-xs bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-sm">
+              <span class="text-slate-400">Login Role:</span>
+              <span class="font-bold text-sdw-pine">${escapeHtml(appState.role)}</span>
+            </div>
+          </div>
+
+          <!-- "Apa yang Butuh Perhatian?" Critical Alerts -->
+          <div class="bg-amber-50/70 border border-amber-200/90 rounded-2xl p-5 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-amber-900 flex items-center space-x-2">
+                <span>&#9888;</span>
+                <span>Butuh Perhatian Operasional Hari Ini</span>
+              </h3>
+              <span class="text-[11px] font-mono text-amber-800">3 Peringatan</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              ${MOCK_DATA.backofficeAlerts.map(a => `
+                <div class="bg-white p-3.5 rounded-xl border border-amber-100 space-y-1 text-xs shadow-sm">
+                  <div class="flex items-center justify-between">
+                    <span class="font-bold text-slate-900">${escapeHtml(a.title)}</span>
+                    <span class="text-[10px] text-slate-400">${a.time}</span>
+                  </div>
+                  <p class="text-slate-600 text-[11px] leading-relaxed">${escapeHtml(a.desc)}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+
+          <!-- Backoffice Sub-navigation Tabs -->
+          <div class="flex border-b border-slate-200 text-xs font-semibold space-x-6 overflow-x-auto">
+            <button onclick="setBackofficeTab('LEADS')" class="py-3 border-b-2 transition ${appState.backofficeTab === 'LEADS' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Pipeline Leads (${MOCK_DATA.leads.length})
+            </button>
+            <button onclick="setBackofficeTab('REGISTRATIONS')" class="py-3 border-b-2 transition ${appState.backofficeTab === 'REGISTRATIONS' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Pendaftaran (${MOCK_DATA.registrations.length})
+            </button>
+            <button onclick="setBackofficeTab('DOCUMENTS')" class="py-3 border-b-2 transition ${appState.backofficeTab === 'DOCUMENTS' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Verifikasi Dokumen
+            </button>
+            <button onclick="setBackofficeTab('DEPARTURES')" class="py-3 border-b-2 transition ${appState.backofficeTab === 'DEPARTURES' ? 'border-sdw-pine text-sdw-pine font-bold' : 'border-transparent text-slate-400 hover:text-slate-700'}">
+              Jadwal Kloter (${MOCK_DATA.departures.length})
+            </button>
+          </div>
+
+          <!-- Tab Content Views -->
+          <div>
+            ${appState.backofficeTab === 'LEADS' ? `
+              ${renderDataTable({
+                headers: ['ID Lead', 'Calon Jamaah', 'Kontak', 'Pilihan Program', 'Urgensi', 'Budget', 'Status Alur', 'Sales Owner', 'Aksi'],
+                rows: MOCK_DATA.leads.map(l => [
+                  `<span class="font-mono text-slate-500 font-bold">${l.id}</span>`,
+                  `<b>${escapeHtml(l.name)}</b>`,
+                  l.phone,
+                  escapeHtml(l.package),
+                  `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${l.urgency === 'HIGH' ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-700'}">${l.urgency}</span>`,
+                  l.budget,
+                  renderStatusBadge(l.status),
+                  escapeHtml(l.owner),
+                  `<button onclick="showToast('Lead ${l.id} dibuka untuk konsultasi')" class="text-sdw-pine font-bold hover:underline">Kelola &rarr;</button>`
+                ])
+              })}
+            ` : ''}
+
+            ${appState.backofficeTab === 'REGISTRATIONS' ? `
+              ${renderDataTable({
+                headers: ['ID Registrasi', 'Nama Jamaah', 'Paket', 'Jadwal', 'Status Mesin', 'Berkas', 'Finansial', 'Aksi'],
+                rows: MOCK_DATA.registrations.map(r => [
+                  `<span class="font-mono text-slate-500 font-bold">${r.id}</span>`,
+                  `<b>${escapeHtml(r.customer)}</b>`,
+                  escapeHtml(r.package),
+                  r.departure,
+                  renderStatusBadge(r.status),
+                  `<span class="font-mono">${r.docs}</span>`,
+                  `<span class="font-mono text-slate-700">${r.payment}</span>`,
+                  `<button onclick="showToast('Detail transaksi ${r.id} dibuka')" class="text-sdw-pine font-bold hover:underline">Review &rarr;</button>`
+                ])
+              })}
+            ` : ''}
+
+            ${appState.backofficeTab === 'DOCUMENTS' ? `
+              <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-soft space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div>
+                    <h3 class="font-bold text-sm text-slate-900">Antrean Verifikasi Dokumen Masuk</h3>
+                    <p class="text-xs text-slate-500">Review dan validasi berkas fisik & digital yang diunggah oleh calon jamaah.</p>
+                  </div>
+                  <span class="text-xs px-2.5 py-1 rounded bg-amber-100 text-amber-900 font-bold">
+                    ${MOCK_DATA.pilgrimDocuments.filter(d => d.status === 'UNDER_REVIEW' || d.status === 'REVISION_REQUIRED').length} Butuh Tindakan
+                  </span>
+                </div>
+                <div class="space-y-3">
+                  ${MOCK_DATA.pilgrimDocuments.map(doc => `
+                    <div class="p-4 rounded-xl border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white hover:border-slate-300 transition">
+                      <div>
+                        <div class="flex items-center space-x-2">
+                          <span class="font-bold text-xs text-slate-900">${escapeHtml(doc.title)}</span>
+                          ${renderStatusBadge(doc.status)}
+                        </div>
+                        <div class="text-[11px] text-slate-400 font-mono mt-0.5">${doc.id} &bull; File: <b>${escapeHtml(doc.file_name || 'Belum diunggah')}</b></div>
+                        ${doc.review_notes ? `<div class="text-[10px] text-slate-600 mt-1 italic bg-slate-50 p-1.5 rounded border border-slate-100">Catatan: ${escapeHtml(doc.review_notes)}</div>` : ''}
+                      </div>
+                      <div class="flex items-center space-x-2 shrink-0">
+                        <button onclick="handleVerifyDocument('${doc.id}', false)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 text-red-700 hover:bg-red-100 transition">Tolak (Revisi)</button>
+                        <button onclick="handleVerifyDocument('${doc.id}', true)" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition">Verifikasi Sah</button>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
+
+            ${appState.backofficeTab === 'DEPARTURES' ? `
+              <div class="space-y-3">
+                ${MOCK_DATA.departures.map(renderDepartureCard).join('')}
+              </div>
+            ` : ''}
+          </div>
+
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       8. SURFACE 5: FOUNDATION SYSTEM DIAGNOSTIC (Preserved from Step 1)
+       ======================================================================== */
+    function renderFoundationSurface() {
+      return `
+        <div class="space-y-8 fade-in pb-12">
+          
+          <!-- Context Banner -->
+          <section class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-soft relative overflow-hidden">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-sdw-goldLight/40 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="relative z-10 max-w-3xl">
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-50 text-sdw-emerald text-xs font-bold uppercase tracking-wider mb-2">
+                <span>Pondasi Diagnostic Backend (Step 1 Preserved)</span>
+              </div>
+              <h2 class="text-2xl font-bold text-slate-900 tracking-tight">
+                Pondasi Komunikasi & Validasi Data Model
+              </h2>
+              <p class="mt-2 text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Menguji konektivitas arsitektur tiga lapis: <span class="font-semibold text-slate-800">Antarmuka Frontend</span> &rarr; 
+                <span class="font-semibold text-slate-800">Google Apps Script (Code.gs)</span> &rarr; 
+                <span class="font-semibold text-slate-800">22 Sheet Master Spreadsheet</span> dengan integritas mutasi dan jejak audit sesuai Master Specification 00–19.
+              </p>
+
+              <!-- Runtime Bridge Switcher -->
+              <div class="mt-4 pt-4 border-t border-slate-100 flex flex-wrap items-center gap-3">
+                <div class="text-xs font-medium text-slate-500">Jalur Eksekusi:</div>
+                <button id="btnModeGAS" onclick="setBridgeMode('GAS')" class="px-3 py-1.5 rounded-lg text-xs font-semibold ${appState.bridgeMode === 'GAS' ? 'bg-sdw-pine text-white border-sdw-pine' : 'bg-slate-100 text-slate-700'} border transition shadow-sm">
+                  Google Apps Script Runtime
+                </button>
+                <button id="btnModeMock" onclick="setBridgeMode('MOCK')" class="px-3 py-1.5 rounded-lg text-xs font-semibold ${appState.bridgeMode === 'MOCK' ? 'bg-sdw-pine text-white border-sdw-pine' : 'bg-slate-100 text-slate-700'} border transition shadow-sm">
+                  Interactive Test Sandbox (Local/Web)
+                </button>
+                <span class="text-xs text-slate-400">|</span>
+                <span id="runtimeHint" class="text-xs text-slate-500 italic">
+                  ${appState.bridgeMode === 'GAS' ? 'google.script.run active' : 'Mode Sandbox Standar Model 00-19 Emulated'}
+                </span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Core Diagnostic Controls & Terminal -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-soft flex flex-col justify-between space-y-6">
+              <div>
+                <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                  <h3 class="font-bold text-slate-900 text-sm flex items-center space-x-2">
+                    <span class="text-sdw-gold">&#9874;</span>
+                    <span>Test Runner Foundation</span>
+                  </h3>
+                  <span class="text-xs px-2 py-0.5 rounded bg-slate-100 font-mono text-slate-600">Step 1</span>
+                </div>
+
+                <div class="mt-4 space-y-3">
+                  <p class="text-xs text-slate-500 leading-normal">
+                    Pilih tindakan diagnostik untuk memverifikasi handshake, skema tabel, dan operasi tulis-baca ke Google Spreadsheet:
+                  </p>
+
+                  <button id="btnHealth" onclick="runHealthCheck()" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold border border-slate-300 shadow-sm flex items-center justify-between group transition">
+                    <span class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                      <span>1. Ping Server & Status DB</span>
+                    </span>
+                    <span class="text-slate-400 group-hover:translate-x-0.5 transition font-mono">&rarr;</span>
+                  </button>
+
+                  <button id="btnInit" onclick="runInitDatabase()" class="w-full py-2.5 px-4 rounded-xl bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold border border-slate-300 shadow-sm flex items-center justify-between group transition">
+                    <span class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      <span>2. Bootstrap 22 Sheet Master</span>
+                    </span>
+                    <span class="text-slate-400 group-hover:translate-x-0.5 transition font-mono">&rarr;</span>
+                  </button>
+
+                  <button id="btnReadWrite" onclick="runReadWriteTest()" class="w-full py-2.5 px-4 rounded-xl bg-sdw-pine hover:bg-sdw-emerald text-white text-xs font-semibold shadow-sm flex items-center justify-between group transition">
+                    <span class="flex items-center space-x-2">
+                      <span class="w-2 h-2 rounded-full bg-sdw-gold status-pulse"></span>
+                      <span>3. Uji Mutasi Read/Write & Audit</span>
+                    </span>
+                    <span class="text-sdw-gold group-hover:translate-x-0.5 transition font-mono">&rarr;</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="p-3 bg-amber-50/70 border border-amber-200/80 rounded-xl text-[11px] text-amber-900 space-y-1">
+                <div class="font-bold flex items-center space-x-1">
+                  <span>&#9888; Aturan Arsitektur:</span>
+                </div>
+                <div>Frontend tidak boleh mengakses Spreadsheet secara langsung. Seluruh mutasi divalidasi oleh fungsi domain di <code>Code.gs</code>.</div>
+              </div>
+            </div>
+
+            <!-- Event Stream Console -->
+            <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 shadow-soft flex flex-col lg:col-span-2 text-slate-200 font-mono text-xs h-[380px]">
+              <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+                <div class="flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+                  <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+                  <span class="text-slate-400 text-[11px] font-sans ml-2 font-medium">Diagnostic Event Stream & Payload Trace</span>
+                </div>
+                <button onclick="clearConsole()" class="text-slate-500 hover:text-slate-300 font-sans text-[11px] transition">Bersihkan</button>
+              </div>
+
+              <div id="terminalBody" class="flex-1 overflow-y-auto py-3 space-y-2 pr-2">
+                <div class="text-slate-500">// Menunggu inisiasi tes... Silakan klik salah satu tombol di panel kendali.</div>
+              </div>
+
+              <div class="pt-2 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between font-sans">
+                <div id="terminalStatusSummary" class="flex items-center space-x-2">
+                  <span>State: Idle</span>
+                </div>
+                <div id="terminalLatency" class="font-mono text-slate-500">Latency: 0ms</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 22 Sheet Schema Matrix Inspector -->
+          <section class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-soft space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+              <div>
+                <h3 class="text-base font-bold text-slate-900">Matrix Verifikasi Skema Domain (22 Sheets)</h3>
+                <p class="text-xs text-slate-500">Representasi relasional domain master PRD & Domain Model 05</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <input type="text" id="schemaSearch" oninput="filterSheets()" placeholder="Cari sheet atau kolom..." class="text-xs border border-slate-200 rounded-lg px-3 py-2 w-56 focus:outline-none focus:border-sdw-pine">
+                <span class="text-xs font-bold text-sdw-pine bg-emerald-50 px-2.5 py-1.5 rounded-lg border border-emerald-200/60">
+                  22/22 Sheet Siap
+                </span>
+              </div>
+            </div>
+
+            <div id="sheetGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Dynamically generated -->
+            </div>
+          </section>
+
+        </div>
+      `;
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       9. NAVIGATION & CONTROLLER LOGIC
+       ======================================================================== */
+    const SHEETS_SCHEMA = {
+      'DB_Users': { prefix: 'USR-', cols: ['id', 'name', 'email', 'role', 'status', 'phone', 'created_at', 'updated_at'], domain: 'Identity & Access' },
+      'DB_Customers': { prefix: 'CUS-', cols: ['id', 'nik', 'full_name', 'gender', 'birth_date', 'birth_place', 'phone', 'email', 'address', 'city', 'province', 'created_at', 'updated_at'], domain: 'Master Pelanggan' },
+      'DB_Leads': { prefix: 'LED-', cols: ['id', 'customer_id', 'source', 'sales_owner_id', 'status', 'urgency', 'budget_range', 'notes', 'created_at', 'updated_at'], domain: 'CRM Pipeline' },
+      'DB_Sales_Activities': { prefix: 'ACT-', cols: ['id', 'lead_id', 'actor_id', 'activity_type', 'summary', 'outcome', 'timestamp'], domain: 'Aktivitas Sales' },
+      'DB_Follow_Ups': { prefix: 'FLW-', cols: ['id', 'lead_id', 'sales_owner_id', 'scheduled_at', 'channel', 'notes', 'status', 'completed_at'], domain: 'Jadwal Follow-up' },
+      'DB_Packages': { prefix: 'PKG-', cols: ['id', 'name', 'slug', 'package_type', 'duration_days', 'status', 'description', 'published_at', 'created_at'], domain: 'Katalog Paket' },
+      'DB_Package_Prices': { prefix: 'PRC-', cols: ['id', 'package_id', 'currency', 'quad_price', 'triple_price', 'double_price', 'effective_start', 'effective_end', 'status'], domain: 'Tarif & Snapshot' },
+      'DB_Departures': { prefix: 'DEP-', cols: ['id', 'package_id', 'departure_date', 'return_date', 'airline', 'origin_airport', 'capacity_total', 'capacity_booked', 'status', 'notes'], domain: 'Jadwal Kloter' },
+      'DB_Registrations': { prefix: 'REG-', cols: ['id', 'customer_id', 'departure_id', 'package_id', 'room_type', 'agreed_price_snapshot', 'discount_snapshot', 'final_price_snapshot', 'status', 'sales_id', 'notes', 'created_at', 'updated_at'], domain: 'Pendaftaran' },
+      'DB_Document_Requirements': { prefix: 'DCR-', cols: ['id', 'code', 'title', 'description', 'is_mandatory', 'applies_to_gender', 'max_expiry_months'], domain: 'Master Persyaratan' },
+      'DB_Pilgrim_Documents': { prefix: 'DOC-', cols: ['id', 'registration_id', 'requirement_id', 'file_name', 'file_ref_mock', 'status', 'review_notes', 'verified_by', 'verified_at', 'updated_at'], domain: 'Dokumen Jamaah' },
+      'DB_Invoices': { prefix: 'INV-', cols: ['id', 'registration_id', 'invoice_number', 'total_amount', 'paid_amount', 'outstanding_amount', 'due_date', 'status', 'created_at', 'updated_at'], domain: 'Finansial Invoice' },
+      'DB_Payment_Schedules': { prefix: 'SCH-', cols: ['id', 'invoice_id', 'term_number', 'title', 'amount', 'due_date', 'status'], domain: 'Termin Bayar' },
+      'DB_Payments': { prefix: 'PAY-', cols: ['id', 'invoice_id', 'schedule_id', 'amount', 'payment_method', 'reference_number', 'proof_ref_mock', 'status', 'submitted_at', 'verified_by', 'verified_at', 'notes'], domain: 'Mutasi Bayar' },
+      'DB_Refunds': { prefix: 'REF-', cols: ['id', 'registration_id', 'invoice_id', 'amount_requested', 'cancellation_fee', 'amount_approved', 'status', 'reason', 'requested_at', 'processed_at'], domain: 'Refund / Batal' },
+      'DB_Preparation': { prefix: 'PRP-', cols: ['id', 'registration_id', 'dimension', 'item_name', 'status', 'notes', 'updated_at'], domain: 'Perlengkapan & Visa' },
+      'DB_Manasik': { prefix: 'MAN-', cols: ['id', 'departure_id', 'session_title', 'session_type', 'scheduled_at', 'location', 'muthawwif_id', 'status'], domain: 'Bimbingan Manasik' },
+      'DB_Trips': { prefix: 'TRP-', cols: ['id', 'departure_id', 'trip_code', 'lead_tour_leader_id', 'muthawwif_id', 'status', 'started_at', 'ended_at'], domain: 'Kloter Operasional' },
+      'DB_Trip_Members': { prefix: 'MBR-', cols: ['id', 'trip_id', 'registration_id', 'bus_number', 'makkah_room_number', 'madinah_room_number', 'special_assistance'], domain: 'Manifest Jamaah' },
+      'DB_Announcements': { prefix: 'ANN-', cols: ['id', 'target_role', 'departure_id', 'title', 'body_content', 'priority', 'published_at', 'created_by'], domain: 'Pengumuman' },
+      'DB_Notifications': { prefix: 'NTF-', cols: ['id', 'user_id', 'title', 'message', 'category', 'is_read', 'action_link', 'created_at'], domain: 'Notifikasi In-App' },
+      'DB_Audit_Logs': { prefix: 'AUD-', cols: ['id', 'timestamp', 'actor', 'action', 'entity', 'entity_id', 'before', 'after', 'reason'], domain: 'Jejak Audit Sistem' }
+    };
+
+    // Initialize application
+    window.addEventListener('DOMContentLoaded', () => {
+      // Auto detect GAS runtime
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        setBridgeMode('GAS');
+      } else {
+        setBridgeMode('MOCK');
+      }
+
+      renderCurrentSurface();
+    });
+
+    // Audit 21 — C6: hormati preferensi reduced-motion pada smooth scroll
+    function prefersReducedMotion() {
+      return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+
+    // Switch between 5 Surfaces
+    function switchSurface(surface) {
+      appState.surface = surface;
+      updateNavigationHighlight(surface);
+      renderCurrentSurface();
+      window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    }
+
+    function renderCurrentSurface() {
+      const container = document.getElementById('mainViewport');
+      if (appState.surface === 'PUBLIC') {
+        container.innerHTML = renderPublicSurface();
+      } else if (appState.surface === 'PILGRIM') {
+        container.innerHTML = renderPilgrimSurface();
+      } else if (appState.surface === 'PARTNER') {
+        container.innerHTML = renderPartnerSurface();
+      } else if (appState.surface === 'BACKOFFICE') {
+        container.innerHTML = renderBackofficeSurface();
+      } else if (appState.surface === 'FOUNDATION') {
+        container.innerHTML = renderFoundationSurface();
+        renderSheetGrid();
+      }
+    }
+
+    function updateNavigationHighlight(surface) {
+      const surfaces = ['PUBLIC', 'PILGRIM', 'PARTNER', 'BACKOFFICE', 'FOUNDATION'];
+      surfaces.forEach(s => {
+        const deskBtn = document.getElementById(`nav-${s}`);
+        const mobBtn = document.getElementById(`mobnav-${s}`);
+        const isActive = (s === surface);
+
+        if (deskBtn) {
+          deskBtn.className = isActive 
+            ? 'px-3 py-1.5 rounded-lg transition-all text-white bg-sdw-emerald shadow-sm flex items-center space-x-1.5 font-bold'
+            : 'px-3 py-1.5 rounded-lg transition-all text-slate-300 hover:text-white flex items-center space-x-1.5';
+        }
+        if (mobBtn) {
+          mobBtn.className = isActive 
+            ? 'py-1.5 px-3 rounded-lg font-bold text-white bg-sdw-emerald whitespace-nowrap min-h-[36px] flex items-center shadow-sm'
+            : 'py-1.5 px-3 rounded-lg text-emerald-200 hover:text-white whitespace-nowrap min-h-[36px] flex items-center';
+        }
+      });
+    }
+
+    // Role switcher simulation handler & state synchronizer
+    function setAppRole(newRole) {
+      appState.role = newRole;
+      const roleSelect = document.getElementById('roleSelector');
+      if (roleSelect) {
+        roleSelect.value = newRole;
+      }
+    }
+
+    function handleRoleChange(newRole) {
+      setAppRole(newRole);
+      showToast(`Simulasi role beralih ke: ${newRole}`);
+      
+      // Auto route to surface and sub-tab matching persona
+      if (newRole === 'VISITOR') {
+        switchSurface('PUBLIC');
+      } else if (newRole === 'PILGRIM') {
+        switchSurface('PILGRIM');
+        setPilgrimTab('OVERVIEW');
+      } else if (newRole === 'PARTNER') {
+        switchSurface('PARTNER');
+      } else {
+        // Staff roles: SALES, DOCUMENT_OFFICER, FINANCE, OPERATIONS, ADMIN
+        switchSurface('BACKOFFICE');
+        if (newRole === 'SALES') {
+          setBackofficeTab('LEADS');
+        } else if (newRole === 'DOCUMENT_OFFICER') {
+          setBackofficeTab('DOCUMENTS');
+        } else if (newRole === 'FINANCE') {
+          setBackofficeTab('REGISTRATIONS');
+        } else if (newRole === 'OPERATIONS') {
+          setBackofficeTab('DEPARTURES');
+        } else {
+          setBackofficeTab('LEADS');
+        }
+      }
+    }
+
+    function setPilgrimTab(tab) {
+      appState.pilgrimTab = tab;
+      renderCurrentSurface();
+    }
+
+    function setBackofficeTab(tab) {
+      appState.backofficeTab = tab;
+      renderCurrentSurface();
+    }
+
+    function setViewState(state) {
+      appState.viewState = state;
+      renderCurrentSurface();
+    }
+
+    function retryView() {
+      setViewState('SUCCESS');
+    }
+
+    function handleNextActionClick(targetTab, payload) {
+      setPilgrimTab(targetTab);
+      if (payload) {
+        showToast('Membuka detail perbaikan dokumen...');
+      }
+    }
+  </script>
+
+  <script>
+    /* ========================================================================
+       10. MODALS, TOASTS & DIAGNOSTIC RUNNER (Preserved Handshake)
+       ======================================================================== */
+    
+    function setBridgeMode(mode) {
+      appState.bridgeMode = mode;
+      const badgeText = document.getElementById('connBadgeText');
+      if (badgeText) {
+        if (mode === 'GAS') {
+          badgeText.textContent = 'GAS ACTIVE';
+          badgeText.className = 'hidden sm:inline text-emerald-300 font-bold';
+        } else {
+          badgeText.textContent = 'SIMULATED / DEMO';
+          badgeText.className = 'hidden sm:inline text-amber-300 font-bold';
+        }
+      }
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      while (container.children.length >= 2) {
+        container.removeChild(container.firstChild);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl border border-slate-700 flex items-center space-x-2.5 mb-2 pointer-events-auto fade-in';
+      toast.innerHTML = `<span class="text-sdw-gold font-bold">&#9432;</span><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function openModal(title, contentHtml, actionBtnHtml = '') {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = contentHtml;
+      const actions = document.getElementById('modalActions');
+      actions.innerHTML = `
+        <button onclick="closeModal()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200">Batal</button>
+        ${actionBtnHtml}
+      `;
+      const modal = document.getElementById('actionModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('actionModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      document.body.style.overflow = '';
+    }
+
+    function handleModalBackdropClick(e) {
+      if (e.target.id === 'actionModal') {
+        closeModal();
+      }
+    }
+
+    // Global keyboard listener for modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('actionModal');
+        if (modal && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      }
+    });
+
+    // Backoffice Document Verification Action (Section 18 & 29 Data Propagation)
+    function handleVerifyDocument(docId, approved) {
+      const doc = MOCK_DATA.pilgrimDocuments.find(d => d.id === docId);
+      if (doc) {
+        if (approved) {
+          doc.status = 'VERIFIED';
+          doc.review_notes = 'Dokumen telah divalidasi sah oleh petugas verifikator (Simulasi).';
+          showToast(`Dokumen ${doc.title} berhasil diverifikasi sah.`);
+        } else {
+          doc.status = 'REVISION_REQUIRED';
+          doc.review_notes = 'Scan dokumen belum memenuhi syarat atau terpotong. Harap upload revisi scan yang jelas.';
+          showToast(`Dokumen ${doc.title} ditandai butuh revisi.`);
+        }
+        renderCurrentSurface();
+      }
+    }
+
+    function openPackageDetailModal(pkgId) {
+      const pkg = MOCK_DATA.packages.find(p => p.id === pkgId);
+      if (!pkg) return;
+
+      openModal(
+        pkg.name,
+        `
+          <div class="space-y-3">
+            <div class="p-3 bg-emerald-50 rounded-xl text-sdw-pine text-xs font-semibold flex items-center justify-between">
+              <span>Durasi: ${pkg.duration_days} Hari Perjalanan</span>
+              <span>${pkg.package_type}</span>
+            </div>
+            <p class="text-xs text-slate-600 leading-relaxed">${escapeHtml(pkg.description)}</p>
+            <div class="space-y-1.5 text-xs text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-100">
+              <div><b>Hotel Makkah:</b> ${escapeHtml(pkg.hotel_makkah)}</div>
+              <div><b>Hotel Madinah:</b> ${escapeHtml(pkg.hotel_madinah)}</div>
+              <div><b>Maskapai:</b> ${escapeHtml(pkg.airline)}</div>
+              <div><b>Tarif Mulai:</b> Rp ${pkg.starting_price.toLocaleString('id-ID')}</div>
+            </div>
+            <div class="text-[11px] text-amber-800 bg-amber-50 p-2.5 rounded-lg border border-amber-200">
+              <b>Catatan Prototype:</b> Harga di atas akan dikunci secara permanen pada saat booking seat (Agreed Price Snapshot).
+            </div>
+          </div>
+        `,
+        `<button onclick="closeModal(); openBookingModal({ packageId: '${pkg.id}' })" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald">Booking Paket Ini &rarr;</button>`
+      );
+    }
+
+    function openConsultationModal() {
+      openModal(
+        'Konsultasi Perjalanan Umroh',
+        `
+          <div class="space-y-3">
+            <p class="text-xs text-slate-600">Sampaikan rencana keberangkatan dan jumlah jamaah keluarga Anda untuk rekomendasi program terbaik.</p>
+            <div class="space-y-2">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-700 uppercase">Nama Lengkap</label>
+                <input type="text" placeholder="Nama Anda" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-sdw-pine">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-700 uppercase">Nomor WhatsApp</label>
+                <input type="text" placeholder="08xxxxxxxxxx" class="w-full text-xs p-2.5 rounded-lg border border-slate-200 focus:outline-none focus:border-sdw-pine">
+              </div>
+            </div>
+          </div>
+        `,
+        `<button onclick="closeModal(); showToast('Permintaan konsultasi diterima (Simulasi Lead Baru Dibuat)')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald">Kirim Pesan</button>`
+      );
+    }
+
+    function handleConsultationAction(pkgName, date) {
+      showToast(`Simulasi booking dimulai untuk ${pkgName} (${date})`);
+      switchSurface('PILGRIM');
+    }
+
+    // Interactive Booking & Registration Modal (Section 15 & 29 Conversion Gateway)
+    function openBookingModal(params = {}) {
+      const pkgId = params.packageId || (appState.estimator && appState.estimator.packageId) || 'PKG-000001';
+      const pkg = MOCK_DATA.packages.find(p => p.id === pkgId) || MOCK_DATA.packages[0];
+      
+      const matchingDeps = MOCK_DATA.departures.filter(d => d.package_id === pkg.id && d.status === 'OPEN');
+      const selectedDepId = params.departureId || (matchingDeps.length > 0 ? matchingDeps[0].id : MOCK_DATA.departures[0].id);
+      const selectedDep = MOCK_DATA.departures.find(d => d.id === selectedDepId) || MOCK_DATA.departures[0];
+
+      const roomType = params.roomType || (appState.estimator && appState.estimator.roomType) || 'QUAD';
+      const paxCount = Number(params.paxCount) || (appState.estimator && appState.estimator.paxCount) || 2;
+
+      const roomSurcharges = { 'QUAD': 0, 'TRIPLE': 1500000, 'DOUBLE': 3000000 };
+      const basePrice = pkg.starting_price || 29500000;
+      const surcharge = roomSurcharges[roomType] || 0;
+      const pricePerPax = basePrice + surcharge;
+      const totalCost = pricePerPax * paxCount;
+      const dpPerPax = 5000000;
+      const totalDp = dpPerPax * paxCount;
+      const sisaPelunasan = Math.max(0, totalCost - totalDp);
+
+      const bodyHtml = `
+        <div class="space-y-4 text-xs text-slate-700">
+          <!-- Agreed Price Snapshot Header -->
+          <div class="p-3.5 bg-emerald-50 rounded-2xl border border-emerald-200/90 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-sdw-pine bg-emerald-100/90 px-2 py-0.5 rounded border border-emerald-300">
+                AGREED PRICE SNAPSHOT
+              </span>
+              <span class="text-[10px] text-slate-500 font-mono">Terkunci Resmi</span>
+            </div>
+            
+            <div class="text-sm font-extrabold text-slate-900">${escapeHtml(pkg.name)}</div>
+            
+            <div class="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-emerald-200/60">
+              <div>
+                <span class="text-slate-500 block">Jadwal Keberangkatan:</span>
+                <span class="font-bold text-slate-800">${selectedDep.departure_date} (${selectedDep.airline})</span>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Konfigurasi Kamar & Rombongan:</span>
+                <span class="font-bold text-sdw-pine">${roomType} &bull; ${paxCount} Orang</span>
+              </div>
+            </div>
+
+            <div class="p-2.5 bg-white rounded-xl border border-emerald-200/80 flex items-center justify-between text-xs mt-2">
+              <div>
+                <div class="text-[10px] text-slate-500">Total Biaya Paket (Snapshot)</div>
+                <div class="text-base font-black text-sdw-pine">Rp ${totalCost.toLocaleString('id-ID')}</div>
+              </div>
+              <div class="text-right">
+                <div class="text-[10px] text-slate-500">DP Wajib (Rp 5jt/pax)</div>
+                <div class="text-xs font-bold text-sdw-gold font-mono">Rp ${totalDp.toLocaleString('id-ID')}</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Customer Contact Inputs -->
+          <div class="space-y-3 pt-1">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Data Pemesan / Kepala Rombongan</div>
+            
+            <div>
+              <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Nama Lengkap Sesuai KTP / Paspor</label>
+              <input type="text" id="bookerFullName" value="${escapeHtml(MOCK_DATA.currentPilgrim?.full_name || 'Ahmad Demo Jamaah')}" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Nomor WhatsApp Aktif</label>
+                <input type="text" id="bookerPhone" value="${escapeHtml(MOCK_DATA.currentPilgrim?.phone || '0812-0000-0001')}" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine">
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Nomor NIK KTP</label>
+                <input type="text" id="bookerNik" value="3271020000000001" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-[10px] font-bold text-slate-700 uppercase mb-1">Permintaan Khusus (Opsional: Kursi Roda / Lansia)</label>
+              <input type="text" id="bookerNotes" placeholder="Contoh: 1 jamaah lansia membutuhkan asistensi kursi roda saat Thawaf" class="w-full text-xs p-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine">
+            </div>
+          </div>
+
+          <div class="text-[10px] text-amber-900 bg-amber-50 p-2.5 rounded-xl border border-amber-200/80 leading-relaxed">
+            <b>Jaminan Kunci Harga:</b> Nilai paket di atas dikunci secara permanen pada lembar pendaftaran resmi Anda tanpa risiko kenaikan kurs live atau biaya tersembunyi.
+          </div>
+        </div>
+      `;
+
+      const actionBtnHtml = `
+        <button onclick="confirmBookingRegistration('${pkg.id}', '${selectedDep.id}', '${roomType}', ${paxCount})" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald shadow-sm transition flex items-center space-x-1.5">
+          <span>Konfirmasi & Buka Dashboard Jamaah</span>
+          <span>&rarr;</span>
+        </button>
+      `;
+
+      openModal('Konfirmasi Booking Kursi & Kunci Harga', bodyHtml, actionBtnHtml);
+    }
+
+    // Confirmation Handler: Persist Registration to State & Synchronize Ecosystem
+    function confirmBookingRegistration(pkgId, depId, roomType, paxCount) {
+      const pkg = MOCK_DATA.packages.find(p => p.id === pkgId) || MOCK_DATA.packages[0];
+      const dep = MOCK_DATA.departures.find(d => d.id === depId) || MOCK_DATA.departures[0];
+      
+      const fullName = document.getElementById('bookerFullName')?.value?.trim() || 'Ahmad Demo Jamaah';
+      const phone = document.getElementById('bookerPhone')?.value?.trim() || '0812-0000-0001';
+
+      const roomSurcharges = { 'QUAD': 0, 'TRIPLE': 1500000, 'DOUBLE': 3000000 };
+      const basePrice = pkg.starting_price || 29500000;
+      const surcharge = roomSurcharges[roomType] || 0;
+      const pricePerPax = basePrice + surcharge;
+      const totalCost = pricePerPax * Number(paxCount);
+      const dpPerPax = 5000000;
+      const totalDp = dpPerPax * Number(paxCount);
+      const sisaPelunasan = Math.max(0, totalCost - totalDp);
+
+      const regNum = Math.floor(100000 + Math.random() * 900000);
+      const newRegId = `REG-${regNum}`;
+      const newInvNumber = `INV/2027/SDW-${Math.floor(1000 + Math.random() * 9000)}`;
+
+      // 1. Update Pilgrim Entity State
+      MOCK_DATA.currentPilgrim = {
+        id: `CUS-${regNum}`,
+        full_name: fullName,
+        phone: phone,
+        email: fullName.toLowerCase().replace(/[^a-z0-9]/g, '') + '@demo.test',
+        registration_id: newRegId,
+        package_name: pkg.name,
+        duration_days: pkg.duration_days,
+        departure_date: dep.departure_date,
+        flight_info: `${dep.airline} (${dep.origin_airport})`,
+        room_type: `${roomType} (${paxCount} Orang)`,
+        current_stage: 'Persiapan',
+        registration_status: 'CONFIRMED',
+        agreed_price_snapshot: totalCost,
+        discount_snapshot: 0,
+        final_price_snapshot: totalCost
+      };
+
+      // 2. Update Invoice State & Schedules
+      MOCK_DATA.invoice = {
+        id: `INV-${newRegId}`,
+        registration_id: newRegId,
+        invoice_number: newInvNumber,
+        total_amount: totalCost,
+        due_date: `H-30 (${dep.departure_date})`,
+        status: 'PARTIAL',
+        schedules: [
+          { term: 1, title: 'Uang Muka (DP Booking Seat)', amount: totalDp, due_date: '1x24 Jam dari Registrasi', status: 'PAID' },
+          { term: 2, title: 'Pelunasan Biaya & Perlengkapan', amount: sisaPelunasan, due_date: `H-30 (${dep.departure_date})`, status: 'PENDING' }
+        ],
+        payments: [
+          {
+            id: `PAY-${regNum}`,
+            amount: totalDp,
+            method: 'Bank Transfer (BSI Syariah Demo)',
+            ref: `REF-${regNum}-DP`,
+            date: new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }),
+            status: 'VERIFIED'
+          }
+        ]
+      };
+
+      // 3. Update Departure Booked Capacity
+      dep.capacity_booked = Math.min(dep.capacity_total, dep.capacity_booked + Number(paxCount));
+
+      // 4. Register into Backoffice Table
+      MOCK_DATA.registrations.unshift({
+        id: newRegId,
+        customer: fullName,
+        package: pkg.name,
+        departure: dep.departure_date,
+        status: 'CONFIRMED',
+        docs: '1/5 Berkas',
+        payment: `DP Rp ${totalDp.toLocaleString('id-ID')} Terverifikasi`
+      });
+
+      // 5. Reset document requirements with 1 revision needed for interactive exploration
+      MOCK_DATA.pilgrimDocuments = [
+        {
+          id: 'DOC-000001',
+          code: 'PASSPORT',
+          title: 'Paspor RI (Masa Berlaku Min. 7 Bulan)',
+          is_mandatory: true,
+          status: 'REVISION_REQUIRED',
+          file_name: 'paspor_scan_demo.jpg',
+          review_notes: 'Foto paspor terpotong pada bagian MRZ barcode bawah. Harap upload ulang scan halaman data diri secara utuh.',
+          updated_at: 'Baru saja'
+        },
+        {
+          id: 'DOC-000002',
+          code: 'KTP',
+          title: 'Kartu Tanda Penduduk (e-KTP)',
+          is_mandatory: true,
+          status: 'VERIFIED',
+          file_name: 'ktp_demo_valid.pdf',
+          review_notes: 'KTP telah divalidasi sesuai data kependudukan.',
+          updated_at: 'Baru saja'
+        },
+        {
+          id: 'DOC-000003',
+          code: 'PHOTO',
+          title: 'Pas Foto Latar Putih (4x6)',
+          is_mandatory: true,
+          status: 'UNDER_REVIEW',
+          file_name: 'pasfoto_demo_white_bg.jpg',
+          review_notes: 'Sedang dalam antrean verifikasi staf dokumen (Simulasi).',
+          updated_at: 'Baru saja'
+        },
+        {
+          id: 'DOC-000004',
+          code: 'BUKU_NIKAH',
+          title: 'Buku Nikah / Akta Lahir (Bila Suami-Istri)',
+          is_mandatory: true,
+          status: 'VERIFIED',
+          file_name: 'buku_nikah_scan.pdf',
+          review_notes: 'Tervalidasi (Simulasi).',
+          updated_at: 'Baru saja'
+        },
+        {
+          id: 'DOC-000005',
+          code: 'VAKSIN_MENINGITIS',
+          title: 'Sertifikat Vaksin Meningitis (ICV)',
+          is_mandatory: false,
+          status: 'NOT_UPLOADED',
+          file_name: null,
+          review_notes: 'Wajib diserahkan maksimal H-20 keberangkatan.',
+          updated_at: '-'
+        }
+      ];
+
+      // 6. Synchronize Role, Close Modal, & Transition to Pilgrim PWA
+      setAppRole('PILGRIM');
+      closeModal();
+      showToast(`Alhamdulillah! Pendaftaran #${newRegId} (${pkg.name}) berhasil. Harga resmi terkunci.`);
+      switchSurface('PILGRIM');
+      setPilgrimTab('OVERVIEW');
+    }
+
+    function openSimulatedUploadModal(docId, docTitle) {
+      openModal(
+        `Unggah Berkas: ${docTitle}`,
+        `
+          <div class="space-y-3">
+            <p class="text-xs text-slate-600">Simulasi upload file dokumen jamaah ke Google Drive terkelola.</p>
+            <div class="p-6 border-2 border-dashed border-slate-200 rounded-xl text-center space-y-2 bg-slate-50">
+              <span class="text-3xl text-slate-400">&#128196;</span>
+              <div class="text-xs text-slate-600 font-medium">Tarik & letakkan file scan di sini, atau</div>
+              <button class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-slate-700 border shadow-sm">Pilih File Dummy</button>
+              <div class="text-[10px] text-slate-400">PDF, JPG, PNG maks. 5MB (Simulasi)</div>
+            </div>
+          </div>
+        `,
+        `<button onclick="closeModal(); showToast('Simulasi unggah berkas tuntas & masuk antrean review.')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald">Simpan Berkas</button>`
+      );
+    }
+
+    function openSimulatedPaymentModal() {
+      const fin = calculateInvoiceFinance(MOCK_DATA.invoice);
+      openModal(
+        'Upload Bukti Pembayaran (SIMULASI)',
+        `
+          <div class="space-y-3 text-xs text-slate-600">
+            <div class="p-2.5 bg-amber-50 rounded-lg text-amber-900 border border-amber-200 text-[11px]">
+              <b>Perhatian:</b> Ini adalah sarana simulasi alur prototype. Jangan mengirim uang ke nomor rekening uji coba ini.
+            </div>
+            <p>Rincian tagihan terhitung otomatis:</p>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono text-[11px] space-y-1">
+              <div>Bank: <b>BSI (Bank Syariah Indonesia) — SIMULASI</b></div>
+              <div>No. Rekening: <b>719-000-0000 (REKENING DEMO)</b></div>
+              <div>Atas Nama: <b>SDW UMROH RESMI PT (SIMULASI PROTOTYPE)</b></div>
+              <div>Sisa Tagihan [Total - Paid]: <b>Rp ${fin.calculated_outstanding.toLocaleString('id-ID')}</b></div>
+            </div>
+            <div class="p-4 border-2 border-dashed border-slate-200 rounded-xl text-center bg-slate-50">
+              <span class="text-xs text-slate-500 font-medium">&#128247; Unggah gambar slip transfer fiktif untuk uji alur</span>
+            </div>
+          </div>
+        `,
+        `<button onclick="closeModal(); showToast('Bukti transfer simulasi terkirim (Status: SUBMITTED untuk verifikasi finance)')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:bg-sdw-emerald">Kirim Bukti Simulasi</button>`
+      );
+    }
+
+    function copyReferralLink() {
+      showToast('Link referral simulasi disalin: https://sdwumroh.test/?ref=MITRA-DEMO-01');
+    }
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* ========================================================================
+       11. FOUNDATION DIAGNOSTIC RUNNERS (Preserved from Step 1)
+       ======================================================================== */
+    function logToTerminal(message, type = 'LOG', payload = null) {
+      const body = document.getElementById('terminalBody');
+      if (!body) return;
+      const time = new Date().toLocaleTimeString('id-ID');
+      const entry = document.createElement('div');
+      entry.className = 'leading-relaxed break-words';
+
+      let typeColor = 'text-slate-400';
+      if (type === 'SUCCESS') typeColor = 'text-emerald-400 font-semibold';
+      if (type === 'ERROR') typeColor = 'text-red-400 font-semibold';
+      if (type === 'INFO') typeColor = 'text-blue-400';
+
+      let html = `<span class="text-slate-600">[${time}]</span> <span class="${typeColor}">${type}:</span> <span>${escapeHtml(message)}</span>`;
+      if (payload) {
+        html += `<pre class="mt-1 p-2 bg-slate-950/80 rounded border border-slate-800 text-[10px] text-emerald-300 overflow-x-auto">${escapeHtml(JSON.stringify(payload, null, 2))}</pre>`;
+      }
+
+      entry.innerHTML = html;
+      body.appendChild(entry);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function clearConsole() {
+      const body = document.getElementById('terminalBody');
+      if (body) body.innerHTML = '<div class="text-slate-500">// Konsol dibersihkan.</div>';
+    }
+
+    function runHealthCheck() {
+      const t0 = performance.now();
+      logToTerminal('Mengirim permintaan testConnection() ke Code.gs backend...', 'INFO');
+
+      if (appState.bridgeMode === 'GAS' && typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            const dt = Math.round(performance.now() - t0);
+            updateLatency(dt);
+            if (res.success) {
+              logToTerminal('Health Check Berhasil. Spreadsheet aktif terhubung.', 'SUCCESS', res.data);
+            } else {
+              logToTerminal(`Health Check Gagal: ${res.error}`, 'ERROR');
+            }
+          })
+          .withFailureHandler((err) => {
+            const dt = Math.round(performance.now() - t0);
+            updateLatency(dt);
+            logToTerminal(`Koneksi Gagal: ${err.message}`, 'ERROR');
+          })
+          .testConnection();
+      } else {
+        setTimeout(() => {
+          const dt = Math.round(performance.now() - t0);
+          updateLatency(dt);
+          const mockData = {
+            status: 'SIMULATED_HEALTHY',
+            mode: 'LOCAL_PROTOTYPE_SANDBOX',
+            note: 'Status disimulasikan lokal sesuai spesifikasi 00-19',
+            totalSheetsDefined: 22,
+            latencyMs: dt
+          };
+          logToTerminal('Health Check Sandbox Selesai (Simulasi Lokal).', 'SUCCESS', mockData);
+        }, 280);
+      }
+    }
+
+    function runInitDatabase() {
+      const t0 = performance.now();
+      logToTerminal('Memeriksa kelengkapan 22 Sheet Master di Google Spreadsheet...', 'INFO');
+
+      if (appState.bridgeMode === 'GAS' && typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            const dt = Math.round(performance.now() - t0);
+            updateLatency(dt);
+            if (res.success) {
+              logToTerminal(`Inisialisasi 22 Sheet Tuntas. Baru dibuat: ${res.data.created.length}`, 'SUCCESS', res.data);
+            } else {
+              logToTerminal(`Inisialisasi Gagal: ${res.error}`, 'ERROR');
+            }
+          })
+          .withFailureHandler((err) => {
+            logToTerminal(`Error Backend: ${err.message}`, 'ERROR');
+          })
+          .initDatabase();
+      } else {
+        setTimeout(() => {
+          const dt = Math.round(performance.now() - t0);
+          updateLatency(dt);
+          logToTerminal('22 Sheet Master terverifikasi lengkap (Simulasi Sandbox).', 'SUCCESS', {
+            sheetsConfigured: Object.keys(SHEETS_SCHEMA).length,
+            structureCompliant: true
+          });
+        }, 350);
+      }
+    }
+
+    function runReadWriteTest() {
+      const t0 = performance.now();
+      const testActor = `${appState.role}_CLIENT`;
+      logToTerminal(`Menguji operasi Tulis -> Baca record audit oleh actor: ${testActor}...`, 'INFO');
+
+      if (appState.bridgeMode === 'GAS' && typeof google !== 'undefined' && google.script && google.script.run) {
+        google.script.run
+          .withSuccessHandler((res) => {
+            const dt = Math.round(performance.now() - t0);
+            updateLatency(dt);
+            if (res.success) {
+              logToTerminal(`Roundtrip Read/Write Sukses! Checksum: ${res.data.testId}`, 'SUCCESS', res.data);
+            } else {
+              logToTerminal(`Uji Mutasi Gagal: ${res.error}`, 'ERROR');
+            }
+          })
+          .withFailureHandler((err) => {
+            logToTerminal(`Error Mutasi: ${err.message}`, 'ERROR');
+          })
+          .performReadWriteTest(testActor);
+      } else {
+        setTimeout(() => {
+          const dt = Math.round(performance.now() - t0);
+          updateLatency(dt);
+          const generatedId = 'AUD-SIM-' + Math.floor(100000 + Math.random() * 900000);
+          logToTerminal(`Verifikasi Mutasi Read/Write Lulus (Simulasi Lokal). Checksum ID: ${generatedId}`, 'SUCCESS', {
+            testId: generatedId,
+            actor: testActor,
+            action: 'CONNECTION_READ_WRITE_VERIFICATION',
+            verificationStatus: 'PASSED (Local Emulation Checksum Matched)'
+          });
+        }, 420);
+      }
+    }
+
+    function updateLatency(ms) {
+      const el = document.getElementById('terminalLatency');
+      if (el) el.textContent = `Latency: ${ms}ms`;
+    }
+
+    function renderSheetGrid(filter = '') {
+      const grid = document.getElementById('sheetGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      const filterLower = filter.toLowerCase();
+
+      for (const [name, meta] of Object.entries(SHEETS_SCHEMA)) {
+        if (filterLower && !name.toLowerCase().includes(filterLower) && !meta.domain.toLowerCase().includes(filterLower)) {
+          continue;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'p-4 rounded-xl border border-slate-200/90 bg-slate-50/50 hover:bg-white hover:border-sdw-gold/60 transition shadow-sm flex flex-col justify-between space-y-3';
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-xs text-slate-800 font-mono">${escapeHtml(name)}</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">${meta.prefix}000001</span>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${escapeHtml(meta.domain)}</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              ${meta.cols.slice(0, 5).map(c => `<span class="text-[9px] font-mono bg-white border border-slate-200 px-1 py-0.5 rounded text-slate-600">${c}</span>`).join('')}
+              ${meta.cols.length > 5 ? `<span class="text-[9px] font-mono bg-slate-200 text-slate-600 px-1 py-0.5 rounded">+${meta.cols.length - 5}</span>` : ''}
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 border-t border-slate-200/60 pt-2 flex items-center justify-between">
+            <span>Kolom: ${meta.cols.length}</span>
+            <span class="text-emerald-700 font-semibold">&bull; State Locked</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      }
+    }
+
+    function filterSheets() {
+      const q = document.getElementById('schemaSearch').value;
+      renderSheetGrid(q);
+    }
+  </script>
+</body>
+</html>
