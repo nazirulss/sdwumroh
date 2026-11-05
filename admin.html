@@ -26,15 +26,175 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Sidebar Desktop Side-by-Side vs Mobile Drawer Layout */
+        #adminSidebar {
+            width: 16rem !important;
+            height: 100vh !important;
+            flex-shrink: 0 !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (min-width: 768px) {
+            #adminSidebar {
+                position: relative !important;
+                transform: none !important;
+                box-shadow: none !important;
+                display: flex !important;
+            }
+            #adminSidebarBackdrop {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 767px) {
+            #adminSidebar {
+                position: fixed !important;
+                top: 0 !important;
+                bottom: 0 !important;
+                left: 0 !important;
+                z-index: 50 !important;
+                transform: translateX(-100%) !important;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4) !important;
+            }
+            #adminSidebar.mobile-open {
+                transform: translateX(0) !important;
+            }
+            #adminSidebarBackdrop.active {
+                display: block !important;
+            }
+        }
+
+        /* Responsive utility overrides */
+        @media (min-width: 640px) {
+            .sm\:inline-flex {
+                display: inline-flex !important;
+            }
+        }
+
+        /* Tab Switch Display Rules (Prevent Collisions) */
+        .admin-tab-container.hidden {
+            display: none !important;
+        }
+        .admin-tab-container:not(.hidden) {
+            display: block !important;
+        }
+
+        /* Slide-over Drawer (Prevent Invisible Backdrop from Intercepting Clicks) */
+        #adminSideDrawer {
+            display: none;
+        }
+        #adminSideDrawer.active {
+            display: block !important;
+            pointer-events: auto !important;
+            opacity: 1 !important;
+        }
+
+        /* Global Search Modal (Prevent Invisible Backdrop from Intercepting Clicks) */
+        #adminSearchModal {
+            display: none;
+        }
+        #adminSearchModal.active {
+            display: flex !important;
+            pointer-events: auto !important;
+            opacity: 1 !important;
+        }
+
+        /* Royal Purple Banner Styling for Operations (Fase 3 Refinements) */
+        .sdw-royal-card {
+            background: linear-gradient(135deg, #240833 0%, #3E165B 50%, #170422 100%) !important;
+            color: #ffffff !important;
+            border: 1px solid rgba(217, 119, 6, 0.4) !important;
+            box-shadow: 0 10px 25px -5px rgba(36, 8, 51, 0.35) !important;
+        }
+        .sdw-glass-kpi {
+            background: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            backdrop-filter: blur(6px);
+        }
+        .sdw-glass-select {
+            background: rgba(255, 255, 255, 0.14) !important;
+            border: 1px solid rgba(255, 255, 255, 0.28) !important;
+            color: #ffffff !important;
+        }
+        .sdw-glass-select option {
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+        .sdw-tab-nav {
+            background: #f1f5f9;
+            padding: 0.375rem;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+        .sdw-tab-pill-active {
+            background: #3E165B !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(62, 22, 91, 0.35) !important;
+        }
+        .sdw-tab-pill-inactive {
+            background: transparent !important;
+            color: #475569 !important;
+        }
+        .sdw-tab-pill-inactive:hover {
+            background: #ffffff !important;
+            color: #0f172a !important;
+        }
+
+        /* Modal Transitions & Print Styles */
+        .admin-modal {
+            display: none !important;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+        .admin-modal.active {
+            display: flex !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+        }
+        .admin-modal.active .modal-card {
+            transform: scale(1) !important;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+            #modalReceiptPrint, #modalReceiptPrint * {
+                visibility: visible !important;
+            }
+            #modalReceiptPrint {
+                position: fixed !important;
+                inset: 0 !important;
+                background: white !important;
+                z-index: 999999 !important;
+                display: block !important;
+                padding: 0 !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+            #modalReceiptPrint .modal-card {
+                box-shadow: none !important;
+                border: none !important;
+                max-width: 100% !important;
+                width: 100% !important;
+                transform: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
 <body class="bg-slate-50 font-sans text-slate-800 antialiased selection:bg-amber-100 selection:text-amber-900">
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden relative">
 
-        <!-- ==================== SIDEBAR NAVIGASI (COLLAPSIBLE / DESKTOP-FIRST) ==================== -->
-        <aside id="adminSidebar" class="w-64 bg-white border-r border-slate-200/90 flex flex-col shrink-0 z-30 transition-all duration-300">
+        <!-- Mobile Sidebar Backdrop Overlay -->
+        <div id="adminSidebarBackdrop" onclick="SDW_ADMIN.toggleMobileSidebar(false)" class="fixed inset-0 bg-black/60 backdrop-blur-2xs z-30 hidden transition-opacity" aria-hidden="true"></div>
+
+        <!-- ==================== SIDEBAR NAVIGASI (SIDE-BY-SIDE ON DESKTOP / DRAWER ON MOBILE) ==================== -->
+        <aside id="adminSidebar" class="bg-white border-r border-slate-200/90 flex flex-col z-40">
             <!-- Brand Header -->
             <div class="h-16 px-5 border-b border-slate-200/80 flex items-center justify-between bg-gradient-to-r from-purple-900 via-[#3E165B] to-[#240833] text-white">
                 <a href="admin.html" class="flex items-center gap-2.5 group">
@@ -46,7 +206,12 @@
                         <span class="text-[9px] text-amber-300/90 font-bold uppercase tracking-wider block mt-0.5">Backoffice Hub</span>
                     </div>
                 </a>
-                <span class="px-2 py-0.5 rounded text-[9.5px] font-mono font-bold bg-white/10 text-amber-300 border border-white/15">v2.4</span>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded text-[9.5px] font-mono font-bold bg-white/10 text-amber-300 border border-white/15">v2.4</span>
+                    <button type="button" onclick="SDW_ADMIN.toggleMobileSidebar(false)" class="md:hidden w-7 h-7 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition cursor-pointer" aria-label="Tutup Menu Sidebar">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- User Profile & Interactive Role Selector -->
@@ -172,15 +337,18 @@
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
 
             <!-- Top Header Bar -->
-            <header class="h-16 bg-white border-b border-slate-200/90 px-4 sm:px-6 flex items-center justify-between shrink-0 z-20">
-                <!-- Search Trigger Bar (Ctrl + K) -->
-                <div class="flex items-center gap-3 flex-1 max-w-md">
+            <header class="h-16 bg-white border-b border-slate-200/90 px-3.5 sm:px-6 flex items-center justify-between shrink-0 z-20">
+                <!-- Hamburger Button (Mobile Only) + Search Trigger Bar (Ctrl + K) -->
+                <div class="flex items-center gap-2 sm:gap-3 flex-1 max-w-md">
+                    <button type="button" onclick="SDW_ADMIN.toggleMobileSidebar(true)" class="md:hidden w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition shrink-0 cursor-pointer" aria-label="Buka Menu Sidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
                     <button type="button" onclick="SDW_ADMIN.openGlobalSearch()" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-400 text-xs font-medium transition cursor-pointer border border-slate-200">
                         <span class="flex items-center gap-2">
                             <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
-                            <span>Cari jamaah, paspor, no. registrasi...</span>
+                            <span class="truncate">Cari jamaah, paspor, no. registrasi...</span>
                         </span>
-                        <kbd class="px-1.5 py-0.5 rounded bg-white text-[10px] font-mono font-bold text-slate-500 border border-slate-200 shadow-2xs">Ctrl K</kbd>
+                        <kbd class="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white text-[10px] font-mono font-bold text-slate-500 border border-slate-200 shadow-2xs">Ctrl K</kbd>
                     </button>
                 </div>
 
@@ -199,8 +367,14 @@
                         </div>
                     </div>
 
+                    <!-- Live Sync Engine Status Pill (Fase 4) -->
+                    <button type="button" id="adminSyncButton" onclick="SDW_ADMIN.openSyncStatusModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition cursor-pointer" title="Klik untuk status sinkronisasi & antrean database">
+                        <span id="adminSyncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span id="adminSyncText">Live DB Synced</span>
+                    </button>
+
                     <!-- Quick Actions -->
-                    <button type="button" onclick="alert('Formulir Prospek Baru')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
+                    <button type="button" onclick="SDW_ADMIN.openModal('modalCreateLead')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
                         <i class="fa-solid fa-user-plus text-[11px]"></i>
                         <span>+ Prospek Baru</span>
                     </button>
@@ -211,6 +385,11 @@
                             <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white"></span>
                         </button>
                     </div>
+
+                    <!-- Lock Screen Button (Fase 6: Security & Session Auto-Lock) -->
+                    <button type="button" id="btnScreenLock" onclick="SDW_ADMIN.lockScreen()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 flex items-center justify-center text-sm transition cursor-pointer" title="Kunci Layar Portal Admin (Security Lock)">
+                        <i class="fa-solid fa-lock"></i>
+                    </button>
                 </div>
             </header>
 
@@ -226,10 +405,10 @@
                             <p class="text-xs text-slate-500 mt-0.5">Monitoring komprehensif pendaftaran, antrean verifikasi, dan kesiapan kloter.</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span>22 Sheet Database Live</span>
-                            </span>
+                            <button type="button" id="dashSyncBadge" onclick="SDW_ADMIN.openSyncStatusModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition cursor-pointer" title="Periksa status koneksi Google Sheets & antrean sinkronisasi">
+                                <span id="dashSyncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span id="dashSyncText">22 Sheet Database Live</span>
+                            </button>
                         </div>
                     </div>
 
@@ -342,13 +521,49 @@
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Manajemen Prospek &amp; CRM Pipeline</h1>
                             <p class="text-xs text-slate-500 mt-0.5">Kelola calon jamaah, tindak lanjut sales konsultasi, dan konversi pendaftaran.</p>
                         </div>
-                        <button type="button" onclick="alert('Formulir Tambah Prospek')" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
-                            + Tambah Prospek Baru
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('LEADS')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh format spreadsheet CSV">
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                                <span>Ekspor CSV</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openModal('modalCreateLead')" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus text-[11px]"></i>
+                                <span>+ Tambah Prospek Baru</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Filter & Table Card -->
                     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+                        <!-- Bilah Filter Multi-Kriteria CRM -->
+                        <div class="p-3.5 sm:p-4 border-b border-slate-200/90 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+                                <div class="relative flex-1 min-w-[160px] max-w-xs">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                    <input type="text" id="crm-filter-search" oninput="SDW_ADMIN.applyCRMFilter()" placeholder="Cari nama, no. HP..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-sdw-pine outline-none">
+                                </div>
+                                <select id="crm-filter-urgency" onchange="SDW_ADMIN.applyCRMFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Urgensi</option>
+                                    <option value="HIGH">🔥 Urgensi HIGH</option>
+                                    <option value="MEDIUM">⚡ Urgensi MEDIUM</option>
+                                    <option value="LOW">❄️ Urgensi LOW</option>
+                                </select>
+                                <select id="crm-filter-status" onchange="SDW_ADMIN.applyCRMFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Status Pipeline</option>
+                                    <option value="NEW">NEW</option>
+                                    <option value="CONSULTATION">CONSULTATION</option>
+                                    <option value="QUALIFIED">QUALIFIED</option>
+                                    <option value="PROPOSAL">PROPOSAL</option>
+                                </select>
+                                <button type="button" onclick="SDW_ADMIN.resetCRMFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200/70 text-slate-500 font-bold text-[11px] transition cursor-pointer" title="Reset seluruh filter">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                                </button>
+                            </div>
+                            <span id="crm-count-badge" class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-900 text-[11px] font-extrabold">
+                                Menampilkan 4 prospek
+                            </span>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[850px]">
                                 <thead class="bg-slate-50 text-[11px] font-extrabold uppercase text-slate-500 border-b border-slate-200">
@@ -378,9 +593,41 @@
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Antrean Verifikasi Berkas &amp; Visa</h1>
                             <p class="text-xs text-slate-500 mt-0.5">Pemeriksaan paspor RI (min. 7 bulan), buku kuning meningitis, dan pasfoto latar putih.</p>
                         </div>
+                        <button type="button" onclick="SDW_ADMIN.exportToCSV('DOCS')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh status kelengkapan berkas CSV">
+                            <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                            <span>Ekspor Status Berkas (CSV)</span>
+                        </button>
                     </div>
 
                     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+                        <!-- Bilah Filter Multi-Kriteria Dokumen -->
+                        <div class="p-3.5 sm:p-4 border-b border-slate-200/90 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+                                <div class="relative flex-1 min-w-[160px] max-w-xs">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                    <input type="text" id="docs-filter-search" oninput="SDW_ADMIN.applyDocsFilter()" placeholder="Cari nama, ID berkas..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-sdw-pine outline-none">
+                                </div>
+                                <select id="docs-filter-type" onchange="SDW_ADMIN.applyDocsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Jenis Dokumen</option>
+                                    <option value="Paspor">Paspor RI</option>
+                                    <option value="Vaksin">Buku Kuning / Vaksin</option>
+                                    <option value="Pasfoto">Pasfoto Latar Putih</option>
+                                </select>
+                                <select id="docs-filter-status" onchange="SDW_ADMIN.applyDocsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Status Review</option>
+                                    <option value="UNDER_REVIEW">UNDER REVIEW</option>
+                                    <option value="VERIFIED">VERIFIED (Sah)</option>
+                                    <option value="REJECTED">REJECTED (Ditolak)</option>
+                                </select>
+                                <button type="button" onclick="SDW_ADMIN.resetDocsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200/70 text-slate-500 font-bold text-[11px] transition cursor-pointer">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                                </button>
+                            </div>
+                            <span id="docs-count-badge" class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-900 text-[11px] font-extrabold">
+                                Menampilkan 3 berkas
+                            </span>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[850px]">
                                 <thead class="bg-slate-50 text-[11px] font-extrabold uppercase text-slate-500 border-b border-slate-200">
@@ -409,9 +656,48 @@
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Manajemen Booking &amp; Registrasi Jamaah</h1>
                             <p class="text-xs text-slate-500 mt-0.5">Penguncian harga komersial snapshot, status berkas, dan histori pembayaran.</p>
                         </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('REGS')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh data seluruh registrasi CSV">
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                                <span>Ekspor CSV</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openModal('modalCreateRegistration')" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-id-card-clip text-[11px]"></i>
+                                <span>+ Booking &amp; Pendaftaran Baru</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+                        <!-- Bilah Filter Multi-Kriteria Registrasi -->
+                        <div class="p-3.5 sm:p-4 border-b border-slate-200/90 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+                                <div class="relative flex-1 min-w-[160px] max-w-xs">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                    <input type="text" id="regs-filter-search" oninput="SDW_ADMIN.applyRegsFilter()" placeholder="Cari nama, ID reg..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-sdw-pine outline-none">
+                                </div>
+                                <select id="regs-filter-package" onchange="SDW_ADMIN.applyRegsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Paket</option>
+                                    <option value="Reguler">Umroh Reguler</option>
+                                    <option value="VIP">Umroh VIP</option>
+                                    <option value="Turki">Umroh Plus Turki</option>
+                                    <option value="Ramadhan">Umroh Ramadhan</option>
+                                </select>
+                                <select id="regs-filter-status" onchange="SDW_ADMIN.applyRegsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="CONFIRMED">CONFIRMED</option>
+                                    <option value="UNDER_REVIEW">UNDER REVIEW</option>
+                                    <option value="APPROVED">APPROVED</option>
+                                </select>
+                                <button type="button" onclick="SDW_ADMIN.resetRegsFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200/70 text-slate-500 font-bold text-[11px] transition cursor-pointer">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                                </button>
+                            </div>
+                            <span id="regs-count-badge" class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-extrabold">
+                                Menampilkan 3 jamaah
+                            </span>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[850px]">
                                 <thead class="bg-slate-50 text-[11px] font-extrabold uppercase text-slate-500 border-b border-slate-200">
@@ -441,9 +727,46 @@
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Keuangan &amp; Verifikasi Mutasi Bank</h1>
                             <p class="text-xs text-slate-500 mt-0.5">Pemeriksaan bukti transfer, termin DP / Pelunasan, dan penerbitan kuitansi resmi.</p>
                         </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('PAYMENTS')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh rekapitulasi mutasi dan kas keuangan">
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                                <span>Ekspor Rekap (CSV)</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openModal('modalCreatePayment')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-money-bill-transfer text-[11px]"></i>
+                                <span>+ Catat Bukti Setor Bank</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+                        <!-- Bilah Filter Multi-Kriteria Keuangan -->
+                        <div class="p-3.5 sm:p-4 border-b border-slate-200/90 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+                                <div class="relative flex-1 min-w-[160px] max-w-xs">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                    <input type="text" id="finance-filter-search" oninput="SDW_ADMIN.applyFinanceFilter()" placeholder="Cari nama, ref bank..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-sdw-pine outline-none">
+                                </div>
+                                <select id="finance-filter-status" onchange="SDW_ADMIN.applyFinanceFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Status Bayar</option>
+                                    <option value="VERIFIED">VERIFIED (Tervalidasi / Sah)</option>
+                                    <option value="PENDING_VERIFY">PENDING (Menunggu Validasi)</option>
+                                </select>
+                                <select id="finance-filter-method" onchange="SDW_ADMIN.applyFinanceFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Bank / Metode</option>
+                                    <option value="BSI">BSI (Bank Syariah Indonesia)</option>
+                                    <option value="Muamalat">Bank Muamalat</option>
+                                    <option value="Tunai">Kasir Tunai</option>
+                                </select>
+                                <button type="button" onclick="SDW_ADMIN.resetFinanceFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200/70 text-slate-500 font-bold text-[11px] transition cursor-pointer">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                                </button>
+                            </div>
+                            <span id="finance-count-badge" class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-900 text-[11px] font-extrabold">
+                                Menampilkan 2 transaksi
+                            </span>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[850px]">
                                 <thead class="bg-slate-50 text-[11px] font-extrabold uppercase text-slate-500 border-b border-slate-200">
@@ -467,15 +790,129 @@
 
                 <!-- ==================== TAB 6: OPERASIONAL TANAH SUCI ==================== -->
                 <div id="tab-operations" class="admin-tab-container hidden space-y-5">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <!-- Top Action & Title Header -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-purple-950">Backoffice Operasional</span>
+                                <span class="text-xs text-slate-400 font-semibold">• Tanah Suci Hub</span>
+                            </div>
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Kloter, Manifest Bus &amp; Rooming List</h1>
-                            <p class="text-xs text-slate-500 mt-0.5">Penugasan Muthawwif &amp; TL, alokasi bus AC tanah suci, dan pembagian kamar hotel Makkah/Madinah.</p>
+                            <p class="text-xs text-slate-500 mt-0.5">Penugasan Muthawwif &amp; TL, absensi boarding bus AC tanah suci, dan visual alokasi kamar hotel Makkah &amp; Madinah.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('MANIFEST')" class="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh rekapitulasi manifest bus penumpang kloter CSV">
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                                <span>Unduh Manifest Bus (CSV)</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('ROOMING')" class="px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh data alokasi kamar hotel Makkah &amp; Madinah CSV">
+                                <i class="fa-solid fa-hotel text-purple-700 text-sm"></i>
+                                <span>Unduh Rooming List (CSV)</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openModal('modalCreateTrip')" class="px-4 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-plane-departure text-[11px]"></i>
+                                <span>+ Buat Kloter Baru</span>
+                            </button>
                         </div>
                     </div>
 
-                    <div id="operations-kloter-container">
+                    <!-- Kloter Active Selector & Quick KPI Header Banner (Royal Purple Card) -->
+                    <div class="sdw-royal-card p-5 sm:p-6 rounded-3xl shadow-md flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400 text-purple-950 shadow-2xs">Kloter Aktif Dipilih</span>
+                                <span class="text-xs text-amber-200 font-bold">H-73 Menuju Keberangkatan (15 Jan 2027)</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <select id="op-kloter-selector" onchange="SDW_ADMIN.changeKloter(this.value)" class="sdw-glass-select rounded-xl px-3.5 py-2 text-xs sm:text-sm font-bold outline-none cursor-pointer">
+                                    <option value="TRP-2701">Kloter Utama 01 (15 Jan 2027) • 45 Pax • Saudia Direct SV-819</option>
+                                    <option value="TRP-2702">Kloter Syawal 02 (10 Feb 2027) • 40 Pax • Garuda GA-980</option>
+                                    <option value="TRP-2703">Kloter VIP Ramadhan 03 (20 Mar 2027) • 35 Pax • Saudia Direct SV-821</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                            <div class="sdw-glass-kpi p-3 rounded-2xl">
+                                <span class="text-[10px] uppercase tracking-wider text-slate-300 block font-bold">Total Jamaah</span>
+                                <span id="op-stat-total-pax" class="text-base sm:text-lg font-black text-amber-300">45 Pax</span>
+                            </div>
+                            <div class="sdw-glass-kpi p-3 rounded-2xl">
+                                <span class="text-[10px] uppercase tracking-wider text-slate-300 block font-bold">Armada Bus</span>
+                                <span class="text-base sm:text-lg font-black text-white">2 Unit Bus AC</span>
+                            </div>
+                            <div class="sdw-glass-kpi p-3 rounded-2xl">
+                                <span class="text-[10px] uppercase tracking-wider text-slate-300 block font-bold">Absensi Boarding</span>
+                                <span id="op-header-boarding" class="text-base sm:text-lg font-black text-emerald-300">43 / 45 (96%)</span>
+                            </div>
+                            <div class="sdw-glass-kpi p-3 rounded-2xl">
+                                <span class="text-[10px] uppercase tracking-wider text-slate-300 block font-bold">Alokasi Kamar</span>
+                                <span id="op-stat-rooms" class="text-base sm:text-lg font-black text-amber-300">30 Kamar (100%)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-Navigation Segmented Pill Bar -->
+                    <div class="sdw-tab-nav flex items-center gap-1.5 overflow-x-auto">
+                        <button type="button" id="subtab-manifest-btn" onclick="SDW_ADMIN.switchOperationsSubtab('manifest')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-active transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-bus-simple text-amber-300"></i>
+                            <span>Manifest Bus &amp; Absensi Boarding</span>
+                        </button>
+                        <button type="button" id="subtab-rooming-btn" onclick="SDW_ADMIN.switchOperationsSubtab('rooming')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-inactive transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-hotel text-purple-700"></i>
+                            <span>Visual Rooming List Hotel</span>
+                        </button>
+                        <button type="button" id="subtab-airport-btn" onclick="SDW_ADMIN.switchOperationsSubtab('airport')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-inactive transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-plane-arrival text-amber-600"></i>
+                            <span>Handling Bandara &amp; Darurat</span>
+                        </button>
+                        <button type="button" id="subtab-trips-btn" onclick="SDW_ADMIN.switchOperationsSubtab('trips')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-inactive transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-layer-group text-slate-500"></i>
+                            <span>Ikhtisar Semua Kloter</span>
+                        </button>
+                        <button type="button" id="subtab-logistics-btn" onclick="SDW_ADMIN.switchOperationsSubtab('logistics')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-inactive transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-boxes-packing text-emerald-600"></i>
+                            <span>Logistik &amp; Koper Jamaah</span>
+                        </button>
+                        <button type="button" id="subtab-manasik-btn" onclick="SDW_ADMIN.switchOperationsSubtab('manasik')" class="px-4 py-2.5 rounded-xl font-bold text-xs sdw-tab-pill-inactive transition cursor-pointer flex items-center gap-2 whitespace-nowrap">
+                            <i class="fa-solid fa-kaaba text-purple-600"></i>
+                            <span>Bimbingan &amp; Presensi Manasik</span>
+                        </button>
+                    </div>
+
+                    <!-- SUB-VIEW 1: MANIFEST BUS & BOARDING -->
+                    <div id="subtab-manifest-view" class="space-y-4">
                         <!-- Rendered by js/admin-core.js -->
+                    </div>
+
+                    <!-- SUB-VIEW 2: ROOMING LIST HOTEL -->
+                    <div id="subtab-rooming-view" class="hidden space-y-4">
+                        <!-- Rendered by js/admin-core.js -->
+                    </div>
+
+                    <!-- SUB-VIEW 3: HANDLING BANDARA & DARURAT -->
+                    <div id="subtab-airport-view" class="hidden space-y-4">
+                        <!-- Rendered by js/admin-core.js -->
+                    </div>
+
+                    <!-- SUB-VIEW 4: IKHTISAR SEMUA KLOTER -->
+                    <div id="subtab-trips-view" class="hidden space-y-4">
+                        <div id="operations-kloter-container">
+                            <!-- Rendered by js/admin-core.js -->
+                        </div>
+                    </div>
+
+                    <!-- SUB-VIEW 5: LOGISTIK & PERLENGKAPAN KOPER (FASE 5) -->
+                    <div id="subtab-logistics-view" class="hidden space-y-4">
+                        <div id="operations-logistics-container">
+                            <!-- Rendered by js/admin-core.js -->
+                        </div>
+                    </div>
+
+                    <!-- SUB-VIEW 6: BIMBINGAN & PRESENSI MANASIK (FASE 5) -->
+                    <div id="subtab-manasik-view" class="hidden space-y-4">
+                        <div id="operations-manasik-container">
+                            <!-- Rendered by js/admin-core.js -->
+                        </div>
                     </div>
                 </div>
 
@@ -486,9 +923,55 @@
                             <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Jejak Audit Log Sistem (Immutable)</h1>
                             <p class="text-xs text-slate-500 mt-0.5">Pencatatan transparan seluruh mutasi data, approval keuangan, dan verifikasi berkas.</p>
                         </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.exportSecurityIncidents()" class="px-3.5 py-2 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Ekspor log insiden keamanan dan mutasi kritikal ke CSV">
+                                <i class="fa-solid fa-shield-halved text-rose-600 text-sm"></i>
+                                <span>Ekspor Insiden Keamanan (CSV)</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.exportToCSV('AUDIT')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Unduh log audit sistem CSV">
+                                <i class="fa-solid fa-file-excel text-emerald-600 text-sm"></i>
+                                <span>Ekspor Semua Audit (CSV)</span>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden">
+                        <!-- Bilah Filter Multi-Kriteria Audit -->
+                        <div class="p-3.5 sm:p-4 border-b border-slate-200/90 bg-slate-50/70 flex flex-wrap items-center justify-between gap-3 text-xs">
+                            <div class="flex flex-wrap items-center gap-2.5 flex-1 min-w-[260px]">
+                                <div class="relative flex-1 min-w-[160px] max-w-xs">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                    <input type="text" id="audit-filter-search" oninput="SDW_ADMIN.applyAuditFilter()" placeholder="Cari aksi, ref ID, aktor..." class="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-medium focus:border-sdw-pine outline-none">
+                                </div>
+                                <select id="audit-filter-severity" onchange="SDW_ADMIN.applyAuditFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Tingkat Keparahan</option>
+                                    <option value="CRITICAL">🔴 Critical (Finansial & Keamanan)</option>
+                                    <option value="WARNING">🟡 Warning (Perubahan & Penolakan Data)</option>
+                                    <option value="INFO">🟢 Info (Operasional Rutin)</option>
+                                </select>
+                                <select id="audit-filter-action" onchange="SDW_ADMIN.applyAuditFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 outline-none cursor-pointer">
+                                    <option value="ALL">Semua Jenis Aksi Audit</option>
+                                    <option value="CREATE_LEAD">CREATE_LEAD</option>
+                                    <option value="CREATE_REGISTRATION">CREATE_REGISTRATION</option>
+                                    <option value="CREATE_PAYMENT">CREATE_PAYMENT</option>
+                                    <option value="VERIFY_PAYMENT">VERIFY_PAYMENT</option>
+                                    <option value="APPROVE_DOCUMENT">APPROVE_DOCUMENT</option>
+                                    <option value="REJECT_DOCUMENT">REJECT_DOCUMENT</option>
+                                    <option value="CREATE_TRIP">CREATE_TRIP</option>
+                                    <option value="ASSIGN_BUS">ASSIGN_BUS</option>
+                                    <option value="ASSIGN_ROOM">ASSIGN_ROOM</option>
+                                    <option value="UNMASK_SENSITIVE_DATA">UNMASK_SENSITIVE_DATA</option>
+                                    <option value="EXPORT_CSV">EXPORT_CSV</option>
+                                </select>
+                                <button type="button" onclick="SDW_ADMIN.resetAuditFilter()" class="px-2.5 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-200/70 text-slate-500 font-bold text-[11px] transition cursor-pointer">
+                                    <i class="fa-solid fa-rotate-left mr-1"></i> Reset
+                                </button>
+                            </div>
+                            <span id="audit-count-badge" class="px-2.5 py-1 rounded-full bg-slate-200 text-slate-800 text-[11px] font-extrabold">
+                                Menampilkan 5 log
+                            </span>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse min-w-[850px]">
                                 <thead class="bg-slate-50 text-[11px] font-extrabold uppercase text-slate-500 border-b border-slate-200">
@@ -530,6 +1013,719 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL 1: FORM TAMBAH PROSPEK BARU (CRM) ==================== -->
+    <div id="modalCreateLead" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Tambah Prospek Baru (CRM)</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Pencatatan calon jamaah &amp; pipeline konsultasi</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateLead')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formCreateLead" onsubmit="SDW_ADMIN.handleCreateLead(event)" class="p-5 overflow-y-auto space-y-4 text-xs font-semibold">
+                <div>
+                    <label class="block text-slate-700 mb-1" for="lead_name">Nama Calon Jamaah <span class="text-rose-500">*</span></label>
+                    <input type="text" id="lead_name" required placeholder="Contoh: Bpk. H. Rahmat Hidayat" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="lead_phone">No. WhatsApp / HP <span class="text-rose-500">*</span></label>
+                        <input type="tel" id="lead_phone" required placeholder="0812-xxxx-xxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="lead_budget">Estimasi Anggaran</label>
+                        <input type="text" id="lead_budget" placeholder="Contoh: Rp 35jt / Pax" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1" for="lead_package">Program Paket Diminati <span class="text-rose-500">*</span></label>
+                    <select id="lead_package" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                        <option value="Umroh Reguler Syawal Barakah">Umroh Reguler Syawal Barakah (9 Hari)</option>
+                        <option value="Umroh VIP Khidmat Akhir Tahun">Umroh VIP Khidmat Akhir Tahun (12 Hari)</option>
+                        <option value="Umroh Plus Turki Musim Semi">Umroh Plus Turki Musim Semi (13 Hari)</option>
+                        <option value="Umroh Awal Ramadhan 1448H">Umroh Awal Ramadhan 1448H (10 Hari)</option>
+                        <option value="Umroh Syariah Bintang Tiga Hemat">Umroh Syariah Bintang Tiga Hemat (9 Hari)</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="lead_urgency">Tingkat Urgensi</label>
+                        <select id="lead_urgency" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="HIGH">🔥 HIGH (Siap DP)</option>
+                            <option value="MEDIUM" selected>⚡ MEDIUM (Follow-up)</option>
+                            <option value="LOW">❄️ LOW (Tanya-tanya)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="lead_status">Status Pipeline</label>
+                        <select id="lead_status" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="NEW" selected>NEW (Baru Masuk)</option>
+                            <option value="CONSULTATION">CONSULTATION</option>
+                            <option value="QUALIFIED">QUALIFIED</option>
+                            <option value="PROPOSAL">PROPOSAL</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="lead_owner">PIC Sales</label>
+                        <select id="lead_owner" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="Sales A">Sales Consultant A</option>
+                            <option value="Sales B">Sales Consultant B</option>
+                            <option value="Belum Ditugaskan">Belum Ditugaskan</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1" for="lead_notes">Catatan Tambahan / Preferensi Khusus</label>
+                    <textarea id="lead_notes" rows="2" placeholder="Catatan konsultasi, riwayat penyakit, atau permintaan kamar khusus..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none"></textarea>
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateLead')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold transition shadow-xs cursor-pointer">
+                        Simpan Prospek
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 2: FORM BOOKING & REGISTRASI BARU ==================== -->
+    <div id="modalCreateRegistration" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-id-card-clip"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Booking Kursi &amp; Registrasi Baru</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Penguncian harga komersial snapshot &amp; penerbitan ID</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateRegistration')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formCreateRegistration" onsubmit="SDW_ADMIN.handleCreateRegistration(event)" class="p-5 overflow-y-auto space-y-4 text-xs font-semibold">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_customer">Nama Lengkap Sesuai KTP <span class="text-rose-500">*</span></label>
+                        <input type="text" id="reg_customer" required placeholder="Nama lengkap jamaah" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_nik">NIK KTP (16 Digit) <span class="text-rose-500">*</span></label>
+                        <input type="text" id="reg_nik" required maxlength="16" placeholder="3201xxxxxxxxxxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none font-mono">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_phone">No. WhatsApp / HP <span class="text-rose-500">*</span></label>
+                        <input type="tel" id="reg_phone" required placeholder="0812-xxxx-xxxx" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_room_type">Tipe Kamar Hotel</label>
+                        <select id="reg_room_type" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="Quad (Berempat)">Quad (Berempat - Standar)</option>
+                            <option value="Triple (Bertiga)">Triple (Bertiga)</option>
+                            <option value="Double (Berdua)" selected>Double (Berdua / Suami-Istri)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_package">Pilihan Paket Umroh <span class="text-rose-500">*</span></label>
+                        <select id="reg_package" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="Umroh Reguler 9H">Umroh Reguler Syawal Barakah 9H (Rp 29.500.000)</option>
+                            <option value="Umroh VIP 12H">Umroh VIP Khidmat Akhir Tahun 12H (Rp 43.500.000)</option>
+                            <option value="Umroh Plus Turki 13H">Umroh Plus Turki Musim Semi 13H (Rp 38.900.000)</option>
+                            <option value="Umroh Ramadhan 10H">Umroh Awal Ramadhan 10H (Rp 36.500.000)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="reg_departure">Jadwal Keberangkatan <span class="text-rose-500">*</span></label>
+                        <select id="reg_departure" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="15 Jan 2027">15 Jan 2027 (Saudia SV819 • CGK)</option>
+                            <option value="28 Feb 2027">28 Feb 2027 (Garuda GA980 • CGK)</option>
+                            <option value="18 Apr 2027">18 Apr 2027 (Turkish TK57 • SUB)</option>
+                            <option value="02 Mar 2027">02 Mar 2027 (Saudia SV825 • CGK)</option>
+                        </select>
+                    </div>
+                </div>
+                <!-- Price Snapshot Box -->
+                <div class="p-3.5 bg-amber-50/70 border border-amber-200/80 rounded-2xl space-y-2">
+                    <div class="text-[11px] font-extrabold text-amber-950 flex items-center gap-1.5">
+                        <i class="fa-solid fa-lock text-amber-600"></i>
+                        <span>Penguncian Harga Snapshot Komersial</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                        <div>
+                            <label class="block text-[11px] text-slate-600 mb-0.5" for="reg_price">Harga Paket (Rp)</label>
+                            <input type="number" id="reg_price" value="34500000" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 font-mono font-bold text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-600 mb-0.5" for="reg_discount">Diskon / Promo (Rp)</label>
+                            <input type="number" id="reg_discount" value="1000000" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 font-mono font-bold text-emerald-700">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-slate-600 mb-0.5" for="reg_dp">Setoran DP Awal (Rp)</label>
+                            <input type="number" id="reg_dp" value="15000000" class="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 font-mono font-bold text-sdw-pine">
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateRegistration')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold transition shadow-xs cursor-pointer">
+                        Konfirmasi &amp; Terbitkan Registrasi
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 3: FORM CATAT PEMBAYARAN BANK ==================== -->
+    <div id="modalCreatePayment" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Catat Bukti Setor &amp; Mutasi Bank</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Pencatatan setoran jamaah untuk verifikasi bagian keuangan</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalCreatePayment')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formCreatePayment" onsubmit="SDW_ADMIN.handleCreatePayment(event)" class="p-5 overflow-y-auto space-y-4 text-xs font-semibold">
+                <div>
+                    <label class="block text-slate-700 mb-1" for="pay_reg_id">Pilih Pendaftaran Jamaah <span class="text-rose-500">*</span></label>
+                    <select id="pay_reg_id" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                        <!-- Populated dynamically by JS -->
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="pay_term">Jenis Termin Pembayaran <span class="text-rose-500">*</span></label>
+                        <select id="pay_term" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                            <option value="Uang Muka (DP Booking Seat)">Uang Muka (DP Booking Seat)</option>
+                            <option value="Termin Ke-2">Termin Ke-2 (H-45)</option>
+                            <option value="Pelunasan Akhir">Pelunasan Akhir (H-30)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="pay_amount">Jumlah Setoran (Rp) <span class="text-rose-500">*</span></label>
+                        <input type="number" id="pay_amount" required placeholder="Contoh: 15000000" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none font-mono">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1" for="pay_bank">Rekening Bank Tujuan <span class="text-rose-500">*</span></label>
+                    <select id="pay_bank" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none bg-white cursor-pointer">
+                        <option value="Transfer Bank Syariah (BSI) - 7123-4567-89">Bank Syariah Indonesia (BSI) - 7123-4567-89 an PT SDW Mandiri</option>
+                        <option value="Transfer Bank Muamalat - 108-9876-5432">Bank Muamalat - 108-9876-5432 an PT SDW Mandiri</option>
+                        <option value="Setoran Tunai di Kasir Kantor">Setoran Tunai di Kasir Kantor SDW</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="pay_ref">No. Referensi / ID Mutasi <span class="text-rose-500">*</span></label>
+                        <input type="text" id="pay_ref" required placeholder="Contoh: BSI-TX889021" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="pay_date">Waktu Mutasi</label>
+                        <input type="text" id="pay_date" value="Hari ini • Real-time" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-700 mb-1" for="pay_notes">Keterangan / Catatan Verifikasi</label>
+                    <textarea id="pay_notes" rows="2" placeholder="Keterangan pengirim, bank asal, atau nomor resi..." class="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none"></textarea>
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalCreatePayment')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition shadow-xs cursor-pointer">
+                        Simpan Bukti Setor
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 4: FORM BUAT KLOTER BARU ==================== -->
+    <div id="modalCreateTrip" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Buat Kloter Perjalanan Baru</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Penjadwalan kloter, maskapai, hotel &amp; pembimbing</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateTrip')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="formCreateTrip" onsubmit="SDW_ADMIN.handleCreateTrip(event)" class="p-5 overflow-y-auto space-y-4 text-xs font-semibold">
+                <div>
+                    <label class="block text-slate-700 mb-1" for="trip_name">Nama / Kode Kloter <span class="text-rose-500">*</span></label>
+                    <input type="text" id="trip_name" required placeholder="Contoh: Kloter Syawal Barakah 02" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_departure_date">Tanggal Berangkat <span class="text-rose-500">*</span></label>
+                        <input type="text" id="trip_departure_date" required placeholder="Contoh: 15 Mei 2027" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_return_date">Tanggal Kembali <span class="text-rose-500">*</span></label>
+                        <input type="text" id="trip_return_date" required placeholder="Contoh: 24 Mei 2027" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_airline">Maskapai Penerbangan <span class="text-rose-500">*</span></label>
+                        <input type="text" id="trip_airline" required placeholder="Contoh: Saudia Direct SV-819 (CGK-JED)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_capacity">Total Kuota Seat <span class="text-rose-500">*</span></label>
+                        <input type="number" id="trip_capacity" required value="45" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none font-mono">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_hotel_makkah">Hotel Makkah</label>
+                        <input type="text" id="trip_hotel_makkah" placeholder="Contoh: Retaj Al Rayyan (350m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_hotel_madinah">Hotel Madinah</label>
+                        <input type="text" id="trip_hotel_madinah" placeholder="Contoh: Concorde Dar Al Khair (200m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_muthawwif">Muthawwif Pembimbing</label>
+                        <input type="text" id="trip_muthawwif" placeholder="Contoh: Ust. DR. H. Salman, Lc." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-slate-700 mb-1" for="trip_tour_leader">Tour Leader (TL)</label>
+                        <input type="text" id="trip_tour_leader" placeholder="Contoh: Ust. H. Fauzi, S.Ag." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalCreateTrip')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold transition shadow-xs cursor-pointer">
+                        Terbitkan Kloter Baru
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 5: CETAK KUITANSI RESMI SYARIAH (PRINT PREVIEW) ==================== -->
+    <div id="modalReceiptPrint" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-2xl w-full max-h-[95vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <!-- Modal Header (No Print) -->
+            <div class="no-print p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 via-[#3E165B] to-[#240833] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Kuitansi Pembayaran Syariah</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Dokumen Resmi Tanda Bukti Penerimaan Dana SDW UMROH</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak / PDF</span>
+                    </button>
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalReceiptPrint')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Printable Receipt Sheet -->
+            <div id="receiptPrintableArea" class="p-6 sm:p-8 overflow-y-auto bg-white text-slate-800 space-y-6">
+                <!-- Receipt Head -->
+                <div class="border-b-2 border-slate-800 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-12 w-auto object-contain">
+                        <div>
+                            <div class="font-black text-lg tracking-tight text-sdw-pine">
+                                PT SDW MANDIRI UTAMA
+                            </div>
+                            <div class="text-[10px] text-slate-600 font-medium leading-tight">
+                                Izin Umroh Kemenag RI No. U.124/2021 • PPIU Terakreditasi A<br>
+                                Gedung SDW Tower Lt. 3, Jl. Margonda Raya No. 100, Depok
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xl font-black font-amiri text-sdw-pine">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+                        <div class="text-xs font-mono font-bold text-slate-700 mt-1">NO: <span id="receiptNumber" class="text-sdw-pine">KWT/SDW/2026/00195</span></div>
+                        <div class="text-[10px] text-slate-500 font-medium">Tanggal: <span id="receiptDate">04 November 2026</span></div>
+                    </div>
+                </div>
+
+                <!-- Receipt Body Form -->
+                <div class="space-y-3.5 text-xs">
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Telah Diterima Dari :</span>
+                        <span id="receiptCustomer" class="flex-1 font-bold text-slate-900 text-sm">Bpk. Ahmad Jamaah Teladan</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Nomor Registrasi :</span>
+                        <span id="receiptRegId" class="flex-1 font-mono font-bold text-sdw-pine">REG-SDW-2701</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Uang Sejumlah (Terbilang) :</span>
+                        <span id="receiptAmountWords" class="flex-1 font-bold italic text-slate-800 bg-amber-50/60 p-2 rounded-lg border border-amber-200/50">"Lima Belas Juta Rupiah"</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Untuk Pembayaran :</span>
+                        <span id="receiptPurpose" class="flex-1 font-semibold text-slate-800">Uang Muka (DP Booking Seat) • Umroh Reguler Syawal Barakah 9H</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Metode &amp; No. Referensi :</span>
+                        <span id="receiptMethodRef" class="flex-1 font-mono text-slate-700">Transfer Bank Syariah (BSI) • Ref: BSI-TX990142</span>
+                    </div>
+                    <div class="flex flex-col sm:flex-row py-1 border-b border-slate-200/80">
+                        <span class="w-44 text-slate-500 font-semibold">Sisa Tagihan Pelunasan :</span>
+                        <span id="receiptRemaining" class="flex-1 font-black text-rose-700">Rp 18.500.000 (Jatuh tempo: 25 Des 2026)</span>
+                    </div>
+                </div>
+
+                <!-- Nominal Box & Signature -->
+                <div class="pt-2 flex flex-col sm:flex-row items-end justify-between gap-6">
+                    <div class="p-4 rounded-2xl bg-purple-50 border-2 border-sdw-pine/30 inline-block">
+                        <span class="text-[10px] font-extrabold text-sdw-pine uppercase tracking-wider block">Jumlah Nominal Sah:</span>
+                        <span id="receiptAmountBox" class="text-2xl font-black text-sdw-pine font-mono">Rp 15.000.000,-</span>
+                    </div>
+                    <div class="text-center sm:text-right space-y-1">
+                        <div class="text-[11px] text-slate-500">Jakarta, 04 November 2026</div>
+                        <div class="text-xs font-bold text-slate-700">Bagian Keuangan SDW Umroh</div>
+                        <div class="h-16 flex items-center justify-end">
+                            <div class="px-3 py-1 rounded-lg border border-emerald-400 bg-emerald-50 text-emerald-800 text-[10px] font-bold inline-flex items-center gap-1.5 shadow-2xs">
+                                <i class="fa-solid fa-stamp text-emerald-600"></i>
+                                <span>TERVALIDASI DIGITAL • SYSTEM VERIFIED</span>
+                            </div>
+                        </div>
+                        <div class="font-bold text-xs text-slate-900 underline">Finance &amp; Treasury Admin</div>
+                        <div class="text-[10px] text-slate-400 font-mono">ID Staf: SDW-FIN-091</div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-200 text-[10px] text-slate-400 text-center">
+                    Kuitansi ini diterbitkan secara sah melalui Portal Admin SDW Umroh. Syarat dan ketentuan ibadah mengikuti akad perjanjian baku pendaftaran umroh.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 6: DETAIL MANIFEST KLOTER & ROOMING LIST ==================== -->
+    <div id="modalTripManifest" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-3xl w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h2 id="manifestModalTitle" class="font-extrabold text-sm sm:text-base leading-tight text-white">Manifest Kloter &amp; Rooming List</h2>
+                        <span id="manifestModalSubtitle" class="text-[10px] text-amber-300 font-medium block">Kloter Utama 01 • 15 Jan 2027</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-slate-900 font-extrabold text-xs transition cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak Manifest</span>
+                    </button>
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalTripManifest')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="manifestModalContent" class="p-5 overflow-y-auto space-y-5 text-xs">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 7: ALOKASI PENGHUNI KAMAR HOTEL (FASE 3) ==================== -->
+    <div id="modalAssignRoom" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-bed"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Alokasi &amp; Ganti Penghuni Kamar</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Rooming List Hotel Makkah &amp; Madinah</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalAssignRoom')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formAssignRoom" onsubmit="SDW_ADMIN.handleAssignRoom(event)" class="p-5 overflow-y-auto space-y-4 text-xs">
+                <input type="hidden" id="assign-room-id" value="">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Hotel &amp; Nomor Kamar</label>
+                    <input type="text" id="assign-room-name" readonly class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 font-bold outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Tipe Kamar</label>
+                        <input type="text" id="assign-room-type" readonly class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 font-semibold outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kategori Muhrim</label>
+                        <select id="assign-room-gender" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                            <option value="IKHWAN">🧔 Ikhwan (Laki-laki)</option>
+                            <option value="AKHWAT">🧕 Akhwat (Perempuan)</option>
+                            <option value="FAMILY">👨‍👩‍👧 Keluarga / Pasutri Sah</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pilih Kasur (Slot)</label>
+                    <select id="assign-room-slot" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                        <option value="0">Kasur A (Slot 1)</option>
+                        <option value="1">Kasur B (Slot 2)</option>
+                        <option value="2">Kasur C (Slot 3)</option>
+                        <option value="3">Kasur D (Slot 4)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Jamaah Penghuni</label>
+                    <input type="text" id="assign-room-occupant" required placeholder="Ketik nama jamaah atau pilih dari daftar..." class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalAssignRoom')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Alokasi Kamar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL 8: ALOKASI ARMADA BUS & NOMOR KURSI (FASE 3) ==================== -->
+    <div id="modalAssignBus" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-purple-900 to-[#3E165B] text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-sm">
+                        <i class="fa-solid fa-bus"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Alokasi Bus &amp; Label Koper</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Penetapan Bus AC Tanah Suci &amp; Nomor Kursi</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalAssignBus')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="formAssignBus" onsubmit="SDW_ADMIN.handleAssignBus(event)" class="p-5 overflow-y-auto space-y-4 text-xs">
+                <input type="hidden" id="assign-bus-manifest-id" value="">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Jamaah</label>
+                    <input type="text" id="assign-bus-passenger-name" readonly class="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-800 font-bold outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Armada Bus AC</label>
+                    <select id="assign-bus-select" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                        <option value="BUS-01">🚌 Bus 01 (Stiker Hijau - TL Ust. DR. H. Salman)</option>
+                        <option value="BUS-02">🚌 Bus 02 (Stiker Kuning - TL Ust. Syam Elmarusy)</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor Kursi (Seat)</label>
+                        <input type="text" id="assign-bus-seat" required placeholder="Misal: 05A, 12B" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Stiker Koper Bagasi</label>
+                        <input type="text" id="assign-bus-tag" required placeholder="Misal: HIJAU-05, KUNING-12" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalAssignBus')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i>
+                        <span>Simpan Alokasi Bus</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL SYNC STATUS & OFFLINE QUEUE (FASE 4) ==================== -->
+    <div id="modalSyncStatus" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-2xs transition-opacity duration-200 opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-200 space-y-5 max-h-[90vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-sdw-pine flex items-center justify-center text-lg">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-black text-slate-900">Status Sinkronisasi & Live Database</h3>
+                        <p class="text-xs text-slate-500">Google Apps Script Web App (22 Sheet Backend & Offline-First Engine)</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalSyncStatus')" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Connection Status Summary Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status Jaringan</div>
+                    <div id="syncNetworkStatus" class="text-xs font-black text-emerald-700 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Online (Tersambung)
+                    </div>
+                    <div id="syncEndpointInfo" class="text-[10px] text-slate-400 truncate">Apps Script Web App v2.0.0</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Antrean Tertunda</div>
+                    <div id="syncPendingCount" class="text-xs font-black text-slate-800 flex items-center gap-1.5">
+                        <span id="syncPendingBadge" class="px-1.5 py-0.5 rounded bg-slate-200 text-slate-700 font-mono text-[11px]">0</span> Mutasi Pending
+                    </div>
+                    <div class="text-[10px] text-slate-400">Tersimpan di Indexed/Local Queue</div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                    <div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Sinkronisasi Terakhir</div>
+                    <div id="syncLastTime" class="text-xs font-black text-slate-800">
+                        Baru Saja
+                    </div>
+                    <div id="syncHistoryCount" class="text-[10px] text-emerald-600 font-semibold">Semua data tersinkron</div>
+                </div>
+            </div>
+
+            <!-- Queue Inspection List / Table -->
+            <div class="flex-1 overflow-hidden flex flex-col space-y-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                        <i class="fa-solid fa-list-check text-slate-400"></i>
+                        <span>Daftar Mutasi Antrean Offline</span>
+                    </h4>
+                    <span id="syncQueueNotice" class="text-[11px] text-slate-500">Auto-sync aktif saat online</span>
+                </div>
+
+                <div id="syncQueueContainer" class="flex-1 overflow-y-auto rounded-xl border border-slate-200 bg-slate-50 p-2 space-y-1.5 min-h-[140px] max-h-[220px]">
+                    <!-- Injected by JS: Items in queue or empty placeholder -->
+                </div>
+            </div>
+
+            <!-- Actions Footer -->
+            <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5">
+                <button type="button" onclick="SDW_ADMIN.clearSyncHistory()" class="text-xs text-slate-500 hover:text-rose-600 font-semibold transition cursor-pointer">
+                    <i class="fa-regular fa-trash-can mr-1"></i> Bersihkan Riwayat Sync
+                </button>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalSyncStatus')" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-bold transition cursor-pointer">
+                        Tutup
+                    </button>
+                    <button type="button" id="btnTriggerManualSync" onclick="SDW_ADMIN.triggerManualSync()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white text-xs font-bold transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span id="btnTriggerSyncText">Sinkronkan Sekarang</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SCREEN LOCK MODAL (FASE 6: SECURITY & SESSION AUTO-LOCK) ==================== -->
+    <div id="modalScreenLock" class="fixed inset-0 z-[100] bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none" aria-hidden="true">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 sm:p-7 shadow-2xl border border-slate-200 text-center space-y-5 transform scale-95 transition-transform duration-200">
+            <!-- Royal Lock Header -->
+            <div class="w-16 h-16 rounded-2xl bg-purple-100 text-sdw-pine mx-auto flex items-center justify-center text-2xl shadow-inner">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-black text-slate-900">Sesi Portal Terkunci</h3>
+                <p class="text-xs text-slate-500 mt-1">Layar dikunci otomatis untuk melindungi kerahasiaan data jamaah.</p>
+            </div>
+
+            <!-- User Info Badge -->
+            <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center gap-3 text-left">
+                <div class="w-10 h-10 rounded-xl bg-sdw-pine text-white flex items-center justify-center font-bold text-sm">
+                    SO
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="text-xs font-black text-slate-900 truncate">Staf Operasional</div>
+                    <div id="lockScreenRoleBadge" class="text-[10px] font-bold text-emerald-700">ADMIN (Akses Penuh)</div>
+                </div>
+            </div>
+
+            <!-- PIN Input Form -->
+            <form onsubmit="SDW_ADMIN.handleUnlock(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1.5">Masukkan PIN Keamanan</label>
+                    <input type="password" id="lockScreenPin" maxlength="6" autofocus placeholder="Default PIN: 1234" class="w-full text-center tracking-widest text-lg font-black py-2.5 rounded-xl border border-slate-300 focus:border-sdw-pine focus:ring-2 focus:ring-purple-200 outline-none">
+                    <div id="lockScreenError" class="text-[11px] text-rose-600 font-bold mt-1.5 hidden">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i> PIN salah! Silakan gunakan PIN default: 1234.
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2">
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('1')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">1</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('2')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">2</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('3')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">3</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('4')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">4</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('5')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">5</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('6')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">6</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('7')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">7</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('8')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">8</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('9')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">9</button>
+                    <button type="button" onclick="SDW_ADMIN.clearLockPin()" class="py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition cursor-pointer">C</button>
+                    <button type="button" onclick="SDW_ADMIN.appendLockPin('0')" class="py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm transition cursor-pointer">0</button>
+                    <button type="submit" class="py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition cursor-pointer flex items-center justify-center"><i class="fa-solid fa-key"></i></button>
+                </div>
+
+                <button type="submit" class="w-full py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-unlock"></i>
+                    <span>Buka Kunci Layar</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- ==================== GLOBAL QUICK SEARCH MODAL (Ctrl + K) ==================== -->
     <div id="adminSearchModal" class="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/60 backdrop-blur-2xs transition-opacity duration-200 opacity-0 pointer-events-none" aria-hidden="true">
         <div class="bg-white rounded-2xl max-w-lg w-full p-4 shadow-2xl border border-slate-200 transform scale-95 transition-transform duration-200 space-y-3">
@@ -552,16 +1748,29 @@
         Pemberitahuan
     </div>
 
-    <!-- Application Scripts -->
-    <script src="js/data-mock.js"></script>
-    <script src="js/app-config.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/admin-core.js"></script>
+    <!-- Application Scripts (Decoupled Modular Architecture v2.7.0) -->
+    <script src="js/data-mock.js?v=2.7.0"></script>
+    <script src="js/app-config.js?v=2.7.0"></script>
+    <script src="js/api.js?v=2.7.0"></script>
+    <script src="js/auth.js?v=2.7.0"></script>
+    <script src="js/admin/admin-state.js?v=2.7.0"></script>
+    <script src="js/admin/admin-nav.js?v=2.7.0"></script>
+    <script src="js/admin/admin-crm.js?v=2.7.0"></script>
+    <script src="js/admin/admin-docs.js?v=2.7.0"></script>
+    <script src="js/admin/admin-registrations.js?v=2.7.0"></script>
+    <script src="js/admin/admin-finance.js?v=2.7.0"></script>
+    <script src="js/admin/admin-operations.js?v=2.7.0"></script>
+    <script src="js/admin/admin-security.js?v=2.7.0"></script>
+    <script src="js/admin/admin-sync.js?v=2.7.0"></script>
+    <script src="js/admin/admin-export.js?v=2.7.0"></script>
+    <script src="js/admin-core.js?v=2.7.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof SDW_ADMIN !== 'undefined') {
                 SDW_ADMIN.init();
+            }
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
             }
         });
     </script>
