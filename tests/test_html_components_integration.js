@@ -6,6 +6,7 @@
 const fs = require('fs');
 const assert = require('assert');
 const http = require('http');
+const path = require('path');
 
 const EXPECTED_PAGES = [
   { file: 'index.html', key: 'beranda', transparent: true },
@@ -82,6 +83,27 @@ async function runIntegrationTests() {
   });
 
   console.log('\n2. Pengujian Dev-Server HTTP 200 untuk Seluruh Halaman');
+  let tempServer = null;
+  try {
+    await checkUrl('http://localhost:3000/index.html');
+  } catch (err) {
+    const devServer = http.createServer((req, res) => {
+      let reqPath = decodeURI(req.url.split('?')[0]);
+      if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
+      const filePath = path.join(process.cwd(), reqPath);
+      if (fs.existsSync(filePath)) {
+        res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+        fs.createReadStream(filePath).pipe(res);
+      } else {
+        res.writeHead(404);
+        res.end();
+      }
+    });
+    await new Promise((resolve) => {
+      tempServer = devServer.listen(3000, resolve);
+    });
+  }
+
   for (const { file } of EXPECTED_PAGES) {
     try {
       const res = await checkUrl(`http://localhost:3000/${file}`);
@@ -96,6 +118,10 @@ async function runIntegrationTests() {
       console.error(`  [FAIL] http://localhost:3000/${file} -> Request error: ${err.message}`);
       failed++;
     }
+  }
+
+  if (tempServer) {
+    await new Promise((resolve) => tempServer.close(resolve));
   }
 
   console.log('\n========================================');

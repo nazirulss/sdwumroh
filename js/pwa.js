@@ -937,6 +937,178 @@
       `;
       document.body.appendChild(gModal);
     }
+
+    // K. Modal Katalog Pilihan Paket Umroh (In-App Sheet)
+    if (!document.getElementById('modalPaketUmroh')) {
+      const pModal = document.createElement('div');
+      pModal.id = 'modalPaketUmroh';
+      pModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      pModal.onclick = function (e) {
+        if (e.target === pModal) window.closePaketModal();
+      };
+      pModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-purple-500/20 text-amber-300 flex items-center justify-center border border-gold-500/30">
+                <i class="fa-solid fa-kaaba text-base"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-white leading-tight">Pilihan Paket Umroh &amp; Haji</h3>
+                <p class="text-[10px] text-purple-200/70">Program Resmi Musim 1447H - 1448H</p>
+              </div>
+            </div>
+            <button type="button" onclick="window.closePaketModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors" aria-label="Tutup">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Kategori Tabs -->
+          <div class="flex items-center gap-1.5 py-2.5 overflow-x-auto no-scrollbar shrink-0 text-[11px] font-bold">
+            <button type="button" onclick="window.filterInAppPaket('ALL', this)" class="inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all whitespace-nowrap active:scale-95 font-black">Semua</button>
+            <button type="button" onclick="window.filterInAppPaket('REGULER', this)" class="inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95">Reguler</button>
+            <button type="button" onclick="window.filterInAppPaket('VIP', this)" class="inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95">VIP Khidmat</button>
+            <button type="button" onclick="window.filterInAppPaket('RAMADHAN', this)" class="inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95">Ramadhan</button>
+            <button type="button" onclick="window.filterInAppPaket('PLUS_TOUR', this)" class="inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95">Plus Wisata</button>
+          </div>
+
+          <!-- List Kartu Paket (Scrollable) -->
+          <div id="inAppPaketListContainer" class="flex-1 overflow-y-auto space-y-3 pr-1 py-1">
+            <!-- Diisi secara dinamis oleh renderInAppPaketList -->
+          </div>
+
+          <!-- Footer Bantuan Konsultasi -->
+          <div class="pt-3 border-t border-white/10 shrink-0 flex items-center justify-between text-[11px]">
+            <span class="text-purple-200/70">Butuh program khusus keluarga / custom?</span>
+            <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20custom%20keluarga." target="_blank" rel="noopener noreferrer" class="text-gold-300 hover:text-white font-bold flex items-center gap-1 cursor-pointer">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+              <span>Hubungi CS</span>
+            </a>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(pModal);
+    }
+
+    // L. Modal Peta Ziarah & Napak Tilas Haramain (In-App Sheet)
+    if (!document.getElementById('modalPetaZiarah')) {
+      const zModal = document.createElement('div');
+      zModal.id = 'modalPetaZiarah';
+      zModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      zModal.onclick = function (e) {
+        if (e.target === zModal) window.closeZiarahModal();
+      };
+      zModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-300 flex items-center justify-center border border-teal-500/30">
+                <i class="fa-solid fa-map-location-dot text-base"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-black text-white leading-tight">Peta Ziarah &amp; Napak Tilas</h3>
+                <p class="text-[10px] text-purple-200/70">Situs Sejarah Makkah &amp; Madinah dengan Navigasi GPS</p>
+              </div>
+            </div>
+            <button type="button" onclick="window.closeZiarahModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors" aria-label="Tutup">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Kota Tabs -->
+          <div class="grid grid-cols-3 gap-1.5 py-2.5 shrink-0 text-xs font-bold">
+            <button type="button" onclick="window.switchZiarahCity('ALL', this)" class="inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black">Semua (12)</button>
+            <button type="button" onclick="window.switchZiarahCity('MAKKAH', this)" class="inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center">🕋 Makkah (6)</button>
+            <button type="button" onclick="window.switchZiarahCity('MADINAH', this)" class="inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center">🕌 Madinah (6)</button>
+          </div>
+
+          <!-- List Titik Ziarah (Scrollable) -->
+          <div id="inAppZiarahListContainer" class="flex-1 overflow-y-auto space-y-3 pr-1 py-1">
+            <!-- Diisi secara dinamis oleh renderInAppZiarahList -->
+          </div>
+
+          <!-- Info Panduan Muthawwif -->
+          <div class="pt-2.5 border-t border-white/10 shrink-0 text-[10.5px] text-purple-200/70 flex items-center justify-between">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-compass text-amber-400"></i> Disertai rute bus &amp; Muthawwif bersanad</span>
+            <span class="text-gold-300 font-bold">SDW Official</span>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(zModal);
+    }
+
+    // M. Modal Live Streaming Ka'bah & Masjid Nabawi (In-App Sheet)
+    if (!document.getElementById('modalLiveKabah')) {
+      const lModal = document.createElement('div');
+      lModal.id = 'modalLiveKabah';
+      lModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      lModal.onclick = function (e) {
+        if (e.target === lModal) window.closeLiveModal();
+      };
+      lModal.innerHTML = `
+        <div class="bg-[#1F0628] rounded-3xl max-w-lg w-full p-4 sm:p-6 shadow-2xl border border-gold-500/40 transform transition-all text-purple-100 max-h-[92vh] flex flex-col animate-in fade-in zoom-in-95">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-red-500/20 text-rose-400 flex items-center justify-center border border-red-500/30">
+                <i class="fa-solid fa-tower-broadcast text-base animate-pulse"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-sm font-black text-white leading-tight">Live Ka'bah &amp; Nabawi</h3>
+                  <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-[9px] font-black uppercase tracking-wider animate-pulse">24/7 LIVE</span>
+                </div>
+                <p id="inAppLiveChannelDesc" class="text-[10px] text-purple-200/70">Makkah Al-Mukarramah — Siaran Langsung Suasana Thawaf</p>
+              </div>
+            </div>
+            <button type="button" onclick="window.closeLiveModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors" aria-label="Tutup">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Video Player Container (16:9 Aspect Ratio) -->
+          <div class="my-3 rounded-2xl overflow-hidden bg-black relative border border-white/10 shadow-lg aspect-video shrink-0">
+            <iframe id="inAppLiveIframe" src="about:blank" title="Live Streaming Ka'bah &amp; Masjid Nabawi" class="w-full h-full object-cover" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <!-- Stream Switcher Tabs -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5 pb-3 border-b border-white/10 shrink-0 text-[11px] font-bold">
+            <button type="button" onclick="window.switchLiveFeed('main', this)" class="inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black">🕋 Makkah Utama</button>
+            <button type="button" onclick="window.switchLiveFeed('backup', this)" class="inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center">📡 Jalur Backup</button>
+            <button type="button" onclick="window.switchLiveFeed('quran', this)" class="inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center">📺 Quran TV</button>
+            <button type="button" onclick="window.switchLiveFeed('madinah', this)" class="inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center">🕌 Madinah TV</button>
+          </div>
+
+          <!-- Doa Melihat Ka'bah / Hadits (Scrollable) -->
+          <div class="flex-1 overflow-y-auto space-y-2 py-2 pr-1">
+            <div class="p-3 rounded-2xl bg-black/30 border border-gold-500/20 text-xs">
+              <span class="text-gold-300 font-bold block mb-1">Doa Ketika Memandang Ka'bah:</span>
+              <p class="font-arabic text-sm text-right leading-loose text-white mb-1.5" dir="rtl">
+                اللَّهُمَّ زِدْ هَذَا الْبَيْتَ تَشْرِيفًا وَتَعْظِيمًا وَتَكْرِيمًا وَمَهَابَةً، وَزِدْ مَنْ شَرَّفَهُ وَعَظَّمَهُ مِمَّنْ حَجَّهُ أَوِ اعْتَمَرَهُ تَشْرِيفًا وَتَكْرِيمًا وَتَعْظِيمًا وَبِرًّا
+              </p>
+              <p class="text-[10.5px] text-purple-200/80 italic leading-relaxed">
+                "Ya Allah, tambahkanlah kemuliaan, keagungan, kehormatan, dan wibawa pada Baitullah ini. Dan tambahkanlah bagi orang yang memuliakannya di antara mereka yang berhaji atau berumroh kemuliaan, kehormatan, keagungan, dan kebaikan."
+              </p>
+            </div>
+          </div>
+
+          <!-- External Fallback Button -->
+          <div class="pt-2.5 border-t border-white/10 shrink-0 flex items-center justify-between">
+            <span class="text-[10px] text-purple-200/70">Koneksi lambat / buffering?</span>
+            <a id="inAppLiveExternalLink" href="https://www.youtube.com/watch?v=eC4LfEVxvKg" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+              <i class="fa-brands fa-youtube"></i>
+              <span>Buka YouTube</span>
+            </a>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(lModal);
+    }
   }
 
   function showPwaPrompt() {
@@ -1430,16 +1602,22 @@
     }
   };
 
-  window.openTitikHotelModal = function (city = 'makkah') {
+  window.openTitikHotelModal = function (city = 'makkah', options = { syncHistory: true }) {
     const modal = document.getElementById('modalTitikHotel');
     if (!modal) return;
     window.switchHotelTab(city);
     modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('hotel');
+    }
   };
 
-  window.closeTitikHotelModal = function () {
+  window.closeTitikHotelModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalTitikHotel');
     if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
   };
 
   window.switchHotelTab = function (city) {
@@ -1516,16 +1694,22 @@
     { id: 'kantong_zamzam', cat: 'Dokumen', label: 'Botol Tumbler Kosong & Tas Selempang Passport / Uang Riyal' }
   ];
 
-  window.openChecklistKoperModal = function () {
+  window.openChecklistKoperModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalChecklistKoper');
     if (!modal) return;
     window.renderKoperChecklist();
     modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('koper');
+    }
   };
 
-  window.closeChecklistKoperModal = function () {
+  window.closeChecklistKoperModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalChecklistKoper');
     if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
   };
 
   function getKoperState() {
@@ -1597,7 +1781,7 @@
   // ==================== ARAH KIBLAT CONTROLLERS ====================
   let compassListenerAttached = false;
 
-  window.openArahKiblatModal = function () {
+  window.openArahKiblatModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalArahKiblat');
     if (!modal) return;
     modal.classList.remove('hidden');
@@ -1606,14 +1790,20 @@
       window.addEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = true;
     }
+    if (options && options.syncHistory) {
+      syncUrlView('kiblat');
+    }
   };
 
-  window.closeArahKiblatModal = function () {
+  window.closeArahKiblatModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalArahKiblat');
     if (modal) modal.classList.add('hidden');
     if (compassListenerAttached) {
       window.removeEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = false;
+    }
+    if (options && options.syncHistory) {
+      clearUrlView();
     }
   };
 
@@ -1629,16 +1819,22 @@
   }
 
   // ==================== GALERI KLOTER CONTROLLERS ====================
-  window.openGaleriKloterModal = function (tab = 'foto') {
+  window.openGaleriKloterModal = function (tab = 'foto', options = { syncHistory: true }) {
     const modal = document.getElementById('modalGaleriKloter');
     if (!modal) return;
     window.switchGaleriTab(tab);
     modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('galeri');
+    }
   };
 
-  window.closeGaleriKloterModal = function () {
+  window.closeGaleriKloterModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('modalGaleriKloter');
     if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
   };
 
   window.switchGaleriTab = function (tab) {
@@ -1653,18 +1849,569 @@
       fotoTab.classList.remove('hidden');
       certTab.classList.add('hidden');
       if (fotoBtn && certBtn) {
-        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center font-black';
         certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
       }
     } else {
       fotoTab.classList.add('hidden');
       certTab.classList.remove('hidden');
       if (fotoBtn && certBtn) {
-        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
+        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center font-black';
         fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
       }
     }
   };
+
+  // ==================== IN-APP PAKET CONTROLLERS ====================
+  const IN_APP_PAKET_DATA = [
+    {
+      id: 'PKG-000001',
+      name: 'Umroh Reguler Syawal Barakah',
+      category: 'REGULER',
+      duration: '9 Hari',
+      badge: 'Best Seller',
+      airline: 'Saudia Airlines (Direct Madinah)',
+      hotelMakkah: 'Retaj Al Rayyan / Setaraf (350m)',
+      hotelMadinah: 'Concorde Dar Al Khair (200m)',
+      startingPrice: 'Rp 29,5 Jt',
+      quadPrice: 'Rp 29,5 Jt',
+      triplePrice: 'Rp 31,0 Jt',
+      doublePrice: 'Rp 32,5 Jt',
+      seatsLeft: 7,
+      rating: '4.9/5 (182 ulasan)'
+    },
+    {
+      id: 'PKG-000002',
+      name: 'Umroh VIP Khidmat Akhir Tahun',
+      category: 'VIP',
+      duration: '12 Hari',
+      badge: 'Clock Tower VIP',
+      airline: 'Garuda Indonesia (GA-980 Flag Carrier)',
+      hotelMakkah: 'Swissotel Makkah Clock Tower (0m)',
+      hotelMadinah: 'Dar Al Taqwa Madinah (50m)',
+      startingPrice: 'Rp 43,5 Jt',
+      quadPrice: 'Rp 43,5 Jt',
+      triplePrice: 'Rp 45,0 Jt',
+      doublePrice: 'Rp 46,5 Jt',
+      seatsLeft: 0,
+      rating: '5.0/5 (94 ulasan)'
+    },
+    {
+      id: 'PKG-000003',
+      name: 'Umroh Plus Turki Musim Semi',
+      category: 'PLUS_TOUR',
+      duration: '13 Hari',
+      badge: 'Favorit Keluarga',
+      airline: 'Turkish Airlines (Free Stopover Istanbul)',
+      hotelMakkah: 'Anjum Hotel Makkah (Pelataran)',
+      hotelMadinah: 'Rove Al Madinah (Dekat Nabawi)',
+      startingPrice: 'Rp 38,9 Jt',
+      quadPrice: 'Rp 38,9 Jt',
+      triplePrice: 'Rp 40,5 Jt',
+      doublePrice: 'Rp 42,0 Jt',
+      seatsLeft: 18,
+      rating: '4.8/5 (65 ulasan)'
+    },
+    {
+      id: 'PKG-000004',
+      name: 'Umroh Awal Ramadhan 1448H',
+      category: 'RAMADHAN',
+      duration: '10 Hari',
+      badge: 'Tarawih Haramain',
+      airline: 'Saudia Airlines (Direct SV)',
+      hotelMakkah: 'Pullman Zamzam Makkah (0m)',
+      hotelMadinah: 'Al Aqeeq Madinah (100m)',
+      startingPrice: 'Rp 36,5 Jt',
+      quadPrice: 'Rp 36,5 Jt',
+      triplePrice: 'Rp 38,0 Jt',
+      doublePrice: 'Rp 39,5 Jt',
+      seatsLeft: 12,
+      rating: '4.9/5 (88 ulasan)'
+    },
+    {
+      id: 'PKG-000005',
+      name: 'Umroh Akhir Ramadhan & Lailatul Qadr',
+      category: 'RAMADHAN',
+      duration: '16 Hari',
+      badge: 'Iktikaf 10 Hari Akhir',
+      airline: 'Garuda Indonesia (Direct Jeddah)',
+      hotelMakkah: 'Swissotel Makkah Clock Tower (0m)',
+      hotelMadinah: 'Dar Al Taqwa Madinah (50m)',
+      startingPrice: 'Rp 52,0 Jt',
+      quadPrice: 'Rp 52,0 Jt',
+      triplePrice: 'Rp 54,0 Jt',
+      doublePrice: 'Rp 56,0 Jt',
+      seatsLeft: 4,
+      rating: '5.0/5 (112 ulasan)'
+    }
+  ];
+
+  window.openPaketModal = function (category = 'ALL', options = { syncHistory: true }) {
+    const modal = document.getElementById('modalPaketUmroh');
+    if (!modal) return;
+    window.renderInAppPaketList(category);
+    modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('paket');
+    }
+  };
+
+  window.closePaketModal = function (options = { syncHistory: true }) {
+    const modal = document.getElementById('modalPaketUmroh');
+    if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
+  };
+
+  window.filterInAppPaket = function (category, clickedBtn) {
+    document.querySelectorAll('.inapp-paket-tab-btn').forEach((btn) => {
+      btn.className = 'inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95';
+    });
+    if (clickedBtn) {
+      clickedBtn.className = 'inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all whitespace-nowrap active:scale-95 font-black';
+    }
+    window.renderInAppPaketList(category);
+  };
+
+  window.renderInAppPaketList = function (category = 'ALL') {
+    const container = document.getElementById('inAppPaketListContainer');
+    if (!container) return;
+
+    let list = IN_APP_PAKET_DATA;
+    if (category && category !== 'ALL') {
+      list = IN_APP_PAKET_DATA.filter((p) => p.category === category);
+    }
+
+    if (list.length === 0) {
+      container.innerHTML = `
+        <div class="p-6 text-center text-purple-200/70 text-xs">
+          <i class="fa-solid fa-kaaba text-2xl mb-2 text-gold-400"></i>
+          <p>Belum ada program untuk kategori ini.</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = list.map((pkg) => {
+      const waText = encodeURIComponent(`Assalamualaikum CS SDW UMROH, saya tertarik booking seat program ${pkg.name} (${pkg.duration} - mulai ${pkg.startingPrice}). Mohon info pendaftaran & ketersediaan kamar.`);
+      const seatBadge = pkg.seatsLeft > 0 
+        ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sisa ${pkg.seatsLeft} Seat</span>`
+        : `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">Seat Penuh</span>`;
+
+      return `
+        <div class="p-4 rounded-2xl bg-black/40 border border-white/10 hover:border-gold-500/40 transition-all space-y-3">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5 flex-wrap mb-1">
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-gold-500 text-slate-950">${pkg.badge}</span>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/10 text-purple-200">${pkg.duration}</span>
+                ${seatBadge}
+              </div>
+              <h4 class="text-sm font-extrabold text-white leading-tight">${pkg.name}</h4>
+            </div>
+            <div class="text-right shrink-0">
+              <span class="text-[9px] text-purple-200/70 block uppercase">Mulai Dari</span>
+              <span class="text-base font-black text-amber-300">${pkg.startingPrice}</span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-white/10 text-purple-100/90">
+            <div class="flex items-center gap-1.5 truncate">
+              <i class="fa-solid fa-hotel text-amber-400 text-xs shrink-0"></i>
+              <span class="truncate">Makkah: <strong>${pkg.hotelMakkah}</strong></span>
+            </div>
+            <div class="flex items-center gap-1.5 truncate">
+              <i class="fa-solid fa-hotel text-amber-400 text-xs shrink-0"></i>
+              <span class="truncate">Madinah: <strong>${pkg.hotelMadinah}</strong></span>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between gap-2 pt-2 border-t border-white/10">
+            <div class="text-[10px] text-purple-200/70 flex items-center gap-1 truncate">
+              <i class="fa-solid fa-plane text-xs text-sky-400 shrink-0"></i>
+              <span class="truncate">${pkg.airline}</span>
+            </div>
+            <a href="https://wa.me/6281234567890?text=${waText}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-sm hover:brightness-110 active:scale-95 transition-all shrink-0">
+              <i class="fa-brands fa-whatsapp text-emerald-800"></i>
+              <span>Pesan Seat</span>
+            </a>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  // ==================== IN-APP ZIARAH CONTROLLERS ====================
+  const IN_APP_ZIARAH_DATA = [
+    {
+      id: 'ZIR-MAK-01',
+      city: 'MAKKAH',
+      name: 'Jabal Nur & Gua Hira',
+      distance: '± 6 Km Utara Masjidil Haram',
+      badge: 'Wahyu Pertama',
+      desc: 'Puncak perenungan Rasulullah ﷺ menerima wahyu perdana Surah Al-\'Alaq (Iqra\') melalui Malaikat Jibril AS.',
+      mapUrl: 'https://maps.google.com/?q=Jabal+al-Nour+Hira+Cave+Mecca'
+    },
+    {
+      id: 'ZIR-MAK-02',
+      city: 'MAKKAH',
+      name: 'Jabal Tsur & Gua Tsur',
+      distance: '± 5 Km Selatan Masjidil Haram',
+      badge: 'Hijrah Perjuangan',
+      desc: 'Tempat persembunyian Rasulullah ﷺ dan Abu Bakar Ash-Shiddiq selama 3 hari dari kejaran kaum kafir Quraisy.',
+      mapUrl: 'https://maps.google.com/?q=Mount+Thawr+Cave+Mecca'
+    },
+    {
+      id: 'ZIR-MAK-03',
+      city: 'MAKKAH',
+      name: 'Jabal Rahmah & Padang Arafah',
+      distance: '± 21 Km Tenggara Masjidil Haram',
+      badge: 'Puncak Haji & Wada\'',
+      desc: 'Bukit kasih sayang pertemuan Adam dan Hawa, serta lokasi Khutbatul Wada\' Rasulullah ﷺ saat Haji Wada\'.',
+      mapUrl: 'https://maps.google.com/?q=Mount+Arafat+Jabal+ar-Rahmah'
+    },
+    {
+      id: 'ZIR-MAK-04',
+      city: 'MAKKAH',
+      name: 'Mina & Kompleks Jamarat',
+      distance: '± 8 Km Timur Masjidil Haram',
+      badge: 'Lembah Tenda',
+      desc: 'Kota tenda tempat mabit hari Tasyriq dan jembatan Jamarat modern tempat melontar jumrah Ula, Wustha, dan Aqabah.',
+      mapUrl: 'https://maps.google.com/?q=Jamaraat+Bridge+Mina'
+    },
+    {
+      id: 'ZIR-MAK-05',
+      city: 'MAKKAH',
+      name: 'Masjid Tan\'im (Masjid Sayyidah Aisyah)',
+      distance: '± 7 Km Utara Masjidil Haram',
+      badge: 'Titik Miqat Terdekat',
+      desc: 'Lokasi Miqat utama tanah halal bagi jamaah yang ingin berihram untuk umroh kedua atau badal umroh keluarga.',
+      mapUrl: 'https://maps.google.com/?q=Aisha+Mosque+Al+Taneem+Mecca'
+    },
+    {
+      id: 'ZIR-MAK-06',
+      city: 'MAKKAH',
+      name: 'Masjid Ji\'ranah',
+      distance: '± 24 Km Timur Laut Masjidil Haram',
+      badge: 'Miqat Utama Rasulullah',
+      desc: 'Tempat Rasulullah ﷺ mengambil miqat dan berihram setelah kembali dari Perang Hunain.',
+      mapUrl: 'https://maps.google.com/?q=Al+Jiranah+Mosque+Makkah'
+    },
+    {
+      id: 'ZIR-MAD-01',
+      city: 'MADINAH',
+      name: 'Raudhah Syarifah',
+      distance: 'Di dalam Masjid Nabawi',
+      badge: 'Taman Surga',
+      desc: 'Area mustajab antara mimbar dan rumah Nabi Muhammad ﷺ yang disabdakan sebagai salah satu taman di surga.',
+      mapUrl: 'https://maps.google.com/?q=Al+Rawda+Al+Sharifa+Madinah'
+    },
+    {
+      id: 'ZIR-MAD-02',
+      city: 'MADINAH',
+      name: 'Makam Rasulullah ﷺ & Dua Sahabat',
+      distance: 'Kompleks Kubah Hijau Masjid Nabawi',
+      badge: 'Salam Keagungan',
+      desc: 'Tempat peristirahatan mulia Baginda Rasulullah ﷺ, Abu Bakar Ash-Shiddiq RA, dan Umar bin Khattab RA.',
+      mapUrl: 'https://maps.google.com/?q=Prophet+Muhammad+Tomb+Madinah'
+    },
+    {
+      id: 'ZIR-MAD-03',
+      city: 'MADINAH',
+      name: 'Masjid Quba',
+      distance: '± 3.5 Km Selatan Masjid Nabawi',
+      badge: 'Pahala Setara Umroh',
+      desc: 'Masjid pertama yang dibangun Rasulullah ﷺ. Bersuci di hotel lalu sholat dua rakaat di Quba berpahala seperti umroh.',
+      mapUrl: 'https://maps.google.com/?q=Quba+Mosque+Madinah'
+    },
+    {
+      id: 'ZIR-MAD-04',
+      city: 'MADINAH',
+      name: 'Jabal Uhud & Syuhada Uhud',
+      distance: '± 5 Km Utara Masjid Nabawi',
+      badge: 'Bukit Cinta Surga',
+      desc: 'Bukit yang mencintai Rasulullah dan dicintai beliau, serta makam 70 syuhada termasuk Sayyidina Hamzah RA.',
+      mapUrl: 'https://maps.google.com/?q=Mount+Uhud+Martyrs+Cemetery'
+    },
+    {
+      id: 'ZIR-MAD-05',
+      city: 'MADINAH',
+      name: 'Masjid Qiblatain (Dua Kiblat)',
+      distance: '± 4 Km Barat Laut Masjid Nabawi',
+      badge: 'Perpindahan Kiblat',
+      desc: 'Saksi sejarah turunnya perintah pemindahan arah kiblat dari Masjidil Aqsa (Yerusalem) ke Ka\'bah (Makkah).',
+      mapUrl: 'https://maps.google.com/?q=Mosque+of+the+Two+Qiblas+Madinah'
+    },
+    {
+      id: 'ZIR-MAD-06',
+      city: 'MADINAH',
+      name: 'Khandaq & Masjid Sab\'ah (Tujuh)',
+      distance: '± 3 Km Barat Laut Masjid Nabawi',
+      badge: 'Strategi Salman Al-Farisi',
+      desc: 'Situs pertahanan parit yang digagas sahabat Salman Al-Farisi saat menghadapi koalisi kaum musyrikin dalam Perang Ahzab.',
+      mapUrl: 'https://maps.google.com/?q=The+Seven+Mosques+Khandaq+Madinah'
+    }
+  ];
+
+  window.openZiarahModal = function (city = 'ALL', options = { syncHistory: true }) {
+    const modal = document.getElementById('modalPetaZiarah');
+    if (!modal) return;
+    window.renderInAppZiarahList(city);
+    modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('ziarah');
+    }
+  };
+
+  window.closeZiarahModal = function (options = { syncHistory: true }) {
+    const modal = document.getElementById('modalPetaZiarah');
+    if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
+  };
+
+  window.switchZiarahCity = function (city, clickedBtn) {
+    document.querySelectorAll('.inapp-ziarah-tab-btn').forEach((btn) => {
+      btn.className = 'inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center';
+    });
+    if (clickedBtn) {
+      clickedBtn.className = 'inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black';
+    }
+    window.renderInAppZiarahList(city);
+  };
+
+  window.renderInAppZiarahList = function (city = 'ALL') {
+    const container = document.getElementById('inAppZiarahListContainer');
+    if (!container) return;
+
+    let list = IN_APP_ZIARAH_DATA;
+    if (city && city !== 'ALL') {
+      list = IN_APP_ZIARAH_DATA.filter((z) => z.city === city);
+    }
+
+    container.innerHTML = list.map((item) => {
+      const cityIcon = item.city === 'MAKKAH' ? 'fa-kaaba text-amber-400' : 'fa-mosque text-emerald-400';
+      const cityBadge = item.city === 'MAKKAH' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+
+      return `
+        <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 hover:border-gold-500/40 transition-all space-y-2">
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${cityBadge}">
+                  <i class="fa-solid ${cityIcon} mr-1"></i>${item.city}
+                </span>
+                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/10 text-purple-200">${item.badge}</span>
+              </div>
+              <h4 class="text-sm font-extrabold text-white leading-tight">${item.name}</h4>
+              <p class="text-[10.5px] text-purple-200/70 mt-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-amber-400 text-xs"></i>
+                <span>${item.distance}</span>
+              </p>
+            </div>
+            <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-xl bg-purple-500/20 text-purple-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 border border-purple-500/30 transition-all shrink-0 active:scale-95 cursor-pointer" title="Buka Navigasi Google Maps">
+              <i class="fa-solid fa-diamond-turn-right text-amber-400"></i>
+              <span>Maps</span>
+            </a>
+          </div>
+          <p class="text-[11px] text-purple-100/80 leading-relaxed pt-1.5 border-t border-white/5">
+            ${item.desc}
+          </p>
+        </div>
+      `;
+    }).join('');
+  };
+
+  // ==================== IN-APP LIVE STREAMING CONTROLLERS ====================
+  const IN_APP_LIVE_FEEDS = {
+    main: {
+      embedUrl: 'https://www.youtube.com/embed/eC4LfEVxvKg?rel=0&autoplay=1&mute=1',
+      watchUrl: 'https://www.youtube.com/watch?v=eC4LfEVxvKg',
+      desc: 'Makkah Al-Mukarramah — Siaran Langsung Suasana Thawaf Ka\'bah (24/7 HD)'
+    },
+    backup: {
+      embedUrl: 'https://www.youtube.com/embed/2MkWc1qN4qg?rel=0&autoplay=1&mute=1',
+      watchUrl: 'https://www.youtube.com/watch?v=2MkWc1qN4qg',
+      desc: 'Makkah Live Stream Jalur Cadangan (24 Jam HD)'
+    },
+    quran: {
+      embedUrl: 'https://www.youtube.com/embed/d3_Zq8hS360?rel=0&autoplay=1&mute=1',
+      watchUrl: 'https://www.youtube.com/watch?v=d3_Zq8hS360',
+      desc: 'Saudi Quran TV — Siaran Resmi Tilawah & Pelataran Ka\'bah'
+    },
+    madinah: {
+      embedUrl: 'https://www.youtube.com/embed/e_k0K244F_I?rel=0&autoplay=1&mute=1',
+      watchUrl: 'https://www.youtube.com/watch?v=e_k0K244F_I',
+      desc: 'Madinah Al-Munawwarah — Siaran Langsung Masjid Nabawi & Raudhah'
+    }
+  };
+
+  window.openLiveModal = function (feed = 'main', options = { syncHistory: true }) {
+    const modal = document.getElementById('modalLiveKabah');
+    if (!modal) return;
+    window.switchLiveFeed(feed);
+    modal.classList.remove('hidden');
+    if (options && options.syncHistory) {
+      syncUrlView('live');
+    }
+  };
+
+  window.closeLiveModal = function (options = { syncHistory: true }) {
+    const modal = document.getElementById('modalLiveKabah');
+    if (modal) modal.classList.add('hidden');
+    const iframe = document.getElementById('inAppLiveIframe');
+    if (iframe) {
+      iframe.src = 'about:blank';
+    }
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
+  };
+
+  window.switchLiveFeed = function (feed = 'main', clickedBtn) {
+    const config = IN_APP_LIVE_FEEDS[feed] || IN_APP_LIVE_FEEDS.main;
+    const iframe = document.getElementById('inAppLiveIframe');
+    const desc = document.getElementById('inAppLiveChannelDesc');
+    const ext = document.getElementById('inAppLiveExternalLink');
+
+    if (iframe) iframe.src = config.embedUrl;
+    if (desc) desc.textContent = config.desc;
+    if (ext) ext.href = config.watchUrl;
+
+    document.querySelectorAll('.inapp-live-tab-btn').forEach((btn) => {
+      btn.className = 'inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center';
+    });
+    if (clickedBtn) {
+      clickedBtn.className = 'inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black';
+    }
+  };
+
+  // ==================== IN-APP ROUTER & URL HISTORY SYNC ENGINE ====================
+  function syncUrlView(viewName) {
+    if (typeof window === 'undefined' || !window.history || !window.history.pushState) return;
+    try {
+      const url = new URL(window.location.href);
+      if (url.searchParams.get('view') === viewName) return;
+      url.searchParams.set('view', viewName);
+      window.history.pushState({ view: viewName }, '', url.toString());
+    } catch (e) {
+      console.warn('URL sync error:', e);
+    }
+  }
+
+  function clearUrlView() {
+    if (typeof window === 'undefined' || !window.history) return;
+    try {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has('view')) return;
+      url.searchParams.delete('view');
+      window.history.pushState({ view: null }, '', url.toString());
+    } catch (e) {
+      console.warn('URL clear error:', e);
+    }
+  }
+
+  window.syncUrlView = syncUrlView;
+  window.clearUrlView = clearUrlView;
+
+  const ALL_APP_MODAL_IDS = [
+    'modalPaketUmroh',
+    'modalTitikHotel',
+    'modalChecklistKoper',
+    'modalArahKiblat',
+    'modalPetaZiarah',
+    'modalGaleriKloter',
+    'modalLiveKabah',
+    'doaOfflineModal',
+    'jadwalSholatModal',
+    'wartaDetailModal',
+    'ibadahHubModal'
+  ];
+
+  window.closeAllAppModals = function (options = { syncHistory: true }) {
+    ALL_APP_MODAL_IDS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('hidden');
+    });
+
+    if (compassListenerAttached && window.DeviceOrientationEvent) {
+      window.removeEventListener('deviceorientation', handleOrientation, true);
+      compassListenerAttached = false;
+    }
+
+    const liveIframe = document.getElementById('inAppLiveIframe');
+    if (liveIframe) {
+      liveIframe.src = 'about:blank';
+    }
+
+    if (options && options.syncHistory) {
+      clearUrlView();
+    }
+  };
+
+  const APP_VIEW_MAP = {
+    'paket': (opts) => window.openPaketModal('ALL', opts),
+    'hotel': (opts) => window.openTitikHotelModal('makkah', opts),
+    'koper': (opts) => window.openChecklistKoperModal(opts),
+    'kiblat': (opts) => window.openArahKiblatModal(opts),
+    'ziarah': (opts) => window.openZiarahModal('ALL', opts),
+    'galeri': (opts) => window.openGaleriKloterModal('foto', opts),
+    'live': (opts) => window.openLiveModal('main', opts),
+    'doa': (opts) => window.openDoaModal('niat', opts),
+    'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts),
+    'warta': (opts) => window.openWartaModal('nusuk-pass', opts),
+    'ibadah': (opts) => window.openIbadahModal(opts)
+  };
+
+  window.openAppViewByName = function (viewName, options = { syncHistory: true }) {
+    if (!viewName) {
+      window.closeAllAppModals({ syncHistory: false });
+      return;
+    }
+    const clean = String(viewName).toLowerCase().trim();
+    const handler = APP_VIEW_MAP[clean];
+    if (handler) {
+      ALL_APP_MODAL_IDS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      handler({ syncHistory: false });
+      if (options && options.syncHistory) {
+        syncUrlView(clean);
+      }
+    }
+  };
+
+  // Hardware Back & Browser Forward History popstate listener
+  window.addEventListener('popstate', () => {
+    try {
+      const url = new URL(window.location.href);
+      const view = url.searchParams.get('view');
+      if (view && APP_VIEW_MAP[view.toLowerCase()]) {
+        window.openAppViewByName(view.toLowerCase(), { syncHistory: false });
+      } else {
+        window.closeAllAppModals({ syncHistory: false });
+      }
+    } catch (e) {
+      console.warn('popstate router error:', e);
+    }
+  });
+
+  function initDeepLinkRouter() {
+    try {
+      const url = new URL(window.location.href);
+      const view = url.searchParams.get('view');
+      if (view && APP_VIEW_MAP[view.toLowerCase()]) {
+        setTimeout(() => {
+          window.openAppViewByName(view.toLowerCase(), { syncHistory: false });
+        }, 150);
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
 
   // 7. Clock, Haramain Prayer Times & Hijri Calendar with Real-Time Seconds Countdown
   function initPrayerAndClockWidget() {
@@ -1847,11 +2594,13 @@
       createPwaUI();
       initPrayerAndClockWidget();
       initAppBannerSlider();
+      initDeepLinkRouter();
     });
   } else {
     initSplashScreen();
     createPwaUI();
     initPrayerAndClockWidget();
     initAppBannerSlider();
+    initDeepLinkRouter();
   }
 })();
