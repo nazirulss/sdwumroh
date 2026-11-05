@@ -1,4 +1,5 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v19';
+const CACHE_NAME = 'sdw-umroh-pwa-v31';
+const RUNTIME_CACHE = 'sdw-runtime-v31';
 
 const PRECACHE_URLS = [
   '/',
@@ -19,14 +20,40 @@ const PRECACHE_URLS = [
   '/manifest.json',
   '/css/styles.min.css',
   '/assets/sdw-logo.png',
+  '/assets/sdw-logo.webp',
+  '/assets/hero-haram.png',
+  '/assets/hero-haram.webp',
   '/assets/hero-twilight.jpg',
+  '/assets/hero-twilight.webp',
+  '/assets/pkg-hemat.webp',
+  '/assets/pkg-plus-turki.webp',
+  '/assets/pkg-ramadhan.webp',
+  '/assets/pkg-reguler-syawal.webp',
+  '/assets/pkg-vip-khidmat.webp',
   '/assets/icon-192.png',
   '/assets/icon-512.png',
+  '/assets/icon-maskable.png',
+  '/js/components.js',
+  '/js/app-config.js',
+  '/js/data-mock.js',
+  '/js/api.js',
+  '/js/auth.js',
   '/js/pwa.js',
+  '/js/admin/admin-state.js',
+  '/js/admin/admin-nav.js',
+  '/js/admin/admin-crm.js',
+  '/js/admin/admin-docs.js',
+  '/js/admin/admin-registrations.js',
+  '/js/admin/admin-finance.js',
+  '/js/admin/admin-operations.js',
+  '/js/admin/admin-security.js',
+  '/js/admin/admin-sync.js',
+  '/js/admin/admin-export.js',
   '/js/admin-core.js',
   '/js/berita-kalender.js'
 ];
 
+// 1. Install Event: Precaches core app shell
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
@@ -38,63 +65,108 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// 2. Activate Event: Cleans up obsolete cache versions
 self.addEventListener('activate', (event) => {
+  const allowedCaches = [CACHE_NAME, RUNTIME_CACHE];
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((cacheName) => cacheName !== CACHE_NAME)
-          .map((cacheName) => caches.delete(cacheName))
+          .filter((name) => !allowedCaches.includes(name))
+          .map((name) => caches.delete(name))
       );
     }).then(() => self.clients.claim())
   );
 });
 
+// Helper for clean URL navigation fallback
+function resolveNavigationFallback(pathname) {
+  if (pathname === '/' || pathname === '') return '/index.html';
+  if (pathname.endsWith('/admin') || pathname.endsWith('/backoffice')) return '/admin.html';
+  if (pathname.endsWith('/app') || pathname.endsWith('/jamaah') || pathname.includes('/app/')) return '/app.html';
+  if (pathname.endsWith('/paket')) return '/paket.html';
+  if (pathname.endsWith('/hotel')) return '/hotel.html';
+  if (pathname.endsWith('/koper')) return '/koper.html';
+  if (pathname.endsWith('/kiblat')) return '/kiblat.html';
+  if (pathname.endsWith('/galeri')) return '/galeri.html';
+  if (pathname.endsWith('/live')) return '/live.html';
+  if (pathname.endsWith('/jadwal')) return '/jadwal.html';
+  if (pathname.endsWith('/kalkulator')) return '/kalkulator.html';
+  if (pathname.endsWith('/ziarah')) return '/ziarah.html';
+  if (pathname.endsWith('/tentang')) return '/tentang.html';
+  if (pathname.endsWith('/faq')) return '/faq.html';
+  return '/index.html';
+}
+
+// 3. Fetch Event: Dual-Strategy (Network-First for HTML/Data, Stale-While-Revalidate for CDN Fonts & Assets)
 self.addEventListener('fetch', (event) => {
-  // Hanya proses request GET http/https
   if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
     return;
   }
 
-  // Network-first strategy: ambil dari internet dulu, jika offline baru ambil dari cache
+  const url = new URL(event.request.url);
+
+  // Strategy A: Stale-While-Revalidate for Third-Party CDN (Fonts & FontAwesome)
+  const isCdn = url.hostname.includes('fonts.googleapis.com') ||
+                url.hostname.includes('fonts.gstatic.com') ||
+                url.hostname.includes('cdnjs.cloudflare.com');
+
+  if (isCdn) {
+    event.respondWith(
+      caches.open(RUNTIME_CACHE).then((cache) => {
+        return cache.match(event.request).then((cachedResponse) => {
+          const fetchPromise = fetch(event.request)
+            .then((networkResponse) => {
+              if (networkResponse && networkResponse.status === 200) {
+                cache.put(event.request, networkResponse.clone());
+              }
+              return networkResponse;
+            })
+            .catch(() => cachedResponse);
+
+          return cachedResponse || fetchPromise;
+        });
+      })
+    );
+    return;
+  }
+
+  // Strategy B: Network-First with Offline Cache Fallback for Core App
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        if (!response || response.status !== 200 || response.type !== 'basic') {
-          // Fallback clean URLs jika server lokal mengembalikan 404 untuk navigasi
+        if (!response || response.status !== 200) {
+          // If 404 on navigation, try clean URL fallback
           if (response && response.status === 404 && event.request.mode === 'navigate') {
-            const url = new URL(event.request.url);
-            if (url.pathname.endsWith('/paket')) return caches.match('/paket.html');
-            if (url.pathname.endsWith('/ziarah')) return caches.match('/ziarah.html');
-            if (url.pathname.endsWith('/jadwal')) return caches.match('/jadwal.html');
-            if (url.pathname.endsWith('/kalkulator')) return caches.match('/kalkulator.html');
-            if (url.pathname.endsWith('/tentang')) return caches.match('/tentang.html');
-            if (url.pathname.endsWith('/faq')) return caches.match('/faq.html');
+            const fallbackPath = resolveNavigationFallback(url.pathname);
+            return caches.match(fallbackPath);
           }
           return response;
         }
 
-        const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
-        });
+        // Cache successful basic responses
+        if (response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
 
         return response;
       })
       .catch(() => {
-        // Jika offline, fallback ke cache
+        // Offline: Match cache or fallback
         return caches.match(event.request).then((cachedResponse) => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // Fallback navigasi offline clean URLs
+
+          // Navigation fallback when completely offline
           if (event.request.mode === 'navigate') {
-            const url = new URL(event.request.url);
-            if (url.pathname.endsWith('/paket')) return caches.match('/paket.html');
-            if (url.pathname.endsWith('/ziarah')) return caches.match('/ziarah.html');
-            if (url.pathname.endsWith('/jadwal')) return caches.match('/jadwal.html');
-            if (url.pathname.endsWith('/kalkulator')) return caches.match('/kalkulator.html');
-            return caches.match('/index.html');
+            const fallbackPath = resolveNavigationFallback(url.pathname);
+            return caches.match(fallbackPath).then((fallbackRes) => {
+              return fallbackRes || caches.match('/index.html');
+            });
           }
         });
       })
