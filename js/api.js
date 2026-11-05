@@ -135,6 +135,31 @@
     function handleMockPost(action, payload) {
         return new Promise((resolve) => {
             setTimeout(() => {
+                if (action === 'syncBatch') {
+                    const mutations = payload.mutations || [];
+                    const results = mutations.map(m => ({
+                        mutationId: m.id || m.clientMutationId,
+                        action: m.action,
+                        success: true,
+                        data: {
+                            id: m.payload && (m.payload.id || m.payload.leadId || m.payload.regId || m.payload.paymentId || ('SIM-' + Date.now())),
+                            simulated: true,
+                            syncedAt: new Date().toISOString()
+                        }
+                    }));
+                    resolve({
+                        success: true,
+                        data: {
+                            processed: results.length,
+                            successCount: results.length,
+                            details: results,
+                            message: "Batch sync berhasil diproses (Simulasi Local/Offline-First Engine)"
+                        },
+                        source: 'mock'
+                    });
+                    return;
+                }
+
                 resolve({
                     success: true,
                     data: { id: "SIM-" + Date.now(), received: payload },

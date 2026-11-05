@@ -60,11 +60,11 @@
 
         // D. Infrastructure Pointers (Google Apps Script / Vercel API)
         infrastructure: Object.freeze({
-            apiBaseUrl: PENDING,
-            appsScriptWebAppUrl: PENDING,
-            spreadsheetId: PENDING,
-            driveRootFolderId: PENDING,
-            drivePilgrimDocumentsFolderId: PENDING
+            apiBaseUrl: "https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec",
+            appsScriptWebAppUrl: "https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec",
+            spreadsheetId: "1UTZ2uJ76rxAljWlfOLx3MpCzV2e4JLUG5IJ7o8SZn3Q",
+            driveRootFolderId: "1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J",
+            drivePilgrimDocumentsFolderId: "1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J"
         }),
 
         // E. Centralized Storage Keys Namespace (Mencegah Tabrakan Key)
