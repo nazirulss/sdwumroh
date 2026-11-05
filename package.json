@@ -8,12 +8,22 @@
     "start": "node dev-server.js",
     "build:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --minify",
     "watch:css": "tailwindcss -i ./css/input.css -o ./css/styles.min.css --watch",
-    "build": "npm run build:css",
+    "optimize:images": "node scripts/optimize-assets.js",
+    "test": "node tests/test_fase5_fase6_full.js",
+    "test:fase4": "node tests/test_fase4_full.js",
+    "audit:project": "node tests/audit_project_full.js",
+    "build": "npm run build:css && npm run optimize:images",
     "backend:status": "cd backend && clasp status",
     "backend:push": "cd backend && clasp push -f",
-    "backend:pull": "cd backend && clasp pull"
+    "backend:pull": "cd backend && clasp pull",
+    "test:components": "node tests/test_components_pwa.js",
+    "test:html-components": "node tests/test_html_components_integration.js",
+    "test:admin-modules": "node tests/test_admin_modular_domains.js",
+    "test:live": "node tests/test_live_sync_verification.js",
+    "test:all": "npm test && npm run test:fase4 && npm run test:components && npm run test:html-components && npm run test:admin-modules && npm run test:live"
   },
   "devDependencies": {
+    "sharp": "^0.35.5",
     "tailwindcss": "^3.4.19"
   }
 }
