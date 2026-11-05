@@ -26,113 +26,7 @@
 <body class="bg-sdw-sand font-sans text-sdw-charcoal antialiased selection:bg-sdw-gold/30 selection:text-sdw-pine">
 
     <!-- ==================== UNIVERSAL NAVIGATION HEADER ==================== -->
-    <nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-solid transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo & Slogan -->
-            <div class="flex items-center gap-4">
-                <a href="app.html" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
-                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
-                    <div class="flex flex-col">
-                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
-                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-amber-700 font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
-                    </div>
-                </a>
-            </div>
-
-            <!-- Desktop Nav Menu -->
-            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
-                <a href="app.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
-                    <span>Beranda</span>
-                </a>
-                <a href="paket.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
-                    <span>Pilihan Paket</span>
-                </a>
-                <a href="hotel.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
-                    <span>Titik Hotel</span>
-                </a>
-                <a href="ziarah.html" class="nav-link-item inline-flex items-center gap-1.5 transition py-1 text-slate-700 hover:text-sdw-pine">
-                    <span>Peta Ziarah</span>
-                </a>
-                <a href="koper.html" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
-                    <span>Checklist Koper</span>
-                </a>
-            </div>
-
-            <!-- Header Action Capsule -->
-            <div class="flex items-center gap-2 sm:gap-3">
-                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20persiapan%20barang%20koper." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
-                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
-                    <span class="hidden sm:inline">Konsultasi Barang 24 Jam</span>
-                    <span class="inline sm:hidden">CS</span>
-                </a>
-                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Drawer -->
-    <div id="mobileNavDrawer" class="fixed inset-0 z-50 pointer-events-none transition-opacity duration-300 opacity-0" aria-hidden="true">
-        <div id="mobileNavBackdrop" onclick="toggleMobileNav(false)" class="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity"></div>
-        <div id="mobileNavPanel" class="absolute top-0 right-0 w-80 max-w-[85vw] h-full bg-white shadow-2xl flex flex-col transform translate-x-full transition-transform duration-300 ease-out z-10 pointer-events-auto">
-            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
-                <div class="flex items-center gap-3">
-                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-9 sm:h-10 w-auto object-contain">
-                    <div>
-                        <div class="font-black text-sm text-sdw-pine leading-tight">SDW <span class="text-sdw-gold">UMROH</span></div>
-                        <div class="text-[9.5px] text-amber-700 font-bold uppercase tracking-wider">One Journey, One Platform</div>
-                    </div>
-                </div>
-                <button type="button" onclick="toggleMobileNav(false)" class="w-8 h-8 rounded-xl bg-slate-200/70 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" aria-label="Tutup Menu">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="p-4 sm:p-5 flex-1 overflow-y-auto space-y-2 text-xs sm:text-sm font-bold text-slate-700">
-                <a href="app.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
-                    <span class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-house text-sdw-pine text-xs w-4 text-center"></i>
-                        <span>Beranda Aplikasi</span>
-                    </span>
-                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
-                </a>
-                <a href="paket.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
-                    <span class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-kaaba text-sdw-gold text-xs w-4 text-center"></i>
-                        <span>Pilihan Paket</span>
-                    </span>
-                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
-                </a>
-                <a href="hotel.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
-                    <span class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-hotel text-sdw-gold text-xs w-4 text-center"></i>
-                        <span>Titik Hotel</span>
-                    </span>
-                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
-                </a>
-                <a href="ziarah.html" class="flex items-center justify-between p-3 rounded-xl hover:bg-purple-50 hover:text-sdw-pine transition">
-                    <span class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-map-location-dot text-sdw-gold text-xs w-4 text-center"></i>
-                        <span>Peta Ziarah Haramain</span>
-                    </span>
-                    <i class="fa-solid fa-arrow-right text-[10px] opacity-40"></i>
-                </a>
-                <a href="koper.html" class="flex items-center justify-between p-3 rounded-xl bg-purple-50 text-sdw-pine font-extrabold transition">
-                    <span class="flex items-center gap-2.5">
-                        <i class="fa-solid fa-suitcase-rolling text-sdw-pine text-xs w-4 text-center"></i>
-                        <span>Checklist Koper</span>
-                    </span>
-                    <i class="fa-solid fa-check text-[10px] text-emerald-600"></i>
-                </a>
-            </div>
-            <div class="p-5 border-t border-slate-100 space-y-2.5 bg-slate-50/50">
-                <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm transition">
-                    <i class="fa-brands fa-whatsapp text-base"></i>
-                    <span>Hotline WhatsApp 24 Jam</span>
-                </a>
-            </div>
-        </div>
-    </div>
+    <header id="app-header" data-active="koper"></header>
 
     <!-- ==================== PAGE HERO BANNER ==================== -->
     <header class="pt-28 pb-12 bg-gradient-to-b from-[#2A0937] via-[#3B134E] to-[#4C1D6B] text-white relative overflow-hidden">
@@ -419,50 +313,11 @@
         </div>
     </div>
 
-    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH STYLE) ==================== -->
-    <nav id="mobileBottomBar" class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_25px_rgba(0,0,0,0.08)] pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] pt-1.5 px-2 transition-transform duration-300">
-        <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
-            <!-- 1. Beranda -->
-            <a href="app.html" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Beranda">
-                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-kaaba text-sm"></i>
-                </div>
-                <span class="text-[9.5px] font-semibold mt-1">Beranda</span>
-            </a>
+    <!-- ==================== UNIVERSAL FOOTER ==================== -->
+    <footer id="app-footer"></footer>
 
-            <!-- 2. Berita -->
-            <a href="app.html?tab=berita" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Berita &amp; Warta Manasik">
-                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-newspaper text-sm"></i>
-                </div>
-                <span class="text-[9.5px] font-semibold mt-1">Berita</span>
-            </a>
-
-            <!-- 3. Ibadah (Elevated Center Action Button) -->
-            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
-                    <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
-                </div>
-                <span class="text-[9.5px] font-extrabold mt-1 text-amber-700">Ibadah</span>
-            </button>
-
-            <!-- 4. Kalender -->
-            <a href="app.html?tab=kalender" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Kalender &amp; Agenda Kloter">
-                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-calendar-days text-sm"></i>
-                </div>
-                <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
-            </a>
-
-            <!-- 5. Profil -->
-            <a href="app.html?tab=profil" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine" aria-label="Profil Jamaah &amp; Pengaturan">
-                <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
-                    <i class="fa-solid fa-circle-user text-sm"></i>
-                </div>
-                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
-            </a>
-        </div>
-    </nav>
+    <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
+    <div id="app-bottom-bar" data-active="koper"></div>
 
     <!-- ==================== CLIENT INTERACTION JAVASCRIPT ==================== -->
     <script>
@@ -830,6 +685,7 @@
             updateProgress();
         });
     </script>
+    <script src="js/components.js?v=2.7.0"></script>
 </body>
 
 </html>

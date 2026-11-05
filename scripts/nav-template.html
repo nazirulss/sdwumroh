@@ -1,0 +1,173 @@
+<nav id="mainNavbar" class="fixed top-0 left-0 right-0 z-50 nav-transparent transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Slogan -->
+            <div class="flex items-center gap-4">
+                <a href="/" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
+                    <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                    <div class="flex flex-col">
+                        <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none transition-colors">SDW <span class="text-sdw-gold">UMROH</span></span>
+                        <span class="nav-logo-sub text-[9px] sm:text-[10px] text-sdw-gold font-bold uppercase tracking-wider block mt-1">One Journey, One Platform</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Menu (5 Items: Beranda + 4 Dropdown Groups) -->
+            <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
+                <!-- Nav Item: Beranda (Active on Home) -->
+                <a href="/" class="nav-link-item nav-link-active inline-flex items-center gap-1.5 transition py-1 text-sdw-pine">
+                    <span>Beranda</span>
+                </a>
+
+                <!-- Dropdown 1: Pilihan Paket -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/paket" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Pilihan Paket</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/paket" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-cubes"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Semua Paket Umroh</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Katalog lengkap &amp; komparasi</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=reguler" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-star-half-stroke"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Paket Umroh Reguler</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Hotel Bintang 4 Dekat Masjid</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=vip" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-crown text-amber-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Paket VIP Khidmat</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Pelataran Ka'bah &amp; Clock Tower</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=ramadhan" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-moon text-indigo-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Ramadhan &amp; Syawal</div>
+                                <div class="text-[10px] text-slate-500 font-medium">I'tikaf 10 Malam Terakhir</div>
+                            </div>
+                        </a>
+                        <a href="/paket?cat=plus" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-plane-departure text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Umroh Plus Wisata Halal</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Turki, Dubai &amp; Mesir</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 2: Layanan (Jadwal, Kalkulator, Tanya Jawab) -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/jadwal" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Layanan</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/jadwal" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-calendar-check text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Jadwal Kloter &amp; Kuota</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Cek tanggal &amp; sisa kursi keberangkatan</div>
+                            </div>
+                        </a>
+                        <a href="/kalkulator" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-calculator text-amber-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Kalkulator Biaya &amp; Estimasi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Simulasi tipe kamar &amp; tabungan syariah</div>
+                            </div>
+                        </a>
+                        <a href="/faq" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-circle-question text-indigo-500"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Tanya Jawab &amp; Bantuan (FAQ)</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Syarat paspor, visa bio, lansia &amp; refund</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 3: Panduan & Ziarah -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/ziarah" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Panduan &amp; Ziarah</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/ziarah" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Peta Ziarah Haramain</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Makkah, Madinah &amp; Raudhah</div>
+                            </div>
+                        </a>
+                        <a href="/ziarah#manasik" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-book-quran"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Panduan Rukun &amp; Doa Sunnah</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Tata cara manasik sesuai sunnah</div>
+                            </div>
+                        </a>
+                        <a href="/ziarah#asatidz" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-tie"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Asatidz Pembimbing Bersanad</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Alumni Universitas Islam Madinah</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Dropdown 4: Tentang Kami -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/tentang" class="nav-link-item inline-flex items-center gap-2 transition">
+                        <span>Tentang Kami</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/tentang" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-shield-halved text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Profil &amp; Legalitas Resmi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">PPIU Kemenag RI &amp; Akreditasi A</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#muthawwif" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-users"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Dewan Muthawwif &amp; Kru</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Pendampingan 24 Jam di Tanah Suci</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#testimoni" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-images"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Galeri &amp; Ulasan Jamaah</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Dokumentasi keberangkatan kloter</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Header Action Capsule: Hotline Pill (Desktop Portal Button Hidden) & Mobile Menu Toggle -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                    <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
+                    <span class="hidden sm:inline">Hotline 24 Jam</span>
+                    <span class="inline sm:hidden">CS</span>
+                </a>
+                <!-- Mobile Hamburger Button -->
+                <button type="button" onclick="toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
