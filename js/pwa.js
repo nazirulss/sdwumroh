@@ -2396,7 +2396,7 @@
     'ibadahHubModal'
   ];
 
-  const IN_APP_SUBVIEW_NAMES = ['paket', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live'];
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live', 'auth'];
 
   // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
   window.openAppSubView = function (viewName, options = { syncHistory: true }) {
@@ -2451,6 +2451,8 @@
       if (typeof window.switchGaleriTab === 'function') window.switchGaleriTab('foto');
     } else if (v === 'live') {
       if (typeof window.switchLiveFeed === 'function') window.switchLiveFeed('main');
+    } else if (v === 'auth') {
+      if (typeof window.switchAuthTab === 'function') window.switchAuthTab('login');
     }
 
     // 5. Synchronize URL query parameter (?view=...)
@@ -2522,6 +2524,7 @@
     'ziarah': (opts) => window.openAppSubView('ziarah', opts),
     'galeri': (opts) => window.openAppSubView('galeri', opts),
     'live': (opts) => window.openAppSubView('live', opts),
+    'auth': (opts) => window.openAppSubView('auth', opts),
     'doa': (opts) => window.openDoaModal('niat', opts),
     'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts),
     'warta': (opts) => window.openWartaModal('nusuk-pass', opts),

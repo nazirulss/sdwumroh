@@ -32,6 +32,12 @@
     }
 
     function renderProfile() {
+        if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.syncPilgrimUI === 'function') {
+            SDW_AUTH.syncPilgrimUI();
+            const session = SDW_AUTH.getPilgrimSession();
+            if (session) return;
+        }
+
         const pilgrim = (typeof MOCK_DATA !== 'undefined' && MOCK_DATA.currentPilgrim) ? MOCK_DATA.currentPilgrim : null;
         if (!pilgrim) return;
 

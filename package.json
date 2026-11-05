@@ -21,7 +21,8 @@
     "test:admin-modules": "node tests/test_admin_modular_domains.js",
     "test:live": "node tests/test_live_sync_verification.js",
     "test:pwa-nav": "node tests/test_pwa_inapp_navigation.js",
-    "test:all": "npm test && npm run test:fase4 && npm run test:components && npm run test:html-components && npm run test:admin-modules && npm run test:pwa-nav && npm run test:live"
+    "test:auth": "node tests/test_pwa_auth_system.js",
+    "test:all": "npm test && npm run test:fase4 && npm run test:components && npm run test:html-components && npm run test:admin-modules && npm run test:pwa-nav && npm run test:auth && npm run test:live"
   },
   "devDependencies": {
     "sharp": "^0.35.5",

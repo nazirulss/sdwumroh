@@ -642,19 +642,54 @@
                         <div>
                             <div class="flex items-center gap-2">
                                 <h2 class="font-black text-sm sm:text-base text-sdw-pine">Profil &amp; Kartu Jamaah</h2>
-                                <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                                <span id="jamaah-badge-status" class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
                                     Aktif
                                 </span>
                             </div>
                             <p class="text-[11px] text-sdw-muted">ID Registrasi: <strong id="jamaah-reg-id" class="text-sdw-pine font-mono">REG-SDW-2701</strong></p>
                         </div>
                     </div>
-                    <button type="button" onclick="window.openSettingsModal()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-sdw-pine flex items-center justify-center transition-all cursor-pointer border border-slate-200" title="Setelan Aplikasi">
-                        <i class="fa-solid fa-sliders text-sm"></i>
-                    </button>
+                    <div class="flex items-center gap-2">
+                        <button type="button" id="profileLoginBtnHeader" onclick="window.openAppSubView('auth')" class="hidden px-3.5 py-1.5 rounded-xl bg-sdw-pine text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition active:scale-95 cursor-pointer">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-xs text-amber-300"></i>
+                            <span>Masuk</span>
+                        </button>
+                        <button type="button" id="profileLogoutBtn" onclick="window.confirmLogoutPilgrim()" class="w-9 h-9 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition-all cursor-pointer border border-rose-200" title="Keluar Akun">
+                            <i class="fa-solid fa-right-from-bracket text-sm"></i>
+                        </button>
+                        <button type="button" onclick="window.openSettingsModal()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-sdw-pine flex items-center justify-center transition-all cursor-pointer border border-slate-200" title="Setelan Aplikasi">
+                            <i class="fa-solid fa-sliders text-sm"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- 1. KARTU DIGITAL JAMAAH (E-Pass SDW Luxury Boarding Pass Style) -->
+                <!-- Banner Tamu (Ditampilkan Jika Belum Login) -->
+                <div id="profileGuestBanner" class="hidden p-5 sm:p-6 bg-gradient-to-br from-[#240833] via-[#3E165B] to-[#1F0628] rounded-3xl text-white shadow-lg border border-gold-500/40 space-y-3">
+                    <div class="flex items-start gap-3">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-xl shrink-0 border border-amber-400/30">
+                            <i class="fa-solid fa-mosque"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-black text-base text-white">Assalamu'alaikum, Calon Jamaah</h3>
+                            <p class="text-xs text-purple-200/80 mt-1 leading-relaxed">
+                                Masuk atau daftarkan akun Anda untuk mengakses <strong>E-Pass Digital</strong>, mengunggah <strong>dokumen paspor &amp; vaksin</strong>, mengecek <strong>jadwal manasik</strong>, serta memantau <strong>invoice pelunasan</strong>.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-white/10">
+                        <button type="button" onclick="window.openAppSubView('auth')" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-md hover:brightness-110 active:scale-95 transition cursor-pointer">
+                            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                            <span>Masuk / Buat Akun Jamaah</span>
+                        </button>
+                        <button type="button" onclick="window.fillDemoAccountAndLogin()" class="py-3 px-4 rounded-2xl bg-white/10 hover:bg-white/20 text-purple-200 border border-white/15 text-xs font-bold transition active:scale-95 cursor-pointer text-center">
+                            Gunakan Akun Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Konten Terautentikasi (E-Pass, Dokumen, Invoice, Manasik) -->
+                <div id="profileAuthenticatedCard" class="space-y-4">
+                    <!-- 1. KARTU DIGITAL JAMAAH (E-Pass SDW Luxury Boarding Pass Style) -->
                 <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] text-white p-5 sm:p-6 shadow-xl border border-sdw-gold/40">
                     <!-- Ka'bah Watermark Decor -->
                     <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl pointer-events-none">
@@ -857,6 +892,7 @@
                         <i class="fa-solid fa-chevron-right text-[10px] text-emerald-500"></i>
                     </a>
                 </div>
+                </div> <!-- End of profileAuthenticatedCard -->
             </div>
 
             <!-- ==================== TAB: ADMIN REDIRECT CARD ==================== -->
@@ -1221,6 +1257,151 @@
                     </p>
                 </div>
             </div>
+
+            <!-- ==================== SUBVIEW 8: FULL-PAGE AKUN JAMAAH (LOGIN & DAFTAR) ==================== -->
+            <div id="subview-auth" class="app-view-container hidden space-y-4 max-w-xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Akun Jamaah SDW</h2>
+                            <p class="text-[11px] text-purple-200/70">Masuk &amp; Kelola Ibadah Umroh Anda</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10.5px] font-bold">SDW Pass</span>
+                </div>
+
+                <!-- Tab Switcher: Masuk vs Daftar Baru -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl">
+                    <button type="button" id="authTabLoginBtn" onclick="window.switchAuthTab('login')" class="py-2.5 px-4 rounded-xl text-xs font-black bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-to-bracket mr-1.5 text-amber-300"></i> Masuk Akun
+                    </button>
+                    <button type="button" id="authTabRegisterBtn" onclick="window.switchAuthTab('register')" class="py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">
+                        <i class="fa-solid fa-user-plus mr-1.5 text-emerald-600"></i> Daftar Baru
+                    </button>
+                </div>
+
+                <!-- Alert Message Box -->
+                <div id="authAlertBox" class="hidden p-3.5 rounded-2xl text-xs font-medium border transition-all"></div>
+
+                <!-- FORM 1: MASUK AKUN (LOGIN) -->
+                <div id="authFormLogin" class="bg-white rounded-3xl p-5 sm:p-6 border border-purple-100 shadow-sm space-y-4">
+                    <div class="text-left space-y-1">
+                        <h3 class="text-base font-black text-slate-900">Masuk ke Akun Anda</h3>
+                        <p class="text-xs text-slate-500">Gunakan nomor WhatsApp aktif dan kata sandi yang telah Anda daftarkan.</p>
+                    </div>
+
+                    <form onsubmit="window.handlePilgrimLogin(event)" class="space-y-3.5">
+                        <div class="space-y-1.5 text-left">
+                            <label for="loginPhone" class="block text-xs font-bold text-slate-700">Nomor WhatsApp</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs font-bold">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                                </span>
+                                <input type="tel" id="loginPhone" name="phone" placeholder="081234567890" required class="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5 text-left">
+                            <div class="flex items-center justify-between">
+                                <label for="loginPassword" class="block text-xs font-bold text-slate-700">Kata Sandi</label>
+                                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20lupa%20kata%20sandi%20akun%20jamaah%20saya.%20Mohon%20bantuan%20reset." target="_blank" rel="noopener noreferrer" class="text-[11px] font-bold text-sdw-pine hover:underline">Lupa Sandi?</a>
+                            </div>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-solid fa-lock text-slate-400"></i>
+                                </span>
+                                <input type="password" id="loginPassword" name="password" placeholder="Masukkan kata sandi" required class="w-full pl-10 pr-11 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                                <button type="button" onclick="window.togglePasswordVisibility('loginPassword', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer text-xs" aria-label="Lihat kata sandi">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="loginSubmitBtn" class="w-full py-3.5 px-4 rounded-2xl bg-sdw-pine hover:bg-purple-900 active:scale-95 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-right-to-bracket text-amber-300"></i>
+                            <span>Masuk Sekarang</span>
+                        </button>
+                    </form>
+
+                    <!-- Quick Demo Account Shortcut -->
+                    <div class="pt-3 border-t border-slate-100 text-center space-y-2">
+                        <span class="text-[10.5px] text-slate-400 block font-medium">Uji Coba Pengembang &amp; Auditor:</span>
+                        <button type="button" onclick="window.fillDemoAccountAndLogin()" class="w-full py-2.5 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine text-xs font-bold border border-purple-200/80 transition active:scale-95 cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-bolt text-amber-500"></i>
+                            <span>Masuk Cepat Akun Demo (Ahmad Jamaah Teladan)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FORM 2: DAFTAR AKUN BARU (REGISTER) -->
+                <div id="authFormRegister" class="hidden bg-white rounded-3xl p-5 sm:p-6 border border-purple-100 shadow-sm space-y-4">
+                    <div class="text-left space-y-1">
+                        <h3 class="text-base font-black text-slate-900">Buat Akun Jamaah Baru</h3>
+                        <p class="text-xs text-slate-500">Daftarkan diri Anda untuk kemudahan booking program umroh, melihat jadwal, dan panduan manasik.</p>
+                    </div>
+
+                    <form onsubmit="window.handlePilgrimRegister(event)" class="space-y-3">
+                        <div class="space-y-1 text-left">
+                            <label for="regFullName" class="block text-xs font-bold text-slate-700">Nama Lengkap (Sesuai KTP)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-solid fa-user text-slate-400"></i>
+                                </span>
+                                <input type="text" id="regFullName" name="fullName" placeholder="Contoh: Muhammad Fatih" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1 text-left">
+                            <label for="regPhone" class="block text-xs font-bold text-slate-700">Nomor WhatsApp Aktif</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
+                                </span>
+                                <input type="tel" id="regPhone" name="phone" placeholder="08xxxxxxxxxx" required class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1 text-left">
+                            <label for="regEmail" class="block text-xs font-bold text-slate-700">Email <span class="text-slate-400 font-normal">(Opsional)</span></label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-regular fa-envelope text-slate-400"></i>
+                                </span>
+                                <input type="email" id="regEmail" name="email" placeholder="nama@email.com" class="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                            </div>
+                        </div>
+
+                        <div class="space-y-1 text-left">
+                            <label for="regPassword" class="block text-xs font-bold text-slate-700">Kata Sandi Baru</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
+                                    <i class="fa-solid fa-lock text-slate-400"></i>
+                                </span>
+                                <input type="password" id="regPassword" name="password" placeholder="Minimal 6 karakter" required minlength="6" class="w-full pl-10 pr-11 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
+                                <button type="button" onclick="window.togglePasswordVisibility('regPassword', this)" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer text-xs" aria-label="Lihat kata sandi">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-2 pt-1 text-left">
+                            <input type="checkbox" id="regAgree" required class="mt-1 rounded text-sdw-pine focus:ring-sdw-pine">
+                            <label for="regAgree" class="text-[11px] text-slate-500 leading-snug">
+                                Saya menyetujui bahwa data yang saya masukkan adalah benar untuk keperluan pendaftaran ibadah umroh resmi SDW UMROH.
+                            </label>
+                        </div>
+
+                        <button type="submit" id="registerSubmitBtn" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:brightness-110 active:scale-95 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-user-plus text-amber-300"></i>
+                            <span>Daftar Akun Jamaah</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1279,7 +1460,12 @@
     <script src="js/berita-kalender.js?v=2.4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            if (typeof SDW_AUTH !== 'undefined') SDW_AUTH.applyPermissions();
+            if (typeof SDW_AUTH !== 'undefined') {
+                SDW_AUTH.applyPermissions();
+                if (typeof SDW_AUTH.syncPilgrimUI === 'function') {
+                    SDW_AUTH.syncPilgrimUI();
+                }
+            }
             if (typeof SDW_JAMAAH !== 'undefined') SDW_JAMAAH.init();
 
             // Handle URL Tab parameter (?tab=berita, ?tab=kalender, ?tab=profil, ?tab=admin)

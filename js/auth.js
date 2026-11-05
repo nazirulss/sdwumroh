@@ -160,11 +160,398 @@
         });
     }
 
+    // ==================== PILGRIM ACCOUNTS & AUTHENTICATION ====================
+    const PILGRIM_SESSION_KEY = 'sdw_pilgrim_session';
+    const REGISTERED_USERS_KEY = 'sdw_registered_users';
+
+    // Pre-seeded default demo accounts (matching DB_Customers & DB_Registrations)
+    const DEFAULT_ACCOUNTS = [
+        {
+            id: 'CUS-000001',
+            fullName: 'Ahmad Jamaah Teladan',
+            phone: '081298765432',
+            email: 'ahmad.jamaah@gmail.com',
+            password: 'password123', // Also supports '123456'
+            regId: 'REG-SDW-2701',
+            packageTitle: 'Umroh Reguler Syawal Barakah (9 Hari)',
+            flightInfo: 'Saudia Airlines (SV-819) • Direct CGK - JED',
+            roomType: 'Quad (Sekamar Ber-4)',
+            departureDate: '15 Syawal 1448H (24 Maret 2027)',
+            status: 'CONFIRMED',
+            isDemo: true
+        },
+        {
+            id: 'CUS-000002',
+            fullName: 'Ibu Siti Fatimah',
+            phone: '081387654321',
+            email: 'siti.fatimah@gmail.com',
+            password: 'password123',
+            regId: 'REG-SDW-2702',
+            packageTitle: 'Umroh VIP Bintang 5 (9 Hari)',
+            flightInfo: 'Garuda Indonesia (GA-980) • Direct CGK - MED',
+            roomType: 'Double (Sekamar Ber-2)',
+            departureDate: '28 Syaban 1448H (05 Februari 2027)',
+            status: 'CONFIRMED',
+            isDemo: true
+        }
+    ];
+
+    function cleanPhone(phone) {
+        if (!phone) return '';
+        let p = String(phone).replace(/[^0-9]/g, '');
+        if (p.startsWith('62')) p = '0' + p.substring(2);
+        return p;
+    }
+
+    function getRegisteredUsers() {
+        try {
+            if (typeof localStorage === 'undefined') return [];
+            const data = localStorage.getItem(REGISTERED_USERS_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function saveRegisteredUsers(users) {
+        try {
+            if (typeof localStorage === 'undefined') return;
+            localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
+        } catch (e) {}
+    }
+
+    function getAllPilgrimAccounts() {
+        const customUsers = getRegisteredUsers();
+        return [...DEFAULT_ACCOUNTS, ...customUsers];
+    }
+
+    function getPilgrimSession() {
+        try {
+            if (typeof localStorage === 'undefined') return null;
+            const session = localStorage.getItem(PILGRIM_SESSION_KEY);
+            return session ? JSON.parse(session) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function setPilgrimSession(sessionData) {
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem(PILGRIM_SESSION_KEY, JSON.stringify(sessionData));
+            }
+        } catch (e) {}
+        syncPilgrimUI();
+    }
+
+    function clearPilgrimSession() {
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.removeItem(PILGRIM_SESSION_KEY);
+            }
+        } catch (e) {}
+        syncPilgrimUI();
+    }
+
+    function loginPilgrim(phone, password) {
+        const cPhone = cleanPhone(phone);
+        if (!cPhone) {
+            return { success: false, message: 'Nomor WhatsApp wajib diisi.' };
+        }
+        if (!password || String(password).trim().length < 4) {
+            return { success: false, message: 'Kata sandi minimal 4 karakter.' };
+        }
+
+        const accounts = getAllPilgrimAccounts();
+        const found = accounts.find(acc => {
+            const accPhone = cleanPhone(acc.phone);
+            return accPhone === cPhone;
+        });
+
+        if (!found) {
+            return {
+                success: false,
+                message: 'Nomor WhatsApp belum terdaftar. Silakan buat akun baru terlebih dahulu.'
+            };
+        }
+
+        const passStr = String(password).trim();
+        const validPassword = (found.password === passStr) || (found.isDemo && passStr === '123456');
+        if (!validPassword) {
+            return {
+                success: false,
+                message: 'Kata sandi yang Anda masukkan salah. Silakan coba lagi.'
+            };
+        }
+
+        const session = {
+            id: found.id,
+            fullName: found.fullName,
+            phone: found.phone,
+            email: found.email || '',
+            regId: found.regId || ('REG-SDW-' + Math.floor(1000 + Math.random() * 9000)),
+            packageTitle: found.packageTitle || 'Program Umroh 1448H',
+            flightInfo: found.flightInfo || 'Maskapai Bintang 5',
+            roomType: found.roomType || 'Quad (Ber-4)',
+            departureDate: found.departureDate || 'Musim 1448H',
+            status: found.status || 'CONFIRMED',
+            loggedInAt: new Date().toISOString()
+        };
+
+        setPilgrimSession(session);
+        return { success: true, user: session };
+    }
+
+    function registerPilgrim({ fullName, phone, email, password }) {
+        if (!fullName || String(fullName).trim().length < 3) {
+            return { success: false, message: 'Nama lengkap wajib diisi minimal 3 karakter sesuai KTP.' };
+        }
+        const cPhone = cleanPhone(phone);
+        if (!cPhone || cPhone.length < 9) {
+            return { success: false, message: 'Nomor WhatsApp aktif tidak valid (minimal 10 digit).' };
+        }
+        if (!password || String(password).trim().length < 6) {
+            return { success: false, message: 'Kata sandi minimal 6 karakter demi keamanan akun Anda.' };
+        }
+
+        const accounts = getAllPilgrimAccounts();
+        const existing = accounts.find(acc => cleanPhone(acc.phone) === cPhone);
+        if (existing) {
+            return {
+                success: false,
+                message: 'Nomor WhatsApp sudah terdaftar. Silakan langsung masuk ke akun Anda.'
+            };
+        }
+
+        const newId = 'CUS-' + String(Math.floor(100000 + Math.random() * 900000));
+        const newRegId = 'REG-SDW-' + String(Math.floor(2700 + Math.random() * 1000));
+        const newUser = {
+            id: newId,
+            fullName: String(fullName).trim(),
+            phone: cPhone,
+            email: (email || '').trim().toLowerCase(),
+            password: String(password).trim(),
+            regId: newRegId,
+            packageTitle: 'Pendaftaran Baru (Menunggu Pemilihan Paket)',
+            flightInfo: 'Maskapai Bintang 5 (Menunggu Jadwal)',
+            roomType: 'Quad (Standar)',
+            departureDate: 'Musim 1448H',
+            status: 'NEW_PILGRIM',
+            createdAt: new Date().toISOString()
+        };
+
+        const customUsers = getRegisteredUsers();
+        customUsers.push(newUser);
+        saveRegisteredUsers(customUsers);
+
+        // Auto login newly registered pilgrim
+        const session = {
+            id: newUser.id,
+            fullName: newUser.fullName,
+            phone: newUser.phone,
+            email: newUser.email,
+            regId: newUser.regId,
+            packageTitle: newUser.packageTitle,
+            flightInfo: newUser.flightInfo,
+            roomType: newUser.roomType,
+            departureDate: newUser.departureDate,
+            status: newUser.status,
+            loggedInAt: new Date().toISOString()
+        };
+
+        setPilgrimSession(session);
+        return { success: true, user: session };
+    }
+
+    function logoutPilgrim() {
+        clearPilgrimSession();
+    }
+
+    function syncPilgrimUI() {
+        if (typeof document === 'undefined') return;
+        const session = getPilgrimSession();
+
+        const guestBanner = document.getElementById('profileGuestBanner');
+        const authCard = document.getElementById('profileAuthenticatedCard');
+        const logoutBtn = document.getElementById('profileLogoutBtn');
+        const loginBtnHeader = document.getElementById('profileLoginBtnHeader');
+        const badgeAktif = document.getElementById('jamaah-badge-status');
+
+        const elName = document.getElementById('jamaah-name');
+        const elRegId = document.getElementById('jamaah-reg-id');
+        const elPackage = document.getElementById('jamaah-package-title');
+        const elFlight = document.getElementById('jamaah-flight-info');
+        const elRoom = document.getElementById('jamaah-room-type');
+        const elDeparture = document.getElementById('jamaah-departure-date');
+
+        if (session) {
+            if (guestBanner) guestBanner.classList.add('hidden');
+            if (authCard) authCard.classList.remove('hidden');
+            if (logoutBtn) logoutBtn.classList.remove('hidden');
+            if (loginBtnHeader) loginBtnHeader.classList.add('hidden');
+            if (badgeAktif) {
+                badgeAktif.textContent = session.status === 'NEW_PILGRIM' ? 'Terdaftar' : 'Aktif';
+                badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
+            }
+
+            if (elName) elName.textContent = session.fullName;
+            if (elRegId) elRegId.textContent = session.regId;
+            if (elPackage) elPackage.textContent = session.packageTitle;
+            if (elFlight) elFlight.textContent = session.flightInfo;
+            if (elRoom) elRoom.textContent = session.roomType;
+            if (elDeparture) elDeparture.textContent = session.departureDate;
+        } else {
+            // Guest mode
+            if (guestBanner) guestBanner.classList.remove('hidden');
+            if (authCard) authCard.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+            if (loginBtnHeader) loginBtnHeader.classList.remove('hidden');
+            if (badgeAktif) {
+                badgeAktif.textContent = 'Tamu';
+                badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300';
+            }
+
+            if (elName) elName.textContent = 'Tamu Jamaah (Belum Masuk)';
+            if (elRegId) elRegId.textContent = 'REG-BELUM-MASUK';
+            if (elPackage) elPackage.textContent = 'Pilih Paket Umroh di Beranda';
+            if (elFlight) elFlight.textContent = 'Silakan Masuk Akun Anda';
+            if (elRoom) elRoom.textContent = '-';
+            if (elDeparture) elDeparture.textContent = '-';
+        }
+    }
+
+    // ==================== GLOBAL WINDOW HELPERS FOR PWA UI ====================
+    if (typeof window !== 'undefined') {
+        window.switchAuthTab = function (tab) {
+            const loginBtn = document.getElementById('authTabLoginBtn');
+            const registerBtn = document.getElementById('authTabRegisterBtn');
+            const loginForm = document.getElementById('authFormLogin');
+            const registerForm = document.getElementById('authFormRegister');
+            const alertBox = document.getElementById('authAlertBox');
+            if (alertBox) alertBox.classList.add('hidden');
+
+            if (tab === 'register') {
+                if (registerBtn) {
+                    registerBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-black bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+                }
+                if (loginBtn) {
+                    loginBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
+                }
+                if (registerForm) registerForm.classList.remove('hidden');
+                if (loginForm) loginForm.classList.add('hidden');
+            } else {
+                if (loginBtn) {
+                    loginBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-black bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+                }
+                if (registerBtn) {
+                    registerBtn.className = 'py-2.5 px-4 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
+                }
+                if (loginForm) loginForm.classList.remove('hidden');
+                if (registerForm) registerForm.classList.add('hidden');
+            }
+        };
+
+        window.togglePasswordVisibility = function (inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            if (btn) {
+                btn.innerHTML = isPassword 
+                    ? '<i class="fa-regular fa-eye-slash text-sdw-pine"></i>' 
+                    : '<i class="fa-regular fa-eye"></i>';
+            }
+        };
+
+        window.showAuthAlert = function (type, message) {
+            const box = document.getElementById('authAlertBox');
+            if (!box) return;
+            box.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200', 'bg-rose-50', 'text-rose-800', 'border-rose-200');
+            if (type === 'success') {
+                box.className = 'p-3.5 rounded-2xl text-xs font-bold border transition-all bg-emerald-50 text-emerald-800 border-emerald-300 flex items-center gap-2';
+                box.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-sm shrink-0"></i><span>${message}</span>`;
+            } else {
+                box.className = 'p-3.5 rounded-2xl text-xs font-bold border transition-all bg-rose-50 text-rose-800 border-rose-300 flex items-center gap-2';
+                box.innerHTML = `<i class="fa-solid fa-circle-exclamation text-rose-600 text-sm shrink-0"></i><span>${message}</span>`;
+            }
+        };
+
+        window.handlePilgrimLogin = function (e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const phone = document.getElementById('loginPhone') ? document.getElementById('loginPhone').value : '';
+            const password = document.getElementById('loginPassword') ? document.getElementById('loginPassword').value : '';
+
+            const res = loginPilgrim(phone, password);
+            if (res.success) {
+                window.showAuthAlert('success', `Alhamdulillah! Selamat datang kembali, ${res.user.fullName}.`);
+                setTimeout(() => {
+                    if (typeof window.backToAppHome === 'function') window.backToAppHome();
+                    syncPilgrimUI();
+                }, 600);
+            } else {
+                window.showAuthAlert('error', res.message);
+            }
+        };
+
+        window.handlePilgrimRegister = function (e) {
+            if (e && e.preventDefault) e.preventDefault();
+            const fullName = document.getElementById('regFullName') ? document.getElementById('regFullName').value : '';
+            const phone = document.getElementById('regPhone') ? document.getElementById('regPhone').value : '';
+            const email = document.getElementById('regEmail') ? document.getElementById('regEmail').value : '';
+            const password = document.getElementById('regPassword') ? document.getElementById('regPassword').value : '';
+
+            const res = registerPilgrim({ fullName, phone, email, password });
+            if (res.success) {
+                window.showAuthAlert('success', `Akun berhasil dibuat! Selamat datang, ${res.user.fullName}.`);
+                setTimeout(() => {
+                    if (typeof window.backToAppHome === 'function') window.backToAppHome();
+                    syncPilgrimUI();
+                }, 600);
+            } else {
+                window.showAuthAlert('error', res.message);
+            }
+        };
+
+        window.fillDemoAccountAndLogin = function () {
+            const phoneInput = document.getElementById('loginPhone');
+            const passInput = document.getElementById('loginPassword');
+            if (phoneInput) phoneInput.value = '081298765432';
+            if (passInput) passInput.value = '123456';
+            const res = loginPilgrim('081298765432', '123456');
+            if (res.success) {
+                window.showAuthAlert('success', `Akun Demo aktif: ${res.user.fullName}`);
+                setTimeout(() => {
+                    if (typeof window.backToAppHome === 'function') window.backToAppHome();
+                    syncPilgrimUI();
+                }, 500);
+            }
+        };
+
+        window.confirmLogoutPilgrim = function () {
+            if (confirm('Apakah Anda yakin ingin keluar dari akun jamaah Anda?')) {
+                logoutPilgrim();
+                syncPilgrimUI();
+                if (typeof window.showAuthAlert === 'function') {
+                    window.showAuthAlert('success', 'Anda telah keluar dari akun.');
+                }
+            }
+        };
+    }
+
     return {
         roles: ROLES,
         getCurrentRole: getCurrentRole,
         setRole: setRole,
         applyPermissions: applyPermissions,
-        switchAppTab: switchAppTab
+        switchAppTab: switchAppTab,
+        // Pilgrim Auth API
+        getPilgrimSession: getPilgrimSession,
+        setPilgrimSession: setPilgrimSession,
+        clearPilgrimSession: clearPilgrimSession,
+        loginPilgrim: loginPilgrim,
+        registerPilgrim: registerPilgrim,
+        logoutPilgrim: logoutPilgrim,
+        syncPilgrimUI: syncPilgrimUI,
+        getAllPilgrimAccounts: getAllPilgrimAccounts
     };
 });

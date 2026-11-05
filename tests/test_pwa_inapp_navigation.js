@@ -125,7 +125,8 @@ const SUBVIEW_IDS = [
   'subview-kiblat',
   'subview-ziarah',
   'subview-galeri',
-  'subview-live'
+  'subview-live',
+  'subview-auth'
 ];
 
 SUBVIEW_IDS.forEach((subId) => {
@@ -136,7 +137,7 @@ SUBVIEW_IDS.forEach((subId) => {
 
 runTest('Setiap subview memiliki tombol sticky [ ← Back ] (window.backToAppHome())', () => {
   const matches = (appHtml.match(/onclick="window\.backToAppHome\(\)"/g) || []).length;
-  assert(matches >= 7, `Expected at least 7 back buttons, found ${matches}`);
+  assert(matches >= 8, `Expected at least 8 back buttons, found ${matches}`);
 });
 
 // 3. Audit js/pwa.js Master Sub-View Router & Controllers
@@ -210,8 +211,8 @@ runTest('Deep Link Router diinisialisasi pada startup', () => {
 console.log('\n5. Pengujian Service Worker Cache Version');
 const swJs = fs.readFileSync(path.join(process.cwd(), 'sw.js'), 'utf8');
 
-runTest('sw.js menggunakan versi cache terbaru (v32)', () => {
-  assert(swJs.includes('sdw-umroh-pwa-v32'), 'sw.js cache version is not bumped to v32');
+runTest('sw.js menggunakan versi cache terbaru (v33)', () => {
+  assert(swJs.includes('sdw-umroh-pwa-v33'), 'sw.js cache version is not bumped to v33');
 });
 
 console.log('\n========================================');
