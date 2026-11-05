@@ -381,7 +381,7 @@
      */
     function getFooterHTML() {
         return `
-    <footer id="globalFooter" class="bg-sdw-footer text-white border-t border-sdw-gold/30 pt-16 pb-28 lg:pb-12 relative overflow-hidden">
+    <footer id="globalFooter" class="bg-sdw-footer text-white border-t border-sdw-gold/30 pt-16 pb-20 lg:pb-12 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- 4 Main Columns -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 border-b border-white/10">
@@ -561,14 +561,14 @@
     }
 
     /**
-     * Renders the canonical Floating WhatsApp Widget (Desktop)
+     * Renders the canonical Floating WhatsApp Widget (Universal Mobile & Desktop)
      */
     function getFloatingContactHTML() {
         return `
     <aside id="floatingContact">
-        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="hidden lg:flex fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white items-center justify-center shadow-2xl shadow-emerald-950/40 hover:scale-110 transition-all cursor-pointer group" aria-label="Tanya Kami di WhatsApp">
-            <i class="fa-brands fa-whatsapp text-2xl"></i>
-            <span class="absolute right-16 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-white/10">
+        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white items-center justify-center shadow-2xl shadow-emerald-950/40 hover:scale-110 active:scale-95 transition-all cursor-pointer group" aria-label="Tanya Kami di WhatsApp">
+            <i class="fa-brands fa-whatsapp text-2xl sm:text-2xl"></i>
+            <span class="hidden sm:inline-block absolute right-16 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-white/10">
                 Tanya Kami di WhatsApp
             </span>
         </a>
@@ -589,10 +589,11 @@
         }
 
         // 2. Mount or enhance Bottom Dock
+        // Pemisahan Total: Bottom navigation bar dipusatkan eksklusif pada PWA App (app.html).
+        // Pada Web Publik, biarkan layar bersih dan lega untuk pengalaman marketing landing page.
         const bottomPlaceholder = document.getElementById('app-bottom-bar') || document.getElementById('sdw-bottom-bar');
         if (bottomPlaceholder) {
-            const activeKey = bottomPlaceholder.getAttribute('data-active');
-            bottomPlaceholder.outerHTML = getBottomBarHTML(activeKey);
+            bottomPlaceholder.outerHTML = '';
         }
 
         // 3. Mount or enhance Footer
