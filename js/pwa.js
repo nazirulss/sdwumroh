@@ -1603,6 +1603,11 @@
   };
 
   window.openTitikHotelModal = function (city = 'makkah', options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('hotel', options);
+      if (city) window.switchHotelTab(city);
+      return;
+    }
     const modal = document.getElementById('modalTitikHotel');
     if (!modal) return;
     window.switchHotelTab(city);
@@ -1613,6 +1618,10 @@
   };
 
   window.closeTitikHotelModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalTitikHotel');
     if (modal) modal.classList.add('hidden');
     if (options && options.syncHistory) {
@@ -1628,50 +1637,50 @@
 
     if (makkahBtn && madinahBtn) {
       if (city === 'makkah') {
-        makkahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
-        madinahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+        makkahBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+        madinahBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       } else {
-        madinahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center';
-        makkahBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+        madinahBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+        makkahBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
     }
 
     if (!container) return;
     container.innerHTML = `
-      <div class="p-3.5 bg-black/30 rounded-2xl border border-white/10 space-y-2 text-left">
+      <div class="p-4 sm:p-5 bg-white rounded-3xl border border-purple-100/90 shadow-sm space-y-3 text-left">
         <div class="flex items-start justify-between gap-2">
           <div>
-            <span class="text-[9.5px] uppercase font-bold text-amber-300 tracking-wider">Hotel Rombongan Kloter</span>
-            <h4 class="font-bold text-sm text-white">${data.name}</h4>
+            <span class="text-[9.5px] uppercase font-black text-amber-600 tracking-wider">Hotel Rombongan Kloter</span>
+            <h4 class="font-extrabold text-base text-slate-900 mt-0.5">${data.name}</h4>
           </div>
-          <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 shrink-0">Bintang 5</span>
+          <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 shrink-0">⭐ Bintang 5</span>
         </div>
-        <div class="space-y-1.5 text-[11px] text-purple-200/90 pt-1 border-t border-white/5">
+        <div class="space-y-2 text-xs text-slate-600 pt-2 border-t border-slate-100">
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-person-walking text-gold-400 w-4 text-center"></i>
-            <span>Jarak: <strong class="text-white">${data.distance}</strong></span>
+            <i class="fa-solid fa-person-walking text-amber-500 w-4 text-center"></i>
+            <span>Jarak: <strong class="text-slate-800">${data.distance}</strong></span>
           </div>
           <div class="flex items-center gap-2">
-            <i class="fa-solid fa-door-open text-gold-400 w-4 text-center"></i>
-            <span>Akses: <strong class="text-white">${data.gate}</strong></span>
+            <i class="fa-solid fa-door-open text-blue-500 w-4 text-center"></i>
+            <span>Akses: <strong class="text-slate-800">${data.gate}</strong></span>
           </div>
           <div class="flex items-start gap-2">
-            <i class="fa-solid fa-location-dot text-gold-400 w-4 text-center mt-0.5"></i>
-            <span class="text-[10px] text-slate-300">${data.address}</span>
+            <i class="fa-solid fa-location-dot text-rose-500 w-4 text-center mt-0.5"></i>
+            <span class="text-[11px] text-slate-500">${data.address}</span>
           </div>
         </div>
-        <p class="text-[10px] text-purple-200/70 bg-purple-950/40 p-2 rounded-xl border border-purple-800/30">
+        <p class="text-[11px] text-slate-600 bg-purple-50/70 p-3 rounded-2xl border border-purple-100/80 leading-relaxed">
           💡 ${data.notes}
         </p>
       </div>
 
       <div class="space-y-2 pt-1">
-        <a href="${data.mapUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+        <a href="${data.mapUrl}" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:brightness-110 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all active:scale-95">
           <i class="fa-solid fa-map-location-dot"></i>
           <span>Buka Petunjuk Arah (Google Maps)</span>
         </a>
-        <a href="tel:${data.phone}" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-white/10 text-purple-200 border border-white/10 text-xs font-bold flex items-center justify-center gap-2 transition-colors">
-          <i class="fa-solid fa-phone text-xs"></i>
+        <a href="tel:${data.phone}" class="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs font-bold flex items-center justify-center gap-2 transition-colors active:scale-95">
+          <i class="fa-solid fa-phone text-xs text-emerald-600"></i>
           <span>Hubungi Resepsionis (${data.phone})</span>
         </a>
       </div>
@@ -1695,6 +1704,10 @@
   ];
 
   window.openChecklistKoperModal = function (options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('koper', options);
+      return;
+    }
     const modal = document.getElementById('modalChecklistKoper');
     if (!modal) return;
     window.renderKoperChecklist();
@@ -1705,6 +1718,10 @@
   };
 
   window.closeChecklistKoperModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalChecklistKoper');
     if (modal) modal.classList.add('hidden');
     if (options && options.syncHistory) {
@@ -1758,15 +1775,15 @@
 
       if (item.cat !== currentCat) {
         currentCat = item.cat;
-        html += `<div class="font-bold text-[10px] text-amber-300 uppercase tracking-wider pt-2 pb-0.5 border-b border-white/5">${currentCat}</div>`;
+        html += `<div class="font-black text-[10.5px] text-sdw-pine uppercase tracking-wider pt-3 pb-1 border-b border-purple-100 flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-amber-500 text-xs"></i><span>${currentCat}</span></div>`;
       }
 
       html += `
-        <div onclick="window.toggleKoperItem('${item.id}')" class="flex items-center gap-2.5 p-2 rounded-xl transition-all cursor-pointer ${isChecked ? 'bg-emerald-950/40 border border-emerald-500/30 text-emerald-200' : 'bg-black/20 hover:bg-black/30 border border-white/5 text-purple-200'}">
-          <div class="w-4 h-4 rounded-md flex items-center justify-center shrink-0 border ${isChecked ? 'bg-emerald-500 border-emerald-400 text-slate-950 font-black' : 'border-purple-400/40 bg-black/40'}">
-            ${isChecked ? '<i class="fa-solid fa-check text-[10px]"></i>' : ''}
+        <div onclick="window.toggleKoperItem('${item.id}')" class="flex items-center gap-3 p-3 rounded-2xl transition-all cursor-pointer border ${isChecked ? 'bg-emerald-50/80 border-emerald-200 text-emerald-950' : 'bg-white hover:bg-purple-50/50 border-slate-200/90 text-slate-800 shadow-xs'}">
+          <div class="w-5 h-5 rounded-lg flex items-center justify-center shrink-0 border transition-all ${isChecked ? 'bg-emerald-600 border-emerald-600 text-white font-bold' : 'border-slate-300 bg-slate-50'}">
+            ${isChecked ? '<i class="fa-solid fa-check text-xs"></i>' : ''}
           </div>
-          <span class="flex-1 ${isChecked ? 'line-through text-purple-300/60' : 'text-purple-100 font-medium'}">${item.label}</span>
+          <span class="flex-1 text-xs leading-snug ${isChecked ? 'line-through text-slate-400 font-medium' : 'text-slate-800 font-semibold'}">${item.label}</span>
         </div>
       `;
     });
@@ -1781,21 +1798,33 @@
   // ==================== ARAH KIBLAT CONTROLLERS ====================
   let compassListenerAttached = false;
 
-  window.openArahKiblatModal = function (options = { syncHistory: true }) {
-    const modal = document.getElementById('modalArahKiblat');
-    if (!modal) return;
-    modal.classList.remove('hidden');
-
+  window.initDigitalCompass = function () {
     if (!compassListenerAttached && window.DeviceOrientationEvent) {
       window.addEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = true;
     }
+  };
+
+  window.openArahKiblatModal = function (options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('kiblat', options);
+      return;
+    }
+    const modal = document.getElementById('modalArahKiblat');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+
+    window.initDigitalCompass();
     if (options && options.syncHistory) {
       syncUrlView('kiblat');
     }
   };
 
   window.closeArahKiblatModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalArahKiblat');
     if (modal) modal.classList.add('hidden');
     if (compassListenerAttached) {
@@ -1820,6 +1849,11 @@
 
   // ==================== GALERI KLOTER CONTROLLERS ====================
   window.openGaleriKloterModal = function (tab = 'foto', options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('galeri', options);
+      if (tab) window.switchGaleriTab(tab);
+      return;
+    }
     const modal = document.getElementById('modalGaleriKloter');
     if (!modal) return;
     window.switchGaleriTab(tab);
@@ -1830,6 +1864,10 @@
   };
 
   window.closeGaleriKloterModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalGaleriKloter');
     if (modal) modal.classList.add('hidden');
     if (options && options.syncHistory) {
@@ -1849,15 +1887,15 @@
       fotoTab.classList.remove('hidden');
       certTab.classList.add('hidden');
       if (fotoBtn && certBtn) {
-        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center font-black';
-        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+        fotoBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+        certBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
     } else {
       fotoTab.classList.add('hidden');
       certTab.classList.remove('hidden');
       if (fotoBtn && certBtn) {
-        certBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-gold-500 text-slate-950 transition-all cursor-pointer text-center font-black';
-        fotoBtn.className = 'flex-1 py-1.5 px-3 rounded-xl text-xs font-bold bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 transition-all cursor-pointer text-center';
+        certBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
+        fotoBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
     }
   };
@@ -1947,6 +1985,11 @@
   ];
 
   window.openPaketModal = function (category = 'ALL', options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('paket', options);
+      if (category && category !== 'ALL') window.renderInAppPaketList(category);
+      return;
+    }
     const modal = document.getElementById('modalPaketUmroh');
     if (!modal) return;
     window.renderInAppPaketList(category);
@@ -1957,6 +2000,10 @@
   };
 
   window.closePaketModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalPaketUmroh');
     if (modal) modal.classList.add('hidden');
     if (options && options.syncHistory) {
@@ -1966,10 +2013,10 @@
 
   window.filterInAppPaket = function (category, clickedBtn) {
     document.querySelectorAll('.inapp-paket-tab-btn').forEach((btn) => {
-      btn.className = 'inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all whitespace-nowrap active:scale-95';
+      btn.className = 'inapp-paket-tab-btn py-2 px-4 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition whitespace-nowrap';
     });
     if (clickedBtn) {
-      clickedBtn.className = 'inapp-paket-tab-btn py-1.5 px-3 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all whitespace-nowrap active:scale-95 font-black';
+      clickedBtn.className = 'inapp-paket-tab-btn py-2 px-4 rounded-xl bg-sdw-pine text-white font-bold text-xs cursor-pointer transition whitespace-nowrap shadow-xs font-black';
     }
     window.renderInAppPaketList(category);
   };
@@ -1985,9 +2032,10 @@
 
     if (list.length === 0) {
       container.innerHTML = `
-        <div class="p-6 text-center text-purple-200/70 text-xs">
-          <i class="fa-solid fa-kaaba text-2xl mb-2 text-gold-400"></i>
-          <p>Belum ada program untuk kategori ini.</p>
+        <div class="p-8 text-center text-slate-500 text-xs bg-white rounded-3xl border border-purple-100 shadow-sm">
+          <i class="fa-solid fa-kaaba text-3xl mb-2 text-amber-500 block"></i>
+          <p class="font-bold">Belum ada program untuk kategori ini.</p>
+          <p class="text-[11px] text-slate-400 mt-1">Silakan pilih kategori lain atau hubungi CS Khidmat.</p>
         </div>
       `;
       return;
@@ -1996,44 +2044,44 @@
     container.innerHTML = list.map((pkg) => {
       const waText = encodeURIComponent(`Assalamualaikum CS SDW UMROH, saya tertarik booking seat program ${pkg.name} (${pkg.duration} - mulai ${pkg.startingPrice}). Mohon info pendaftaran & ketersediaan kamar.`);
       const seatBadge = pkg.seatsLeft > 0 
-        ? `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Sisa ${pkg.seatsLeft} Seat</span>`
-        : `<span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">Seat Penuh</span>`;
+        ? `<span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Sisa ${pkg.seatsLeft} Seat</span>`
+        : `<span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Seat Penuh</span>`;
 
       return `
-        <div class="p-4 rounded-2xl bg-black/40 border border-white/10 hover:border-gold-500/40 transition-all space-y-3">
+        <div class="p-4 sm:p-5 rounded-3xl bg-white border border-purple-100/90 shadow-sm hover:shadow-md transition-all space-y-3">
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="flex items-center gap-1.5 flex-wrap mb-1">
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-gold-500 text-slate-950">${pkg.badge}</span>
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/10 text-purple-200">${pkg.duration}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black uppercase tracking-wider bg-gold-500 text-slate-950">${pkg.badge}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-purple-50 text-sdw-pine border border-purple-100">${pkg.duration}</span>
                 ${seatBadge}
               </div>
-              <h4 class="text-sm font-extrabold text-white leading-tight">${pkg.name}</h4>
+              <h4 class="text-sm font-extrabold text-slate-900 leading-tight">${pkg.name}</h4>
             </div>
             <div class="text-right shrink-0">
-              <span class="text-[9px] text-purple-200/70 block uppercase">Mulai Dari</span>
-              <span class="text-base font-black text-amber-300">${pkg.startingPrice}</span>
+              <span class="text-[9px] text-slate-400 block uppercase font-bold">Mulai Dari</span>
+              <span class="text-base font-black text-amber-600">${pkg.startingPrice}</span>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-white/10 text-purple-100/90">
+          <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-slate-100 text-slate-600">
             <div class="flex items-center gap-1.5 truncate">
-              <i class="fa-solid fa-hotel text-amber-400 text-xs shrink-0"></i>
-              <span class="truncate">Makkah: <strong>${pkg.hotelMakkah}</strong></span>
+              <i class="fa-solid fa-hotel text-amber-500 text-xs shrink-0"></i>
+              <span class="truncate">Makkah: <strong class="text-slate-800">${pkg.hotelMakkah}</strong></span>
             </div>
             <div class="flex items-center gap-1.5 truncate">
-              <i class="fa-solid fa-hotel text-amber-400 text-xs shrink-0"></i>
-              <span class="truncate">Madinah: <strong>${pkg.hotelMadinah}</strong></span>
+              <i class="fa-solid fa-hotel text-amber-500 text-xs shrink-0"></i>
+              <span class="truncate">Madinah: <strong class="text-slate-800">${pkg.hotelMadinah}</strong></span>
             </div>
           </div>
 
-          <div class="flex items-center justify-between gap-2 pt-2 border-t border-white/10">
-            <div class="text-[10px] text-purple-200/70 flex items-center gap-1 truncate">
-              <i class="fa-solid fa-plane text-xs text-sky-400 shrink-0"></i>
+          <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+            <div class="text-[10px] text-slate-500 flex items-center gap-1 truncate font-medium">
+              <i class="fa-solid fa-plane text-xs text-sky-500 shrink-0"></i>
               <span class="truncate">${pkg.airline}</span>
             </div>
-            <a href="https://wa.me/6281234567890?text=${waText}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-sm hover:brightness-110 active:scale-95 transition-all shrink-0">
-              <i class="fa-brands fa-whatsapp text-emerald-800"></i>
+            <a href="https://wa.me/6281234567890?text=${waText}" target="_blank" rel="noopener noreferrer" class="py-2 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:brightness-110 active:scale-95 transition-all shrink-0">
+              <i class="fa-brands fa-whatsapp text-sm"></i>
               <span>Pesan Seat</span>
             </a>
           </div>
@@ -2155,6 +2203,11 @@
   ];
 
   window.openZiarahModal = function (city = 'ALL', options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('ziarah', options);
+      if (city && city !== 'ALL') window.renderInAppZiarahList(city);
+      return;
+    }
     const modal = document.getElementById('modalPetaZiarah');
     if (!modal) return;
     window.renderInAppZiarahList(city);
@@ -2165,6 +2218,10 @@
   };
 
   window.closeZiarahModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalPetaZiarah');
     if (modal) modal.classList.add('hidden');
     if (options && options.syncHistory) {
@@ -2174,10 +2231,10 @@
 
   window.switchZiarahCity = function (city, clickedBtn) {
     document.querySelectorAll('.inapp-ziarah-tab-btn').forEach((btn) => {
-      btn.className = 'inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center';
+      btn.className = 'inapp-ziarah-tab-btn py-2 px-3 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition text-center';
     });
     if (clickedBtn) {
-      clickedBtn.className = 'inapp-ziarah-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black';
+      clickedBtn.className = 'inapp-ziarah-tab-btn py-2 px-3 rounded-xl bg-sdw-pine text-white font-bold text-xs cursor-pointer transition text-center shadow-xs font-black';
     }
     window.renderInAppZiarahList(city);
   };
@@ -2192,31 +2249,31 @@
     }
 
     container.innerHTML = list.map((item) => {
-      const cityIcon = item.city === 'MAKKAH' ? 'fa-kaaba text-amber-400' : 'fa-mosque text-emerald-400';
-      const cityBadge = item.city === 'MAKKAH' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30';
+      const cityIcon = item.city === 'MAKKAH' ? 'fa-kaaba text-amber-500' : 'fa-mosque text-emerald-500';
+      const cityBadge = item.city === 'MAKKAH' ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200';
 
       return `
-        <div class="p-3.5 rounded-2xl bg-black/40 border border-white/10 hover:border-gold-500/40 transition-all space-y-2">
+        <div class="p-4 sm:p-5 rounded-3xl bg-white border border-purple-100/90 shadow-sm hover:shadow-md transition-all space-y-2">
           <div class="flex items-start justify-between gap-2">
             <div>
               <div class="flex items-center gap-1.5 mb-1">
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider border ${cityBadge}">
+                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black uppercase tracking-wider border ${cityBadge}">
                   <i class="fa-solid ${cityIcon} mr-1"></i>${item.city}
                 </span>
-                <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-white/10 text-purple-200">${item.badge}</span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-bold bg-slate-100 text-slate-600">${item.badge}</span>
               </div>
-              <h4 class="text-sm font-extrabold text-white leading-tight">${item.name}</h4>
-              <p class="text-[10.5px] text-purple-200/70 mt-0.5 flex items-center gap-1">
-                <i class="fa-solid fa-location-dot text-amber-400 text-xs"></i>
+              <h4 class="text-sm font-extrabold text-slate-900 leading-tight">${item.name}</h4>
+              <p class="text-[10.5px] text-slate-500 mt-0.5 flex items-center gap-1">
+                <i class="fa-solid fa-location-dot text-amber-500 text-xs"></i>
                 <span>${item.distance}</span>
               </p>
             </div>
-            <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="py-1.5 px-3 rounded-xl bg-purple-500/20 text-purple-200 hover:bg-gold-500 hover:text-slate-950 font-bold text-xs flex items-center gap-1.5 border border-purple-500/30 transition-all shrink-0 active:scale-95 cursor-pointer" title="Buka Navigasi Google Maps">
-              <i class="fa-solid fa-diamond-turn-right text-amber-400"></i>
+            <a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="py-2 px-3.5 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white font-bold text-xs flex items-center gap-1.5 border border-blue-200 transition-all shrink-0 active:scale-95 cursor-pointer" title="Buka Navigasi Google Maps">
+              <i class="fa-solid fa-diamond-turn-right text-xs"></i>
               <span>Maps</span>
             </a>
           </div>
-          <p class="text-[11px] text-purple-100/80 leading-relaxed pt-1.5 border-t border-white/5">
+          <p class="text-[11.5px] text-slate-600 leading-relaxed pt-2 border-t border-slate-100">
             ${item.desc}
           </p>
         </div>
@@ -2238,7 +2295,7 @@
     },
     quran: {
       embedUrl: 'https://www.youtube.com/embed/d3_Zq8hS360?rel=0&autoplay=1&mute=1',
-      watchUrl: 'https://www.youtube.com/watch?v=d3_Zq8hS360',
+      watchUrl: 'https://www.youtube.com/watch?d3_Zq8hS360',
       desc: 'Saudi Quran TV — Siaran Resmi Tilawah & Pelataran Ka\'bah'
     },
     madinah: {
@@ -2249,6 +2306,11 @@
   };
 
   window.openLiveModal = function (feed = 'main', options = { syncHistory: true }) {
+    if (typeof window.openAppSubView === 'function') {
+      window.openAppSubView('live', options);
+      if (feed) window.switchLiveFeed(feed);
+      return;
+    }
     const modal = document.getElementById('modalLiveKabah');
     if (!modal) return;
     window.switchLiveFeed(feed);
@@ -2259,6 +2321,10 @@
   };
 
   window.closeLiveModal = function (options = { syncHistory: true }) {
+    if (typeof window.backToAppHome === 'function') {
+      window.backToAppHome(options);
+      return;
+    }
     const modal = document.getElementById('modalLiveKabah');
     if (modal) modal.classList.add('hidden');
     const iframe = document.getElementById('inAppLiveIframe');
@@ -2281,10 +2347,10 @@
     if (ext) ext.href = config.watchUrl;
 
     document.querySelectorAll('.inapp-live-tab-btn').forEach((btn) => {
-      btn.className = 'inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-white/5 text-purple-200 border border-white/10 hover:bg-white/10 cursor-pointer transition-all text-center';
+      btn.className = 'inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition text-center cursor-pointer';
     });
     if (clickedBtn) {
-      clickedBtn.className = 'inapp-live-tab-btn py-1.5 px-2 rounded-xl bg-gold-500 text-slate-950 cursor-pointer transition-all text-center font-black';
+      clickedBtn.className = 'inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black';
     }
   };
 
@@ -2330,35 +2396,132 @@
     'ibadahHubModal'
   ];
 
-  window.closeAllAppModals = function (options = { syncHistory: true }) {
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live'];
+
+  // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
+  window.openAppSubView = function (viewName, options = { syncHistory: true }) {
+    if (!viewName) return;
+    const v = String(viewName).toLowerCase().trim();
+    const targetSubView = document.getElementById('subview-' + v);
+
+    // 1. Hide all main views/tabs in app.html (.app-view-container)
+    const allViews = document.querySelectorAll('.app-view-container');
+    if (allViews.length > 0) {
+      allViews.forEach((el) => el.classList.add('hidden'));
+    }
+
+    // 2. Display targeted full-screen sub-view
+    if (targetSubView) {
+      targetSubView.classList.remove('hidden');
+    }
+
+    // 3. Fallback: if legacy popup modal exists on other pages, show it
+    const legacyModalMap = {
+      paket: 'modalPaketUmroh',
+      hotel: 'modalTitikHotel',
+      koper: 'modalChecklistKoper',
+      kiblat: 'modalArahKiblat',
+      ziarah: 'modalPetaZiarah',
+      galeri: 'modalGaleriKloter',
+      live: 'modalLiveKabah'
+    };
+    const modalId = legacyModalMap[v];
+    if (modalId && !targetSubView) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    // 4. Initialize dynamic content of sub-view
+    if (v === 'paket') {
+      if (typeof window.renderInAppPaketList === 'function') window.renderInAppPaketList('ALL');
+    } else if (v === 'hotel') {
+      if (typeof window.switchHotelTab === 'function') window.switchHotelTab('makkah');
+    } else if (v === 'koper') {
+      if (typeof window.renderKoperChecklist === 'function') window.renderKoperChecklist();
+    } else if (v === 'kiblat') {
+      if (typeof window.initDigitalCompass === 'function') {
+        window.initDigitalCompass();
+      } else if (!compassListenerAttached && window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', handleOrientation, true);
+        compassListenerAttached = true;
+      }
+    } else if (v === 'ziarah') {
+      if (typeof window.renderInAppZiarahList === 'function') window.renderInAppZiarahList('ALL');
+    } else if (v === 'galeri') {
+      if (typeof window.switchGaleriTab === 'function') window.switchGaleriTab('foto');
+    } else if (v === 'live') {
+      if (typeof window.switchLiveFeed === 'function') window.switchLiveFeed('main');
+    }
+
+    // 5. Synchronize URL query parameter (?view=...)
+    if (options && options.syncHistory !== false) {
+      syncUrlView(v);
+    }
+
+    // 6. Scroll smoothly to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 7. Dispatch event for listening components
+    try {
+      window.dispatchEvent(new CustomEvent('appSubViewChanged', { detail: { view: v } }));
+    } catch (e) {}
+  };
+
+  window.backToAppHome = function (options = { syncHistory: true }) {
+    // 1. Hide all sub-views in app.html
+    const allSubviews = document.querySelectorAll('[id^="subview-"]');
+    allSubviews.forEach((el) => el.classList.add('hidden'));
+
+    // 2. Hide any legacy modals if open
     ALL_APP_MODAL_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
 
+    // 3. Stop compass orientation listener if running
     if (compassListenerAttached && window.DeviceOrientationEvent) {
       window.removeEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = false;
     }
 
+    // 4. Pause live streaming video by clearing iframe src
     const liveIframe = document.getElementById('inAppLiveIframe');
     if (liveIframe) {
       liveIframe.src = 'about:blank';
     }
 
-    if (options && options.syncHistory) {
+    // 5. Restore Home Tab (#tab-jamaah) in app.html
+    const homeTab = document.getElementById('tab-jamaah');
+    if (homeTab) {
+      homeTab.classList.remove('hidden');
+    }
+
+    // 6. Clear URL query parameter
+    if (options && options.syncHistory !== false) {
       clearUrlView();
     }
+
+    // 7. Scroll smoothly to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 8. Dispatch event
+    try {
+      window.dispatchEvent(new CustomEvent('appSubViewChanged', { detail: { view: 'home' } }));
+    } catch (e) {}
+  };
+
+  window.closeAllAppModals = function (options = { syncHistory: true }) {
+    window.backToAppHome(options);
   };
 
   const APP_VIEW_MAP = {
-    'paket': (opts) => window.openPaketModal('ALL', opts),
-    'hotel': (opts) => window.openTitikHotelModal('makkah', opts),
-    'koper': (opts) => window.openChecklistKoperModal(opts),
-    'kiblat': (opts) => window.openArahKiblatModal(opts),
-    'ziarah': (opts) => window.openZiarahModal('ALL', opts),
-    'galeri': (opts) => window.openGaleriKloterModal('foto', opts),
-    'live': (opts) => window.openLiveModal('main', opts),
+    'paket': (opts) => window.openAppSubView('paket', opts),
+    'hotel': (opts) => window.openAppSubView('hotel', opts),
+    'koper': (opts) => window.openAppSubView('koper', opts),
+    'kiblat': (opts) => window.openAppSubView('kiblat', opts),
+    'ziarah': (opts) => window.openAppSubView('ziarah', opts),
+    'galeri': (opts) => window.openAppSubView('galeri', opts),
+    'live': (opts) => window.openAppSubView('live', opts),
     'doa': (opts) => window.openDoaModal('niat', opts),
     'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts),
     'warta': (opts) => window.openWartaModal('nusuk-pass', opts),
@@ -2367,17 +2530,18 @@
 
   window.openAppViewByName = function (viewName, options = { syncHistory: true }) {
     if (!viewName) {
-      window.closeAllAppModals({ syncHistory: false });
+      window.backToAppHome(options);
       return;
     }
     const clean = String(viewName).toLowerCase().trim();
-    const handler = APP_VIEW_MAP[clean];
-    if (handler) {
+    if (IN_APP_SUBVIEW_NAMES.includes(clean)) {
+      window.openAppSubView(clean, options);
+    } else if (APP_VIEW_MAP[clean]) {
       ALL_APP_MODAL_IDS.forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
-      handler({ syncHistory: false });
+      APP_VIEW_MAP[clean](options);
       if (options && options.syncHistory) {
         syncUrlView(clean);
       }
@@ -2389,10 +2553,10 @@
     try {
       const url = new URL(window.location.href);
       const view = url.searchParams.get('view');
-      if (view && APP_VIEW_MAP[view.toLowerCase()]) {
+      if (view && (IN_APP_SUBVIEW_NAMES.includes(view.toLowerCase()) || APP_VIEW_MAP[view.toLowerCase()])) {
         window.openAppViewByName(view.toLowerCase(), { syncHistory: false });
       } else {
-        window.closeAllAppModals({ syncHistory: false });
+        window.backToAppHome({ syncHistory: false });
       }
     } catch (e) {
       console.warn('popstate router error:', e);
@@ -2403,7 +2567,7 @@
     try {
       const url = new URL(window.location.href);
       const view = url.searchParams.get('view');
-      if (view && APP_VIEW_MAP[view.toLowerCase()]) {
+      if (view && (IN_APP_SUBVIEW_NAMES.includes(view.toLowerCase()) || APP_VIEW_MAP[view.toLowerCase()])) {
         setTimeout(() => {
           window.openAppViewByName(view.toLowerCase(), { syncHistory: false });
         }, 150);

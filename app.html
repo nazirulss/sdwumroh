@@ -226,7 +226,7 @@
                 <div class="bg-white rounded-3xl p-4 shadow-md border border-purple-100/80">
                     <div class="grid grid-cols-4 gap-y-4 gap-x-2">
                         <!-- 1. Paket Umroh -->
-                        <button type="button" onclick="window.openPaketModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('paket')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-purple-50 text-sdw-pine rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sdw-pine group-hover:text-white transition-all duration-300 border border-purple-100/80">
                                 <i class="fa-solid fa-kaaba"></i>
                             </div>
@@ -234,7 +234,7 @@
                         </button>
 
                         <!-- 2. Titik Hotel (Makkah & Madinah) -->
-                        <button type="button" onclick="window.openTitikHotelModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('hotel')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 border border-blue-100/80">
                                 <i class="fa-solid fa-hotel"></i>
                             </div>
@@ -242,7 +242,7 @@
                         </button>
 
                         <!-- 3. Checklist Koper -->
-                        <button type="button" onclick="window.openChecklistKoperModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('koper')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 border border-amber-100/80">
                                 <i class="fa-solid fa-suitcase-rolling"></i>
                             </div>
@@ -250,7 +250,7 @@
                         </button>
 
                         <!-- 4. Arah Kiblat -->
-                        <button type="button" onclick="window.openArahKiblatModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('kiblat')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
                                 <i class="fa-solid fa-compass"></i>
                             </div>
@@ -258,7 +258,7 @@
                         </button>
 
                         <!-- 5. Peta Ziarah -->
-                        <button type="button" onclick="window.openZiarahModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('ziarah')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-teal-50 text-teal-700 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-teal-600 group-hover:text-white transition-all duration-300 border border-teal-100/80">
                                 <i class="fa-solid fa-map-location-dot"></i>
                             </div>
@@ -266,7 +266,7 @@
                         </button>
 
                         <!-- 6. Galeri Kloter -->
-                        <button type="button" onclick="window.openGaleriKloterModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('galeri')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-rose-50 text-rose-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-rose-600 group-hover:text-white transition-all duration-300 border border-rose-100/80">
                                 <i class="fa-solid fa-photo-film"></i>
                             </div>
@@ -274,7 +274,7 @@
                         </button>
 
                         <!-- 7. Live Ka'bah -->
-                        <button type="button" onclick="window.openLiveModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <button type="button" onclick="window.openAppSubView('live')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-red-600 group-hover:text-white transition-all duration-300 border border-red-100/80">
                                 <i class="fa-solid fa-tower-broadcast"></i>
                             </div>
@@ -872,6 +872,354 @@
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     <span>Buka Portal Admin Enterprise</span>
                 </a>
+            </div>
+
+            <!-- ==================== SUBVIEW 1: FULL-PAGE KATALOG PAKET UMROH ==================== -->
+            <div id="subview-paket" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Katalog Paket Umroh</h2>
+                            <p class="text-[11px] text-purple-200/70">Program Musim 1447H - 1448H</p>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-sm active:scale-95 transition">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span class="hidden sm:inline">Tanya CS</span>
+                    </a>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+                    <button type="button" onclick="window.filterInAppPaket('ALL', this)" class="inapp-paket-tab-btn py-2 px-4 rounded-xl bg-sdw-pine text-white font-bold text-xs cursor-pointer transition whitespace-nowrap shadow-xs font-black">Semua Program</button>
+                    <button type="button" onclick="window.filterInAppPaket('REGULER', this)" class="inapp-paket-tab-btn py-2 px-4 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition whitespace-nowrap">Reguler</button>
+                    <button type="button" onclick="window.filterInAppPaket('VIP', this)" class="inapp-paket-tab-btn py-2 px-4 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition whitespace-nowrap">VIP Khidmat</button>
+                    <button type="button" onclick="window.filterInAppPaket('RAMADHAN', this)" class="inapp-paket-tab-btn py-2 px-4 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition whitespace-nowrap">Ramadhan</button>
+                    <button type="button" onclick="window.filterInAppPaket('PLUS_TOUR', this)" class="inapp-paket-tab-btn py-2 px-4 rounded-xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 font-bold text-xs cursor-pointer transition whitespace-nowrap">Plus Wisata</button>
+                </div>
+
+                <!-- Dynamic Packages List Container -->
+                <div id="inAppPaketListContainer" class="space-y-4 pt-1">
+                    <!-- Rendered by renderInAppPaketList -->
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 2: FULL-PAGE TITIK HOTEL & NAVIGASI ==================== -->
+            <div id="subview-hotel" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Titik Hotel &amp; Akses Pintu</h2>
+                            <p class="text-[11px] text-purple-200/70">Navigasi GPS Makkah &amp; Madinah</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-[10.5px] font-bold">Bintang 5</span>
+                </div>
+
+                <!-- City Tabs -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl">
+                    <button type="button" id="hotelTabMakkahBtn" onclick="window.switchHotelTab('makkah')" class="py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer">
+                        <i class="fa-solid fa-kaaba mr-1.5 text-amber-300"></i> Makkah (Clock Tower)
+                    </button>
+                    <button type="button" id="hotelTabMadinahBtn" onclick="window.switchHotelTab('madinah')" class="py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">
+                        <i class="fa-solid fa-mosque mr-1.5 text-emerald-500"></i> Madinah (Dar Al Taqwa)
+                    </button>
+                </div>
+
+                <!-- Hotel Detail Card -->
+                <div id="hotelDetailContainer" class="space-y-4 pt-1">
+                    <!-- Rendered by switchHotelTab -->
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 3: FULL-PAGE CHECKLIST KOPER ==================== -->
+            <div id="subview-koper" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Checklist Koper Jamaah</h2>
+                            <p class="text-[11px] text-purple-200/70">Panduan Bawaan Mandiri &amp; Sunnah</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="window.resetKoperChecklist()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-purple-200 hover:text-white text-xs font-bold flex items-center gap-1.5 transition cursor-pointer border border-white/10">
+                        <i class="fa-solid fa-rotate-right text-xs"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+
+                <!-- Progress Header Card -->
+                <div class="p-4 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent rounded-2xl border border-amber-200/80 flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center text-lg font-black shadow-xs">
+                            <i class="fa-solid fa-suitcase-rolling"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-extrabold text-slate-800">Status Kesiapan Koper</div>
+                            <div id="koperProgressText" class="text-xs font-bold text-amber-700">0/12 Siap (0%)</div>
+                        </div>
+                    </div>
+                    <div class="w-28 sm:w-40 bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                        <div id="koperProgressBar" class="bg-gradient-to-r from-amber-500 to-emerald-500 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Checklist List Container -->
+                <div id="koperItemsList" class="space-y-2 pt-1">
+                    <!-- Rendered by renderKoperChecklist -->
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 4: FULL-PAGE ARAH KIBLAT ==================== -->
+            <div id="subview-kiblat" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Arah Kiblat Digital</h2>
+                            <p class="text-[11px] text-purple-200/70">Sudut Arah Ka'bah Makkah Al-Mukarramah</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10.5px] font-bold">295° Barat Laut</span>
+                </div>
+
+                <!-- Compass Interactive Card -->
+                <div class="bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-md text-center space-y-6">
+                    <div class="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto rounded-full bg-gradient-to-b from-purple-50 to-amber-50/40 border-4 border-gold-500/40 shadow-inner flex items-center justify-center overflow-hidden">
+                        <!-- Compass Background Marks -->
+                        <div class="absolute inset-2 rounded-full border border-dashed border-purple-200"></div>
+                        <span class="absolute top-3 font-bold text-xs text-rose-600">U (0°)</span>
+                        <span class="absolute bottom-3 font-bold text-xs text-slate-400">S (180°)</span>
+                        <span class="absolute right-3 font-bold text-xs text-slate-400">T (90°)</span>
+                        <span class="absolute left-3 font-bold text-xs text-slate-400">B (270°)</span>
+
+                        <!-- Rotating Needle -->
+                        <div id="compassNeedle" class="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out">
+                            <!-- Ka'bah Direction Indicator -->
+                            <div class="absolute top-8 flex flex-col items-center">
+                                <div class="w-9 h-9 rounded-xl bg-sdw-pine text-gold-400 flex items-center justify-center text-sm shadow-md border border-gold-400/50 animate-bounce">
+                                    <i class="fa-solid fa-kaaba"></i>
+                                </div>
+                                <span class="text-[9px] font-black text-sdw-pine uppercase tracking-wider mt-1">Kiblat</span>
+                            </div>
+                            <div class="w-1.5 h-32 bg-gradient-to-t from-slate-300 via-amber-400 to-rose-600 rounded-full shadow-sm"></div>
+                            <div class="w-4 h-4 rounded-full bg-slate-900 border-2 border-white absolute"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 max-w-md mx-auto">
+                        <div class="text-sm font-extrabold text-slate-900">Arah Kiblat Indonesia: &plusmn; 295° (Barat Laut)</div>
+                        <p class="text-xs text-slate-500 leading-relaxed">
+                            Pegang smartphone dalam posisi datar mendatar (horizontal) dan putar tubuh perlahan hingga jarum Ka'bah tegak lurus ke atas.
+                        </p>
+                    </div>
+
+                    <div class="p-3.5 bg-purple-50 rounded-2xl border border-purple-100 text-left text-xs text-purple-900/90 leading-relaxed">
+                        <div class="font-bold mb-1 text-sdw-pine flex items-center gap-1.5">
+                            <i class="fa-solid fa-book-quran text-amber-500"></i>
+                            <span>QS. Al-Baqarah: 144</span>
+                        </div>
+                        <em>"Maka hadapkanlah wajahmu ke arah Masjidil Haram. Dan di mana saja kamu berada, hadapkanlah wajahmu ke arahnya."</em>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 5: FULL-PAGE PETA ZIARAH ==================== -->
+            <div id="subview-ziarah" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Peta Ziarah Haramain</h2>
+                            <p class="text-[11px] text-purple-200/70">12 Situs Sejarah Makkah &amp; Madinah</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-400/30 text-[10.5px] font-bold">12 Destinasi</span>
+                </div>
+
+                <!-- City Tabs -->
+                <div class="grid grid-cols-3 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+                    <button type="button" onclick="window.switchZiarahCity('ALL', this)" class="inapp-ziarah-tab-btn py-2 px-2 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">Semua (12)</button>
+                    <button type="button" onclick="window.switchZiarahCity('MAKKAH', this)" class="inapp-ziarah-tab-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🕋 Makkah (6)</button>
+                    <button type="button" onclick="window.switchZiarahCity('MADINAH', this)" class="inapp-ziarah-tab-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🕌 Madinah (6)</button>
+                </div>
+
+                <!-- Dynamic Ziarah Cards -->
+                <div id="inAppZiarahListContainer" class="space-y-3.5 pt-1">
+                    <!-- Rendered by renderInAppZiarahList -->
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 6: FULL-PAGE GALERI KLOTER ==================== -->
+            <div id="subview-galeri" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Galeri &amp; E-Sertifikat</h2>
+                            <p class="text-[11px] text-purple-200/70">Dokumentasi Kloter &amp; Penghargaan Mabrur</p>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition">
+                        <i class="fa-solid fa-cloud-arrow-down"></i>
+                        <span class="hidden sm:inline">Drive</span>
+                    </a>
+                </div>
+
+                <!-- Tabs -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+                    <button type="button" id="galeriTabFotoBtn" onclick="window.switchGaleriTab('foto')" class="py-2.5 px-3 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">
+                        <i class="fa-solid fa-photo-film mr-1.5"></i> Foto Perjalanan
+                    </button>
+                    <button type="button" id="galeriTabSertifikatBtn" onclick="window.switchGaleriTab('sertifikat')" class="py-2.5 px-3 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">
+                        <i class="fa-solid fa-award mr-1.5"></i> E-Sertifikat Mabrur
+                    </button>
+                </div>
+
+                <!-- Tab 1: Galeri Foto -->
+                <div id="galeriTabContentFoto" class="space-y-4 pt-1">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
+                            <img src="assets/hero-haram.png" alt="Dokumentasi Manasik" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-2.5 text-xs">
+                                <span class="font-bold text-slate-800 block truncate">Bimbingan Manasik Akbar</span>
+                                <span class="text-[10px] text-slate-500">Hotel Griptha Kudus</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
+                            <img src="assets/hero-twilight.jpg" alt="Dokumentasi Thawaf" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-2.5 text-xs">
+                                <span class="font-bold text-slate-800 block truncate">Thawaf Umroh Bersama</span>
+                                <span class="text-[10px] text-slate-500">Pelataran Ka'bah Makkah</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
+                            <img src="assets/hero-haram.png" alt="Dokumentasi Raudhah" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-2.5 text-xs">
+                                <span class="font-bold text-slate-800 block truncate">Ziarah Raudhah Syarifah</span>
+                                <span class="text-[10px] text-slate-500">Masjid Nabawi Madinah</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
+                            <img src="assets/hero-twilight.jpg" alt="Dokumentasi Jabal Uhud" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-2.5 text-xs">
+                                <span class="font-bold text-slate-800 block truncate">Ziarah Bukit Uhud</span>
+                                <span class="text-[10px] text-slate-500">Makam Syuhada Uhud</span>
+                            </div>
+                        </div>
+                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
+                            <img src="assets/hero-haram.png" alt="Dokumentasi Kepulangan" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
+                            <div class="p-2.5 text-xs">
+                                <span class="font-bold text-slate-800 block truncate">Pelepasan Bandara Jeddah</span>
+                                <span class="text-[10px] text-slate-500">King Abdulaziz Airport</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-purple-50 text-sdw-pine border border-purple-200 hover:bg-purple-100 text-xs font-bold flex items-center justify-center gap-2 transition">
+                        <i class="fa-solid fa-cloud-arrow-down text-sm text-sdw-gold"></i>
+                        <span>Unduh Seluruh Dokumentasi Foto &amp; Video Kloter (Google Drive)</span>
+                    </a>
+                </div>
+
+                <!-- Tab 2: E-Sertifikat -->
+                <div id="galeriTabContentSertifikat" class="hidden space-y-4 pt-1">
+                    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#2d1139] to-[#17051f] border-2 border-gold-500/60 shadow-xl text-center relative overflow-hidden text-purple-100">
+                        <div class="text-gold-400 font-serif text-xs tracking-widest uppercase mb-1">
+                            ✦ SAMIRA ALI WISATA (SDW UMROH) ✦
+                        </div>
+                        <h3 class="text-lg sm:text-2xl font-black text-white font-serif tracking-wide">SERTIFIKAT UMROH MABRUR</h3>
+                        <div class="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto my-3"></div>
+                        <p class="text-xs text-purple-200/80">Dengan rahmat Allah SWT, dianugerahkan kepada:</p>
+                        <div class="text-lg sm:text-2xl font-black text-amber-300 font-serif my-2">
+                            Ahmad Jamaah Teladan
+                        </div>
+                        <p class="text-xs text-purple-200/80">Telah menunaikan Rukun &amp; Wajib Ibadah Umroh pada Program:</p>
+                        <div class="text-sm font-bold text-white mt-1">
+                            Umroh Syawal Barakah 1448 H / 2026 M
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-white/10 text-[10px] text-slate-400 flex justify-between items-center">
+                            <span>No. Reg: REG-SDW-2701</span>
+                            <span>Makkah al-Mukarramah</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="alert('E-Sertifikat resmi siap diunduh dalam format PDF Resolusi Tinggi.')" class="py-3 px-4 rounded-2xl bg-gold-500 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 hover:brightness-110 cursor-pointer shadow-md">
+                            <i class="fa-solid fa-download"></i>
+                            <span>Download PDF</span>
+                        </button>
+                        <a href="https://wa.me/?text=Alhamdulillah%20saya%20telah%20selesai%20menunaikan%20ibadah%20umroh%20mabrur%20bersama%20SDW%20UMROH." target="_blank" rel="noopener noreferrer" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>Bagikan (WA)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 7: FULL-PAGE LIVE KA'BAH & NABAWI ==================== -->
+            <div id="subview-live" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-base font-extrabold text-white leading-tight">Live Ka'bah &amp; Nabawi</h2>
+                                <span class="px-2 py-0.5 rounded-full bg-red-600 text-white text-[9px] font-black uppercase tracking-wider animate-pulse">24/7 LIVE</span>
+                            </div>
+                            <p id="inAppLiveChannelDesc" class="text-[11px] text-purple-200/70">Makkah Al-Mukarramah — Siaran Langsung Suasana Thawaf</p>
+                        </div>
+                    </div>
+                    <a id="inAppLiveExternalLink" href="https://www.youtube.com/watch?v=eC4LfEVxvKg" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+                        <i class="fa-brands fa-youtube"></i>
+                        <span class="hidden sm:inline">YouTube</span>
+                    </a>
+                </div>
+
+                <!-- Stream Video Player (16:9 Aspect Ratio) -->
+                <div class="rounded-3xl overflow-hidden bg-black relative border border-slate-200 shadow-lg aspect-video w-full">
+                    <iframe id="inAppLiveIframe" src="about:blank" title="Live Streaming Ka'bah &amp; Masjid Nabawi" class="w-full h-full object-cover" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                </div>
+
+                <!-- Stream Switcher Tabs -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-bold">
+                    <button type="button" onclick="window.switchLiveFeed('main', this)" class="inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">🕋 Makkah Utama</button>
+                    <button type="button" onclick="window.switchLiveFeed('backup', this)" class="inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition text-center cursor-pointer">📡 Jalur Backup</button>
+                    <button type="button" onclick="window.switchLiveFeed('quran', this)" class="inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition text-center cursor-pointer">📺 Quran TV</button>
+                    <button type="button" onclick="window.switchLiveFeed('madinah', this)" class="inapp-live-tab-btn py-2.5 px-3 rounded-2xl bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 transition text-center cursor-pointer">🕌 Madinah TV</button>
+                </div>
+
+                <!-- Doa Memandang Ka'bah -->
+                <div class="p-5 bg-white rounded-3xl border border-purple-100 shadow-md space-y-2">
+                    <span class="text-sdw-pine font-extrabold text-sm block">Doa Ketika Memandang Ka'bah:</span>
+                    <p class="font-arabic text-base sm:text-lg text-right leading-loose text-slate-900 mb-2" dir="rtl">
+                        اللَّهُمَّ زِدْ هَذَا الْبَيْتَ تَشْرِيفًا وَتَعْظِيمًا وَتَكْرِيمًا وَمَهَابَةً، وَزِدْ مَنْ شَرَّفَهُ وَعَظَّمَهُ مِمَّنْ حَجَّهُ أَوِ اعْتَمَرَهُ تَشْرِيفًا وَتَكْرِيمًا وَتَعْظِيمًا وَبِرًّا
+                    </p>
+                    <p class="text-xs text-slate-600 italic leading-relaxed">
+                        "Ya Allah, tambahkanlah kemuliaan, keagungan, kehormatan, dan wibawa pada Baitullah ini. Dan tambahkanlah bagi orang yang memuliakannya di antara mereka yang berhaji atau berumroh kemuliaan, kehormatan, keagungan, dan kebaikan."
+                    </p>
+                </div>
             </div>
         </main>
     </div>
