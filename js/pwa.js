@@ -409,28 +409,35 @@
               </button>
             </div>
 
-            <!-- 5. Mode Peran Pengguna (Role Switcher Testing Backoffice & Jamaah) -->
-            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
-              <div class="flex items-center justify-between mb-1.5">
+            <!-- 5. Mode Peran Pengguna & Portal Admin Enterprise Hub -->
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5 space-y-2.5">
+              <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
                   <i class="fa-solid fa-user-shield text-gold-400 text-xs"></i>
-                  <span>Simulasi Peran Pengguna</span>
+                  <span>Peran Pengguna &amp; Akses Sistem</span>
                 </span>
                 <span id="settingsCurrentRoleBadge" class="text-[10px] bg-gold-500/20 px-2 py-0.5 rounded-full border border-gold-500/30 text-gold-300 font-bold">PILGRIM</span>
               </div>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Ganti hak akses untuk menguji tampilan Jamaah, Sales, Muthawwif, Tour Leader, atau Admin.</p>
-              <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2.5 px-3 rounded-xl bg-[#3E165B] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
-                <option value="PILGRIM">Jamaah (Pilgrim)</option>
-                <option value="SALES">Sales / Marketing</option>
-                <option value="DOCUMENT_OFFICER">Document Officer</option>
-                <option value="FINANCE">Finance Staff</option>
-                <option value="OPERATIONS">Operations Kloter</option>
-                <option value="TOUR_LEADER">Tour Leader</option>
-                <option value="MUTHAWWIF">Muthawwif</option>
-                <option value="PARTNER">Mitra / Agen</option>
-                <option value="ADMIN">Admin Sistem</option>
-                <option value="OWNER">Executive Owner</option>
-              </select>
+              <p class="text-[11px] text-purple-200/70">Aplikasi PWA ini khusus melayani jamaah. Untuk staf operasional, CRM, muthawwif, dan keuangan, silakan akses Portal Admin.</p>
+              <a href="admin.html" class="w-full py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 hover:from-amber-300 hover:to-yellow-300 text-slate-950 text-xs font-black flex items-center justify-center gap-2 transition active:scale-95 shadow-md">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>Buka Portal Admin Enterprise</span>
+              </a>
+              <div class="pt-2 border-t border-white/10">
+                <label class="text-[10px] text-purple-300/80 font-semibold block mb-1">Ganti Hak Akses (Memilih peran staf akan otomatis membuka Portal Admin):</label>
+                <select id="settingsRoleSelect" onchange="if(typeof SDW_AUTH!=='undefined'){SDW_AUTH.setRole(this.value); window.updateSettingsRoleUI();}" class="w-full py-2 px-3 rounded-xl bg-[#3E165B] border border-gold-500/30 text-white text-xs font-bold outline-none cursor-pointer">
+                  <option value="PILGRIM">Jamaah (Pilgrim)</option>
+                  <option value="SALES">Sales / Marketing (Portal Admin)</option>
+                  <option value="DOCUMENT_OFFICER">Document Officer (Portal Admin)</option>
+                  <option value="FINANCE">Finance Staff (Portal Admin)</option>
+                  <option value="OPERATIONS">Operations Kloter (Portal Admin)</option>
+                  <option value="TOUR_LEADER">Tour Leader (Portal Admin)</option>
+                  <option value="MUTHAWWIF">Muthawwif (Portal Admin)</option>
+                  <option value="PARTNER">Mitra / Agen (Portal Admin)</option>
+                  <option value="ADMIN">Admin Sistem (Portal Admin)</option>
+                  <option value="OWNER">Executive Owner (Portal Admin)</option>
+                </select>
+              </div>
             </div>
 
             <!-- 6. Layanan Bantuan & Khidmat 24/7 (ala Asnawiyyah) -->

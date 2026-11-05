@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SDW UMROH App — Portal Jamaah &amp; Backoffice Terpadu</title>
+    <title>SDW UMROH App — Aplikasi Jamaah Umroh Digital</title>
 
     <meta name="robots" content="noindex, nofollow">
     <link rel="canonical" href="https://sdwumroh.com/app">
@@ -103,22 +103,11 @@
                 </button>
             </div>
 
-            <!-- Desktop Role Tester Selector (Visible on MD and larger) -->
-            <div class="hidden md:flex items-center gap-1.5 bg-black/25 px-2.5 py-1 rounded-xl border border-white/10 text-xs">
-                <span class="text-[11px] text-sdw-gold">Ganti Peran:</span>
-                <select id="role-switcher-select" onchange="SDW_AUTH.setRole(this.value)" class="bg-transparent text-white font-bold text-xs outline-none cursor-pointer">
-                    <option value="PILGRIM" class="text-sdw-charcoal">Jamaah (Pilgrim)</option>
-                    <option value="SALES" class="text-sdw-charcoal">Sales / Marketing</option>
-                    <option value="DOCUMENT_OFFICER" class="text-sdw-charcoal">Document Officer</option>
-                    <option value="FINANCE" class="text-sdw-charcoal">Finance Staff</option>
-                    <option value="OPERATIONS" class="text-sdw-charcoal">Operations Kloter</option>
-                    <option value="TOUR_LEADER" class="text-sdw-charcoal">Tour Leader</option>
-                    <option value="MUTHAWWIF" class="text-sdw-charcoal">Muthawwif</option>
-                    <option value="PARTNER" class="text-sdw-charcoal">Mitra / Agen</option>
-                    <option value="ADMIN" class="text-sdw-charcoal">Admin Sistem</option>
-                    <option value="OWNER" class="text-sdw-charcoal">Executive Owner</option>
-                </select>
-            </div>
+            <!-- Desktop Portal Admin Button -->
+            <a href="admin.html" class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-400 hover:bg-yellow-400 text-slate-950 text-xs font-extrabold transition shadow-xs active:scale-95 cursor-pointer" title="Buka Portal Operasional &amp; Manajemen Admin">
+                <i class="fa-solid fa-gauge-high text-xs"></i>
+                <span>Portal Admin</span>
+            </a>
 
             <a href="/" class="text-xs text-slate-200 hover:text-white px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/10 transition hidden md:inline-block">
                 <i class="fa-solid fa-globe mr-1"></i> Web Publik
@@ -153,37 +142,21 @@
                     <span>Profil &amp; Kartu Jamaah</span>
                 </button>
 
-                <button type="button" data-perm-tab="tab-crm" onclick="SDW_AUTH.switchAppTab('tab-crm')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
-                    <i class="fa-solid fa-users-viewfinder text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>CRM &amp; Sales Leads</span>
-                </button>
-
-                <button type="button" data-perm-tab="tab-documents" onclick="SDW_AUTH.switchAppTab('tab-documents')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
-                    <i class="fa-solid fa-passport text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>Verifikasi Berkas</span>
-                </button>
-
-                <button type="button" data-perm-tab="tab-finance" onclick="SDW_AUTH.switchAppTab('tab-finance')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
-                    <i class="fa-solid fa-file-invoice-dollar text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>Keuangan &amp; Invoice</span>
-                </button>
-
-                <button type="button" data-perm-tab="tab-trips" onclick="SDW_AUTH.switchAppTab('tab-trips')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
-                    <i class="fa-solid fa-bus-simple text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>Kloter &amp; Manifest</span>
-                </button>
-
-                <button type="button" data-perm-tab="tab-audit" onclick="SDW_AUTH.switchAppTab('tab-audit')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
-                    <i class="fa-solid fa-list-check text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>Jejak Audit Sistem</span>
-                </button>
-                <a href="admin.html" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-pine bg-purple-50 hover:bg-purple-100 border border-purple-200 transition cursor-pointer text-left">
-                    <span class="flex items-center gap-3">
-                        <i class="fa-solid fa-gauge-high text-sm text-purple-700 w-5 text-center"></i>
-                        <span>Buka Portal Admin</span>
-                    </span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-500"></i>
-                </a>
+                <div class="pt-3 border-t border-slate-100 space-y-2">
+                    <span class="text-[10px] font-extrabold uppercase text-sdw-muted tracking-wider px-3 block">Akses Manajemen</span>
+                    <a href="admin.html" class="w-full flex items-center justify-between p-3 rounded-2xl text-xs font-bold text-sdw-pine bg-gradient-to-r from-purple-50 to-amber-50/50 hover:from-purple-100 hover:to-amber-100/60 border border-purple-200/80 transition cursor-pointer text-left shadow-2xs group">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-8 h-8 rounded-xl bg-purple-900 text-amber-300 flex items-center justify-center text-sm shadow-xs group-hover:scale-105 transition-transform">
+                                <i class="fa-solid fa-gauge-high"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-sdw-pine">Portal Admin Hub</div>
+                                <div class="text-[10px] text-slate-500 font-medium">CRM, Keuangan &amp; Kloter</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-600"></i>
+                    </a>
+                </div>
             </div>
 
             <div class="pt-4 border-t border-sdw-border/80 text-[11px] text-sdw-muted space-y-1">
@@ -886,138 +859,19 @@
                 </div>
             </div>
 
-            <!-- ==================== TAB 2: CRM & LEADS PIPELINE ==================== -->
-            <div id="tab-crm" class="app-view-container hidden space-y-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div>
-                        <h2 class="text-xl font-extrabold text-sdw-pine">CRM Pipeline &amp; Prospek Jamaah</h2>
-                        <p class="text-xs text-sdw-muted">Kelola calon jamaah, tindak lanjut sales, dan status konversi pendaftaran.</p>
-                    </div>
-                    <button type="button" onclick="alert('Formulir prospek baru')" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-sdw-pineLight transition cursor-pointer">
-                        + Tambah Prospek
-                    </button>
+            <!-- ==================== TAB: ADMIN REDIRECT CARD ==================== -->
+            <div id="tab-admin" class="app-view-container hidden space-y-6 max-w-xl mx-auto py-12 text-center">
+                <div class="w-16 h-16 rounded-3xl bg-purple-100 text-sdw-pine flex items-center justify-center text-2xl mx-auto shadow-sm border border-purple-200">
+                    <i class="fa-solid fa-gauge-high"></i>
                 </div>
-
-                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
-                                <tr>
-                                    <th class="py-3 px-4">ID Lead</th>
-                                    <th class="py-3 px-4">Nama &amp; Kontak</th>
-                                    <th class="py-3 px-4">Paket Diminati</th>
-                                    <th class="py-3 px-4">Urgensi</th>
-                                    <th class="py-3 px-4">Budget</th>
-                                    <th class="py-3 px-4">Status</th>
-                                    <th class="py-3 px-4">PIC Sales</th>
-                                    <th class="py-3 px-4 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="crm-leads-tbody">
-                                <!-- Rendered by js/backoffice.js -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==================== TAB 3: VERIFIKASI BERKAS ==================== -->
-            <div id="tab-documents" class="app-view-container hidden space-y-6">
                 <div>
-                    <h2 class="text-xl font-extrabold text-sdw-pine">Antrean Verifikasi Berkas &amp; Visa</h2>
-                    <p class="text-xs text-sdw-muted">Pemeriksaan fisik/scan paspor RI, buku nikah, dan sertifikat vaksin meningitis.</p>
+                    <h2 class="text-xl font-extrabold text-sdw-pine">Portal Operasional &amp; Backoffice</h2>
+                    <p class="text-xs text-slate-500 mt-1 max-w-sm mx-auto">Fitur CRM sales, verifikasi dokumen paspor, manajemen keuangan invoice, dan operasional kloter kini dikelola secara terpusat pada Portal Admin mandiri.</p>
                 </div>
-                <div class="bg-white rounded-3xl p-6 border border-sdw-border shadow-xs text-center py-12">
-                    <i class="fa-solid fa-passport text-3xl text-sdw-gold mb-3"></i>
-                    <h3 class="font-bold text-sm text-sdw-pine">Semua Berkas Jamaah Terverifikasi</h3>
-                    <p class="text-xs text-sdw-muted mt-1">Tidak ada dokumen yang sedang dalam status UNDER_REVIEW saat ini.</p>
-                </div>
-            </div>
-
-            <!-- ==================== TAB 4: KEUANGAN & INVOICE ==================== -->
-            <div id="tab-finance" class="app-view-container hidden space-y-6">
-                <div>
-                    <h2 class="text-xl font-extrabold text-sdw-pine">Manajemen Keuangan &amp; Rekonsiliasi</h2>
-                    <p class="text-xs text-sdw-muted">Verifikasi bukti setor transfer bank syariah, termin DP, dan rekonsiliasi invoice.</p>
-                </div>
-                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
-                                <tr>
-                                    <th class="py-3 px-4">ID Registrasi</th>
-                                    <th class="py-3 px-4">Nama Jamaah</th>
-                                    <th class="py-3 px-4">Program Paket</th>
-                                    <th class="py-3 px-4">Keberangkatan</th>
-                                    <th class="py-3 px-4">Status</th>
-                                    <th class="py-3 px-4">Berkas</th>
-                                    <th class="py-3 px-4">Pembayaran</th>
-                                    <th class="py-3 px-4 text-right">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bo-registrations-tbody">
-                                <!-- Rendered by js/backoffice.js -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==================== TAB 5: KLOTER & MANIFEST ==================== -->
-            <div id="tab-trips" class="app-view-container hidden space-y-6">
-                <div>
-                    <h2 class="text-xl font-extrabold text-sdw-pine">Operasional Kloter &amp; Manifest Jamaah</h2>
-                    <p class="text-xs text-sdw-muted">Pembagian manifest bus tanah suci, alokasi nomor kamar Makkah/Madinah, dan penugasan muthawwif.</p>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs">
-                        <h3 class="font-extrabold text-sm text-sdw-pine mb-3">Manifest Bus Kloter 15 Jan 2027</h3>
-                        <div class="space-y-2 text-xs">
-                            <div class="p-3 bg-sdw-sand rounded-xl flex justify-between">
-                                <span>Bus 01 (VIP Haramain): <strong>35 Kursi Terisi</strong></span>
-                                <span class="text-emerald-700 font-bold">Siap</span>
-                            </div>
-                            <div class="p-3 bg-sdw-sand rounded-xl flex justify-between">
-                                <span>Bus 02 (Reguler Barakah): <strong>40 Kursi Terisi</strong></span>
-                                <span class="text-emerald-700 font-bold">Siap</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-6 bg-white rounded-3xl border border-sdw-border shadow-xs">
-                        <h3 class="font-extrabold text-sm text-sdw-pine mb-3">Rooming List Hotel Makkah</h3>
-                        <p class="text-xs text-sdw-muted mb-4">Penguncian kamar Swissotel Clock Tower H-30 keberangkatan.</p>
-                        <button type="button" onclick="alert('Export Manifest PDF')" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-sdw-pineLight transition cursor-pointer">
-                            <i class="fa-solid fa-file-pdf mr-1.5"></i> Export Manifest PDF
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ==================== TAB 6: AUDIT TRAIL ==================== -->
-            <div id="tab-audit" class="app-view-container hidden space-y-6">
-                <div>
-                    <h2 class="text-xl font-extrabold text-sdw-pine">Jejak Audit Mutasi Sistem (Append-Only)</h2>
-                    <p class="text-xs text-sdw-muted">Seluruh pencatatan dan perubahan status tercatat permanen di sheet DB_Audit_Logs.</p>
-                </div>
-                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-sdw-sand text-xs font-bold uppercase text-sdw-pine border-b border-sdw-border">
-                                <tr>
-                                    <th class="py-3 px-4">Audit ID</th>
-                                    <th class="py-3 px-4">Waktu</th>
-                                    <th class="py-3 px-4">Aktor Pengguna</th>
-                                    <th class="py-3 px-4">Aksi</th>
-                                    <th class="py-3 px-4">Entitas Referensi</th>
-                                    <th class="py-3 px-4">Deskripsi Mutasi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="bo-audit-tbody">
-                                <!-- Rendered by js/backoffice.js -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                <a href="admin.html" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-sdw-pine text-white text-xs font-bold hover:bg-purple-900 shadow-md transition active:scale-95">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span>Buka Portal Admin Enterprise</span>
+                </a>
             </div>
         </main>
     </div>
@@ -1073,33 +927,39 @@
     <script src="js/api.js?v=2.4"></script>
     <script src="js/auth.js?v=2.4"></script>
     <script src="js/jamaah.js?v=2.4"></script>
-    <script src="js/backoffice.js?v=2.4"></script>
     <script src="js/pwa.js?v=2.4"></script>
     <script src="js/berita-kalender.js?v=2.4"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof SDW_AUTH !== 'undefined') SDW_AUTH.applyPermissions();
             if (typeof SDW_JAMAAH !== 'undefined') SDW_JAMAAH.init();
-            if (typeof SDW_BACKOFFICE !== 'undefined') SDW_BACKOFFICE.init();
 
-            // Handle URL Tab parameter (?tab=berita, ?tab=kalender, ?tab=profil)
+            // Handle URL Tab parameter (?tab=berita, ?tab=kalender, ?tab=profil, ?tab=admin)
             const urlParams = new URLSearchParams(window.location.search);
             const reqTab = urlParams.get('tab');
-            if (reqTab && typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
-                const tabMap = {
-                    'beranda': 'tab-jamaah',
-                    'jamaah': 'tab-jamaah',
-                    'berita': 'tab-berita',
-                    'warta': 'tab-berita',
-                    'kalender': 'tab-kalender',
-                    'agenda': 'tab-kalender',
-                    'profil': 'tab-profile',
-                    'profile': 'tab-profile'
-                };
-                const targetTab = tabMap[reqTab.toLowerCase()] || reqTab;
-                setTimeout(() => {
-                    SDW_AUTH.switchAppTab(targetTab);
-                }, 100);
+            if (reqTab) {
+                const lower = reqTab.toLowerCase();
+                // Jika permintaan terkait tab staf/backoffice, alihkan ke admin.html
+                if (['admin', 'crm', 'finance', 'dokumen', 'documents', 'trips', 'backoffice', 'audit'].includes(lower)) {
+                    window.location.href = 'admin.html';
+                    return;
+                }
+                if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+                    const tabMap = {
+                        'beranda': 'tab-jamaah',
+                        'jamaah': 'tab-jamaah',
+                        'berita': 'tab-berita',
+                        'warta': 'tab-berita',
+                        'kalender': 'tab-kalender',
+                        'agenda': 'tab-kalender',
+                        'profil': 'tab-profile',
+                        'profile': 'tab-profile'
+                    };
+                    const targetTab = tabMap[lower] || reqTab;
+                    setTimeout(() => {
+                        SDW_AUTH.switchAppTab(targetTab);
+                    }, 100);
+                }
             }
         });
     </script>

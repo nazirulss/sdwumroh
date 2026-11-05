@@ -31,19 +31,19 @@
         'OWNER'             // Pimpinan / Pemilik Eksekutif
     ];
 
-    // Role View Permission Mapping
+    // Role View Permission Mapping for Pilgrim App (Decoupled from Admin Portal)
     const PERMISSIONS = {
         'PILGRIM': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'SALES': ['tab-crm', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'DOCUMENT_OFFICER': ['tab-documents', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'FINANCE': ['tab-finance', 'tab-jamaah', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'OPERATIONS': ['tab-trips', 'tab-documents', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'TOUR_LEADER': ['tab-trips', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'MUTHAWWIF': ['tab-trips', 'tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'PARTNER': ['tab-crm', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'ADMIN': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'MANAGER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile'],
-        'OWNER': ['tab-jamaah', 'tab-crm', 'tab-documents', 'tab-finance', 'tab-trips', 'tab-audit', 'tab-berita', 'tab-kalender', 'tab-profile']
+        'SALES': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'DOCUMENT_OFFICER': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'FINANCE': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'OPERATIONS': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'TOUR_LEADER': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'MUTHAWWIF': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'PARTNER': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'ADMIN': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'MANAGER': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin'],
+        'OWNER': ['tab-jamaah', 'tab-berita', 'tab-kalender', 'tab-profile', 'tab-admin']
     };
 
     function getCurrentRole() {
@@ -59,6 +59,15 @@
         if (!ROLES.includes(newRole)) return;
         if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.storage) {
             sessionStorage.setItem(APP_CONFIG.storage.keys.adminRole, newRole);
+            localStorage.setItem(APP_CONFIG.storage.keys.adminRole, newRole);
+        }
+        // Jika staf/admin dipilih saat berada di aplikasi jamaah (app.html), langsung alihkan ke Portal Admin
+        if (newRole !== 'PILGRIM' && typeof window !== 'undefined' && window.location) {
+            const currentPath = window.location.pathname || '';
+            if (currentPath.includes('app.html') || currentPath.endsWith('/app')) {
+                window.location.href = 'admin.html';
+                return;
+            }
         }
         applyPermissions(newRole);
     }
