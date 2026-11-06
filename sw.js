@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v36';
-const RUNTIME_CACHE = 'sdw-runtime-v36';
+const CACHE_NAME = 'sdw-umroh-pwa-v37';
+const RUNTIME_CACHE = 'sdw-runtime-v37';
 
 const PRECACHE_URLS = [
   '/',
@@ -38,6 +38,7 @@ const PRECACHE_URLS = [
   '/js/data-mock.js',
   '/js/api.js',
   '/js/auth.js',
+  '/js/jamaah.js',
   '/js/pwa.js',
   '/js/admin/admin-state.js',
   '/js/admin/admin-nav.js',
@@ -46,12 +47,20 @@ const PRECACHE_URLS = [
   '/js/admin/admin-registrations.js',
   '/js/admin/admin-finance.js',
   '/js/admin/admin-operations.js',
+  '/js/admin/admin-certificates.js',
   '/js/admin/admin-security.js',
   '/js/admin/admin-sync.js',
   '/js/admin/admin-export.js',
   '/js/admin-core.js',
   '/js/berita-kalender.js'
 ];
+
+// 0. Message Event: Listens for SKIP_WAITING from client update banner
+self.addEventListener('message', (event) => {
+  if (event.data && (event.data.type === 'SKIP_WAITING' || event.data.action === 'skipWaiting')) {
+    self.skipWaiting();
+  }
+});
 
 // 1. Install Event: Precaches core app shell
 self.addEventListener('install', (event) => {

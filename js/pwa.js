@@ -12,21 +12,47 @@
 (function () {
   'use strict';
 
-  // 1. Service Worker Registration
+  // 1. Service Worker Registration & Live Update Engine
+  let newWorkerWaiting = null;
+  let isRefreshing = false;
+
   if ('serviceWorker' in navigator) {
+    // Reload halaman begitu Service Worker versi baru mengambil alih
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!isRefreshing) {
+        isRefreshing = true;
+        window.location.reload();
+      }
+    });
+
     window.addEventListener('load', () => {
       navigator.serviceWorker
         .register('/sw.js')
         .then((reg) => {
           console.log('[SDW PWA] Service Worker registered:', reg.scope);
+
+          // Jika sudah ada Service Worker baru yang antre/waiting, tampilkan banner update
+          if (reg.waiting && navigator.serviceWorker.controller) {
+            newWorkerWaiting = reg.waiting;
+            showUpdateToast(newWorkerWaiting);
+          }
+
           reg.addEventListener('updatefound', () => {
             const installing = reg.installing;
             if (installing) {
               installing.addEventListener('statechange', () => {
                 if (installing.state === 'installed' && navigator.serviceWorker.controller) {
-                  showUpdateToast();
+                  newWorkerWaiting = reg.waiting || installing;
+                  showUpdateToast(newWorkerWaiting);
                 }
               });
+            }
+          });
+
+          // Cek update otomatis saat pengguna membuka kembali tab / aplikasi
+          document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+              reg.update().catch(() => {});
             }
           });
         })
@@ -34,6 +60,35 @@
           console.warn('[SDW PWA] Service Worker registration failed:', err);
         });
     });
+  }
+
+  // Helper fungsi global untuk memeriksa pembaruan secara manual
+  async function checkForUpdates(manual = true) {
+    if (!('serviceWorker' in navigator)) {
+      if (manual) alert('Perangkat browser ini tidak mendukung Service Worker PWA.');
+      return;
+    }
+    try {
+      const reg = await navigator.serviceWorker.getRegistration();
+      if (!reg) {
+        if (manual) alert('Service Worker belum terpasang.');
+        return;
+      }
+      if (reg.waiting) {
+        newWorkerWaiting = reg.waiting;
+        showUpdateToast(newWorkerWaiting);
+        return;
+      }
+      await reg.update();
+      if (reg.waiting) {
+        newWorkerWaiting = reg.waiting;
+        showUpdateToast(newWorkerWaiting);
+      } else if (manual) {
+        alert('✅ Aplikasi Anda sudah menggunakan versi terbaru (v2.4 Live).');
+      }
+    } catch (err) {
+      console.warn('[SDW PWA] Gagal memeriksa pembaruan:', err);
+    }
   }
 
   // 2. Detection (iOS, Android, Standalone)
@@ -397,16 +452,25 @@
             </div>
 
             <!-- 4. Sinkronisasi Data Kloter & Cache -->
-            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5">
-              <span class="text-xs font-bold text-gold-300 flex items-center gap-2 mb-1">
-                <i class="fa-solid fa-arrows-rotate text-gold-400 text-xs"></i>
-                <span>Sinkronisasi Data Kloter &amp; Cache</span>
-              </span>
-              <p class="text-[11px] text-purple-200/70 mb-2.5">Bersihkan cache aplikasi untuk mengambil pengumuman warta manasik &amp; jadwal kloter paling mutakhir.</p>
-              <button onclick="window.refreshAppCache()" class="w-full py-2.5 px-3 rounded-xl bg-white/5 border border-gold-500/30 hover:bg-gold-500/10 text-gold-300 text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-xs">
-                <i class="fa-solid fa-rotate text-gold-400 text-xs"></i>
-                <span>Bersihkan Cache &amp; Muat Ulang</span>
-              </button>
+            <div class="p-3.5 bg-black/30 rounded-2xl border border-white/5 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-gold-300 flex items-center gap-2">
+                  <i class="fa-solid fa-cloud-arrow-down text-gold-400 text-xs"></i>
+                  <span>Pembaruan Aplikasi &amp; Cache</span>
+                </span>
+                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/30 font-bold font-mono">v2.4 Live</span>
+              </div>
+              <p class="text-[11px] text-purple-200/70">Periksa pembaruan fitur E-Sertifikat dan sinkronkan data jadwal kloter termutakhir.</p>
+              <div class="grid grid-cols-2 gap-2">
+                <button onclick="if(window.SDW_PWA && window.SDW_PWA.checkForUpdates) window.SDW_PWA.checkForUpdates(true);" class="py-2.5 px-3 rounded-xl bg-gold-500/20 border border-gold-500/40 hover:bg-gold-500/30 text-gold-300 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+                  <i class="fa-solid fa-cloud-arrow-down text-xs"></i>
+                  <span>Cek Update</span>
+                </button>
+                <button onclick="window.refreshAppCache()" class="py-2.5 px-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-purple-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-xs">
+                  <i class="fa-solid fa-rotate text-xs"></i>
+                  <span>Reset Cache</span>
+                </button>
+              </div>
             </div>
 
             <!-- 5. Mode Peran Pengguna & Portal Admin Enterprise Hub -->
@@ -3149,20 +3213,59 @@
     }, 3500);
   }
 
-  function showUpdateToast() {
+  function showUpdateToast(waitingWorker) {
+    if (document.getElementById('sdw-pwa-update-banner')) return;
     const toast = document.createElement('div');
+    toast.id = 'sdw-pwa-update-banner';
     toast.className =
-      'fixed bottom-20 sm:bottom-6 left-4 right-4 sm:left-auto sm:right-6 sm:w-80 z-50 bg-[#1F0628] text-white p-3.5 rounded-2xl shadow-2xl border border-gold-500/40 flex items-center justify-between gap-3';
+      'fixed bottom-20 sm:bottom-6 left-3 right-3 sm:left-auto sm:right-6 sm:w-96 z-[9999] bg-[#16031E]/95 backdrop-blur-md text-white p-4 rounded-2xl shadow-2xl border border-amber-500/50 flex flex-col gap-3 animate-bounce-subtle';
     toast.innerHTML = `
-      <div class="text-xs">
-        <p class="font-bold text-gold-400">Pembaruan Jadwal Tersedia</p>
-        <p class="text-[11px] text-purple-200/80">Muat ulang untuk melihat jadwal kloter termutakhir.</p>
+      <div class="flex items-start gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shrink-0 shadow-md">
+          <i class="fa-solid fa-sparkles text-slate-950 text-base"></i>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-amber-300">Pembaruan Aplikasi Tersedia</h4>
+            <span class="text-[9px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold">v2.4 Baru</span>
+          </div>
+          <p class="text-[11px] text-purple-200/90 mt-0.5 leading-relaxed">
+            Tersedia pembaruan fitur E-Sertifikat Umroh & sinkronisasi data jadwal kloter.
+          </p>
+        </div>
       </div>
-      <button onclick="window.location.reload()" class="px-3 py-1.5 bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-bold rounded-xl text-xs transition-colors shrink-0 cursor-pointer">
-        Perbarui
-      </button>
+      <div class="flex items-center gap-2 pt-1 border-t border-purple-900/50">
+        <button id="sdw-dismiss-update-btn" class="flex-1 py-2 text-center text-xs text-purple-300 hover:text-white rounded-xl bg-white/5 hover:bg-white/10 transition cursor-pointer">
+          Nanti Saja
+        </button>
+        <button id="sdw-apply-update-btn" class="flex-1 py-2 text-center text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 hover:from-amber-300 hover:to-amber-500 rounded-xl shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-1.5 cursor-pointer">
+          <i class="fa-solid fa-arrows-rotate animate-spin-slow"></i>
+          <span>Perbarui Sekarang</span>
+        </button>
+      </div>
     `;
     document.body.appendChild(toast);
+
+    document.getElementById('sdw-dismiss-update-btn')?.addEventListener('click', () => {
+      toast.remove();
+    });
+
+    document.getElementById('sdw-apply-update-btn')?.addEventListener('click', () => {
+      const applyBtn = document.getElementById('sdw-apply-update-btn');
+      if (applyBtn) {
+        applyBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><span>Menerapkan...</span>';
+        applyBtn.disabled = true;
+      }
+      const targetWorker = waitingWorker || newWorkerWaiting;
+      if (targetWorker) {
+        targetWorker.postMessage({ type: 'SKIP_WAITING' });
+      } else if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+      }
+      setTimeout(() => {
+        window.location.reload();
+      }, 400);
+    });
   }
 
   // 9. Banner Auto Slide in App Mode
@@ -3232,4 +3335,9 @@
     initAppBannerSlider();
     initDeepLinkRouter();
   }
+
+  // Public SDW_PWA Namespace
+  window.SDW_PWA = window.SDW_PWA || {};
+  window.SDW_PWA.checkForUpdates = checkForUpdates;
+  window.SDW_PWA.showUpdateToast = showUpdateToast;
 })();
