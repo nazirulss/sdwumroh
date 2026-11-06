@@ -595,6 +595,20 @@
             if (elRoom) elRoom.textContent = session.roomType;
             if (elDeparture) elDeparture.textContent = session.departureDate;
 
+            // Foto Jamaah pada Kartu E-PASS Rasio 2:3
+            const elPhotoImg = document.getElementById('jamaah-photo-img');
+            const elPhotoPlaceholder = document.getElementById('jamaah-photo-placeholder');
+            if (session.photoUrl || session.photo) {
+                if (elPhotoImg) {
+                    elPhotoImg.src = session.photoUrl || session.photo;
+                    elPhotoImg.classList.remove('hidden');
+                }
+                if (elPhotoPlaceholder) elPhotoPlaceholder.classList.add('hidden');
+            } else {
+                if (elPhotoImg) elPhotoImg.classList.add('hidden');
+                if (elPhotoPlaceholder) elPhotoPlaceholder.classList.remove('hidden');
+            }
+
             // Sinkronkan Total Paket pada Kartu Digital SDW E-PASS
             let displayPrice = session.totalPrice;
             if (!displayPrice && session.finalPrice) {

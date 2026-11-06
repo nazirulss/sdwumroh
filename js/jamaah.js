@@ -231,11 +231,11 @@
             if (!btn || !icon) continue;
 
             if (i === 1) {
-                btn.className = 'journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
-                icon.className = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs';
+                btn.className = 'journey-step-btn group flex flex-col items-center py-2.5 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs mb-1.5 transition shadow-xs';
             } else {
-                btn.className = 'journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
-                icon.className = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs';
+                btn.className = 'journey-step-btn group flex flex-col items-center py-2.5 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1.5 transition shadow-xs';
             }
         }
 
@@ -275,21 +275,21 @@
             collapseIcon.className = 'fa-solid fa-chevron-up text-[10px]';
         }
 
-        // 3. Update Visual Style pada Tiap Tombol Stepper (3 Baris Rapi)
+        // 3. Update Visual Style pada Tiap Tombol Stepper (3 Baris Rapi & Proporsional)
         for (let i = 1; i <= 5; i++) {
             const btn = document.getElementById(`step-btn-${i}`);
             const icon = document.getElementById(`step-icon-${i}`);
             if (!btn || !icon) continue;
 
             if (i === step) {
-                btn.className = 'journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer bg-amber-50 border border-amber-300/80 shadow-xs ring-2 ring-amber-400/40';
-                icon.className = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs ring-2 ring-amber-300/80';
+                btn.className = 'journey-step-btn group flex flex-col items-center py-2.5 px-1 rounded-2xl transition-all cursor-pointer bg-amber-50 border border-amber-300/80 shadow-xs ring-2 ring-amber-400/40';
+                icon.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs mb-1.5 transition shadow-xs ring-2 ring-amber-300/80 animate-pulse';
             } else if (i === 1) {
-                btn.className = 'journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
-                icon.className = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs';
+                btn.className = 'journey-step-btn group flex flex-col items-center py-2.5 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs mb-1.5 transition shadow-xs';
             } else {
-                btn.className = 'journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
-                icon.className = 'w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs';
+                btn.className = 'journey-step-btn group flex flex-col items-center py-2.5 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1.5 transition shadow-xs';
             }
         }
 
