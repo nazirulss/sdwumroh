@@ -196,10 +196,61 @@
         if (elUstadz) elUstadz.textContent = manasik.muthawwif;
     }
 
+    const STEP_INFO = {
+        1: { name: 'DP Booking (Lunas)', badge: 'Tahap 1: DP Booking (Lunas Sah)', badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+        2: { name: 'Paspor & Berkas', badge: 'Tahap 2: Paspor & Berkas Dokumen', badgeClass: 'bg-amber-100 text-amber-800 border-amber-300' },
+        3: { name: 'Pelunasan Termin', badge: 'Tahap 3: Pelunasan Biaya & Termin', badgeClass: 'bg-purple-100 text-purple-800 border-purple-300' },
+        4: { name: 'Bimbingan Manasik', badge: 'Tahap 4: Bimbingan Manasik Akbar', badgeClass: 'bg-indigo-100 text-indigo-800 border-indigo-300' },
+        5: { name: 'Keberangkatan & Kloter', badge: 'Tahap 5: Keberangkatan & Kloter Siap', badgeClass: 'bg-teal-100 text-teal-800 border-teal-300' }
+    };
+
+    function switchJourneyStep(stepNum) {
+        const step = parseInt(stepNum, 10) || 2;
+
+        // 1. Tampilkan hanya panel yang dipilih (Inline card, NO POPUP)
+        const allPanels = document.querySelectorAll('.journey-panel');
+        allPanels.forEach(p => p.classList.add('hidden'));
+
+        const targetPanel = document.getElementById(`journey-panel-${step}`);
+        if (targetPanel) {
+            targetPanel.classList.remove('hidden');
+        }
+
+        // 2. Update Badge Judul di Header Stepper
+        const badge = document.getElementById('journey-active-badge');
+        if (badge && STEP_INFO[step]) {
+            badge.textContent = STEP_INFO[step].badge;
+            badge.className = `px-2.5 py-0.5 rounded-full text-[9.5px] font-black border ${STEP_INFO[step].badgeClass}`;
+        }
+
+        // 3. Update Visual Style pada Tiap Tombol Stepper
+        for (let i = 1; i <= 5; i++) {
+            const btn = document.getElementById(`step-btn-${i}`);
+            const icon = document.getElementById(`step-icon-${i}`);
+            if (!btn || !icon) continue;
+
+            if (i === step) {
+                btn.className = 'journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer bg-amber-50 border border-amber-300/80 shadow-xs ring-2 ring-amber-400/40';
+                icon.className = 'w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs ring-2 ring-amber-300/80';
+            } else if (i === 1) {
+                btn.className = 'journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs';
+            } else {
+                btn.className = 'journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100';
+                icon.className = 'w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs';
+            }
+        }
+    }
+
+    if (typeof window !== 'undefined') {
+        window.switchJourneyStep = switchJourneyStep;
+    }
+
     return {
         init: initJamaahView,
         loadPilgrimDocumentsAsync: loadPilgrimDocumentsAsync,
         renderDocuments: renderDocuments,
+        switchJourneyStep: switchJourneyStep,
         formatRupiah: formatRupiah
     };
 });
