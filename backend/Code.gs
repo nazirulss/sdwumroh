@@ -488,23 +488,54 @@ function doGet(e) {
 
     if (action === 'getPayments') {
       const payments = getSheetRowsAsObjects_(ss, "DB_Payments");
+      const invoices = getSheetRowsAsObjects_(ss, "DB_Invoices");
       const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
       const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
 
+      const invMap = {};
+      invoices.forEach(function(inv) { invMap[inv.id] = inv; });
       const regMap = {};
       regs.forEach(function(r) { regMap[r.id] = r; });
       const custMap = {};
-      customers.forEach(function(c) { custMap[c.id] = c; });
+      customers.forEach(function(c) {
+        custMap[c.id] = c;
+        if (c.full_name) custMap[c.full_name.toLowerCase()] = c;
+      });
 
       const mapped = payments.map(function(pay) {
-        const reg = regMap[pay.invoice_id] || {};
-        const cust = custMap[reg.customer_id] || {};
-        const amountNum = Number(pay.amount || 0);
+        // Cari target registration ID dari invoice atau langsung dari registration_id
+        let targetRegId = pay.invoice_id;
+        if (invMap[pay.invoice_id] && invMap[pay.invoice_id].registration_id) {
+          targetRegId = invMap[pay.invoice_id].registration_id;
+        }
+
+        const reg = regMap[targetRegId] || {};
+        const cust = custMap[reg.customer_id] || (reg.customer_id ? custMap[String(reg.customer_id).toLowerCase()] : null) || {};
+        const rawAmount = pay.amount;
+        const amountNum = typeof rawAmount === 'number' ? rawAmount : (Number(String(rawAmount || 0).replace(/[^0-9]/g, '')) || 0);
+
+        // Cari nama jamaah dengan resolusi nama berjenjang
+        let resolvedName = cust.full_name;
+        if (!resolvedName && reg.customer_id && !reg.customer_id.startsWith('CUS-') && !reg.customer_id.startsWith('REG-')) {
+          resolvedName = reg.customer_id;
+        }
+        if (!resolvedName && pay.notes) {
+          if (pay.notes.includes('an ')) {
+            const m = pay.notes.match(/an\s+([^,.(]+)/i);
+            if (m) resolvedName = m[1].trim();
+          } else if (pay.notes.includes('oleh ')) {
+            const m = pay.notes.match(/oleh\s+([^,.(]+)/i);
+            if (m) resolvedName = m[1].trim();
+          }
+        }
+        if (!resolvedName) {
+          resolvedName = "Jamaah (" + (targetRegId || pay.invoice_id || "Anonim") + ")";
+        }
 
         return {
           id: pay.id,
-          regId: pay.invoice_id || pay.schedule_id || "-",
-          customer: cust.full_name || (pay.invoice_id ? "Jamaah (" + pay.invoice_id + ")" : "Anonim"),
+          regId: targetRegId || pay.invoice_id || "-",
+          customer: resolvedName,
           amount: "Rp " + amountNum.toLocaleString('id-ID'),
           amountNum: amountNum,
           method: pay.payment_method || "Transfer Bank",

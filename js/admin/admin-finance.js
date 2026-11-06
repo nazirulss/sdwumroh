@@ -91,6 +91,13 @@
             package: 'Umroh Reguler Syawal Barakah 9H'
         };
 
+        let displayCustomer = pay.customer;
+        if (!displayCustomer || displayCustomer.startsWith('Jamaah (')) {
+            if (reg.customer && !reg.customer.startsWith('Jamaah (')) {
+                displayCustomer = reg.customer;
+            }
+        }
+
         const numVal = parseInt(pay.amount.replace(/[^0-9]/g, '')) || 15000000;
         const words = admin.numberToWords(numVal).trim() + " Rupiah";
 
@@ -109,7 +116,7 @@
 
             if (rNumber) rNumber.innerText = `KWT/SDW/${new Date().getFullYear()}/${pay.id.replace('PAY-SDW-', '')}`;
             if (rDate) rDate.innerText = todayFormatted;
-            if (rCustomer) rCustomer.innerText = pay.customer;
+            if (rCustomer) rCustomer.innerText = displayCustomer;
             if (rRegId) rRegId.innerText = reg.id;
             if (rAmountWords) rAmountWords.innerText = `"${words}"`;
             if (rPurpose) rPurpose.innerText = `Setoran Biaya Paket Umroh: ${reg.package} • Ref: ${pay.id}`;
@@ -156,11 +163,20 @@
             return;
         }
 
-        tbody.innerHTML = filtered.map(p => `
+        tbody.innerHTML = filtered.map(p => {
+            const reg = (admin.registrationsData || []).find(r => r.id === p.regId) || {};
+            let displayCustomer = p.customer;
+            if (!displayCustomer || displayCustomer.startsWith('Jamaah (')) {
+                if (reg.customer && !reg.customer.startsWith('Jamaah (')) {
+                    displayCustomer = reg.customer;
+                }
+            }
+
+            return `
             <tr class="hover:bg-slate-50 border-b border-slate-100 text-xs transition">
                 <td class="py-3.5 px-4 font-mono font-bold text-sdw-pine">${admin.escapeHtml(p.id)}</td>
                 <td class="py-3.5 px-4">
-                    <div class="font-bold text-slate-800">${admin.escapeHtml(p.customer)}</div>
+                    <div class="font-bold text-slate-800">${admin.escapeHtml(displayCustomer)}</div>
                     <div class="text-[10px] text-slate-400 font-mono">${admin.escapeHtml(p.regId)}</div>
                 </td>
                 <td class="py-3.5 px-4 font-black text-emerald-700 text-sm">${admin.escapeHtml(p.amount)}</td>
@@ -183,7 +199,8 @@
                     `}
                 </td>
             </tr>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function applyFinanceFilter() {
