@@ -30,6 +30,25 @@
         renderFinance();
         renderManasik();
         loadPilgrimDocumentsAsync();
+        syncLiveRegistrationsAsync();
+    }
+
+    async function syncLiveRegistrationsAsync() {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getRegistrations');
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    try {
+                        localStorage.setItem('sdw_admin_registrations', JSON.stringify(res.data));
+                    } catch (e) {}
+                    // Refresh tampilan sertifikat kloter & daftar nama jamaah live
+                    populateCertificateDateFilter();
+                    renderPilgrimCertificate();
+                }
+            } catch (err) {
+                console.warn('[SDW_JAMAAH] Gagal mengambil data registrasi live dari Spreadsheet:', err);
+            }
+        }
     }
 
     async function loadPilgrimDocumentsAsync() {
@@ -622,10 +641,12 @@
         window.shareCertificateWA = shareKloterCertificateWA;
         window.downloadCertificateImage = downloadCertificateImage;
         window.downloadCertificatePDF = downloadCertificatePDF;
+        window.syncLiveRegistrationsAsync = syncLiveRegistrationsAsync;
     }
 
     return {
         init: initJamaahView,
+        syncLiveRegistrationsAsync: syncLiveRegistrationsAsync,
         loadPilgrimDocumentsAsync: loadPilgrimDocumentsAsync,
         renderDocuments: renderDocuments,
         switchJourneyStep: switchJourneyStep,

@@ -331,11 +331,15 @@
             { id: 'LED-004', name: 'Bpk. Ridwan Kamil', phone: '0818-5555-0104', package: 'Umroh Awal Ramadhan', urgency: 'LOW', budget: 'Rp 35jt', status: 'NEW', owner: 'Belum Ditugaskan' }
         ],
 
-        // Demo Registrations Backoffice
+        // Demo Registrations Backoffice (Sinkron dengan DB_Registrations Spreadsheet)
         registrations: [
-            { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '3/4', payment: 'Rp 15jt / 33.5jt' },
-            { id: 'REG-SDW-2702', customer: 'Ibu Fatimah Zahra', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'UNDER_REVIEW', docs: '2/4', payment: 'Rp 10jt / 29.5jt' },
-            { id: 'REG-SDW-2703', customer: 'Bpk. Gunawan Wibisono', package: 'Umroh VIP 12H', departure: '28 Feb 2027', status: 'APPROVED', docs: '4/4', payment: 'LUNAS (Rp 43.5jt)' }
+            { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2702', customer: 'Ibu Siti Fatimah', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2703', customer: 'Bpk. Gunawan Wibisono', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2704', customer: 'Uji Jamaah PWA', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2705', customer: 'H. Ahmad Syarifuddin', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-3410', customer: 'Starmil Store', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-3439', customer: 'NAZIR', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' }
         ]
     };
 });
