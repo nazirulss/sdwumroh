@@ -1996,12 +1996,12 @@
                     <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block">Live Real-time Preview:</span>
                     
                     <!-- Canvas Box -->
-                    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1;">
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1; container-type: inline-size;">
                         <img src="assets/certificate-template.jpg" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
 
                         <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan) -->
-                        <div id="modal-cert-preview-no" class="absolute font-semibold text-slate-500 tracking-normal text-[7px] sm:text-[9.5px] md:text-[11px] pointer-events-none select-none"
-                             style="top: 5.8%; left: 6.8%;">
+                        <div id="modal-cert-preview-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
+                             style="top: 5.8%; left: 6.8%; font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
                             No: SDW/CERT/2027/2701
                         </div>
 
@@ -2017,8 +2017,8 @@
                         <!-- Nama di Tengah (Mendekati Garis Horizontal Bawah) -->
                         <div class="absolute text-center px-2 w-[80%] pointer-events-none"
                              style="top: 53.6%; left: 49.5%; transform: translate(-50%, -100%);">
-                            <h3 id="modal-cert-preview-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate text-[11px] sm:text-base md:text-xl"
-                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                            <h3 id="modal-cert-preview-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate"
+                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12); font-size: clamp(10px, 3.2cqi, 20px); line-height: 1.1;">
                                 NAMA JAMAAH
                             </h3>
                         </div>
@@ -2026,8 +2026,9 @@
                         <!-- Tanggal di Bawah Garis (Wajib 1 Baris Saja) -->
                         <div class="absolute text-center px-2 w-[85%] pointer-events-none"
                              style="top: 55.4%; left: 49.5%; transform: translateX(-50%);">
-                            <p id="modal-cert-preview-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis text-[7px] sm:text-[9.5px] md:text-[11px]">
-                                Keberangkatan: 15 Januari 2027 • Musim 1448 H
+                            <p id="modal-cert-preview-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
+                               style="font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
+                                Keberangkatan: 15 Januari 2027
                             </p>
                         </div>
                     </div>

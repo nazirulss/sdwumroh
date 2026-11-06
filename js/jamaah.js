@@ -327,8 +327,200 @@
     }
 
     // ==================== E-SERTIFIKAT UMROH CONTROLLERS ====================
+    let activeCertDateFilter = '';
+    let activePilgrimInFilter = null;
+
+    // Helper standardisasi tanggal keberangkatan
+    function normalizeDepartureDate(dateStr) {
+        if (!dateStr) return '15 Januari 2027';
+        let str = String(dateStr).trim();
+        str = str.replace(/^Keberangkatan:\s*/i, '').replace(/\s*•.*$/, '').trim();
+
+        const isoMatch = str.match(/(\d{4})-(\d{2})-(\d{2})/);
+        if (isoMatch) {
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            return `${parseInt(isoMatch[3], 10)} ${months[parseInt(isoMatch[2], 10) - 1]} ${isoMatch[1]}`;
+        }
+
+        str = str.replace(/\bJan\b/i, 'Januari')
+                 .replace(/\bFeb\b/i, 'Februari')
+                 .replace(/\bMar\b/i, 'Maret')
+                 .replace(/\bApr\b/i, 'April')
+                 .replace(/\bMei\b/i, 'Mei')
+                 .replace(/\bJun\b/i, 'Juni')
+                 .replace(/\bJul\b/i, 'Juli')
+                 .replace(/\bAgu\b|\bAgt\b/i, 'Agustus')
+                 .replace(/\bSep\b/i, 'September')
+                 .replace(/\bOkt\b/i, 'Oktober')
+                 .replace(/\bNov\b/i, 'November')
+                 .replace(/\bDes\b/i, 'Desember');
+        return str;
+    }
+
+    // Ambil daftar seluruh sertifikat & jamaah
+    function getAllPilgrimCertificates() {
+        const list = [];
+        let certStore = {};
+        try {
+            certStore = JSON.parse(localStorage.getItem('sdw_admin_certificates') || '{}');
+        } catch (e) {}
+
+        let regs = [];
+        try {
+            regs = JSON.parse(localStorage.getItem('sdw_admin_registrations') || 'null');
+        } catch (e) {}
+        if (!Array.isArray(regs) || regs.length === 0) {
+            if (typeof SDW_DATA_MOCK !== 'undefined' && Array.isArray(SDW_DATA_MOCK.registrations)) {
+                regs = SDW_DATA_MOCK.registrations;
+            } else {
+                regs = [
+                    { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', departure: '15 Jan 2027' },
+                    { id: 'REG-SDW-2702', customer: 'Ibu Fatimah Zahra', departure: '15 Jan 2027' },
+                    { id: 'REG-SDW-2703', customer: 'Bpk. Gunawan Wibisono', departure: '28 Feb 2027' }
+                ];
+            }
+        }
+
+        regs.forEach(r => {
+            const cert = certStore[r.id] || {};
+            const cleanDep = normalizeDepartureDate(cert.departureDate || r.departure || r.departure_date || '15 Januari 2027');
+            list.push({
+                regId: r.id,
+                name: cert.displayName || r.customer || r.name || r.full_name || 'Jamaah Umroh',
+                departureDate: cleanDep,
+                certNo: cert.certificateNo || `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
+                photoUrl: cert.photoUrl || r.photo || r.photoUrl || null,
+                isIssued: !!cert.isIssued
+            });
+        });
+
+        Object.keys(certStore).forEach(k => {
+            if (!list.some(p => p.regId === k)) {
+                const c = certStore[k];
+                if (c && c.displayName) {
+                    list.push({
+                        regId: k,
+                        name: c.displayName,
+                        departureDate: normalizeDepartureDate(c.departureDate),
+                        certNo: c.certificateNo || 'SDW/CERT/2027/2701',
+                        photoUrl: c.photoUrl || null,
+                        isIssued: !!c.isIssued
+                    });
+                }
+            }
+        });
+
+        return list;
+    }
+
+    // Isi Opsi Filter Tanggal Keberangkatan
+    function populateCertificateDateFilter() {
+        const filterEl = document.getElementById('certFilterDepartureDate');
+        if (!filterEl) return;
+
+        const all = getAllPilgrimCertificates();
+        const dates = Array.from(new Set(all.map(p => p.departureDate).filter(Boolean)));
+
+        if (dates.length === 0) {
+            dates.push('15 Januari 2027');
+        }
+
+        // Simpan nilai pilihan sebelumnya jika ada
+        const prevValue = filterEl.value;
+        filterEl.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join('');
+
+        if (prevValue && dates.includes(prevValue)) {
+            filterEl.value = prevValue;
+            activeCertDateFilter = prevValue;
+        } else if (!activeCertDateFilter || !dates.includes(activeCertDateFilter)) {
+            const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
+            const sessionDate = session ? normalizeDepartureDate(session.departureDate) : '';
+            if (sessionDate && dates.includes(sessionDate)) {
+                activeCertDateFilter = sessionDate;
+            } else {
+                activeCertDateFilter = dates[0];
+            }
+            filterEl.value = activeCertDateFilter;
+        } else {
+            filterEl.value = activeCertDateFilter;
+        }
+    }
+
+    // Handler saat Admin / Jamaah mengubah dropdown Filter Keberangkatan
+    function onCertificateDateFilterChange(val) {
+        activeCertDateFilter = val;
+        activePilgrimInFilter = null;
+        renderPilgrimCertificate();
+    }
+
+    // Pilih Jamaah spesifik di dalam kloter
+    function selectPilgrimInKloter(regId) {
+        const all = getAllPilgrimCertificates();
+        const found = all.find(p => p.regId === regId);
+        if (found) {
+            activePilgrimInFilter = found;
+            renderCertificateDisplay(found);
+
+            // Perbarui styling tombol aktif pada switcher
+            const switcherEl = document.getElementById('certPilgrimSwitcher');
+            if (switcherEl) {
+                const buttons = switcherEl.querySelectorAll('button');
+                buttons.forEach(btn => {
+                    if (btn.getAttribute('data-reg-id') === regId) {
+                        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-sdw-pine text-white';
+                    } else {
+                        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-slate-100 text-slate-700 hover:bg-slate-200';
+                    }
+                });
+            }
+        }
+    }
+
+    // Render E-Sertifikat Utama
     function renderPilgrimCertificate() {
-        const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
+        populateCertificateDateFilter();
+
+        const all = getAllPilgrimCertificates();
+        const filterEl = document.getElementById('certFilterDepartureDate');
+        const currentFilteredDate = (filterEl && filterEl.value) || activeCertDateFilter || '15 Januari 2027';
+        const kloterPilgrims = all.filter(p => p.departureDate === currentFilteredDate);
+
+        let pilgrimToShow = activePilgrimInFilter;
+        if (!pilgrimToShow || pilgrimToShow.departureDate !== currentFilteredDate) {
+            pilgrimToShow = kloterPilgrims[0] || all[0] || {
+                name: 'AHMAD JAMAAH TELADAN',
+                departureDate: currentFilteredDate,
+                certNo: 'SDW/CERT/2027/2701',
+                photoUrl: null
+            };
+            activePilgrimInFilter = pilgrimToShow;
+        }
+
+        renderCertificateDisplay(pilgrimToShow);
+
+        // Switcher jamaah dalam kloter
+        const switcherEl = document.getElementById('certPilgrimSwitcher');
+        if (switcherEl) {
+            if (kloterPilgrims.length > 1) {
+                switcherEl.innerHTML = kloterPilgrims.map(p => {
+                    const isActive = p.regId === pilgrimToShow.regId;
+                    const shortName = (p.name || 'Jamaah').split(' ').slice(0, 2).join(' ');
+                    return `
+                        <button type="button" data-reg-id="${p.regId}" onclick="window.selectPilgrimInKloter('${p.regId}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs ${isActive ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
+                            <i class="fa-solid fa-user text-[10px] mr-1"></i>
+                            <span>${shortName}</span>
+                        </button>
+                    `;
+                }).join('');
+                switcherEl.classList.remove('hidden');
+            } else {
+                switcherEl.classList.add('hidden');
+            }
+        }
+    }
+
+    // Render Tampilan Canvas / Dynamic Overlay Sertifikat
+    function renderCertificateDisplay(p) {
         const certNameEl = document.getElementById('cert-pilgrim-name');
         const certDateEl = document.getElementById('cert-pilgrim-date');
         const certNoEl = document.getElementById('cert-pilgrim-no');
@@ -337,56 +529,21 @@
 
         if (!certNameEl) return;
 
-        // Cek apakah ada sertifikat kustom yang diterbitkan Admin dari localStorage
-        let customCert = null;
-        try {
-            const certStore = JSON.parse(localStorage.getItem('sdw_admin_certificates') || '{}');
-            if (session && session.regId && certStore[session.regId]) {
-                customCert = certStore[session.regId];
-            } else if (session && session.fullName && certStore[session.fullName]) {
-                customCert = certStore[session.fullName];
-            } else if (certStore['REG-SDW-2701']) {
-                customCert = certStore['REG-SDW-2701'];
-            }
-        } catch (e) {
-            console.warn('Gagal membaca sdw_admin_certificates:', e);
+        certNameEl.textContent = (p.name || 'AHMAD JAMAAH TELADAN').toUpperCase();
+
+        if (certDateEl) {
+            const cleanD = p.departureDate.startsWith('Keberangkatan') ? p.departureDate : `Keberangkatan: ${p.departureDate}`;
+            certDateEl.textContent = cleanD;
         }
 
-        const displayName = (customCert && customCert.displayName) ? customCert.displayName : (session && session.fullName ? session.fullName : 'Ahmad Jamaah Teladan');
-        const certNo = (customCert && customCert.certificateNo) ? customCert.certificateNo : (session && session.regId ? `SDW/CERT/2027/${String(session.regId).replace(/\D/g, '').padStart(3, '0')}` : 'SDW/CERT/2027/2701');
-        
-        let displayDate = 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
-        if (customCert && customCert.departureDate) {
-            let cleanDep = customCert.departureDate;
-            // Jika mengandung format ISO YYYY-MM-DD atau teks maskapai panjang, rapikan
-            const isoMatch = cleanDep.match(/(\d{4})-(\d{2})-(\d{2})/);
-            if (isoMatch) {
-                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                cleanDep = `${parseInt(isoMatch[3], 10)} ${months[parseInt(isoMatch[2], 10) - 1]} ${isoMatch[1]}`;
-            }
-            displayDate = cleanDep.startsWith('Keberangkatan') ? cleanDep : `Keberangkatan: ${cleanDep}`;
-            if (!displayDate.includes('Musim 1448 H') && displayDate.length < 40) {
-                displayDate += ' • Musim 1448 H';
-            }
-        } else if (session && session.departureDate) {
-            let dep = session.departureDate;
-            if (/^\d{4}-\d{2}-\d{2}$/.test(dep)) {
-                const parts = dep.split('-');
-                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                dep = `${parseInt(parts[2], 10)} ${months[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
-            }
-            displayDate = `Keberangkatan: ${dep} • Musim 1448 H`;
+        if (certNoEl) {
+            const cleanNo = p.certNo || 'SDW/CERT/2027/2701';
+            certNoEl.textContent = cleanNo.startsWith('No') ? cleanNo : `No: ${cleanNo}`;
         }
 
-        const photoUrl = (customCert && customCert.photoUrl) ? customCert.photoUrl : (session && (session.photoUrl || session.photo) ? (session.photoUrl || session.photo) : null);
-
-        certNameEl.textContent = displayName;
-        if (certDateEl) certDateEl.textContent = displayDate;
-        if (certNoEl) certNoEl.textContent = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
-
-        if (photoUrl) {
+        if (p.photoUrl) {
             if (photoImg) {
-                photoImg.src = photoUrl;
+                photoImg.src = p.photoUrl;
                 photoImg.classList.remove('hidden');
             }
             if (photoPlaceholder) photoPlaceholder.classList.add('hidden');
@@ -396,124 +553,33 @@
         }
     }
 
-    function downloadCertificateImage() {
-        const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah-SDW';
-        const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
-        const certNo = document.getElementById('cert-pilgrim-no')?.textContent || 'No: SDW/CERT/2027/2701';
-        const photoImg = document.getElementById('cert-pilgrim-photo-img');
+    // Bagikan E-Sertifikat ke WhatsApp Berdasarkan Tanggal Keberangkatan Kloter
+    function shareKloterCertificateWA() {
+        const filterEl = document.getElementById('certFilterDepartureDate');
+        const selectedDate = filterEl ? filterEl.value : (activeCertDateFilter || '15 Januari 2027');
 
-        const canvas = document.createElement('canvas');
-        canvas.width = 1480;
-        canvas.height = 1000;
-        const ctx = canvas.getContext('2d');
+        const all = getAllPilgrimCertificates();
+        const kloterPilgrims = all.filter(p => p.departureDate === selectedDate);
 
-        const template = new Image();
-        template.crossOrigin = 'anonymous';
-        template.src = 'assets/certificate-template.jpg';
-        template.onload = function () {
-            // 1. Gambar Master Mockup Template
-            ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
-
-            // 1b. Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan)
-            ctx.fillStyle = '#64748b';
-            ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'top';
-            ctx.fillText(certNo.trim(), canvas.width * 0.068, canvas.height * 0.058);
-
-            // 2. Gambar Foto Jamaah di dalam Bingkai Emas (Lebar Sisi Kiri Ditambah)
-            const frameX = canvas.width * 0.768;
-            const frameY = canvas.height * 0.1554;
-            const frameW = canvas.width * 0.1375;
-            const frameH = canvas.height * 0.251;
-
-            if (photoImg && !photoImg.classList.contains('hidden') && photoImg.src) {
-                try {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.rect(frameX, frameY, frameW, frameH);
-                    ctx.clip();
-                    ctx.drawImage(photoImg, frameX, frameY, frameW, frameH);
-                    ctx.restore();
-                } catch (err) {
-                    console.warn('Gagal render foto ke canvas:', err);
-                }
-            }
-
-            // 3. Cetak Nama Jamaah di atas garis (Mendekati Garis Horizontal Bawah)
-            ctx.fillStyle = '#1e293b';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'bottom';
-            ctx.font = 'bold 36px "Playfair Display", Georgia, serif';
-            const nameX = canvas.width * 0.495;
-            const nameY = canvas.height * 0.536;
-            ctx.fillText(certName.trim().toUpperCase(), nameX, nameY);
-
-            // 4. Cetak Tanggal di bawah garis (1 Baris Saja)
-            ctx.fillStyle = '#475569';
-            ctx.font = '600 18px "Plus Jakarta Sans", sans-serif';
-            const dateY = canvas.height * 0.565;
-            ctx.fillText(certDate.trim(), nameX, dateY);
-
-            // 5. Unduh file
-            const link = document.createElement('a');
-            link.download = `Sertifikat-Umroh-${certName.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
-            link.href = canvas.toDataURL('image/jpeg', 0.95);
-            link.click();
-        };
-        template.onerror = function () {
-            alert('Template sertifikat belum termuat sempurna. Silakan refresh halaman.');
-        };
-    }
-
-    function downloadCertificatePDF() {
-        const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah SDW';
-        const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
-        const certNo = document.getElementById('cert-pilgrim-no')?.textContent || 'No: SDW/CERT/2027/2701';
-        const photoImg = document.getElementById('cert-pilgrim-photo-img');
-        const photoSrc = (photoImg && !photoImg.classList.contains('hidden')) ? photoImg.src : '';
-
-        const printWindow = window.open('', '_blank');
-        if (!printWindow) {
-            alert('Mohon izinkan popup browser untuk mengunduh / mencetak PDF.');
-            return;
+        let pilgrimListText = '';
+        if (kloterPilgrims.length > 0) {
+            pilgrimListText = kloterPilgrims.map((p, idx) => `${idx + 1}. *${p.name}* (${p.certNo})`).join('\n');
+        } else {
+            pilgrimListText = `1. *Ahmad Jamaah Teladan* (SDW/CERT/2027/2701)`;
         }
 
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>Sertifikat Umroh - ${certName}</title>
-                <style>
-                    @page { size: A4 landscape; margin: 0; }
-                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
-                    .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
-                    .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: sans-serif; font-size: 14.5px; font-weight: 600; color: #64748b; letter-spacing: 0.2px; }
-                    .cert-photo { position: absolute; top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; object-fit: cover; border-radius: 2px; }
-                    .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
-                    .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                </style>
-            </head>
-            <body>
-                <div class="cert-box">
-                    <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
-                    <div class="cert-no">${certNo}</div>
-                    ${photoSrc ? `<img src="${photoSrc}" class="cert-photo">` : ''}
-                    <div class="cert-name">${certName}</div>
-                    <div class="cert-date">${certDate}</div>
-                </div>
-                <script>
-                    window.onload = function() {
-                        window.print();
-                        setTimeout(function() { window.close(); }, 1000);
-                    };
-                <\/script>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
+        let text = `*E-SERTIFIKAT UMROH RESMI PT SDW TOUR & TRAVEL*\n`;
+        text += `Kloter Keberangkatan: *${selectedDate}*\n\n`;
+        text += `Alhamdulillah, E-Sertifikat Umroh Resmi bagi seluruh jamaah kloter keberangkatan *${selectedDate}* telah resmi diterbitkan oleh PT SDW Mandiri Utama (SDW Tour & Travel).\n\n`;
+        text += `*Daftar Jamaah Kloter:*\n${pilgrimListText}\n\n`;
+        text += `Semoga seluruh jamaah meraih predikat umroh yang mabrur dan penuh keberkahan bersama keluarga tercinta. Aamiin ya Rabbal 'Alamin.\n\n`;
+        text += `Buka & Cek E-Sertifikat: ${window.location.origin}/app?view=galeri`;
+
+        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
+
+    function downloadCertificateImage() {}
+    function downloadCertificatePDF() {}
 
     function shareCertificateWA() {
         const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah';
@@ -526,9 +592,12 @@
         window.closeJourneyPanels = closeJourneyPanels;
         window.toggleJourneyCollapse = toggleJourneyCollapse;
         window.renderPilgrimCertificate = renderPilgrimCertificate;
+        window.onCertificateDateFilterChange = onCertificateDateFilterChange;
+        window.selectPilgrimInKloter = selectPilgrimInKloter;
+        window.shareKloterCertificateWA = shareKloterCertificateWA;
+        window.shareCertificateWA = shareKloterCertificateWA;
         window.downloadCertificateImage = downloadCertificateImage;
         window.downloadCertificatePDF = downloadCertificatePDF;
-        window.shareCertificateWA = shareCertificateWA;
     }
 
     return {
@@ -539,9 +608,12 @@
         closeJourneyPanels: closeJourneyPanels,
         toggleJourneyCollapse: toggleJourneyCollapse,
         renderPilgrimCertificate: renderPilgrimCertificate,
+        onCertificateDateFilterChange: onCertificateDateFilterChange,
+        selectPilgrimInKloter: selectPilgrimInKloter,
+        shareKloterCertificateWA: shareKloterCertificateWA,
+        shareCertificateWA: shareKloterCertificateWA,
         downloadCertificateImage: downloadCertificateImage,
         downloadCertificatePDF: downloadCertificatePDF,
-        shareCertificateWA: shareCertificateWA,
         formatRupiah: formatRupiah
     };
 });

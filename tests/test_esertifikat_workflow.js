@@ -33,9 +33,8 @@ assert(appHtml.includes('id="cert-pilgrim-name"'), 'Elemen nama jamaah di sertif
 assert(appHtml.includes('top: 53.6%; left: 49.5%;'), 'Letak nama jamaah harus mendekati garis horizontal');
 assert(appHtml.includes('id="cert-pilgrim-date"'), 'Elemen tanggal keberangkatan harus ada');
 assert(appHtml.includes('whitespace-nowrap'), 'Tanggal keberangkatan harus 1 baris saja');
-assert(appHtml.includes('downloadCertificatePDF()'), 'Trigger download PDF harus ada');
-assert(appHtml.includes('downloadCertificateImage()'), 'Trigger download JPG image harus ada');
-assert(appHtml.includes('shareCertificateWA()'), 'Trigger bagikan WA harus ada');
+assert(appHtml.includes('id="certFilterDepartureDate"'), 'Filter dropdown tanggal keberangkatan harus ada di app.html');
+assert(appHtml.includes('shareKloterCertificateWA()'), 'Tombol bagikan WA kloter keberangkatan harus ada');
 console.log('  [PASS] Seluruh komponen UI sertifikat di app.html terverifikasi!');
 
 // 3. Verifikasi Controller Jamaah (js/jamaah.js & js/pwa.js)
@@ -47,8 +46,8 @@ assert(jamaahJs.includes('function downloadCertificateImage('), 'downloadCertifi
 assert(jamaahJs.includes('window.downloadCertificateImage = downloadCertificateImage'), 'downloadCertificateImage harus diekspos ke window');
 assert(jamaahJs.includes('function downloadCertificatePDF('), 'downloadCertificatePDF harus didefinisikan');
 assert(jamaahJs.includes('window.downloadCertificatePDF = downloadCertificatePDF'), 'downloadCertificatePDF harus diekspos ke window');
-assert(jamaahJs.includes('function shareCertificateWA('), 'shareCertificateWA harus didefinisikan');
-assert(jamaahJs.includes('window.shareCertificateWA = shareCertificateWA'), 'shareCertificateWA harus diekspos ke window');
+assert(jamaahJs.includes('window.shareKloterCertificateWA = shareKloterCertificateWA'), 'shareKloterCertificateWA harus diekspos ke window');
+assert(jamaahJs.includes('window.onCertificateDateFilterChange = onCertificateDateFilterChange'), 'onCertificateDateFilterChange harus diekspos ke window');
 
 const pwaJs = fs.readFileSync(pwaJsPath, 'utf8');
 assert(pwaJs.includes('renderPilgrimCertificate'), 'switchGaleriTab(sertifikat) harus memanggil renderPilgrimCertificate');

@@ -1846,17 +1846,34 @@
                 </div>
 
                 <!-- Tab 2: E-Sertifikat Mabrur (Mockup Resmi dengan Dynamic Canvas Overlay) -->
-                <div id="galeriTabContentSertifikat" class="hidden space-y-4 pt-1">
-                    <!-- Bingkai Sertifikat Landscape Piagam (Rasio Asli 1.414 / A4) -->
+                <div id="galeriTabContentSertifikat" class="hidden space-y-3 pt-1">
+                    <!-- Bar Filter Keberangkatan & Tombol Bagikan WA Kloter -->
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 max-w-2xl mx-auto">
+                        <div class="flex-1 flex items-center gap-2 min-w-[180px]">
+                            <label for="certFilterDepartureDate" class="text-xs font-bold text-slate-700 shrink-0 flex items-center gap-1.5">
+                                <i class="fa-solid fa-calendar-days text-amber-600"></i>
+                                <span>Keberangkatan:</span>
+                            </label>
+                            <select id="certFilterDepartureDate" onchange="window.onCertificateDateFilterChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-sdw-pine outline-none transition cursor-pointer">
+                                <!-- Pilihan Tanggal Keberangkatan -->
+                            </select>
+                        </div>
+                        <button type="button" id="btnShareCertificateWA" onclick="window.shareKloterCertificateWA()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer shadow-md shrink-0">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>Bagikan ke WA</span>
+                        </button>
+                    </div>
+
+                    <!-- Bingkai Sertifikat Landscape Piagam (Rasio Asli 1.48 / A4) -->
                     <div id="pilgrimCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-400/50 select-none bg-slate-900 mx-auto"
-                         style="aspect-ratio: 1.48 / 1; max-width: 720px;">
+                         style="aspect-ratio: 1.48 / 1; max-width: 720px; container-type: inline-size;">
                         
                         <!-- Master Mockup Template Image -->
                         <img id="certTemplateImg" src="assets/certificate-template.jpg" alt="Template Sertifikat Umroh SDW" class="w-full h-full object-cover pointer-events-none select-none block">
 
                         <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan) -->
-                        <div id="cert-pilgrim-no" class="absolute font-semibold text-slate-500 tracking-normal text-[7.5px] sm:text-xs md:text-sm pointer-events-none select-none"
-                             style="top: 5.8%; left: 6.8%;">
+                        <div id="cert-pilgrim-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
+                             style="top: 5.8%; left: 6.8%; font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
                             No: SDW/CERT/2027/2701
                         </div>
 
@@ -1872,8 +1889,8 @@
                         <!-- Dynamic Overlay 2: Nama Jamaah di Atas Garis Tengah (Mendekati Garis Horizontal Bawah) -->
                         <div class="absolute text-center px-4 w-[80%] pointer-events-none"
                              style="top: 53.6%; left: 49.5%; transform: translate(-50%, -100%);">
-                            <h2 id="cert-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate text-[11px] sm:text-lg md:text-2xl"
-                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                            <h2 id="cert-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate"
+                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12); font-size: clamp(10px, 3.2cqi, 20px); line-height: 1.1;">
                                 Ahmad Jamaah Teladan
                             </h2>
                         </div>
@@ -1881,26 +1898,16 @@
                         <!-- Dynamic Overlay 3: Tanggal & Musim Keberangkatan di Bawah Garis Tengah (Wajib 1 Baris Saja) -->
                         <div class="absolute text-center px-4 w-[85%] pointer-events-none"
                              style="top: 55.4%; left: 49.5%; transform: translateX(-50%);">
-                            <p id="cert-pilgrim-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis text-[7.5px] sm:text-xs md:text-sm">
-                                Keberangkatan: 15 Januari 2027 • Musim 1448 H
+                            <p id="cert-pilgrim-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
+                               style="font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
+                                Keberangkatan: 15 Januari 2027
                             </p>
                         </div>
                     </div>
 
-                    <!-- Tombol Aksi Jamaah: Download PDF, Simpan Gambar, Bagikan WA -->
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 max-w-2xl mx-auto">
-                        <button type="button" onclick="window.downloadCertificatePDF()" class="py-3 px-4 rounded-2xl bg-sdw-pine text-white font-extrabold text-xs flex items-center justify-center gap-2 hover:bg-slate-800 transition active:scale-95 cursor-pointer shadow-md">
-                            <i class="fa-solid fa-file-pdf text-amber-300 text-sm"></i>
-                            <span>Unduh PDF Resmi</span>
-                        </button>
-                        <button type="button" onclick="window.downloadCertificateImage()" class="py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs flex items-center justify-center gap-2 hover:brightness-110 transition active:scale-95 cursor-pointer shadow-md">
-                            <i class="fa-solid fa-image text-slate-950 text-sm"></i>
-                            <span>Simpan Gambar (JPG)</span>
-                        </button>
-                        <button type="button" onclick="window.shareCertificateWA()" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer shadow-md">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
-                            <span>Bagikan (WA)</span>
-                        </button>
+                    <!-- Switcher Jamaah (Jika dalam Kloter Ini Ada Beberapa Sertifikat) -->
+                    <div id="certPilgrimSwitcher" class="hidden flex items-center justify-center gap-1.5 flex-wrap max-w-2xl mx-auto pt-1">
+                        <!-- Pill buttons dynamically rendered by js/jamaah.js -->
                     </div>
 
                     <!-- Informasi Cetak Fisik -->
