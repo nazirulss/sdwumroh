@@ -2094,11 +2094,35 @@
                             <div></div>
                         </div>
 
-                        <!-- 4 Corner Handles yang bisa ditarik -->
-                        <div class="crop-corner-handle cropper-handle-nw absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nwse-resize -top-2 -left-2 z-10" data-handle="nw"></div>
-                        <div class="crop-corner-handle cropper-handle-ne absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nesw-resize -top-2 -right-2 z-10" data-handle="ne"></div>
-                        <div class="crop-corner-handle cropper-handle-sw absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nesw-resize -bottom-2 -left-2 z-10" data-handle="sw"></div>
-                        <div class="crop-corner-handle cropper-handle-se absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nwse-resize -bottom-2 -right-2 z-10" data-handle="se"></div>
+                        <!-- 4 Corner Handles yang sangat mudah ditarik (Area Sentuh 44x44px) -->
+                        <div class="crop-corner-handle cropper-handle-nw absolute z-30 flex items-center justify-center cursor-nwse-resize"
+                             data-handle="nw"
+                             style="width: 44px; height: 44px; top: -22px; left: -22px; touch-action: none;">
+                            <div class="w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-xl pointer-events-none flex items-center justify-center ring-2 ring-amber-500/60">
+                                <div class="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="crop-corner-handle cropper-handle-ne absolute z-30 flex items-center justify-center cursor-nesw-resize"
+                             data-handle="ne"
+                             style="width: 44px; height: 44px; top: -22px; right: -22px; touch-action: none;">
+                            <div class="w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-xl pointer-events-none flex items-center justify-center ring-2 ring-amber-500/60">
+                                <div class="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="crop-corner-handle cropper-handle-sw absolute z-30 flex items-center justify-center cursor-nesw-resize"
+                             data-handle="sw"
+                             style="width: 44px; height: 44px; bottom: -22px; left: -22px; touch-action: none;">
+                            <div class="w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-xl pointer-events-none flex items-center justify-center ring-2 ring-amber-500/60">
+                                <div class="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
+                            </div>
+                        </div>
+                        <div class="crop-corner-handle cropper-handle-se absolute z-30 flex items-center justify-center cursor-nwse-resize"
+                             data-handle="se"
+                             style="width: 44px; height: 44px; bottom: -22px; right: -22px; touch-action: none;">
+                            <div class="w-5 h-5 rounded-full bg-amber-400 border-2 border-white shadow-xl pointer-events-none flex items-center justify-center ring-2 ring-amber-500/60">
+                                <div class="w-1.5 h-1.5 bg-slate-900 rounded-full"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

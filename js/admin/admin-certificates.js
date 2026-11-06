@@ -370,22 +370,17 @@
         cropperState.imgOffsetLeft = imgLeft;
         cropperState.imgOffsetTop = imgTop;
 
-        // Inisialisasi crop box proporsional (~82% tinggi gambar atau lebar gambar)
-        let boxH = imgH * 0.82;
+        // Inisialisasi crop box proporsional (~72% tinggi gambar agar leluasa ditarik ke segala arah)
+        let boxH = imgH * 0.72;
         let boxW = boxH * CROP_RATIO;
 
-        if (boxW > imgW * 0.95) {
-            boxW = imgW * 0.95;
+        if (boxW > imgW * 0.85) {
+            boxW = imgW * 0.85;
             boxH = boxW / CROP_RATIO;
         }
 
-        if (boxH > imgH * 0.95) {
-            boxH = imgH * 0.95;
-            boxW = boxH * CROP_RATIO;
-        }
-
-        const boxLeft = Math.max(imgLeft, imgLeft + (imgW - boxW) / 2);
-        const boxTop = Math.max(imgTop, imgTop + (imgH - boxH) / 2);
+        const boxLeft = Math.max(imgLeft + 10, imgLeft + (imgW - boxW) / 2);
+        const boxTop = Math.max(imgTop + 10, imgTop + (imgH - boxH) / 2);
 
         cropBox.style.left = `${boxLeft}px`;
         cropBox.style.top = `${boxTop}px`;
@@ -409,32 +404,70 @@
             return { x: e.clientX, y: e.clientY };
         }
 
-        // Pointer down pada corner handle
-        stage.addEventListener('mousedown', function (e) {
-            const handle = e.target.closest('.crop-corner-handle');
-            if (handle) {
-                e.preventDefault();
-                e.stopPropagation();
-                startResize(handle.getAttribute('data-handle'), getPoint(e));
-                return;
+        // Deteksi kedekatan klik/kursor dengan 4 sudut crop box (toleransi 40px)
+        function getClosestCorner(clickX, clickY) {
+            const boxRect = cropBox.getBoundingClientRect();
+            const corners = [
+                { handle: 'nw', x: boxRect.left, y: boxRect.top },
+                { handle: 'ne', x: boxRect.right, y: boxRect.top },
+                { handle: 'sw', x: boxRect.left, y: boxRect.bottom },
+                { handle: 'se', x: boxRect.right, y: boxRect.bottom }
+            ];
+
+            let closest = null;
+            let minDist = Infinity;
+            for (const c of corners) {
+                const dist = Math.hypot(clickX - c.x, clickY - c.y);
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = c;
+                }
             }
-            if (e.target.closest('#cropper-crop-box')) {
-                e.preventDefault();
-                startDrag(getPoint(e));
+            if (minDist <= 40) {
+                return closest.handle;
+            }
+            return null;
+        }
+
+        // Ubah cursor secara dinamis saat mouse diarahkan ke sudut crop box
+        cropBox.addEventListener('mousemove', function (e) {
+            if (cropperState.isDragging || cropperState.isResizing) return;
+            const corner = getClosestCorner(e.clientX, e.clientY);
+            if (corner === 'nw' || corner === 'se') {
+                cropBox.style.cursor = 'nwse-resize';
+            } else if (corner === 'ne' || corner === 'sw') {
+                cropBox.style.cursor = 'nesw-resize';
+            } else {
+                cropBox.style.cursor = 'move';
             }
         });
 
-        stage.addEventListener('touchstart', function (e) {
-            const handle = e.target.closest('.crop-corner-handle');
-            if (handle) {
+        // Pointer down (Mouse & Touch)
+        function handlePointerStart(e) {
+            const pt = getPoint(e);
+            const handleEl = e.target.closest('.crop-corner-handle');
+
+            if (handleEl) {
+                e.preventDefault();
                 e.stopPropagation();
-                startResize(handle.getAttribute('data-handle'), getPoint(e));
+                startResize(handleEl.getAttribute('data-handle'), pt);
                 return;
             }
+
             if (e.target.closest('#cropper-crop-box')) {
-                startDrag(getPoint(e));
+                e.preventDefault();
+                // Jika klik berada di area sudut kotak (meskipun meleset dari pin handle), otomatis aktifkan resize!
+                const corner = getClosestCorner(pt.x, pt.y);
+                if (corner) {
+                    startResize(corner, pt);
+                } else {
+                    startDrag(pt);
+                }
             }
-        }, { passive: true });
+        }
+
+        stage.addEventListener('mousedown', handlePointerStart);
+        stage.addEventListener('touchstart', handlePointerStart, { passive: false });
 
         function startDrag(pt) {
             cropperState.isDragging = true;
@@ -443,6 +476,7 @@
             cropperState.startY = pt.y;
             cropperState.boxStartX = parseFloat(cropBox.style.left) || 0;
             cropperState.boxStartY = parseFloat(cropBox.style.top) || 0;
+            cropBox.style.cursor = 'move';
         }
 
         function startResize(handleType, pt) {
@@ -451,10 +485,24 @@
             cropperState.activeHandle = handleType;
             cropperState.startX = pt.x;
             cropperState.startY = pt.y;
-            cropperState.boxStartX = parseFloat(cropBox.style.left) || 0;
-            cropperState.boxStartY = parseFloat(cropBox.style.top) || 0;
-            cropperState.boxStartW = parseFloat(cropBox.style.width) || 100;
-            cropperState.boxStartH = parseFloat(cropBox.style.height) || (100 / CROP_RATIO);
+
+            const curL = parseFloat(cropBox.style.left) || 0;
+            const curT = parseFloat(cropBox.style.top) || 0;
+            const curW = parseFloat(cropBox.style.width) || 100;
+            const curH = parseFloat(cropBox.style.height) || (100 / CROP_RATIO);
+
+            cropperState.boxStartX = curL;
+            cropperState.boxStartY = curT;
+            cropperState.boxStartW = curW;
+            cropperState.boxStartH = curH;
+            cropperState.fixedRight = curL + curW;
+            cropperState.fixedBottom = curT + curH;
+
+            if (handleType === 'nw' || handleType === 'se') {
+                cropBox.style.cursor = 'nwse-resize';
+            } else {
+                cropBox.style.cursor = 'nesw-resize';
+            }
         }
 
         function onPointerMove(e) {
@@ -465,7 +513,7 @@
             const maxX = cropperState.imgOffsetLeft + cropperState.imgRenderedW;
             const minY = cropperState.imgOffsetTop;
             const maxY = cropperState.imgOffsetTop + cropperState.imgRenderedH;
-            const minBoxW = 40;
+            const minBoxW = 45;
 
             if (cropperState.isDragging) {
                 const dx = pt.x - cropperState.startX;
@@ -486,90 +534,77 @@
             } else if (cropperState.isResizing) {
                 const handle = cropperState.activeHandle;
                 const dx = pt.x - cropperState.startX;
+                const dy = pt.y - cropperState.startY;
 
                 if (handle === 'se') {
-                    // Tarik sudut Tenggara (kanan-bawah)
-                    let newW = cropperState.boxStartW + dx;
-                    let newH = newW / CROP_RATIO;
-                    if (cropperState.boxStartX + newW > maxX) {
-                        newW = maxX - cropperState.boxStartX;
-                        newH = newW / CROP_RATIO;
-                    }
-                    if (cropperState.boxStartY + newH > maxY) {
-                        newH = maxY - cropperState.boxStartY;
-                        newW = newH * CROP_RATIO;
-                    }
-                    if (newW >= minBoxW) {
-                        cropBox.style.width = `${newW}px`;
-                        cropBox.style.height = `${newH}px`;
-                    }
+                    // Sudut kiri-atas tetap: (boxStartX, boxStartY)
+                    // Ambil delta perubahan terbesar (horizontal/vertikal)
+                    const deltaW = Math.abs(dx) >= Math.abs(dy * CROP_RATIO) ? dx : (dy * CROP_RATIO);
+                    let targetW = cropperState.boxStartW + deltaW;
+                    targetW = Math.max(minBoxW, targetW);
+
+                    const maxWByRight = maxX - cropperState.boxStartX;
+                    const maxWByBottom = (maxY - cropperState.boxStartY) * CROP_RATIO;
+                    const maxW = Math.min(maxWByRight, maxWByBottom);
+                    targetW = Math.min(targetW, maxW);
+                    const targetH = targetW / CROP_RATIO;
+
+                    cropBox.style.width = `${targetW}px`;
+                    cropBox.style.height = `${targetH}px`;
+                    cropBox.style.left = `${cropperState.boxStartX}px`;
+                    cropBox.style.top = `${cropperState.boxStartY}px`;
                 } else if (handle === 'sw') {
-                    // Tarik sudut Barat Daya (kiri-bawah)
-                    let newW = cropperState.boxStartW - dx;
-                    let newH = newW / CROP_RATIO;
-                    let newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
+                    // Sudut kanan-atas tetap: (fixedRight, boxStartY)
+                    const deltaW = Math.abs(dx) >= Math.abs(dy * CROP_RATIO) ? -dx : (dy * CROP_RATIO);
+                    let targetW = cropperState.boxStartW + deltaW;
+                    targetW = Math.max(minBoxW, targetW);
 
-                    if (newL < minX) {
-                        newL = minX;
-                        newW = cropperState.boxStartX + cropperState.boxStartW - minX;
-                        newH = newW / CROP_RATIO;
-                    }
-                    if (cropperState.boxStartY + newH > maxY) {
-                        newH = maxY - cropperState.boxStartY;
-                        newW = newH * CROP_RATIO;
-                        newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
-                    }
-                    if (newW >= minBoxW) {
-                        cropBox.style.left = `${newL}px`;
-                        cropBox.style.width = `${newW}px`;
-                        cropBox.style.height = `${newH}px`;
-                    }
+                    const maxWByLeft = cropperState.fixedRight - minX;
+                    const maxWByBottom = (maxY - cropperState.boxStartY) * CROP_RATIO;
+                    const maxW = Math.min(maxWByLeft, maxWByBottom);
+                    targetW = Math.min(targetW, maxW);
+                    const targetH = targetW / CROP_RATIO;
+                    const newL = cropperState.fixedRight - targetW;
+
+                    cropBox.style.width = `${targetW}px`;
+                    cropBox.style.height = `${targetH}px`;
+                    cropBox.style.left = `${newL}px`;
+                    cropBox.style.top = `${cropperState.boxStartY}px`;
                 } else if (handle === 'ne') {
-                    // Tarik sudut Timur Laut (kanan-atas)
-                    let newW = cropperState.boxStartW + dx;
-                    let newH = newW / CROP_RATIO;
-                    let newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+                    // Sudut kiri-bawah tetap: (boxStartX, fixedBottom)
+                    const deltaW = Math.abs(dx) >= Math.abs(dy * CROP_RATIO) ? dx : (-dy * CROP_RATIO);
+                    let targetW = cropperState.boxStartW + deltaW;
+                    targetW = Math.max(minBoxW, targetW);
 
-                    if (cropperState.boxStartX + newW > maxX) {
-                        newW = maxX - cropperState.boxStartX;
-                        newH = newW / CROP_RATIO;
-                        newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
-                    }
-                    if (newT < minY) {
-                        newT = minY;
-                        newH = cropperState.boxStartY + cropperState.boxStartH - minY;
-                        newW = newH * CROP_RATIO;
-                    }
-                    if (newW >= minBoxW) {
-                        cropBox.style.top = `${newT}px`;
-                        cropBox.style.width = `${newW}px`;
-                        cropBox.style.height = `${newH}px`;
-                    }
+                    const maxWByRight = maxX - cropperState.boxStartX;
+                    const maxWByTop = (cropperState.fixedBottom - minY) * CROP_RATIO;
+                    const maxW = Math.min(maxWByRight, maxWByTop);
+                    targetW = Math.min(targetW, maxW);
+                    const targetH = targetW / CROP_RATIO;
+                    const newT = cropperState.fixedBottom - targetH;
+
+                    cropBox.style.width = `${targetW}px`;
+                    cropBox.style.height = `${targetH}px`;
+                    cropBox.style.left = `${cropperState.boxStartX}px`;
+                    cropBox.style.top = `${newT}px`;
                 } else if (handle === 'nw') {
-                    // Tarik sudut Barat Laut (kiri-atas)
-                    let newW = cropperState.boxStartW - dx;
-                    let newH = newW / CROP_RATIO;
-                    let newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
-                    let newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+                    // Sudut kanan-bawah tetap: (fixedRight, fixedBottom)
+                    const deltaW = Math.abs(dx) >= Math.abs(dy * CROP_RATIO) ? -dx : (-dy * CROP_RATIO);
+                    let targetW = cropperState.boxStartW + deltaW;
+                    targetW = Math.max(minBoxW, targetW);
 
-                    if (newL < minX) {
-                        newL = minX;
-                        newW = cropperState.boxStartX + cropperState.boxStartW - minX;
-                        newH = newW / CROP_RATIO;
-                        newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
-                    }
-                    if (newT < minY) {
-                        newT = minY;
-                        newH = cropperState.boxStartY + cropperState.boxStartH - minY;
-                        newW = newH * CROP_RATIO;
-                        newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
-                    }
-                    if (newW >= minBoxW) {
-                        cropBox.style.left = `${newL}px`;
-                        cropBox.style.top = `${newT}px`;
-                        cropBox.style.width = `${newW}px`;
-                        cropBox.style.height = `${newH}px`;
-                    }
+                    const maxWByLeft = cropperState.fixedRight - minX;
+                    const maxWByTop = (cropperState.fixedBottom - minY) * CROP_RATIO;
+                    const maxW = Math.min(maxWByLeft, maxWByTop);
+                    targetW = Math.min(targetW, maxW);
+                    const targetH = targetW / CROP_RATIO;
+                    const newL = cropperState.fixedRight - targetW;
+                    const newT = cropperState.fixedBottom - targetH;
+
+                    cropBox.style.width = `${targetW}px`;
+                    cropBox.style.height = `${targetH}px`;
+                    cropBox.style.left = `${newL}px`;
+                    cropBox.style.top = `${newT}px`;
                 }
             }
         }
