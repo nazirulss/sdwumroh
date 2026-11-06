@@ -133,7 +133,10 @@
                                 ${photoSrc ? `<img src="${photoSrc}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user text-slate-400 text-sm"></i>`}
                             </div>
                             <div>
-                                <span class="font-mono text-[10px] text-amber-800 font-extrabold block">${r.id}</span>
+                                <span class="font-mono text-[10px] text-amber-800 font-extrabold flex items-center gap-1">
+                                    <span>${r.id}</span>
+                                    ${(photoSrc && (photoSrc.includes('googleusercontent') || photoSrc.includes('drive.google') || (cert && cert.isDriveSynced))) ? '<i class="fa-solid fa-cloud-check text-emerald-600 text-[9px]" title="Tersimpan di Google Drive & Spreadsheet"></i>' : ''}
+                                </span>
                                 <span class="text-[9.5px] text-slate-400">${r.phone || '-'}</span>
                             </div>
                         </div>
@@ -692,7 +695,8 @@
             displayName: displayName,
             departureDate: departureDate || '15 Januari 2027',
             photoUrl: finalPhoto,
-            rawPhotoUrl: sourcePhoto
+            rawPhotoUrl: sourcePhoto,
+            isDriveSynced: !!(finalPhoto && (finalPhoto.includes('googleusercontent') || finalPhoto.includes('drive.google')))
         };
         saveCertificatesStore(certStore);
 
@@ -702,6 +706,45 @@
             admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
         } else {
             alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
+        }
+
+        // Unggah otomatis pasfoto ke Google Drive & simpan link ke Spreadsheet jika data base64 baru
+        if (finalPhoto && finalPhoto.startsWith('data:image/')) {
+            uploadCertificatePhotoToCloud(regId, finalPhoto, displayName, certStore[regId].certificateNo);
+        }
+    }
+
+    // 6b. Unggah Asynchronous ke Google Drive & Catat ke Spreadsheet DB_Pilgrim_Documents
+    async function uploadCertificatePhotoToCloud(regId, photoBase64, displayName, certNo) {
+        if (typeof SDW_API === 'undefined' || typeof SDW_API.post !== 'function') return;
+        try {
+            if (typeof admin.showToast === 'function') {
+                admin.showToast(`☁️ Menyimpan pasfoto ${displayName} ke Google Drive & Spreadsheet...`);
+            }
+            const res = await SDW_API.post('uploadCertificatePhoto', {
+                regId: regId,
+                photoBase64: photoBase64,
+                displayName: displayName,
+                certificateNo: certNo,
+                fileName: `PASFOTO_${regId}.jpg`
+            });
+            if (res && res.success && res.data && res.data.driveUrl) {
+                const certStore = getCertificatesStore();
+                if (certStore[regId]) {
+                    certStore[regId].photoUrl = res.data.driveUrl;
+                    certStore[regId].driveFileId = res.data.fileId;
+                    certStore[regId].driveViewLink = res.data.viewLink;
+                    certStore[regId].isDriveSynced = true;
+                    certStore[regId].driveSyncedAt = new Date().toISOString();
+                    saveCertificatesStore(certStore);
+                    renderCertificates();
+                }
+                if (typeof admin.showToast === 'function') {
+                    admin.showToast(`🎉 Pasfoto ${displayName} berhasil tersimpan di Google Drive & Spreadsheet!`);
+                }
+            }
+        } catch (err) {
+            console.warn('[SDW_CERT] Gagal upload foto ke Google Drive:', err);
         }
     }
 
@@ -827,6 +870,7 @@
     admin.onPhotoCropChange = onPhotoCropChange;
     admin.resetPhotoCrop = resetPhotoCrop;
     admin.saveCertificate = saveCertificate;
+    admin.uploadCertificatePhotoToCloud = uploadCertificatePhotoToCloud;
     admin.printCertificate = printCertificate;
     admin.generateBulkCertificates = generateBulkCertificates;
 

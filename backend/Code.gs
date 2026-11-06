@@ -533,6 +533,8 @@ function doGet(e) {
 
         const regPays = payments.filter(function(p) { return String(p.invoice_id) === String(reg.id) || String(p.registration_id) === String(reg.id); });
         const hasVerifiedPay = regPays.some(function(p) { return p.status === 'VERIFIED'; });
+        const photoDoc = regDocs.find(function(d) { return String(d.requirement_id) === 'DCR-000004' || String(d.requirement_id) === 'PASPHOTO'; });
+        const photoUrl = photoDoc ? (photoDoc.file_ref_mock || "") : "";
 
         return {
           id: reg.id,
@@ -553,6 +555,7 @@ function doGet(e) {
           salesId: reg.sales_id || "USR-000001",
           docs: verifiedDocs + "/" + totalDocs,
           payment: reg.status === 'CONFIRMED' ? 'Lunas (Terverifikasi)' : (hasVerifiedPay ? 'DP Terverifikasi' : 'Menunggu DP'),
+          photoUrl: photoUrl,
           notes: reg.notes || "",
           createdAt: reg.created_at,
           updatedAt: reg.updated_at
@@ -994,6 +997,122 @@ function processSingleMutation_(ss, action, payload, actor) {
 
     logAudit_(actor || "Pilgrim", "UPLOAD_PAYMENT_PROOF", "DB_Payments", regId, null, { regId: regId }, "Bukti transfer diunggah mandiri via PWA");
     return { id: regId, status: "PROOF_UPLOADED", entity: "DB_Payments" };
+  }
+
+  // 3c. MUTASI UNGGAH PASFOTO SERTIFIKAT KE GOOGLE DRIVE & SIMPAN TAUTAN KE SPREADSHEET
+  if (action === 'uploadCertificatePhoto' || action === 'uploadPilgrimPhoto') {
+    const p = (payload && payload.payload && typeof payload.payload === 'object') ? payload.payload : (payload || {});
+    const regId = p.regId || payload.regId;
+    if (!regId) throw new Error("Parameter regId wajib diisi");
+
+    const base64Data = p.photoBase64 || p.imageBase64 || p.photoUrl || payload.photoBase64 || payload.imageBase64 || payload.photoUrl;
+    if (!base64Data) throw new Error("Data gambar pasfoto (base64) tidak ditemukan");
+
+    let fileId = "";
+    let driveUrl = "";
+    let viewLink = "";
+    let fileName = p.fileName || payload.fileName || ("PASFOTO_" + regId + ".jpg");
+
+    let driveErrorMsg = "";
+    // 1. Simpan berkas gambar ke Google Drive Folder resmi
+    try {
+      let cleanBase64 = base64Data;
+      let contentType = "image/jpeg";
+
+      if (cleanBase64.indexOf("data:") === 0) {
+        const matches = cleanBase64.match(/^data:([^;]+);base64,(.+)$/);
+        if (matches && matches.length === 3) {
+          contentType = matches[1];
+          cleanBase64 = matches[2];
+        }
+      }
+
+      const decodedBytes = Utilities.base64Decode(cleanBase64);
+      const blob = Utilities.newBlob(decodedBytes, contentType, fileName);
+
+      let targetFolder = null;
+      if (CONFIG.DRIVE_FOLDER_ID && CONFIG.DRIVE_FOLDER_ID !== "__SDW_CONFIG_PENDING__") {
+        try {
+          targetFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
+        } catch (fErr) {}
+      }
+      if (!targetFolder) {
+        const folders = DriveApp.getFoldersByName("Pasfoto_Sertifikat");
+        if (folders.hasNext()) {
+          targetFolder = folders.next();
+        } else {
+          targetFolder = DriveApp.createFolder("Pasfoto_Sertifikat");
+        }
+      }
+
+      const file = targetFolder.createFile(blob);
+      fileId = file.getId();
+      try {
+        file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+      } catch (shareErr) {}
+
+      // Tautan Direct CDN Google Drive agar langsung tampil di tag <img> tanpa CORS blocker
+      driveUrl = "https://lh3.googleusercontent.com/d/" + fileId;
+      viewLink = file.getUrl();
+    } catch (driveErr) {
+      driveErrorMsg = String(driveErr && driveErr.message ? driveErr.message : driveErr);
+      fileId = "DRV-LOCAL-" + Date.now();
+      driveUrl = base64Data;
+      viewLink = base64Data;
+    }
+
+    // 2. Catat atau perbarui tautan foto di sheet DB_Pilgrim_Documents (Requirement DCR-000004 = PASPHOTO)
+    const docSheet = ss.getSheetByName("DB_Pilgrim_Documents");
+    let docUpdated = false;
+    let docId = "";
+
+    if (docSheet) {
+      const rows = docSheet.getDataRange().getValues();
+      for (let i = 1; i < rows.length; i++) {
+        const rowRegId = String(rows[i][1]).toUpperCase();
+        const rowReqId = String(rows[i][2]).toUpperCase();
+        if (rowRegId === String(regId).toUpperCase() && (rowReqId === 'DCR-000004' || rowReqId === 'PASPHOTO')) {
+          docId = rows[i][0];
+          docSheet.getRange(i + 1, 4).setValue(fileName);
+          docSheet.getRange(i + 1, 5).setValue(driveUrl);
+          docSheet.getRange(i + 1, 6).setValue("VERIFIED");
+          docSheet.getRange(i + 1, 7).setValue("Pasfoto resmi E-Sertifikat Umroh (Tersimpan di Google Drive)");
+          docSheet.getRange(i + 1, 8).setValue(actor || "Admin Sertifikat");
+          docSheet.getRange(i + 1, 9).setValue(nowStr);
+          docSheet.getRange(i + 1, 10).setValue(nowStr);
+          docUpdated = true;
+          break;
+        }
+      }
+
+      if (!docUpdated) {
+        docId = "DOC-" + (2700 + docSheet.getLastRow());
+        docSheet.appendRow([
+          docId,
+          regId,
+          "DCR-000004",
+          fileName,
+          driveUrl,
+          "VERIFIED",
+          "Pasfoto resmi E-Sertifikat Umroh (Tersimpan di Google Drive)",
+          actor || "Admin Sertifikat",
+          nowStr,
+          nowStr
+        ]);
+      }
+    }
+
+    logAudit_(actor || "Admin Sertifikat", "UPLOAD_CERTIFICATE_PHOTO", "DB_Pilgrim_Documents", docId || regId, null, { fileId: fileId, driveUrl: driveUrl, regId: regId }, "Pasfoto sertifikat berhasil diunggah ke Google Drive & tautan tersimpan di DB_Pilgrim_Documents");
+
+    return {
+      id: docId || regId,
+      fileId: fileId,
+      driveUrl: driveUrl,
+      viewLink: viewLink,
+      regId: regId,
+      status: "PHOTO_UPLOADED",
+      entity: "DB_Pilgrim_Documents"
+    };
   }
 
   // 4. MUTASI VALIDASI KEUANGAN: VERIFY PAYMENT

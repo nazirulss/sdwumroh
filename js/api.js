@@ -135,6 +135,26 @@
     function handleMockPost(action, payload) {
         return new Promise((resolve) => {
             setTimeout(() => {
+                if (action === 'uploadCertificatePhoto' || action === 'uploadPilgrimPhoto') {
+                    const mockFileId = '1mock_photo_' + Date.now();
+                    const mockDriveUrl = 'https://lh3.googleusercontent.com/d/' + mockFileId;
+                    resolve({
+                        success: true,
+                        data: {
+                            id: 'DOC-SIM-' + Date.now(),
+                            fileId: mockFileId,
+                            driveUrl: payload.photoBase64 || mockDriveUrl,
+                            viewLink: mockDriveUrl,
+                            regId: payload.regId,
+                            status: 'PHOTO_UPLOADED',
+                            entity: 'DB_Pilgrim_Documents'
+                        },
+                        message: "Pasfoto berhasil diunggah (Simulasi Drive & Spreadsheet)",
+                        source: 'mock'
+                    });
+                    return;
+                }
+
                 if (action === 'syncBatch') {
                     const mutations = payload.mutations || [];
                     const results = mutations.map(m => ({
