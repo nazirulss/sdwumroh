@@ -425,11 +425,28 @@
             dates.push('15 Januari 2027');
         }
 
+        // Cek parameter URL (?date=...)
+        let urlDate = null;
+        try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const qDate = urlParams.get('date');
+            if (qDate) {
+                const foundMatch = dates.find(d => d.toLowerCase() === qDate.toLowerCase().trim());
+                urlDate = foundMatch || qDate;
+                if (!dates.includes(urlDate)) {
+                    dates.push(urlDate);
+                }
+            }
+        } catch (e) {}
+
         // Simpan nilai pilihan sebelumnya jika ada
         const prevValue = filterEl.value;
         filterEl.innerHTML = dates.map(d => `<option value="${d}">${d}</option>`).join('');
 
-        if (prevValue && dates.includes(prevValue)) {
+        if (urlDate) {
+            filterEl.value = urlDate;
+            activeCertDateFilter = urlDate;
+        } else if (prevValue && dates.includes(prevValue)) {
             filterEl.value = prevValue;
             activeCertDateFilter = prevValue;
         } else if (!activeCertDateFilter || !dates.includes(activeCertDateFilter)) {
@@ -450,6 +467,11 @@
     function onCertificateDateFilterChange(val) {
         activeCertDateFilter = val;
         activePilgrimInFilter = null;
+        try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('date', val);
+            window.history.replaceState(window.history.state, '', url.toString());
+        } catch (e) {}
         renderPilgrimCertificate();
     }
 
@@ -568,12 +590,14 @@
             pilgrimListText = `1. *Ahmad Jamaah Teladan* (SDW/CERT/2027/2701)`;
         }
 
+        const shareUrl = `${window.location.origin}/app?view=galeri&tab=sertifikat&date=${encodeURIComponent(selectedDate)}`;
+
         let text = `*E-SERTIFIKAT UMROH RESMI PT SDW TOUR & TRAVEL*\n`;
         text += `Kloter Keberangkatan: *${selectedDate}*\n\n`;
         text += `Alhamdulillah, E-Sertifikat Umroh Resmi bagi seluruh jamaah kloter keberangkatan *${selectedDate}* telah resmi diterbitkan oleh PT SDW Mandiri Utama (SDW Tour & Travel).\n\n`;
         text += `*Daftar Jamaah Kloter:*\n${pilgrimListText}\n\n`;
         text += `Semoga seluruh jamaah meraih predikat umroh yang mabrur dan penuh keberkahan bersama keluarga tercinta. Aamiin ya Rabbal 'Alamin.\n\n`;
-        text += `Buka & Cek E-Sertifikat: ${window.location.origin}/app?view=galeri`;
+        text += `Buka & Cek E-Sertifikat: ${shareUrl}`;
 
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }

@@ -1850,7 +1850,7 @@
   // ==================== GALERI KLOTER CONTROLLERS ====================
   window.openGaleriKloterModal = function (tab = 'foto', options = { syncHistory: true }) {
     if (typeof window.openAppSubView === 'function') {
-      window.openAppSubView('galeri', options);
+      window.openAppSubView('galeri', { ...options, tab });
       if (tab) window.switchGaleriTab(tab);
       return;
     }
@@ -1890,6 +1890,13 @@
         fotoBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
         certBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.has('tab')) {
+          url.searchParams.delete('tab');
+          window.history.replaceState(window.history.state, '', url.toString());
+        }
+      } catch (e) {}
     } else {
       fotoTab.classList.add('hidden');
       certTab.classList.remove('hidden');
@@ -1897,6 +1904,13 @@
         certBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
         fotoBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
+      try {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('tab') !== 'sertifikat') {
+          url.searchParams.set('tab', 'sertifikat');
+          window.history.replaceState(window.history.state, '', url.toString());
+        }
+      } catch (e) {}
       if (typeof window.renderPilgrimCertificate === 'function') {
         window.renderPilgrimCertificate();
       }
@@ -2689,6 +2703,8 @@
       const url = new URL(window.location.href);
       if (!url.searchParams.has('view')) return;
       url.searchParams.delete('view');
+      url.searchParams.delete('tab');
+      url.searchParams.delete('date');
       window.history.pushState({ view: null }, '', url.toString());
     } catch (e) {
       console.warn('URL clear error:', e);
@@ -2712,12 +2728,17 @@
     'ibadahHubModal'
   ];
 
-  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live', 'auth'];
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'live', 'auth'];
 
   // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
   window.openAppSubView = function (viewName, options = { syncHistory: true }) {
     if (!viewName) return;
-    const v = String(viewName).toLowerCase().trim();
+    let v = String(viewName).toLowerCase().trim();
+    if (v === 'sertifikat' || v === 'cert') {
+      v = 'galeri';
+      if (!options) options = {};
+      options.tab = 'sertifikat';
+    }
     const targetSubView = document.getElementById('subview-' + v);
 
     // 1. Hide all main views/tabs in app.html (.app-view-container)
@@ -2764,7 +2785,18 @@
     } else if (v === 'ziarah') {
       if (typeof window.renderInAppZiarahList === 'function') window.renderInAppZiarahList('ALL');
     } else if (v === 'galeri') {
-      if (typeof window.switchGaleriTab === 'function') window.switchGaleriTab('foto');
+      let targetTab = 'foto';
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const qTab = urlParams.get('tab');
+        if (qTab === 'sertifikat' || qTab === 'cert') {
+          targetTab = 'sertifikat';
+        }
+      } catch (e) {}
+      if (options && options.tab) {
+        targetTab = options.tab;
+      }
+      if (typeof window.switchGaleriTab === 'function') window.switchGaleriTab(targetTab);
     } else if (v === 'live') {
       if (typeof window.switchLiveFeed === 'function') window.switchLiveFeed('main');
     } else if (v === 'auth') {
@@ -2776,6 +2808,13 @@
     // 5. Synchronize URL query parameter (?view=...)
     if (options && options.syncHistory !== false) {
       syncUrlView(v);
+      if (v === 'galeri' && options && options.tab === 'sertifikat') {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('tab', 'sertifikat');
+          window.history.replaceState(window.history.state, '', url.toString());
+        } catch (e) {}
+      }
     }
 
     // 6. Scroll smoothly to top
@@ -2842,6 +2881,7 @@
     'kiblat': (opts) => window.openAppSubView('kiblat', opts),
     'ziarah': (opts) => window.openAppSubView('ziarah', opts),
     'galeri': (opts) => window.openAppSubView('galeri', opts),
+    'sertifikat': (opts) => window.openAppSubView('galeri', { tab: 'sertifikat', ...opts }),
     'live': (opts) => window.openAppSubView('live', opts),
     'auth': (opts) => window.openAppSubView('auth', opts),
     'doa': (opts) => window.openDoaModal('niat', opts),
