@@ -1845,36 +1845,64 @@
                     </a>
                 </div>
 
-                <!-- Tab 2: E-Sertifikat -->
+                <!-- Tab 2: E-Sertifikat Mabrur (Mockup Resmi dengan Dynamic Canvas Overlay) -->
                 <div id="galeriTabContentSertifikat" class="hidden space-y-4 pt-1">
-                    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-[#2d1139] to-[#17051f] border-2 border-gold-500/60 shadow-xl text-center relative overflow-hidden text-purple-100">
-                        <div class="text-gold-400 font-serif text-xs tracking-widest uppercase mb-1">
-                            ✦ SAMIRA ALI WISATA (SDW UMROH) ✦
+                    <!-- Bingkai Sertifikat Landscape Piagam (Rasio Asli 1.414 / A4) -->
+                    <div id="pilgrimCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-400/50 select-none bg-slate-900 mx-auto"
+                         style="aspect-ratio: 1.48 / 1; max-width: 720px;">
+                        
+                        <!-- Master Mockup Template Image -->
+                        <img id="certTemplateImg" src="assets/certificate-template.jpg" alt="Template Sertifikat Umroh SDW" class="w-full h-full object-cover pointer-events-none select-none block">
+
+                        <!-- Dynamic Overlay 1: Foto Jamaah dalam Bingkai Emas Kanan Atas -->
+                        <div id="cert-pilgrim-photo-box" class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100"
+                             style="top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; border-radius: 3px;">
+                            <img id="cert-pilgrim-photo-img" src="" alt="Foto Jamaah" class="w-full h-full object-cover hidden">
+                            <div id="cert-pilgrim-photo-placeholder" class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400">
+                                <i class="fa-solid fa-user text-base sm:text-2xl md:text-3xl text-slate-400/80"></i>
+                            </div>
                         </div>
-                        <h3 class="text-lg sm:text-2xl font-black text-white font-serif tracking-wide">SERTIFIKAT UMROH MABRUR</h3>
-                        <div class="w-24 h-0.5 bg-gradient-to-r from-transparent via-gold-400 to-transparent mx-auto my-3"></div>
-                        <p class="text-xs text-purple-200/80">Dengan rahmat Allah SWT, dianugerahkan kepada:</p>
-                        <div class="text-lg sm:text-2xl font-black text-amber-300 font-serif my-2">
-                            Ahmad Jamaah Teladan
+
+                        <!-- Dynamic Overlay 2: Nama Jamaah di Atas Garis Tengah -->
+                        <div class="absolute text-center px-4 w-[74%] pointer-events-none"
+                             style="top: 48.2%; left: 49.5%; transform: translate(-50%, -100%);">
+                            <h2 id="cert-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate text-[11px] sm:text-lg md:text-2xl"
+                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                                Ahmad Jamaah Teladan
+                            </h2>
                         </div>
-                        <p class="text-xs text-purple-200/80">Telah menunaikan Rukun &amp; Wajib Ibadah Umroh pada Program:</p>
-                        <div class="text-sm font-bold text-white mt-1">
-                            Umroh Syawal Barakah 1448 H / 2026 M
-                        </div>
-                        <div class="mt-4 pt-3 border-t border-white/10 text-[10px] text-slate-400 flex justify-between items-center">
-                            <span>No. Reg: REG-SDW-2701</span>
-                            <span>Makkah al-Mukarramah</span>
+
+                        <!-- Dynamic Overlay 3: Tanggal & Musim Keberangkatan di Bawah Garis Tengah -->
+                        <div class="absolute text-center px-4 w-[74%] pointer-events-none"
+                             style="top: 55.5%; left: 49.5%; transform: translateX(-50%);">
+                            <p id="cert-pilgrim-date" class="font-semibold text-slate-600 tracking-normal text-[8px] sm:text-xs md:text-sm">
+                                Keberangkatan: 15 Januari 2027 • Musim 1448 H
+                            </p>
                         </div>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="alert('E-Sertifikat resmi siap diunduh dalam format PDF Resolusi Tinggi.')" class="py-3 px-4 rounded-2xl bg-gold-500 text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 hover:brightness-110 cursor-pointer shadow-md">
-                            <i class="fa-solid fa-download"></i>
-                            <span>Download PDF</span>
+
+                    <!-- Tombol Aksi Jamaah: Download PDF, Simpan Gambar, Bagikan WA -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 max-w-2xl mx-auto">
+                        <button type="button" onclick="window.downloadCertificatePDF()" class="py-3 px-4 rounded-2xl bg-sdw-pine text-white font-extrabold text-xs flex items-center justify-center gap-2 hover:bg-slate-800 transition active:scale-95 cursor-pointer shadow-md">
+                            <i class="fa-solid fa-file-pdf text-amber-300 text-sm"></i>
+                            <span>Unduh PDF Resmi</span>
                         </button>
-                        <a href="https://wa.me/?text=Alhamdulillah%20saya%20telah%20selesai%20menunaikan%20ibadah%20umroh%20mabrur%20bersama%20SDW%20UMROH." target="_blank" rel="noopener noreferrer" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md">
+                        <button type="button" onclick="window.downloadCertificateImage()" class="py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-black text-xs flex items-center justify-center gap-2 hover:brightness-110 transition active:scale-95 cursor-pointer shadow-md">
+                            <i class="fa-solid fa-image text-slate-950 text-sm"></i>
+                            <span>Simpan Gambar (JPG)</span>
+                        </button>
+                        <button type="button" onclick="window.shareCertificateWA()" class="py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition active:scale-95 cursor-pointer shadow-md">
                             <i class="fa-brands fa-whatsapp text-sm"></i>
                             <span>Bagikan (WA)</span>
-                        </a>
+                        </button>
+                    </div>
+
+                    <!-- Informasi Cetak Fisik -->
+                    <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-amber-950 text-xs flex items-start gap-2.5 max-w-2xl mx-auto">
+                        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-sm shrink-0"></i>
+                        <p class="leading-relaxed text-[11.5px]">
+                            <strong>Piagam Cetak Fisik Resmi:</strong> Sertifikat berstempel emas dan bertanda tangan basah pimpinan SDW Umroh juga dapat diambil di kantor operasional atau dikirimkan langsung ke alamat Anda setelah kepulangan kloter.
+                        </p>
                     </div>
                 </div>
             </div>

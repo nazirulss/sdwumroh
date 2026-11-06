@@ -307,6 +307,13 @@
                             <span>Kloter, Bus &amp; Kamar Hotel</span>
                         </span>
                     </button>
+                    <button type="button" data-admin-tab="tab-certificates" onclick="SDW_ADMIN.switchTab('tab-certificates')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-award nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>E-Sertifikat Umroh</span>
+                        </span>
+                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Resmi</span>
+                    </button>
                 </div>
 
                 <!-- Group 6: Kepatuhan & Audit -->
@@ -912,6 +919,62 @@
                     <div id="subtab-manasik-view" class="hidden space-y-4">
                         <div id="operations-manasik-container">
                             <!-- Rendered by js/admin-core.js -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: E-SERTIFIKAT UMROH ==================== -->
+                <div id="tab-certificates" class="admin-tab-container hidden space-y-5">
+                    <!-- Top Section Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Pengelolaan &amp; Penerbitan E-Sertifikat Umroh</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-purple-900 border border-purple-200">Piagam Resmi</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kustomisasi nama jamaah, tanggal keberangkatan, pasfoto, dan cetak piagam fisik A4 berbasis template resmi.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.generateBulkCertificates()" class="px-3.5 py-2.5 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Generate otomatis sertifikat untuk semua jamaah yang belum memiliki">
+                                <i class="fa-solid fa-wand-magic-sparkles text-purple-700 text-sm"></i>
+                                <span>Terbitkan Massal Kloter</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-wrap items-center justify-between gap-3">
+                        <div class="relative flex-1 min-w-[200px] max-w-sm">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input type="text" id="cert-search-input" oninput="SDW_ADMIN.renderCertificates()" placeholder="Cari nama jamaah, ID registrasi..." class="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-sdw-pine outline-none">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-500 font-bold">Template Piagam:</span>
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-900 border border-amber-300 text-xs font-black flex items-center gap-1.5">
+                                <i class="fa-solid fa-certificate text-amber-600"></i>
+                                <span>SDW Gold Master Mockup (JPG)</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200 text-[10.5px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                        <th class="px-4 py-3">Jamaah &amp; ID</th>
+                                        <th class="px-4 py-3">Nama di Sertifikat</th>
+                                        <th class="px-4 py-3">Keberangkatan</th>
+                                        <th class="px-4 py-3">No. Sertifikat</th>
+                                        <th class="px-4 py-3">Status</th>
+                                        <th class="px-4 py-3 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-certificates-body">
+                                    <!-- Rendered dynamically by js/admin/admin-certificates.js -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1867,6 +1930,117 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL 9: KELOLA & PREVIEW E-SERTIFIKAT UMROH ==================== -->
+    <div id="modalCertificateEditor" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-4xl w-full shadow-2xl border border-slate-200 overflow-hidden transform transition-all my-auto max-h-[92vh] flex flex-col">
+            <!-- Modal Header -->
+            <div class="px-5 py-4 bg-gradient-to-r from-[#240833] to-[#451052] text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center shadow-xs">
+                        <i class="fa-solid fa-award text-sm"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Kustomisasi &amp; Preview E-Sertifikat Umroh</h2>
+                        <span class="text-[10px] text-amber-300 font-medium block">Penerbitan piagam resmi dengan Live Template Mockup</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeCertificateModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" aria-label="Tutup Modal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (2 Kolom: Form Input Kiri • Live Preview Kanan) -->
+            <div class="p-4 sm:p-6 overflow-y-auto flex-1 grid grid-cols-1 lg:grid-cols-12 gap-5">
+                <!-- Kolom Kiri: Form Input Data Sertifikat (lg:col-span-5) -->
+                <div class="lg:col-span-5 space-y-3.5">
+                    <input type="hidden" id="cert-input-reg-id">
+                    
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1" for="cert-input-name">Nama Lengkap di Sertifikat <span class="text-rose-500">*</span></label>
+                        <input type="text" id="cert-input-name" oninput="SDW_ADMIN.updateCertificatePreview()" placeholder="Contoh: H. Ahmad Jamaah Teladan, S.E." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-800 focus:border-sdw-pine outline-none">
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Dapat ditambahkan gelar haji atau akademik resmi</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1" for="cert-input-date">Tanggal Keberangkatan / Kloter <span class="text-rose-500">*</span></label>
+                        <input type="text" id="cert-input-date" oninput="SDW_ADMIN.updateCertificatePreview()" placeholder="Contoh: 15 Januari 2027" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-700 text-xs font-bold mb-1" for="cert-input-no">Nomor Sertifikat</label>
+                        <input type="text" id="cert-input-no" placeholder="Contoh: SDW/CERT/2027/001" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-semibold text-slate-800 focus:border-sdw-pine outline-none">
+                    </div>
+
+                    <!-- Upload Foto Jamaah -->
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                        <label class="block text-slate-700 text-xs font-bold">Pasfoto Jamaah untuk Sertifikat</label>
+                        <div class="flex items-center gap-3">
+                            <label class="px-3 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer shadow-2xs flex items-center gap-2">
+                                <i class="fa-solid fa-cloud-arrow-up text-amber-600"></i>
+                                <span>Pilih Foto Baru</span>
+                                <input type="file" accept="image/*" onchange="SDW_ADMIN.handleCertificatePhotoUpload(this)" class="hidden">
+                            </label>
+                            <span class="text-[10.5px] text-slate-400">Rasio pasfoto 3:4 atau 2:3</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Kolom Kanan: Live Interactive Certificate Preview (lg:col-span-7) -->
+                <div class="lg:col-span-7 flex flex-col justify-center space-y-2">
+                    <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider block">Live Real-time Preview:</span>
+                    
+                    <!-- Canvas Box -->
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1;">
+                        <img src="assets/certificate-template.jpg" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
+
+                        <!-- Photo Overlay di Bingkai Kanan Atas -->
+                        <div class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100"
+                             style="top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; border-radius: 3px;">
+                            <img id="modal-cert-preview-photo-img" src="" alt="Foto" class="w-full h-full object-cover hidden">
+                            <div id="modal-cert-preview-photo-placeholder" class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400">
+                                <i class="fa-solid fa-user text-base sm:text-xl text-slate-400"></i>
+                            </div>
+                        </div>
+
+                        <!-- Nama di Tengah -->
+                        <div class="absolute text-center px-2 w-[74%] pointer-events-none"
+                             style="top: 48.2%; left: 49.5%; transform: translate(-50%, -100%);">
+                            <h3 id="modal-cert-preview-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate text-[11px] sm:text-base md:text-xl"
+                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
+                                NAMA JAMAAH
+                            </h3>
+                        </div>
+
+                        <!-- Tanggal di Bawah Garis -->
+                        <div class="absolute text-center px-2 w-[74%] pointer-events-none"
+                             style="top: 55.5%; left: 49.5%; transform: translateX(-50%);">
+                            <p id="modal-cert-preview-date" class="font-semibold text-slate-600 tracking-normal text-[8px] sm:text-[11px]">
+                                Keberangkatan: 15 Januari 2027 • Musim 1448 H
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2.5 shrink-0">
+                <button type="button" onclick="SDW_ADMIN.closeCertificateModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer">
+                    Batal
+                </button>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="SDW_ADMIN.printCertificate(document.getElementById('cert-input-reg-id').value)" class="px-4 py-2.5 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 font-bold text-xs transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                        <i class="fa-solid fa-print"></i>
+                        <span>Cetak Fisik A4</span>
+                    </button>
+                    <button type="button" onclick="SDW_ADMIN.saveCertificate()" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-950 text-white font-extrabold text-xs transition flex items-center gap-1.5 cursor-pointer shadow-sm">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Simpan &amp; Terbitkan ke Jamaah</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -1884,6 +2058,7 @@
     <script src="js/admin/admin-registrations.js?v=2.7.0"></script>
     <script src="js/admin/admin-finance.js?v=2.7.0"></script>
     <script src="js/admin/admin-operations.js?v=2.7.0"></script>
+    <script src="js/admin/admin-certificates.js?v=2.7.0"></script>
     <script src="js/admin/admin-security.js?v=2.7.0"></script>
     <script src="js/admin/admin-sync.js?v=2.7.0"></script>
     <script src="js/admin/admin-export.js?v=2.7.0"></script>

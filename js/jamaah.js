@@ -326,10 +326,183 @@
         });
     }
 
+    // ==================== E-SERTIFIKAT UMROH CONTROLLERS ====================
+    function renderPilgrimCertificate() {
+        const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
+        const certNameEl = document.getElementById('cert-pilgrim-name');
+        const certDateEl = document.getElementById('cert-pilgrim-date');
+        const photoImg = document.getElementById('cert-pilgrim-photo-img');
+        const photoPlaceholder = document.getElementById('cert-pilgrim-photo-placeholder');
+
+        if (!certNameEl) return;
+
+        // Cek apakah ada sertifikat kustom yang diterbitkan Admin dari localStorage
+        let customCert = null;
+        try {
+            const certStore = JSON.parse(localStorage.getItem('sdw_admin_certificates') || '{}');
+            if (session && session.regId && certStore[session.regId]) {
+                customCert = certStore[session.regId];
+            } else if (session && session.fullName && certStore[session.fullName]) {
+                customCert = certStore[session.fullName];
+            }
+        } catch (e) {
+            console.warn('Gagal membaca sdw_admin_certificates:', e);
+        }
+
+        const displayName = (customCert && customCert.displayName) ? customCert.displayName : (session && session.fullName ? session.fullName : 'Ahmad Jamaah Teladan');
+        
+        let displayDate = 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
+        if (customCert && customCert.departureDate) {
+            displayDate = customCert.departureDate.startsWith('Keberangkatan') ? customCert.departureDate : `Keberangkatan: ${customCert.departureDate} • Musim 1448 H`;
+        } else if (session && session.departureDate) {
+            let dep = session.departureDate;
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dep)) {
+                const parts = dep.split('-');
+                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                dep = `${parseInt(parts[2], 10)} ${months[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
+            }
+            displayDate = `Keberangkatan: ${dep} • Musim 1448 H`;
+        }
+
+        const photoUrl = (customCert && customCert.photoUrl) ? customCert.photoUrl : (session && (session.photoUrl || session.photo) ? (session.photoUrl || session.photo) : null);
+
+        certNameEl.textContent = displayName;
+        if (certDateEl) certDateEl.textContent = displayDate;
+
+        if (photoUrl) {
+            if (photoImg) {
+                photoImg.src = photoUrl;
+                photoImg.classList.remove('hidden');
+            }
+            if (photoPlaceholder) photoPlaceholder.classList.add('hidden');
+        } else {
+            if (photoImg) photoImg.classList.add('hidden');
+            if (photoPlaceholder) photoPlaceholder.classList.remove('hidden');
+        }
+    }
+
+    function downloadCertificateImage() {
+        const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah-SDW';
+        const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
+        const photoImg = document.getElementById('cert-pilgrim-photo-img');
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 1480;
+        canvas.height = 1000;
+        const ctx = canvas.getContext('2d');
+
+        const template = new Image();
+        template.crossOrigin = 'anonymous';
+        template.src = 'assets/certificate-template.jpg';
+        template.onload = function () {
+            // 1. Gambar Master Mockup Template
+            ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
+
+            // 2. Gambar Foto Jamaah di dalam Bingkai Emas
+            const frameX = canvas.width - (canvas.width * 0.088) - (canvas.width * 0.162);
+            const frameY = canvas.height * 0.132;
+            const frameW = canvas.width * 0.162;
+            const frameH = canvas.height * 0.274;
+
+            if (photoImg && !photoImg.classList.contains('hidden') && photoImg.src) {
+                try {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(frameX, frameY, frameW, frameH);
+                    ctx.clip();
+                    ctx.drawImage(photoImg, frameX, frameY, frameW, frameH);
+                    ctx.restore();
+                } catch (err) {
+                    console.warn('Gagal render foto ke canvas:', err);
+                }
+            }
+
+            // 3. Cetak Nama Jamaah di atas garis
+            ctx.fillStyle = '#1e293b';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.font = 'bold 36px "Playfair Display", Georgia, serif';
+            const nameX = canvas.width * 0.495;
+            const nameY = canvas.height * 0.482;
+            ctx.fillText(certName.trim().toUpperCase(), nameX, nameY);
+
+            // 4. Cetak Tanggal di bawah garis
+            ctx.fillStyle = '#475569';
+            ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
+            const dateY = canvas.height * 0.555;
+            ctx.fillText(certDate.trim(), nameX, dateY);
+
+            // 5. Unduh file
+            const link = document.createElement('a');
+            link.download = `Sertifikat-Umroh-${certName.replace(/[^a-zA-Z0-9]/g, '_')}.jpg`;
+            link.href = canvas.toDataURL('image/jpeg', 0.95);
+            link.click();
+        };
+        template.onerror = function () {
+            alert('Template sertifikat belum termuat sempurna. Silakan refresh halaman.');
+        };
+    }
+
+    function downloadCertificatePDF() {
+        const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah SDW';
+        const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
+        const photoImg = document.getElementById('cert-pilgrim-photo-img');
+        const photoSrc = (photoImg && !photoImg.classList.contains('hidden')) ? photoImg.src : '';
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert('Mohon izinkan popup browser untuk mengunduh / mencetak PDF.');
+            return;
+        }
+
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Sertifikat Umroh - ${certName}</title>
+                <style>
+                    @page { size: A4 landscape; margin: 0; }
+                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
+                    .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
+                    .cert-bg { width: 100%; height: 100%; object-fit: cover; }
+                    .cert-photo { position: absolute; top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; object-fit: cover; border-radius: 4px; }
+                    .cert-name { position: absolute; top: 48.2%; left: 49.5%; transform: translate(-50%, -100%); width: 74%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; }
+                    .cert-date { position: absolute; top: 55.5%; left: 49.5%; transform: translateX(-50%); width: 74%; text-align: center; font-size: 16px; font-weight: 600; color: #475569; font-family: sans-serif; }
+                </style>
+            </head>
+            <body>
+                <div class="cert-box">
+                    <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
+                    ${photoSrc ? `<img src="${photoSrc}" class="cert-photo">` : ''}
+                    <div class="cert-name">${certName}</div>
+                    <div class="cert-date">${certDate}</div>
+                </div>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        setTimeout(function() { window.close(); }, 1000);
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+
+    function shareCertificateWA() {
+        const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah';
+        const text = encodeURIComponent(`Alhamdulillah, telah terbit E-Sertifikat Umroh Resmi atas nama *${certName}* dari PT SDW Mandiri Utama (SDW Tour & Travel). Semoga menjadi umroh yang mabrur dan penuh keberkahan.`);
+        window.open(`https://wa.me/?text=${text}`, '_blank');
+    }
+
     if (typeof window !== 'undefined') {
         window.switchJourneyStep = switchJourneyStep;
         window.closeJourneyPanels = closeJourneyPanels;
         window.toggleJourneyCollapse = toggleJourneyCollapse;
+        window.renderPilgrimCertificate = renderPilgrimCertificate;
+        window.downloadCertificateImage = downloadCertificateImage;
+        window.downloadCertificatePDF = downloadCertificatePDF;
+        window.shareCertificateWA = shareCertificateWA;
     }
 
     return {
@@ -339,6 +512,10 @@
         switchJourneyStep: switchJourneyStep,
         closeJourneyPanels: closeJourneyPanels,
         toggleJourneyCollapse: toggleJourneyCollapse,
+        renderPilgrimCertificate: renderPilgrimCertificate,
+        downloadCertificateImage: downloadCertificateImage,
+        downloadCertificatePDF: downloadCertificatePDF,
+        shareCertificateWA: shareCertificateWA,
         formatRupiah: formatRupiah
     };
 });

@@ -33,19 +33,20 @@
         SYNC_HISTORY: 'sdw_sync_history',
         LAST_SYNC: 'sdw_last_sync_timestamp',
         LOGISTICS: 'sdw_admin_logistics',
-        MANASIK: 'sdw_admin_manasik'
+        MANASIK: 'sdw_admin_manasik',
+        CERTS: 'sdw_admin_certificates'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-audit'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
         'SALES': ['tab-dashboard', 'tab-crm', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
-        'OPERATIONS': ['tab-dashboard', 'tab-registrations', 'tab-operations', 'tab-docs'],
-        'TOUR_LEADER': ['tab-dashboard', 'tab-operations']
+        'OPERATIONS': ['tab-dashboard', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-docs'],
+        'TOUR_LEADER': ['tab-dashboard', 'tab-operations', 'tab-certificates']
     };
 
     // 3. Central Reactive State Container

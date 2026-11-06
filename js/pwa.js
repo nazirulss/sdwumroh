@@ -1897,6 +1897,9 @@
         certBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition text-center cursor-pointer';
         fotoBtn.className = 'py-2.5 px-3 rounded-xl text-xs font-bold text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
       }
+      if (typeof window.renderPilgrimCertificate === 'function') {
+        window.renderPilgrimCertificate();
+      }
     }
   };
 
