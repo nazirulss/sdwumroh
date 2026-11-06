@@ -379,8 +379,13 @@
             boxH = boxW / CROP_RATIO;
         }
 
-        const boxLeft = imgLeft + (imgW - boxW) / 2;
-        const boxTop = imgTop + (imgH - boxH) / 2;
+        if (boxH > imgH * 0.95) {
+            boxH = imgH * 0.95;
+            boxW = boxH * CROP_RATIO;
+        }
+
+        const boxLeft = Math.max(imgLeft, imgLeft + (imgW - boxW) / 2);
+        const boxTop = Math.max(imgTop, imgTop + (imgH - boxH) / 2);
 
         cropBox.style.left = `${boxLeft}px`;
         cropBox.style.top = `${boxTop}px`;

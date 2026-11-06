@@ -412,7 +412,7 @@
                                         <span class="text-[10px] text-slate-400 block font-medium">Tipe ${admin.escapeHtml(m.roomType)}</span>
                                     </td>
                                     <td class="py-3 px-4">
-                                        <a href="https://wa.me/${m.phone.replace(/[^0-9]/g, '')}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium text-[11px] transition">
+                                        <a href="https://wa.me/${String(m.phone || '').replace(/[^0-9]/g, '')}" target="_blank" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium text-[11px] transition">
                                             <i class="fa-brands fa-whatsapp text-emerald-600"></i>
                                             <span>${admin.escapeHtml(m.phone)}</span>
                                         </a>
