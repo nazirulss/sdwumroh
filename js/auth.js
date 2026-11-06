@@ -593,7 +593,15 @@
             if (elPackage) elPackage.textContent = session.packageTitle;
             if (elFlight) elFlight.textContent = session.flightInfo;
             if (elRoom) elRoom.textContent = session.roomType;
-            if (elDeparture) elDeparture.textContent = session.departureDate;
+            if (elDeparture) {
+                let dep = session.departureDate || '-';
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dep)) {
+                    const parts = dep.split('-');
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                    dep = `${parseInt(parts[2], 10)} ${months[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
+                }
+                elDeparture.textContent = dep;
+            }
 
             // Foto Jamaah pada Kartu E-PASS Rasio 2:3
             const elPhotoImg = document.getElementById('jamaah-photo-img');

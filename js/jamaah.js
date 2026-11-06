@@ -83,7 +83,15 @@
         if (elPackage) elPackage.textContent = `${pilgrim.package_name} (${pilgrim.duration_days} Hari)`;
         if (elFlight) elFlight.textContent = pilgrim.flight_info;
         if (elRoom) elRoom.textContent = pilgrim.room_type;
-        if (elDeparture) elDeparture.textContent = pilgrim.departure_date;
+        if (elDeparture) {
+            let dep = pilgrim.departure_date || '-';
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dep)) {
+                const parts = dep.split('-');
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+                dep = `${parseInt(parts[2], 10)} ${months[parseInt(parts[1], 10) - 1]} ${parts[0]}`;
+            }
+            elDeparture.textContent = dep;
+        }
         if (elSnapshotPrice) elSnapshotPrice.textContent = formatRupiah(pilgrim.final_price_snapshot);
     }
 
