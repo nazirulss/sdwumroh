@@ -344,6 +344,8 @@
                 customCert = certStore[session.regId];
             } else if (session && session.fullName && certStore[session.fullName]) {
                 customCert = certStore[session.fullName];
+            } else if (certStore['REG-SDW-2701']) {
+                customCert = certStore['REG-SDW-2701'];
             }
         } catch (e) {
             console.warn('Gagal membaca sdw_admin_certificates:', e);

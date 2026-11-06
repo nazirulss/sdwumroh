@@ -18,6 +18,7 @@
         require('./admin/admin-registrations.js');
         require('./admin/admin-finance.js');
         require('./admin/admin-operations.js');
+        require('./admin/admin-certificates.js');
         require('./admin/admin-security.js');
         require('./admin/admin-sync.js');
         require('./admin/admin-export.js');

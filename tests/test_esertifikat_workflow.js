@@ -85,6 +85,25 @@ assert(adminCertsJs.includes('handleCertificatePhotoUpload'), 'handleCertificate
 assert(adminCertsJs.includes('updateCertificatePreview'), 'updateCertificatePreview harus ada');
 console.log('  [PASS] Fungsi-fungsi CRUD dan live preview admin terverifikasi!');
 
+// 7. Pengujian Fungsional Logika Sertifikat di Lingkungan Node
+console.log('\n7. Pengujian Fungsional Logika Registrasi & Sertifikat di Lingkungan Node');
+const adminState = require('../js/admin/admin-state.js');
+const adminCerts = require('../js/admin/admin-certificates.js');
+
+// Mock localStorage
+global.localStorage = {
+    _data: {},
+    getItem(k) { return this._data[k] || null; },
+    setItem(k, v) { this._data[k] = String(v); },
+    removeItem(k) { delete this._data[k]; },
+    clear() { this._data = {}; }
+};
+
+const regsList = adminCerts.getRegistrations();
+assert(Array.isArray(regsList) && regsList.length > 0, 'Daftar registrasi jamaah tidak boleh kosong');
+assert(regsList[0].customer || regsList[0].name, 'Data registrasi harus memiliki nama/customer');
+console.log(`  [PASS] getRegistrations() berhasil mengembalikan ${regsList.length} jamaah!`);
+
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');

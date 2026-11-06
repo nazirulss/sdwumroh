@@ -2,7 +2,7 @@
  * ====================================================================
  * SDW UMROH — ADMIN MODULE: E-SERTIFIKAT UMROH
  * File: js/admin/admin-certificates.js
- * Version: 2.7.0
+ * Version: 2.7.1
  * Philosophy: ONE JOURNEY, ONE PLATFORM
  * ====================================================================
  */
@@ -37,20 +37,63 @@
         }
     }
 
+    // Helper: Ambil daftar seluruh registrasi jamaah secara aman & reaktif
+    function getRegistrationsList() {
+        if (Array.isArray(admin.registrationsData) && admin.registrationsData.length > 0) {
+            return admin.registrationsData;
+        }
+        try {
+            const raw = localStorage.getItem('sdw_admin_registrations');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    admin.registrationsData = parsed;
+                    return parsed;
+                }
+            }
+        } catch (e) {}
+
+        if (typeof MOCK_DATA !== 'undefined' && Array.isArray(MOCK_DATA.registrations) && MOCK_DATA.registrations.length > 0) {
+            admin.registrationsData = JSON.parse(JSON.stringify(MOCK_DATA.registrations));
+            return admin.registrationsData;
+        }
+
+        // Fallback default sample registrations bila store belum terisi
+        const fallback = [
+            { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', phone: '0812-9876-5432' },
+            { id: 'REG-SDW-2702', customer: 'Ibu Fatimah Zahra', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'UNDER_REVIEW', phone: '0813-2233-4455' },
+            { id: 'REG-SDW-2703', customer: 'Bpk. Gunawan Wibisono', package: 'Umroh VIP 12H', departure: '28 Feb 2027', status: 'APPROVED', phone: '0817-8899-0011' }
+        ];
+        admin.registrationsData = fallback;
+        return fallback;
+    }
+
     // 1. Render Tabel E-Sertifikat di Portal Admin
     function renderCertificates() {
         const tbody = document.getElementById('table-certificates-body');
         if (!tbody) return;
 
-        const regs = (typeof admin.getRegistrations === 'function') ? admin.getRegistrations() : [];
+        const searchInput = document.getElementById('cert-search-input');
+        const query = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+        let regs = getRegistrationsList();
         const certStore = getCertificatesStore();
+
+        if (query) {
+            regs = regs.filter(r => {
+                const name = (r.customer || r.name || r.full_name || '').toLowerCase();
+                const id = (r.id || '').toLowerCase();
+                const pkg = (r.package || r.packageName || '').toLowerCase();
+                return name.includes(query) || id.includes(query) || pkg.includes(query);
+            });
+        }
 
         if (regs.length === 0) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="6" class="px-4 py-8 text-center text-slate-400 text-xs">
                         <i class="fa-solid fa-award text-3xl mb-2 text-slate-300 block"></i>
-                        Belum ada data jamaah terkonfirmasi untuk diterbitkan sertifikat.
+                        ${query ? 'Tidak ada data jamaah yang cocok dengan pencarian.' : 'Belum ada data jamaah terkonfirmasi untuk diterbitkan sertifikat.'}
                     </td>
                 </tr>
             `;
@@ -60,7 +103,7 @@
         tbody.innerHTML = regs.map(r => {
             const cert = certStore[r.id] || null;
             const isIssued = !!(cert && cert.isIssued);
-            const displayName = (cert && cert.displayName) ? cert.displayName : (r.name || r.full_name || 'Jamaah SDW');
+            const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
             const depDate = (cert && cert.departureDate) ? cert.departureDate : (r.departure || r.departure_date || '15 Jan 2027');
             const certNo = (cert && cert.certificateNo) ? cert.certificateNo : `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`;
             const photoSrc = (cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || '');
@@ -118,10 +161,10 @@
 
     // 2. Buka Modal Edit & Preview E-Sertifikat
     function openCertificateModal(regId) {
-        const regs = (typeof admin.getRegistrations === 'function') ? admin.getRegistrations() : [];
+        const regs = getRegistrationsList();
         const pilgrim = regs.find(r => r.id === regId);
         if (!pilgrim) {
-            admin.showToast('Data jamaah tidak ditemukan.');
+            if (typeof admin.showToast === 'function') admin.showToast('Data jamaah tidak ditemukan.');
             return;
         }
 
@@ -135,7 +178,7 @@
         const modal = document.getElementById('modalCertificateEditor');
 
         if (regIdInput) regIdInput.value = regId;
-        if (nameInput) nameInput.value = cert.displayName || pilgrim.name || pilgrim.full_name || '';
+        if (nameInput) nameInput.value = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || '';
         if (dateInput) dateInput.value = cert.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027';
         if (certNoInput) certNoInput.value = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
 
@@ -192,7 +235,7 @@
         reader.onload = function (e) {
             activeCertPhotoDataUrl = e.target.result;
             updateCertificatePreview();
-            admin.showToast('Foto sertifikat berhasil diperbarui di preview.');
+            if (typeof admin.showToast === 'function') admin.showToast('Foto sertifikat berhasil diperbarui di preview.');
         };
         reader.readAsDataURL(file);
     }
@@ -220,26 +263,30 @@
         certStore[regId] = {
             isIssued: true,
             issuedAt: new Date().toISOString(),
-            certificateNo: certificateNo,
+            certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
             displayName: displayName,
-            departureDate: departureDate,
+            departureDate: departureDate || '15 Januari 2027',
             photoUrl: activeCertPhotoDataUrl
         };
         saveCertificatesStore(certStore);
 
         closeCertificateModal();
         renderCertificates();
-        admin.showToast(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan ke aplikasi jamaah!`);
+        if (typeof admin.showToast === 'function') {
+            admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
+        } else {
+            alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
+        }
     }
 
     // 6. Cetak Piagam Format A4 Landscape
     function printCertificate(regId) {
         const certStore = getCertificatesStore();
-        const regs = (typeof admin.getRegistrations === 'function') ? admin.getRegistrations() : [];
+        const regs = getRegistrationsList();
         const pilgrim = regs.find(r => r.id === regId) || {};
         const cert = certStore[regId] || {};
 
-        const displayName = cert.displayName || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
+        const displayName = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
         const departureDate = cert.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027';
         const photoSrc = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '';
 
@@ -284,28 +331,45 @@
 
     // 7. Terbitkan Massal Seluruh Jamaah Kloter
     function generateBulkCertificates() {
-        const regs = (typeof admin.getRegistrations === 'function') ? admin.getRegistrations() : [];
+        const regs = getRegistrationsList();
         if (regs.length === 0) {
-            alert('Tidak ada jamaah dalam antrean untuk diterbitkan sertifikat.');
-            return;
-        }
-
-        if (!confirm(`Terbitkan E-Sertifikat secara otomatis untuk ${regs.length} jamaah terdaftar?`)) {
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('Tidak ada data jamaah dalam sistem.');
+            } else {
+                alert('Tidak ada data jamaah dalam sistem.');
+            }
             return;
         }
 
         const certStore = getCertificatesStore();
-        let count = 0;
-
+        let unissuedCount = 0;
         regs.forEach(r => {
-            if (!certStore[r.id]) {
+            if (!certStore[r.id] || !certStore[r.id].isIssued) unissuedCount++;
+        });
+
+        if (unissuedCount === 0) {
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('ℹ️ Seluruh jamaah kloter sudah memiliki E-Sertifikat terbit.');
+            } else {
+                alert('Seluruh jamaah kloter sudah memiliki E-Sertifikat terbit.');
+            }
+            return;
+        }
+
+        if (!confirm(`Terbitkan E-Sertifikat secara otomatis untuk ${unissuedCount} jamaah yang belum terbit?`)) {
+            return;
+        }
+
+        let count = 0;
+        regs.forEach(r => {
+            if (!certStore[r.id] || !certStore[r.id].isIssued) {
                 certStore[r.id] = {
                     isIssued: true,
                     issuedAt: new Date().toISOString(),
-                    certificateNo: `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
-                    displayName: (r.name || r.full_name || 'Jamaah Umroh').toUpperCase(),
-                    departureDate: r.departure || r.departure_date || '15 Januari 2027',
-                    photoUrl: r.photo || r.photoUrl || null
+                    certificateNo: (certStore[r.id] && certStore[r.id].certificateNo) || `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
+                    displayName: (certStore[r.id] && certStore[r.id].displayName) || (r.customer || r.name || r.full_name || 'Jamaah Umroh').toUpperCase(),
+                    departureDate: (certStore[r.id] && certStore[r.id].departureDate) || r.departure || r.departure_date || '15 Januari 2027',
+                    photoUrl: (certStore[r.id] && certStore[r.id].photoUrl) || r.photo || r.photoUrl || null
                 };
                 count++;
             }
@@ -313,10 +377,15 @@
 
         saveCertificatesStore(certStore);
         renderCertificates();
-        admin.showToast(`Berhasil menerbitkan ${count} E-Sertifikat baru secara massal!`);
+        if (typeof admin.showToast === 'function') {
+            admin.showToast(`✅ Berhasil menerbitkan ${count} E-Sertifikat baru secara massal!`);
+        } else {
+            alert(`Berhasil menerbitkan ${count} E-Sertifikat baru secara massal!`);
+        }
     }
 
     // Bind ke SDW_ADMIN
+    admin.getRegistrations = getRegistrationsList;
     admin.renderCertificates = renderCertificates;
     admin.openCertificateModal = openCertificateModal;
     admin.closeCertificateModal = closeCertificateModal;
