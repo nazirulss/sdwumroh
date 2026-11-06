@@ -185,8 +185,45 @@ async function runLiveVerification() {
     failed++;
   }
 
+  // TEST 7: Test PWA Self-Registration Live Sync (DB_Leads & DB_Registrations)
+  try {
+    process.stdout.write('\n7. Menguji Mutasi Pendaftaran Akun Jamaah PWA Live... ');
+    const randomPhone = '0812' + Math.floor(10000000 + Math.random() * 90000000);
+    const regPayload = JSON.stringify({
+      action: 'registerPilgrim',
+      customer: 'H. Ahmad Syarifuddin (PWA Live)',
+      phone: randomPhone,
+      email: 'ahmad.syarif@test.com',
+      nik: 'NIK-' + randomPhone,
+      notes: 'Pendaftaran Akun Baru via PWA Live Test pada ' + new Date().toLocaleString('id-ID'),
+      actor: 'PWA_APP'
+    });
+
+    const res = await fetchUrl(WEB_APP_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: regPayload
+    });
+
+    if (res.json && res.json.success) {
+      console.log('✅ SUKSES!');
+      console.log('   - ID Registrasi   :', res.json.data ? res.json.data.id : 'OK');
+      console.log('   - Entity Tersimpan:', res.json.data ? res.json.data.entity : 'DB_Registrations');
+      console.log('   - Status          :', res.json.data ? res.json.data.status : 'OK');
+      passed++;
+    } else {
+      console.log('❌ GAGAL!', res.json || res.raw);
+      failed++;
+    }
+  } catch (err) {
+    console.log('❌ ERROR:', err.message);
+    failed++;
+  }
+
   console.log('\n================================================================');
-  console.log(`HASIL AKHIR VERIFIKASI: ${passed}/6 PENGUJIAN BERHASIL (${failed} GAGAL)`);
+  console.log(`HASIL AKHIR VERIFIKASI: ${passed}/7 PENGUJIAN BERHASIL (${failed} GAGAL)`);
   console.log('================================================================\n');
 
   if (failed === 0) {

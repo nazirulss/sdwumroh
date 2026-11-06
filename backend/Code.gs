@@ -392,6 +392,87 @@ function doGet(e) {
 function processSingleMutation_(ss, action, payload, actor) {
   const nowStr = formatDateSafe_(new Date());
 
+  // 0. MUTASI AKUN JAMAAH: REGISTER ACCOUNT (PWA SELF REGISTER)
+  if (action === 'registerAccount' || action === 'registerPilgrimAccount') {
+    const custSheet = ss.getSheetByName("DB_Customers");
+    if (!custSheet) throw new Error("Sheet DB_Customers tidak ditemukan");
+
+    // Pastikan ID Customer unik
+    const newCustId = payload.customerId || payload.id || ("CUS-" + String(Math.max(1, custSheet.getLastRow())).padStart(6, '0'));
+    const custRow = [
+      newCustId,
+      payload.nik || "-",
+      payload.fullName || payload.name || "Jamaah Baru",
+      payload.gender || "-",
+      payload.birthDate || "-",
+      payload.birthPlace || "-",
+      payload.phone || "-",
+      payload.email || "-",
+      payload.address || "-",
+      payload.city || "-",
+      payload.province || "-",
+      nowStr,
+      nowStr
+    ];
+    custSheet.appendRow(custRow);
+
+    // Otomatis buatkan prospek baru di DB_Leads agar tim sales ter-notifikasi di backoffice CRM
+    let newLeadId = null;
+    const leadSheet = ss.getSheetByName("DB_Leads");
+    if (leadSheet) {
+      newLeadId = "LED-" + String(Math.max(1, leadSheet.getLastRow())).padStart(6, '0');
+      const leadRow = [
+        newLeadId,
+        newCustId,
+        payload.source || "PWA_SELF_REGISTER",
+        "Belum Ditugaskan",
+        "NEW",
+        "MEDIUM",
+        payload.budget || "Program Umroh 1448H",
+        payload.notes || ("Pendaftaran mandiri akun jamaah via PWA (" + (payload.phone || "") + ")"),
+        nowStr,
+        nowStr
+      ];
+      leadSheet.appendRow(leadRow);
+    }
+
+    // Catat ke DB_Users sebagai akun jamaah aktif jika sheet tersedia
+    let newUserId = null;
+    const userSheet = ss.getSheetByName("DB_Users");
+    if (userSheet) {
+      newUserId = "USR-" + String(Math.max(1, userSheet.getLastRow())).padStart(6, '0');
+      const userRow = [
+        newUserId,
+        payload.fullName || payload.name || "Jamaah Baru",
+        payload.email || (payload.phone ? payload.phone + "@jamaah.sdw" : "-"),
+        "PILGRIM",
+        "ACTIVE",
+        payload.phone || "-",
+        nowStr,
+        nowStr
+      ];
+      userSheet.appendRow(userRow);
+    }
+
+    logAudit_(actor || "PWA_APP", "REGISTER_ACCOUNT", "DB_Customers", newCustId, null, {
+      customerId: newCustId,
+      leadId: newLeadId,
+      userId: newUserId,
+      fullName: payload.fullName,
+      phone: payload.phone
+    }, "Pendaftaran mandiri akun jamaah via PWA");
+
+    return {
+      id: newCustId,
+      customerId: newCustId,
+      leadId: newLeadId,
+      userId: newUserId,
+      status: "REGISTERED",
+      entity: "DB_Customers",
+      message: "Akun jamaah baru berhasil didaftarkan ke Spreadsheet"
+    };
+  }
+
   // 1. MUTASI CRM: CREATE LEAD
   if (action === 'createLead') {
     const sheet = ss.getSheetByName("DB_Leads");

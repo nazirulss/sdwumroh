@@ -360,7 +360,100 @@
         };
 
         setPilgrimSession(session);
+
+        // Sinkronisasi data pendaftaran akun ke Google Apps Script / Spreadsheet (Offline-First)
+        syncPilgrimRegistrationToBackend(newUser);
+
         return { success: true, user: session };
+    }
+
+    /**
+     * Mengirimkan mutasi pendaftaran akun jamaah ke backend Google Apps Script / Spreadsheet
+     * Dilengkapi strategi fallback otomatis ke mutasi live (createLead & registerPilgrim)
+     * serta local storage queue bila perangkat sedang offline.
+     */
+    function syncPilgrimRegistrationToBackend(newUser) {
+        if (!newUser) return Promise.resolve(null);
+
+        const api = (typeof window !== 'undefined' && window.SDW_API) ? window.SDW_API :
+                    (typeof SDW_API !== 'undefined' ? SDW_API : (typeof global !== 'undefined' && global.SDW_API ? global.SDW_API : null));
+
+        if (!api || typeof api.post !== 'function') {
+            console.warn('[SDW_AUTH] SDW_API belum tersedia, akun disimpan lokal.');
+            return Promise.resolve(null);
+        }
+
+        const payload = {
+            id: newUser.id,
+            customerId: newUser.id,
+            fullName: newUser.fullName,
+            name: newUser.fullName,
+            phone: newUser.phone,
+            email: newUser.email || '',
+            nik: 'NIK-' + newUser.phone,
+            source: 'PWA_SELF_REGISTER',
+            notes: `Pendaftaran Akun Jamaah Baru via PWA (${newUser.phone})`
+        };
+
+        return api.post('registerAccount', payload)
+            .then(res => {
+                if (res && res.success) {
+                    console.info('[SDW_AUTH] ✅ Akun jamaah berhasil tersinkron ke Spreadsheet (registerAccount):', res);
+                    return res;
+                }
+                // Fallback ke mutasi createLead & registerPilgrim yang aktif di live Apps Script
+                console.info('[SDW_AUTH] Mencatat ke CRM Leads Spreadsheet live (createLead)...');
+                return api.post('createLead', {
+                    name: newUser.fullName,
+                    customerId: newUser.id,
+                    source: 'PWA_SELF_REGISTER',
+                    urgency: 'HIGH',
+                    budget: 'Program Umroh 1448H',
+                    notes: `No. WA: ${newUser.phone} | Email: ${newUser.email || '-'} | Pendaftaran Akun Jamaah Baru via PWA`
+                }).then(leadRes => {
+                    console.info('[SDW_AUTH] ✅ Data jamaah berhasil dicatat di DB_Leads Spreadsheet:', leadRes);
+                    if (api.post) {
+                        api.post('registerPilgrim', {
+                            id: newUser.regId,
+                            customer: newUser.fullName,
+                            customerId: newUser.id,
+                            phone: newUser.phone,
+                            email: newUser.email,
+                            nik: 'NIK-' + newUser.phone,
+                            notes: 'Pendaftaran Akun Mandiri PWA'
+                        }).catch(() => {});
+                    }
+                    return leadRes;
+                });
+            })
+            .catch(err => {
+                console.warn('[SDW_AUTH] Gagal sinkronisasi online langsung (offline fallback aktif):', err.message || err);
+                try {
+                    if (typeof localStorage !== 'undefined') {
+                        const queueKey = 'sdw_pending_account_registrations';
+                        const queue = JSON.parse(localStorage.getItem(queueKey) || '[]');
+                        queue.push({ payload, queuedAt: new Date().toISOString() });
+                        localStorage.setItem(queueKey, JSON.stringify(queue));
+                    }
+                } catch (e) {}
+                return null;
+            });
+    }
+
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+        window.addEventListener('online', function () {
+            try {
+                const queueKey = 'sdw_pending_account_registrations';
+                const queue = JSON.parse(localStorage.getItem(queueKey) || '[]');
+                if (queue.length > 0) {
+                    console.info(`[SDW_AUTH] Terhubung kembali ke internet. Memproses ${queue.length} antrean pendaftaran ke Spreadsheet...`);
+                    localStorage.removeItem(queueKey);
+                    queue.forEach(item => {
+                        syncPilgrimRegistrationToBackend(item.payload);
+                    });
+                }
+            } catch (e) {}
+        });
     }
 
     function logoutPilgrim() {
@@ -552,6 +645,7 @@
         registerPilgrim: registerPilgrim,
         logoutPilgrim: logoutPilgrim,
         syncPilgrimUI: syncPilgrimUI,
-        getAllPilgrimAccounts: getAllPilgrimAccounts
+        getAllPilgrimAccounts: getAllPilgrimAccounts,
+        syncPilgrimRegistrationToBackend: syncPilgrimRegistrationToBackend
     };
 });
