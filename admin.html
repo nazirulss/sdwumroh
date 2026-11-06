@@ -1971,8 +1971,8 @@
                         <input type="text" id="cert-input-no" placeholder="Contoh: SDW/CERT/2027/001" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-semibold text-slate-800 focus:border-sdw-pine outline-none">
                     </div>
 
-                    <!-- Upload Foto Jamaah -->
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                    <!-- Upload Foto Jamaah & Penataan Crop -->
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
                         <label class="block text-slate-700 text-xs font-bold">Pasfoto Jamaah untuk Sertifikat</label>
                         <div class="flex items-center gap-3">
                             <label class="px-3 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer shadow-2xs flex items-center gap-2">
@@ -1981,6 +1981,49 @@
                                 <input type="file" accept="image/*" onchange="SDW_ADMIN.handleCertificatePhotoUpload(this)" class="hidden">
                             </label>
                             <span class="text-[10.5px] text-slate-400">Rasio pasfoto 3:4 atau 2:3</span>
+                        </div>
+
+                        <!-- Panel Kontrol Crop & Penataan Posisi Foto -->
+                        <div id="cert-photo-crop-panel" class="pt-2 border-t border-slate-200/80 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10.5px] font-extrabold text-slate-700 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-crop-simple text-amber-600"></i>
+                                    <span>Penataan &amp; Crop Posisi Foto</span>
+                                </span>
+                                <button type="button" onclick="SDW_ADMIN.resetPhotoCrop()" class="text-[10px] text-amber-800 hover:text-amber-950 font-bold underline cursor-pointer">
+                                    Reset Posisi
+                                </button>
+                            </div>
+
+                            <!-- Slider Zoom -->
+                            <div>
+                                <div class="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
+                                    <span>Perbesar (Zoom):</span>
+                                    <span id="label-crop-zoom" class="font-mono text-amber-800 font-bold">100%</span>
+                                </div>
+                                <input type="range" id="crop-zoom" min="100" max="250" value="100" step="1" oninput="SDW_ADMIN.onPhotoCropChange()" class="w-full accent-amber-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+                            </div>
+
+                            <!-- Sliders Geser X & Y (2 kolom) -->
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
+                                        <span>Geser Kiri/Kanan:</span>
+                                        <span id="label-crop-x" class="font-mono text-amber-800 font-bold">0%</span>
+                                    </div>
+                                    <input type="range" id="crop-offset-x" min="-50" max="50" value="0" step="1" oninput="SDW_ADMIN.onPhotoCropChange()" class="w-full accent-amber-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
+                                        <span>Geser Atas/Bawah:</span>
+                                        <span id="label-crop-y" class="font-mono text-amber-800 font-bold">0%</span>
+                                    </div>
+                                    <input type="range" id="crop-offset-y" min="-50" max="50" value="0" step="1" oninput="SDW_ADMIN.onPhotoCropChange()" class="w-full accent-amber-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
+                                </div>
+                            </div>
+                            <p class="text-[9.5px] text-slate-400 leading-tight">
+                                💡 <em>Tips: Anda juga dapat klik &amp; geser (drag) foto langsung pada bingkai di sebelah kanan.</em>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1993,28 +2036,28 @@
                     <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1;">
                         <img src="assets/certificate-template.jpg" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
 
-                        <!-- Photo Overlay di Bingkai Kanan Atas -->
-                        <div class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100"
-                             style="top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; border-radius: 3px;">
-                            <img id="modal-cert-preview-photo-img" src="" alt="Foto" class="w-full h-full object-cover hidden">
-                            <div id="modal-cert-preview-photo-placeholder" class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400">
+                        <!-- Photo Overlay di Bingkai Emas Kanan Atas (Presisi 100% Sesuai Template 1024x682) -->
+                        <div id="modal-cert-preview-photo-box" class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100 cursor-grab active:cursor-grabbing select-none"
+                             style="top: 15.55%; left: 76.56%; width: 13.18%; height: 25.07%; border-radius: 2px;">
+                            <img id="modal-cert-preview-photo-img" src="" alt="Foto" class="w-full h-full object-cover hidden pointer-events-none select-none" style="transform-origin: center center;">
+                            <div id="modal-cert-preview-photo-placeholder" class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400 pointer-events-none">
                                 <i class="fa-solid fa-user text-base sm:text-xl text-slate-400"></i>
                             </div>
                         </div>
 
-                        <!-- Nama di Tengah -->
-                        <div class="absolute text-center px-2 w-[74%] pointer-events-none"
-                             style="top: 48.2%; left: 49.5%; transform: translate(-50%, -100%);">
+                        <!-- Nama di Tengah (Mendekati Garis Horizontal Bawah) -->
+                        <div class="absolute text-center px-2 w-[80%] pointer-events-none"
+                             style="top: 53.6%; left: 49.5%; transform: translate(-50%, -100%);">
                             <h3 id="modal-cert-preview-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate text-[11px] sm:text-base md:text-xl"
                                 style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12);">
                                 NAMA JAMAAH
                             </h3>
                         </div>
 
-                        <!-- Tanggal di Bawah Garis -->
-                        <div class="absolute text-center px-2 w-[74%] pointer-events-none"
-                             style="top: 55.5%; left: 49.5%; transform: translateX(-50%);">
-                            <p id="modal-cert-preview-date" class="font-semibold text-slate-600 tracking-normal text-[8px] sm:text-[11px]">
+                        <!-- Tanggal di Bawah Garis (Wajib 1 Baris Saja) -->
+                        <div class="absolute text-center px-2 w-[85%] pointer-events-none"
+                             style="top: 55.4%; left: 49.5%; transform: translateX(-50%);">
+                            <p id="modal-cert-preview-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis text-[7px] sm:text-[9.5px] md:text-[11px]">
                                 Keberangkatan: 15 Januari 2027 • Musim 1448 H
                             </p>
                         </div>

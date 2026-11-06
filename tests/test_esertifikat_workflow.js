@@ -26,9 +26,12 @@ console.log('\n2. Verifikasi UI E-Sertifikat di app.html');
 const appHtml = fs.readFileSync(appHtmlPath, 'utf8');
 assert(appHtml.includes('id="pilgrimCertContainer"'), 'Container certificate preview harus ada');
 assert(appHtml.includes('id="cert-pilgrim-photo-box"'), 'Frame foto sertifikat harus ada');
+assert(appHtml.includes('top: 15.55%; left: 76.56%;'), 'Koordinat bingkai foto harus presisi 100%');
 assert(appHtml.includes('id="cert-pilgrim-photo-img"'), 'Image tag foto jamaah harus ada');
 assert(appHtml.includes('id="cert-pilgrim-name"'), 'Elemen nama jamaah di sertifikat harus ada');
+assert(appHtml.includes('top: 53.6%; left: 49.5%;'), 'Letak nama jamaah harus mendekati garis horizontal');
 assert(appHtml.includes('id="cert-pilgrim-date"'), 'Elemen tanggal keberangkatan harus ada');
+assert(appHtml.includes('whitespace-nowrap'), 'Tanggal keberangkatan harus 1 baris saja');
 assert(appHtml.includes('downloadCertificatePDF()'), 'Trigger download PDF harus ada');
 assert(appHtml.includes('downloadCertificateImage()'), 'Trigger download JPG image harus ada');
 assert(appHtml.includes('shareCertificateWA()'), 'Trigger bagikan WA harus ada');
@@ -58,6 +61,9 @@ assert(adminHtml.includes('id="tab-certificates"'), 'Container tab-certificates 
 assert(adminHtml.includes('id="table-certificates-body"'), 'Tabel daftar sertifikat jamaah harus ada');
 assert(adminHtml.includes('id="modalCertificateEditor"'), 'Modal editor sertifikat harus ada');
 assert(adminHtml.includes('id="modal-cert-preview-name"'), 'Preview nama di modal editor harus ada');
+assert(adminHtml.includes('id="crop-zoom"'), 'Slider Crop Zoom harus ada di modal');
+assert(adminHtml.includes('id="crop-offset-x"'), 'Slider Crop Offset X harus ada di modal');
+assert(adminHtml.includes('id="crop-offset-y"'), 'Slider Crop Offset Y harus ada di modal');
 assert(adminHtml.includes('js/admin/admin-certificates.js'), 'admin-certificates.js harus dimuat di admin.html');
 console.log('  [PASS] Navigasi, tab view, live preview modal, dan script loader di admin.html terverifikasi!');
 
@@ -83,7 +89,9 @@ assert(adminCertsJs.includes('printCertificate'), 'printCertificate harus ada');
 assert(adminCertsJs.includes('generateBulkCertificates'), 'generateBulkCertificates harus ada');
 assert(adminCertsJs.includes('handleCertificatePhotoUpload'), 'handleCertificatePhotoUpload harus ada');
 assert(adminCertsJs.includes('updateCertificatePreview'), 'updateCertificatePreview harus ada');
-console.log('  [PASS] Fungsi-fungsi CRUD dan live preview admin terverifikasi!');
+assert(adminCertsJs.includes('onPhotoCropChange'), 'onPhotoCropChange harus ada');
+assert(adminCertsJs.includes('resetPhotoCrop'), 'resetPhotoCrop harus ada');
+console.log('  [PASS] Fungsi-fungsi CRUD, live preview, dan Crop pasfoto admin terverifikasi!');
 
 // 7. Pengujian Fungsional Logika Sertifikat di Lingkungan Node
 console.log('\n7. Pengujian Fungsional Logika Registrasi & Sertifikat di Lingkungan Node');

@@ -355,7 +355,17 @@
         
         let displayDate = 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
         if (customCert && customCert.departureDate) {
-            displayDate = customCert.departureDate.startsWith('Keberangkatan') ? customCert.departureDate : `Keberangkatan: ${customCert.departureDate} • Musim 1448 H`;
+            let cleanDep = customCert.departureDate;
+            // Jika mengandung format ISO YYYY-MM-DD atau teks maskapai panjang, rapikan
+            const isoMatch = cleanDep.match(/(\d{4})-(\d{2})-(\d{2})/);
+            if (isoMatch) {
+                const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                cleanDep = `${parseInt(isoMatch[3], 10)} ${months[parseInt(isoMatch[2], 10) - 1]} ${isoMatch[1]}`;
+            }
+            displayDate = cleanDep.startsWith('Keberangkatan') ? cleanDep : `Keberangkatan: ${cleanDep}`;
+            if (!displayDate.includes('Musim 1448 H') && displayDate.length < 40) {
+                displayDate += ' • Musim 1448 H';
+            }
         } else if (session && session.departureDate) {
             let dep = session.departureDate;
             if (/^\d{4}-\d{2}-\d{2}$/.test(dep)) {
@@ -400,11 +410,11 @@
             // 1. Gambar Master Mockup Template
             ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
-            // 2. Gambar Foto Jamaah di dalam Bingkai Emas
-            const frameX = canvas.width - (canvas.width * 0.088) - (canvas.width * 0.162);
-            const frameY = canvas.height * 0.132;
-            const frameW = canvas.width * 0.162;
-            const frameH = canvas.height * 0.274;
+            // 2. Gambar Foto Jamaah di dalam Bingkai Emas (Presisi Sesuai Mockup 1024x682)
+            const frameX = canvas.width * 0.7656;
+            const frameY = canvas.height * 0.1554;
+            const frameW = canvas.width * 0.1318;
+            const frameH = canvas.height * 0.2507;
 
             if (photoImg && !photoImg.classList.contains('hidden') && photoImg.src) {
                 try {
@@ -419,19 +429,19 @@
                 }
             }
 
-            // 3. Cetak Nama Jamaah di atas garis
+            // 3. Cetak Nama Jamaah di atas garis (Mendekati Garis Horizontal Bawah)
             ctx.fillStyle = '#1e293b';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.font = 'bold 36px "Playfair Display", Georgia, serif';
             const nameX = canvas.width * 0.495;
-            const nameY = canvas.height * 0.482;
+            const nameY = canvas.height * 0.536;
             ctx.fillText(certName.trim().toUpperCase(), nameX, nameY);
 
-            // 4. Cetak Tanggal di bawah garis
+            // 4. Cetak Tanggal di bawah garis (1 Baris Saja)
             ctx.fillStyle = '#475569';
-            ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
-            const dateY = canvas.height * 0.555;
+            ctx.font = '600 18px "Plus Jakarta Sans", sans-serif';
+            const dateY = canvas.height * 0.565;
             ctx.fillText(certDate.trim(), nameX, dateY);
 
             // 5. Unduh file
@@ -467,9 +477,9 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-photo { position: absolute; top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; object-fit: cover; border-radius: 4px; }
-                    .cert-name { position: absolute; top: 48.2%; left: 49.5%; transform: translate(-50%, -100%); width: 74%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; }
-                    .cert-date { position: absolute; top: 55.5%; left: 49.5%; transform: translateX(-50%); width: 74%; text-align: center; font-size: 16px; font-weight: 600; color: #475569; font-family: sans-serif; }
+                    .cert-photo { position: absolute; top: 15.54%; left: 76.56%; width: 13.18%; height: 25.07%; object-fit: cover; border-radius: 2px; }
+                    .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
+                    .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
             </head>
             <body>

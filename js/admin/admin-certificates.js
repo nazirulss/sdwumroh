@@ -2,7 +2,7 @@
  * ====================================================================
  * SDW UMROH — ADMIN MODULE: E-SERTIFIKAT UMROH
  * File: js/admin/admin-certificates.js
- * Version: 2.7.1
+ * Version: 2.7.2
  * Philosophy: ONE JOURNEY, ONE PLATFORM
  * ====================================================================
  */
@@ -20,6 +20,8 @@
     admin = admin || {};
 
     let activeCertPhotoDataUrl = null;
+    let activeRawPhotoDataUrl = null;
+    let activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
 
     function getCertificatesStore() {
         try {
@@ -35,6 +37,21 @@
         } catch (e) {
             console.error('Gagal menyimpan sertifikat ke localStorage:', e);
         }
+    }
+
+    // Helper: Format tanggal bersih 1 baris
+    function formatCleanDate(str) {
+        if (!str) return '15 Januari 2027';
+        // Deteksi format ISO YYYY-MM-DD
+        const isoMatch = str.match(/(\d{4})-(\d{2})-(\d{2})/);
+        if (isoMatch) {
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            const d = parseInt(isoMatch[3], 10);
+            const m = months[parseInt(isoMatch[2], 10) - 1];
+            const y = isoMatch[1];
+            return `${d} ${m} ${y}`;
+        }
+        return str.replace(/\s*\(.*?\)\s*/g, ' ').trim();
     }
 
     // Helper: Ambil daftar seluruh registrasi jamaah secara aman & reaktif
@@ -104,7 +121,7 @@
             const cert = certStore[r.id] || null;
             const isIssued = !!(cert && cert.isIssued);
             const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
-            const depDate = (cert && cert.departureDate) ? cert.departureDate : (r.departure || r.departure_date || '15 Jan 2027');
+            const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departure || r.departure_date || '15 Jan 2027');
             const certNo = (cert && cert.certificateNo) ? cert.certificateNo : `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`;
             const photoSrc = (cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || '');
 
@@ -179,12 +196,22 @@
 
         if (regIdInput) regIdInput.value = regId;
         if (nameInput) nameInput.value = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || '';
-        if (dateInput) dateInput.value = cert.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027';
+        if (dateInput) dateInput.value = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
         if (certNoInput) certNoInput.value = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
 
-        activeCertPhotoDataUrl = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || null;
+        activeRawPhotoDataUrl = cert.rawPhotoUrl || cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || null;
+        activeCertPhotoDataUrl = cert.photoUrl || activeRawPhotoDataUrl;
 
+        // Pulihkan pengaturan crop tersimpan atau reset ke default
+        if (cert.cropSettings) {
+            activeCertCrop = { ...cert.cropSettings };
+        } else {
+            activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
+        }
+
+        syncCropSlidersUI();
         updateCertificatePreview();
+        initPhotoDragEvents();
 
         if (modal) {
             modal.classList.remove('hidden');
@@ -200,7 +227,101 @@
         }
     }
 
-    // 3. Update Real-Time Live Preview di Layar Modal
+    // 3. Sinkronisasi UI Sliders Crop
+    function syncCropSlidersUI() {
+        const zoomInput = document.getElementById('crop-zoom');
+        const xInput = document.getElementById('crop-offset-x');
+        const yInput = document.getElementById('crop-offset-y');
+        const zoomLabel = document.getElementById('label-crop-zoom');
+        const xLabel = document.getElementById('label-crop-x');
+        const yLabel = document.getElementById('label-crop-y');
+
+        if (zoomInput) zoomInput.value = activeCertCrop.zoom;
+        if (xInput) xInput.value = activeCertCrop.offsetX;
+        if (yInput) yInput.value = activeCertCrop.offsetY;
+
+        if (zoomLabel) zoomLabel.textContent = `${activeCertCrop.zoom}%`;
+        if (xLabel) xLabel.textContent = `${activeCertCrop.offsetX}%`;
+        if (yLabel) yLabel.textContent = `${activeCertCrop.offsetY}%`;
+    }
+
+    // Event Handler saat slider crop digeser
+    function onPhotoCropChange() {
+        const zoomInput = document.getElementById('crop-zoom');
+        const xInput = document.getElementById('crop-offset-x');
+        const yInput = document.getElementById('crop-offset-y');
+
+        activeCertCrop.zoom = parseInt(zoomInput ? zoomInput.value : '100', 10) || 100;
+        activeCertCrop.offsetX = parseInt(xInput ? xInput.value : '0', 10) || 0;
+        activeCertCrop.offsetY = parseInt(yInput ? yInput.value : '0', 10) || 0;
+
+        syncCropSlidersUI();
+        updatePhotoTransformPreview();
+    }
+
+    // Reset posisi dan zoom pasfoto
+    function resetPhotoCrop() {
+        activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
+        syncCropSlidersUI();
+        updatePhotoTransformPreview();
+    }
+
+    // Update transformasi CSS foto pratinjau real-time
+    function updatePhotoTransformPreview() {
+        const previewImg = document.getElementById('modal-cert-preview-photo-img');
+        if (!previewImg) return;
+
+        const scale = (activeCertCrop.zoom || 100) / 100;
+        const offX = activeCertCrop.offsetX || 0;
+        const offY = activeCertCrop.offsetY || 0;
+
+        previewImg.style.transform = `scale(${scale}) translate(${offX}%, ${offY}%)`;
+    }
+
+    // Inisialisasi gesture Drag & Pan pada bingkai foto
+    function initPhotoDragEvents() {
+        const box = document.getElementById('modal-cert-preview-photo-box');
+        if (!box || box._dragInitialized) return;
+        box._dragInitialized = true;
+
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+        let startOffX = 0;
+        let startOffY = 0;
+
+        box.addEventListener('mousedown', function (e) {
+            if (!activeRawPhotoDataUrl && !activeCertPhotoDataUrl) return;
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startOffX = activeCertCrop.offsetX;
+            startOffY = activeCertCrop.offsetY;
+            e.preventDefault();
+        });
+
+        window.addEventListener('mousemove', function (e) {
+            if (!isDragging) return;
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+
+            // Rasio geser sensitif: 1px = ~0.6%
+            const newX = Math.max(-50, Math.min(50, Math.round(startOffX + dx * 0.6)));
+            const newY = Math.max(-50, Math.min(50, Math.round(startOffY + dy * 0.6)));
+
+            activeCertCrop.offsetX = newX;
+            activeCertCrop.offsetY = newY;
+
+            syncCropSlidersUI();
+            updatePhotoTransformPreview();
+        });
+
+        window.addEventListener('mouseup', function () {
+            if (isDragging) isDragging = false;
+        });
+    }
+
+    // 4. Update Real-Time Live Preview Teks di Layar Modal
     function updateCertificatePreview() {
         const nameInput = document.getElementById('cert-input-name');
         const dateInput = document.getElementById('cert-input-date');
@@ -213,12 +334,20 @@
         const dateVal = (dateInput && dateInput.value.trim()) ? dateInput.value.trim() : '15 Januari 2027';
 
         if (previewName) previewName.textContent = nameVal;
-        if (previewDate) previewDate.textContent = `Keberangkatan: ${dateVal} • Musim 1448 H`;
 
-        if (activeCertPhotoDataUrl) {
+        // Wajib 1 Baris Saja
+        if (previewDate) {
+            const cleanDateLabel = dateVal.startsWith('Keberangkatan') ? dateVal : `Keberangkatan: ${dateVal}`;
+            previewDate.textContent = cleanDateLabel;
+        }
+
+        const photoToDisplay = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
+
+        if (photoToDisplay) {
             if (previewImg) {
-                previewImg.src = activeCertPhotoDataUrl;
+                previewImg.src = photoToDisplay;
                 previewImg.classList.remove('hidden');
+                updatePhotoTransformPreview();
             }
             if (previewPlaceholder) previewPlaceholder.classList.add('hidden');
         } else {
@@ -227,20 +356,72 @@
         }
     }
 
-    // 4. Handle Upload Foto Pasfoto Kustom di Modal
+    // 5. Handle Upload Foto Pasfoto Kustom di Modal
     function handleCertificatePhotoUpload(input) {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
         const reader = new FileReader();
         reader.onload = function (e) {
+            activeRawPhotoDataUrl = e.target.result;
             activeCertPhotoDataUrl = e.target.result;
+            resetPhotoCrop();
             updateCertificatePreview();
-            if (typeof admin.showToast === 'function') admin.showToast('Foto sertifikat berhasil diperbarui di preview.');
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('Pasfoto berhasil diunggah! Sesuaikan zoom & posisi geser sesuai kebutuhan.');
+            }
         };
         reader.readAsDataURL(file);
     }
 
-    // 5. Simpan Sertifikat & Terbitkan ke Aplikasi Jamaah
+    // Helper: Bake / Crop Foto ke Canvas dengan Rasio Presisi 135:171 (Resolusi Tinggi 405x513)
+    function bakeCroppedPhoto(imageSrc, scale, offsetX, offsetY, callback) {
+        if (!imageSrc) {
+            callback(null);
+            return;
+        }
+
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function () {
+            const targetW = 405;
+            const targetH = 513;
+            const canvas = document.createElement('canvas');
+            canvas.width = targetW;
+            canvas.height = targetH;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.fillRect(0, 0, targetW, targetH);
+
+            const imgAspect = img.width / img.height;
+            const targetAspect = targetW / targetH;
+            let drawW, drawH;
+
+            if (imgAspect > targetAspect) {
+                drawH = targetH * scale;
+                drawW = drawH * imgAspect;
+            } else {
+                drawW = targetW * scale;
+                drawH = drawW / imgAspect;
+            }
+
+            const shiftX = (targetW - drawW) / 2 + (offsetX / 100) * targetW;
+            const shiftY = (targetH - drawH) / 2 + (offsetY / 100) * targetH;
+
+            ctx.drawImage(img, shiftX, shiftY, drawW, drawH);
+            try {
+                callback(canvas.toDataURL('image/jpeg', 0.95));
+            } catch (err) {
+                callback(imageSrc);
+            }
+        };
+        img.onerror = function () {
+            callback(imageSrc);
+        };
+        img.src = imageSrc;
+    }
+
+    // 6. Simpan Sertifikat & Terbitkan ke Aplikasi Jamaah
     function saveCertificate() {
         const regIdInput = document.getElementById('cert-input-reg-id');
         const nameInput = document.getElementById('cert-input-name');
@@ -259,27 +440,36 @@
             return;
         }
 
-        const certStore = getCertificatesStore();
-        certStore[regId] = {
-            isIssued: true,
-            issuedAt: new Date().toISOString(),
-            certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
-            displayName: displayName,
-            departureDate: departureDate || '15 Januari 2027',
-            photoUrl: activeCertPhotoDataUrl
-        };
-        saveCertificatesStore(certStore);
+        const sourcePhoto = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
+        const scale = (activeCertCrop.zoom || 100) / 100;
+        const offX = activeCertCrop.offsetX || 0;
+        const offY = activeCertCrop.offsetY || 0;
 
-        closeCertificateModal();
-        renderCertificates();
-        if (typeof admin.showToast === 'function') {
-            admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
-        } else {
-            alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
-        }
+        bakeCroppedPhoto(sourcePhoto, scale, offX, offY, function (bakedUrl) {
+            const certStore = getCertificatesStore();
+            certStore[regId] = {
+                isIssued: true,
+                issuedAt: new Date().toISOString(),
+                certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
+                displayName: displayName,
+                departureDate: departureDate || '15 Januari 2027',
+                photoUrl: bakedUrl,
+                rawPhotoUrl: sourcePhoto,
+                cropSettings: { ...activeCertCrop }
+            };
+            saveCertificatesStore(certStore);
+
+            closeCertificateModal();
+            renderCertificates();
+            if (typeof admin.showToast === 'function') {
+                admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
+            } else {
+                alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
+            }
+        });
     }
 
-    // 6. Cetak Piagam Format A4 Landscape
+    // 7. Cetak Piagam Format A4 Landscape
     function printCertificate(regId) {
         const certStore = getCertificatesStore();
         const regs = getRegistrationsList();
@@ -287,7 +477,7 @@
         const cert = certStore[regId] || {};
 
         const displayName = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
-        const departureDate = cert.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027';
+        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
         const photoSrc = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '';
 
         const printWindow = window.open('', '_blank');
@@ -306,9 +496,9 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-photo { position: absolute; top: 13.2%; right: 8.8%; width: 16.2%; height: 27.4%; object-fit: cover; border-radius: 4px; }
-                    .cert-name { position: absolute; top: 48.2%; left: 49.5%; transform: translate(-50%, -100%); width: 74%; text-align: center; font-size: 34px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
-                    .cert-date { position: absolute; top: 55.5%; left: 49.5%; transform: translateX(-50%); width: 74%; text-align: center; font-size: 16px; font-weight: 600; color: #475569; font-family: sans-serif; }
+                    .cert-photo { position: absolute; top: 15.54%; left: 76.56%; width: 13.18%; height: 25.07%; object-fit: cover; border-radius: 2px; }
+                    .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
+                    .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
             </head>
             <body>
@@ -316,7 +506,7 @@
                     <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
                     ${photoSrc ? `<img src="${photoSrc}" class="cert-photo">` : ''}
                     <div class="cert-name">${displayName}</div>
-                    <div class="cert-date">Keberangkatan: ${departureDate} • Musim 1448 H</div>
+                    <div class="cert-date">Keberangkatan: ${departureDate}</div>
                 </div>
                 <script>
                     window.onload = function() {
@@ -329,7 +519,7 @@
         printWindow.document.close();
     }
 
-    // 7. Terbitkan Massal Seluruh Jamaah Kloter
+    // 8. Terbitkan Massal Seluruh Jamaah Kloter
     function generateBulkCertificates() {
         const regs = getRegistrationsList();
         if (regs.length === 0) {
@@ -368,7 +558,7 @@
                     issuedAt: new Date().toISOString(),
                     certificateNo: (certStore[r.id] && certStore[r.id].certificateNo) || `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
                     displayName: (certStore[r.id] && certStore[r.id].displayName) || (r.customer || r.name || r.full_name || 'Jamaah Umroh').toUpperCase(),
-                    departureDate: (certStore[r.id] && certStore[r.id].departureDate) || r.departure || r.departure_date || '15 Januari 2027',
+                    departureDate: (certStore[r.id] && certStore[r.id].departureDate) || formatCleanDate(r.departure || r.departure_date || '15 Januari 2027'),
                     photoUrl: (certStore[r.id] && certStore[r.id].photoUrl) || r.photo || r.photoUrl || null
                 };
                 count++;
@@ -391,6 +581,8 @@
     admin.closeCertificateModal = closeCertificateModal;
     admin.updateCertificatePreview = updateCertificatePreview;
     admin.handleCertificatePhotoUpload = handleCertificatePhotoUpload;
+    admin.onPhotoCropChange = onPhotoCropChange;
+    admin.resetPhotoCrop = resetPhotoCrop;
     admin.saveCertificate = saveCertificate;
     admin.printCertificate = printCertificate;
     admin.generateBulkCertificates = generateBulkCertificates;
