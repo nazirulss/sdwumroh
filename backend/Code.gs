@@ -39,7 +39,7 @@ function authorizeDriveAccess() {
 }
 
 /**
- * SEED DATA: 10 Jamaah Kloter 27 Oktober 2026 yang telah memenuhi 4 syarat validasi e-sertifikat
+ * SEED DATA: 44 Jamaah Real Kloter 27 Oktober 2026 yang telah memenuhi 4 syarat validasi e-sertifikat
  */
 function seedKloter27Oktober2026(ss) {
   if (!ss) ss = getSpreadsheet();
@@ -47,12 +47,21 @@ function seedKloter27Oktober2026(ss) {
 
   const nowStr = Utilities.formatDate(new Date(), "Asia/Jakarta", CONFIG.DATE_FORMAT);
 
-  // 1. DB_Departures
+  // 1. DB_Departures: Update / Create DEP-20261027
   const depSheet = ss.getSheetByName("DB_Departures");
   if (depSheet) {
     const depData = depSheet.getDataRange().getValues();
-    const exists = depData.some(function(r) { return String(r[0]) === "DEP-20261027"; });
-    if (!exists) {
+    let depFound = false;
+    for (let i = 1; i < depData.length; i++) {
+      if (String(depData[i][0]) === "DEP-20261027") {
+        depSheet.getRange(i + 1, 8).setValue(44); // capacity_booked
+        depSheet.getRange(i + 1, 9).setValue("COMPLETED"); // status
+        depSheet.getRange(i + 1, 10).setValue("Kloter Khidmat 27 Oktober 2026 (44 Jamaah Real Alumni)");
+        depFound = true;
+        break;
+      }
+    }
+    if (!depFound) {
       depSheet.appendRow([
         "DEP-20261027",
         "PKG-000001",
@@ -61,137 +70,145 @@ function seedKloter27Oktober2026(ss) {
         "Saudia Airlines (SV-818)",
         "SOC",
         45,
-        10,
+        44,
         "COMPLETED",
-        "Kloter Khidmat 27 Oktober 2026 (Alumni Berhak Sertifikat)"
+        "Kloter Khidmat 27 Oktober 2026 (44 Jamaah Real Alumni)"
       ]);
     }
   }
 
-  // 2. Data 10 Jamaah Lengkap
-  const pilgrims = [
-    { id: "REG-SDW-2601", custId: "CUS-000101", nik: "3319011203750001", name: "H. Ahmad Subarkah, S.Pd.I", gender: "MALE", phone: "08122334401", city: "Kudus", certNo: "SDW/CERT/2026/2601" },
-    { id: "REG-SDW-2602", custId: "CUS-000102", nik: "3319015508780002", name: "Hj. Siti Aminah, M.Pd", gender: "FEMALE", phone: "08122334402", city: "Kudus", certNo: "SDW/CERT/2026/2602" },
-    { id: "REG-SDW-2603", custId: "CUS-000103", nik: "3321021405680001", name: "K.H. Mas'ud Ridwan", gender: "MALE", phone: "08122334403", city: "Demak", certNo: "SDW/CERT/2026/2603" },
-    { id: "REG-SDW-2604", custId: "CUS-000104", nik: "3321025010720002", name: "Nyai Hj. Nurul Hidayah", gender: "FEMALE", phone: "08122334404", city: "Demak", certNo: "SDW/CERT/2026/2604" },
-    { id: "REG-SDW-2605", custId: "CUS-000105", nik: "3374031102650001", name: "Drs. H. Bambang Wijanarko", gender: "MALE", phone: "08122334405", city: "Semarang", certNo: "SDW/CERT/2026/2605" },
-    { id: "REG-SDW-2606", custId: "CUS-000106", nik: "3374034807700002", name: "Hj. Sri Wahyuningsih, S.E.", gender: "FEMALE", phone: "08122334406", city: "Semarang", certNo: "SDW/CERT/2026/2606" },
-    { id: "REG-SDW-2607", custId: "CUS-000107", nik: "3320041809790001", name: "H. Muhammad Zainuri, M.T.", gender: "MALE", phone: "08122334407", city: "Jepara", certNo: "SDW/CERT/2026/2607" },
-    { id: "REG-SDW-2608", custId: "CUS-000108", nik: "3320046204820002", name: "Hj. Fatimah Az-Zahra", gender: "FEMALE", phone: "08122334408", city: "Jepara", certNo: "SDW/CERT/2026/2608" },
-    { id: "REG-SDW-2609", custId: "CUS-000109", nik: "3318052111800001", name: "H. Agus Kurniawan, S.Kom", gender: "MALE", phone: "08122334409", city: "Pati", certNo: "SDW/CERT/2026/2609" },
-    { id: "REG-SDW-2610", custId: "CUS-000110", nik: "3318056512830002", name: "Hj. Endang Lestari", gender: "FEMALE", phone: "08122334410", city: "Pati", certNo: "SDW/CERT/2026/2610" }
+  // 44 Data Jamaah Real Sesuai Manifest Resmi 27 Oktober 2026
+  const names = [
+    "KHASAN MUNADI", "MIFNAHAH MUDAKIR KASRI", "SANALI BAJURI", "SITI NURIYAH",
+    "MUKHLIS MUSLIH", "MUARIFAH ABDUL KARIM", "SUGIANTO SABAR", "HARTINI SUWARSONO",
+    "ALI MUKID", "SRI NURYATI", "SUGIYONO PAMIN", "MAESAROH MARLAN",
+    "SALEMAN DUL HOFUR", "SAMSONAH KASMIUN", "KANAPI SIRAT", "SOTIJAH SALEH",
+    "MARYATUN SUWARNO", "MUNARTI MUKALIL", "SARMINAH SARBI", "KALIMAH GIMIN",
+    "SULAMANAH KASAN", "SUWARIYAH JAHRI", "MUHAMAD MUNIF", "MADKHAN KAMRI",
+    "AHMAD ZAINI", "MUKHAMMAD NURUL YAKIN", "DEWI WAHYUNINGSIH", "NAILA ABIDAH IZDIHAR",
+    "HASNA NAFASYA SYATHIRA RAZQYA", "SUHARNI SARDI DULLAH", "NUR ISTIQOMAH JAYANTI", "INDANA ZULFA FILLAH",
+    "SUTIYO PAIJAN", "SUYATI SUGIMIN", "MASHADI KASDI", "SOPIYAH ASNGADI",
+    "SURIPAH SAHLI", "NURUZ ZAKIYAH", "ZURIYAH JAMIN", "MUNGIN YAHYO",
+    "HARI PRI TUMINAH", "HARYATI ABDUL KOHIR", "JUNWADI PARSAN", "JAIMIN KASIPIN"
   ];
 
-  // 3. DB_Customers
+  // Helper hapus baris uji coba lama untuk kloter 27 Okt
+  function cleanSheetRows(sheetName, idColIdx, prefix) {
+    const sh = ss.getSheetByName(sheetName);
+    if (!sh) return;
+    const data = sh.getDataRange().getValues();
+    for (let i = data.length - 1; i >= 1; i--) {
+      const val = String(data[i][idColIdx]);
+      if (val.indexOf(prefix) === 0) {
+        sh.deleteRow(i + 1);
+      }
+    }
+  }
+
+  // Bersihkan data uji coba lama (REG-SDW-26*, CUS-26*, PAY-26*, DOC-26*, CUS-0001*)
+  cleanSheetRows("DB_Registrations", 0, "REG-SDW-26");
+  cleanSheetRows("DB_Customers", 0, "CUS-26");
+  cleanSheetRows("DB_Payments", 0, "PAY-26");
+  cleanSheetRows("DB_Pilgrim_Documents", 0, "DOC-26");
+  cleanSheetRows("DB_Customers", 0, "CUS-0001");
+
   const custSheet = ss.getSheetByName("DB_Customers");
-  if (custSheet) {
-    const custData = custSheet.getDataRange().getValues();
-    pilgrims.forEach(function(p) {
-      const exists = custData.some(function(r) { return String(r[0]) === p.custId; });
-      if (!exists) {
-        custSheet.appendRow([
-          p.custId,
-          p.nik,
-          p.name,
-          p.gender,
-          "1980-01-01",
-          p.city,
-          p.phone,
-          p.phone + "@jamaah.sdw.id",
-          "Jl. Raya " + p.city + " No. " + p.id.replace(/\D/g, ""),
-          p.city,
-          "Jawa Tengah",
-          nowStr,
-          nowStr
-        ]);
-      }
-    });
-  }
-
-  // 4. DB_Registrations
   const regSheet = ss.getSheetByName("DB_Registrations");
-  if (regSheet) {
-    const regData = regSheet.getDataRange().getValues();
-    pilgrims.forEach(function(p) {
-      const exists = regData.some(function(r) { return String(r[0]) === p.id; });
-      if (!exists) {
-        regSheet.appendRow([
-          p.id,
-          p.custId,
-          "DEP-20261027",
-          "PKG-000001",
-          "QUAD",
-          33500000,
-          0,
-          33500000,
-          "COMPLETED",
-          "USR-000001",
-          "Kloter Khidmat 27 Oktober 2026 (Alumni Mabrur Terbit Sertifikat)",
-          nowStr,
-          nowStr
-        ]);
-      }
-    });
-  }
-
-  // 5. DB_Payments (Syarat 1: 100% Lunas)
   const paySheet = ss.getSheetByName("DB_Payments");
-  if (paySheet) {
-    const payData = paySheet.getDataRange().getValues();
-    pilgrims.forEach(function(p, idx) {
-      const payId = "PAY-26" + String(idx + 1).padStart(2, '0');
-      const exists = payData.some(function(r) { return String(r[0]) === payId || String(r[1]) === p.id; });
-      if (!exists) {
-        paySheet.appendRow([
-          payId,
-          p.id, // invoice_id / reg_id
-          "SCH-LUNAS",
-          33500000,
-          "BANK_TRANSFER_BSI",
-          "TRX-BSI-202610" + String(idx + 1).padStart(2, '0'),
-          "mock_proof_lunas.jpg",
-          "VERIFIED",
-          "2026-10-20 10:00:00",
-          "Finance Officer",
-          "2026-10-20 10:30:00",
-          "Pelunasan Biaya Umroh 100% Lunas"
-        ]);
-      }
-    });
-  }
-
-  // 6. DB_Pilgrim_Documents (Syarat 2: Pasfoto Terverifikasi & Tersimpan di Drive)
   const docSheet = ss.getSheetByName("DB_Pilgrim_Documents");
-  if (docSheet) {
-    const docData = docSheet.getDataRange().getValues();
-    pilgrims.forEach(function(p, idx) {
-      const docId = "DOC-26" + String(idx + 1).padStart(2, '0');
-      const exists = docData.some(function(r) { return String(r[0]) === docId || (String(r[1]) === p.id && String(r[2]) === "DCR-000004"); });
-      if (!exists) {
-        // Tautan pasfoto resolusi tinggi di Google Drive
-        const photoUrl = "https://lh3.googleusercontent.com/d/1CblSK1EVxRl3gQSyYsq_l8q6j0wg-Ziq";
-        docSheet.appendRow([
-          docId,
-          p.id,
-          "DCR-000004",
-          "PASFOTO_" + p.id + ".jpg",
-          photoUrl,
-          "VERIFIED",
-          "Pasfoto resmi E-Sertifikat Umroh (Tersimpan di Google Drive)",
-          "Document Officer",
-          "2026-10-22 14:00:00",
-          nowStr
-        ]);
-      }
-    });
-  }
 
-  logAudit_("Admin Sistem", "SEED_KLOTER_27_OKT", "DB_Registrations", "DEP-20261027", null, { total: pilgrims.length }, "Suntik 10 data jamaah kloter 27 Oktober 2026 berhak sertifikat");
+  const cities = ["Kudus", "Demak", "Jepara", "Semarang", "Pati"];
+
+  names.forEach(function(fullName, idx) {
+    const numStr = String(idx + 1).padStart(2, '0');
+    const regId = "REG-SDW-26" + numStr;
+    const custId = "CUS-26" + numStr;
+    const payId = "PAY-26" + numStr;
+    const docId = "DOC-26" + numStr;
+    const city = cities[idx % cities.length];
+    const phone = "08123456" + String(2600 + idx + 1);
+    const nik = "331901" + String(100000 + idx + 1) + "0001";
+    const photoUrl = "https://lh3.googleusercontent.com/d/1CblSK1EVxRl3gQSyYsq_l8q6j0wg-Ziq";
+
+    // 1. DB_Customers
+    if (custSheet) {
+      custSheet.appendRow([
+        custId,
+        nik,
+        fullName,
+        (idx % 2 === 0 ? "MALE" : "FEMALE"),
+        "1975-05-15",
+        city,
+        phone,
+        phone + "@jamaah.sdw.id",
+        "Jl. Raya " + city + " No. " + (idx + 1),
+        city,
+        "Jawa Tengah",
+        nowStr,
+        nowStr
+      ]);
+    }
+
+    // 2. DB_Registrations (Syarat 3: Berangkat & Selesai Kloter 27 Okt 2026)
+    if (regSheet) {
+      regSheet.appendRow([
+        regId,
+        custId,
+        "DEP-20261027",
+        "PKG-000001",
+        "QUAD",
+        33500000,
+        0,
+        33500000,
+        "COMPLETED",
+        "USR-000001",
+        "Kloter Utama 27 Oktober 2026 (Alumni Real Mabrur)",
+        nowStr,
+        nowStr
+      ]);
+    }
+
+    // 3. DB_Payments (Syarat 1: 100% Lunas)
+    if (paySheet) {
+      paySheet.appendRow([
+        payId,
+        regId,
+        "SCH-LUNAS",
+        33500000,
+        "BANK_TRANSFER_BSI",
+        "TRX-BSI-20261027-" + numStr,
+        "mock_proof_lunas.jpg",
+        "VERIFIED",
+        "2026-10-20 09:00:00",
+        "Finance Officer",
+        "2026-10-20 09:30:00",
+        "Pelunasan Biaya Umroh 100% Lunas"
+      ]);
+    }
+
+    // 4. DB_Pilgrim_Documents (Syarat 2: Pasfoto Terverifikasi & Tersimpan di Drive)
+    if (docSheet) {
+      docSheet.appendRow([
+        docId,
+        regId,
+        "DCR-000004",
+        "PASFOTO_" + regId + ".jpg",
+        photoUrl,
+        "VERIFIED",
+        "Pasfoto resmi E-Sertifikat Umroh (Tersimpan di Google Drive)",
+        "Document Officer",
+        "2026-10-22 10:00:00",
+        nowStr
+      ]);
+    }
+  });
+
+  logAudit_("Admin Sistem", "SEED_REAL_44_JAMAAH", "DB_Registrations", "DEP-20261027", null, { total: names.length }, "Generate otomatis 44 data jamaah real kloter 27 Oktober 2026");
 
   return {
     success: true,
-    message: "10 Data Jamaah Kloter 27 Oktober 2026 berhasil disuntikkan ke Google Spreadsheet!",
-    totalPilgrims: pilgrims.length,
+    message: "44 Data Jamaah Real Kloter 27 Oktober 2026 berhasil digenerate ke Google Spreadsheet!",
+    totalPilgrims: names.length,
     departureId: "DEP-20261027",
     departureDate: "27 Oktober 2026"
   };
