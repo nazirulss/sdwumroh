@@ -333,13 +333,21 @@
 
         // Demo Registrations Backoffice (Sinkron dengan DB_Registrations Spreadsheet)
         registrations: [
-            { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-2702', customer: 'Ibu Siti Fatimah', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-2703', customer: 'Bpk. Gunawan Wibisono', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-2704', customer: 'Uji Jamaah PWA', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-2705', customer: 'H. Ahmad Syarifuddin', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-3410', customer: 'Starmil Store', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
-            { id: 'REG-SDW-3439', customer: 'NAZIR', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', docs: '4/4', payment: 'Lunas (Terverifikasi)' }
+            // Kloter 27 Oktober 2026 (Alumni Resmi Berhak Sertifikat - 100% Lunas & Pasfoto Lengkap)
+            { id: 'REG-SDW-2601', customer: 'H. Ahmad Subarkah, S.Pd.I', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2601', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2602', customer: 'Hj. Siti Aminah, M.Pd', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2602', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2603', customer: 'K.H. Mas\'ud Ridwan', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2603', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2604', customer: 'Nyai Hj. Nurul Hidayah', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2604', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2605', customer: 'Drs. H. Bambang Wijanarko', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2605', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2606', customer: 'Hj. Sri Wahyuningsih, S.E.', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2606', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2607', customer: 'H. Muhammad Zainuri, M.T.', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2607', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2608', customer: 'Hj. Fatimah Az-Zahra', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2608', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2609', customer: 'H. Agus Kurniawan, S.Kom', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2609', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2610', customer: 'Hj. Endang Lestari', package: 'Umroh Reguler 9H', departure: '27 Okt 2026', status: 'COMPLETED', isIssued: true, certificateNo: 'SDW/CERT/2026/2610', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+
+            // Kloter 15 Januari 2027 (Dalam Proses Keberangkatan)
+            { id: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', isIssued: true, certificateNo: 'SDW/CERT/2027/2701', docs: '4/4', payment: 'Lunas (Terverifikasi)' },
+            { id: 'REG-SDW-2702', customer: 'Ibu Siti Fatimah', package: 'Umroh Reguler 9H', departure: '15 Jan 2027', status: 'CONFIRMED', isIssued: false, docs: '3/4', payment: 'DP Terverifikasi' }
         ]
     };
 });

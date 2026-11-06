@@ -119,10 +119,10 @@
 
         tbody.innerHTML = regs.map(r => {
             const cert = certStore[r.id] || null;
-            const isIssued = !!(cert && cert.isIssued);
+            const isIssued = (cert && cert.isIssued !== undefined) ? !!cert.isIssued : (r.isIssued === true || r.status === 'COMPLETED');
             const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
             const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departure || r.departure_date || '15 Jan 2027');
-            const certNo = (cert && cert.certificateNo) ? cert.certificateNo : `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`;
+            const certNo = (cert && cert.certificateNo) ? cert.certificateNo : (r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`);
             const photoSrc = (cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || '');
 
             return `

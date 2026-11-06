@@ -402,28 +402,34 @@
 
         regs.forEach(r => {
             const cert = certStore[r.id] || {};
-            const cleanDep = normalizeDepartureDate(cert.departureDate || r.departure || r.departure_date || '15 Januari 2027');
-            list.push({
-                regId: r.id,
-                name: cert.displayName || r.customer || r.name || r.full_name || 'Jamaah Umroh',
-                departureDate: cleanDep,
-                certNo: cert.certificateNo || `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
-                photoUrl: cert.photoUrl || r.photo || r.photoUrl || null,
-                isIssued: !!cert.isIssued
-            });
+            const cleanDep = normalizeDepartureDate(cert.departureDate || r.departure || r.departure_date || '27 Oktober 2026');
+            
+            // Validasi Status Terbit: hanya tampilkan jika Admin sudah menerbitkan (isIssued true) atau status COMPLETED di DB
+            const isIssued = (cert.isIssued !== undefined) ? !!cert.isIssued : (!!r.isIssued || r.status === 'COMPLETED');
+            
+            if (isIssued) {
+                list.push({
+                    regId: r.id,
+                    name: cert.displayName || r.customer || r.name || r.full_name || 'Jamaah Umroh',
+                    departureDate: cleanDep,
+                    certNo: cert.certificateNo || r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
+                    photoUrl: cert.photoUrl || r.photoUrl || r.photo || null,
+                    isIssued: true
+                });
+            }
         });
 
         Object.keys(certStore).forEach(k => {
             if (!list.some(p => p.regId === k)) {
                 const c = certStore[k];
-                if (c && c.displayName) {
+                if (c && c.displayName && c.isIssued) {
                     list.push({
                         regId: k,
                         name: c.displayName,
                         departureDate: normalizeDepartureDate(c.departureDate),
-                        certNo: c.certificateNo || 'SDW/CERT/2027/2701',
+                        certNo: c.certificateNo || 'SDW/CERT/2026/2601',
                         photoUrl: c.photoUrl || null,
-                        isIssued: !!c.isIssued
+                        isIssued: true
                     });
                 }
             }

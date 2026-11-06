@@ -38,6 +38,165 @@ function authorizeDriveAccess() {
   };
 }
 
+/**
+ * SEED DATA: 10 Jamaah Kloter 27 Oktober 2026 yang telah memenuhi 4 syarat validasi e-sertifikat
+ */
+function seedKloter27Oktober2026(ss) {
+  if (!ss) ss = getSpreadsheet();
+  if (!ss) throw new Error("Spreadsheet tidak ditemukan");
+
+  const nowStr = Utilities.formatDate(new Date(), "Asia/Jakarta", CONFIG.DATE_FORMAT);
+
+  // 1. DB_Departures
+  const depSheet = ss.getSheetByName("DB_Departures");
+  if (depSheet) {
+    const depData = depSheet.getDataRange().getValues();
+    const exists = depData.some(function(r) { return String(r[0]) === "DEP-20261027"; });
+    if (!exists) {
+      depSheet.appendRow([
+        "DEP-20261027",
+        "PKG-000001",
+        "2026-10-27T00:00:00.000Z",
+        "2026-11-05T00:00:00.000Z",
+        "Saudia Airlines (SV-818)",
+        "SOC",
+        45,
+        10,
+        "COMPLETED",
+        "Kloter Khidmat 27 Oktober 2026 (Alumni Berhak Sertifikat)"
+      ]);
+    }
+  }
+
+  // 2. Data 10 Jamaah Lengkap
+  const pilgrims = [
+    { id: "REG-SDW-2601", custId: "CUS-000101", nik: "3319011203750001", name: "H. Ahmad Subarkah, S.Pd.I", gender: "MALE", phone: "08122334401", city: "Kudus", certNo: "SDW/CERT/2026/2601" },
+    { id: "REG-SDW-2602", custId: "CUS-000102", nik: "3319015508780002", name: "Hj. Siti Aminah, M.Pd", gender: "FEMALE", phone: "08122334402", city: "Kudus", certNo: "SDW/CERT/2026/2602" },
+    { id: "REG-SDW-2603", custId: "CUS-000103", nik: "3321021405680001", name: "K.H. Mas'ud Ridwan", gender: "MALE", phone: "08122334403", city: "Demak", certNo: "SDW/CERT/2026/2603" },
+    { id: "REG-SDW-2604", custId: "CUS-000104", nik: "3321025010720002", name: "Nyai Hj. Nurul Hidayah", gender: "FEMALE", phone: "08122334404", city: "Demak", certNo: "SDW/CERT/2026/2604" },
+    { id: "REG-SDW-2605", custId: "CUS-000105", nik: "3374031102650001", name: "Drs. H. Bambang Wijanarko", gender: "MALE", phone: "08122334405", city: "Semarang", certNo: "SDW/CERT/2026/2605" },
+    { id: "REG-SDW-2606", custId: "CUS-000106", nik: "3374034807700002", name: "Hj. Sri Wahyuningsih, S.E.", gender: "FEMALE", phone: "08122334406", city: "Semarang", certNo: "SDW/CERT/2026/2606" },
+    { id: "REG-SDW-2607", custId: "CUS-000107", nik: "3320041809790001", name: "H. Muhammad Zainuri, M.T.", gender: "MALE", phone: "08122334407", city: "Jepara", certNo: "SDW/CERT/2026/2607" },
+    { id: "REG-SDW-2608", custId: "CUS-000108", nik: "3320046204820002", name: "Hj. Fatimah Az-Zahra", gender: "FEMALE", phone: "08122334408", city: "Jepara", certNo: "SDW/CERT/2026/2608" },
+    { id: "REG-SDW-2609", custId: "CUS-000109", nik: "3318052111800001", name: "H. Agus Kurniawan, S.Kom", gender: "MALE", phone: "08122334409", city: "Pati", certNo: "SDW/CERT/2026/2609" },
+    { id: "REG-SDW-2610", custId: "CUS-000110", nik: "3318056512830002", name: "Hj. Endang Lestari", gender: "FEMALE", phone: "08122334410", city: "Pati", certNo: "SDW/CERT/2026/2610" }
+  ];
+
+  // 3. DB_Customers
+  const custSheet = ss.getSheetByName("DB_Customers");
+  if (custSheet) {
+    const custData = custSheet.getDataRange().getValues();
+    pilgrims.forEach(function(p) {
+      const exists = custData.some(function(r) { return String(r[0]) === p.custId; });
+      if (!exists) {
+        custSheet.appendRow([
+          p.custId,
+          p.nik,
+          p.name,
+          p.gender,
+          "1980-01-01",
+          p.city,
+          p.phone,
+          p.phone + "@jamaah.sdw.id",
+          "Jl. Raya " + p.city + " No. " + p.id.replace(/\D/g, ""),
+          p.city,
+          "Jawa Tengah",
+          nowStr,
+          nowStr
+        ]);
+      }
+    });
+  }
+
+  // 4. DB_Registrations
+  const regSheet = ss.getSheetByName("DB_Registrations");
+  if (regSheet) {
+    const regData = regSheet.getDataRange().getValues();
+    pilgrims.forEach(function(p) {
+      const exists = regData.some(function(r) { return String(r[0]) === p.id; });
+      if (!exists) {
+        regSheet.appendRow([
+          p.id,
+          p.custId,
+          "DEP-20261027",
+          "PKG-000001",
+          "QUAD",
+          33500000,
+          0,
+          33500000,
+          "COMPLETED",
+          "USR-000001",
+          "Kloter Khidmat 27 Oktober 2026 (Alumni Mabrur Terbit Sertifikat)",
+          nowStr,
+          nowStr
+        ]);
+      }
+    });
+  }
+
+  // 5. DB_Payments (Syarat 1: 100% Lunas)
+  const paySheet = ss.getSheetByName("DB_Payments");
+  if (paySheet) {
+    const payData = paySheet.getDataRange().getValues();
+    pilgrims.forEach(function(p, idx) {
+      const payId = "PAY-26" + String(idx + 1).padStart(2, '0');
+      const exists = payData.some(function(r) { return String(r[0]) === payId || String(r[1]) === p.id; });
+      if (!exists) {
+        paySheet.appendRow([
+          payId,
+          p.id, // invoice_id / reg_id
+          "SCH-LUNAS",
+          33500000,
+          "BANK_TRANSFER_BSI",
+          "TRX-BSI-202610" + String(idx + 1).padStart(2, '0'),
+          "mock_proof_lunas.jpg",
+          "VERIFIED",
+          "2026-10-20 10:00:00",
+          "Finance Officer",
+          "2026-10-20 10:30:00",
+          "Pelunasan Biaya Umroh 100% Lunas"
+        ]);
+      }
+    });
+  }
+
+  // 6. DB_Pilgrim_Documents (Syarat 2: Pasfoto Terverifikasi & Tersimpan di Drive)
+  const docSheet = ss.getSheetByName("DB_Pilgrim_Documents");
+  if (docSheet) {
+    const docData = docSheet.getDataRange().getValues();
+    pilgrims.forEach(function(p, idx) {
+      const docId = "DOC-26" + String(idx + 1).padStart(2, '0');
+      const exists = docData.some(function(r) { return String(r[0]) === docId || (String(r[1]) === p.id && String(r[2]) === "DCR-000004"); });
+      if (!exists) {
+        // Tautan pasfoto resolusi tinggi di Google Drive
+        const photoUrl = "https://lh3.googleusercontent.com/d/1CblSK1EVxRl3gQSyYsq_l8q6j0wg-Ziq";
+        docSheet.appendRow([
+          docId,
+          p.id,
+          "DCR-000004",
+          "PASFOTO_" + p.id + ".jpg",
+          photoUrl,
+          "VERIFIED",
+          "Pasfoto resmi E-Sertifikat Umroh (Tersimpan di Google Drive)",
+          "Document Officer",
+          "2026-10-22 14:00:00",
+          nowStr
+        ]);
+      }
+    });
+  }
+
+  logAudit_("Admin Sistem", "SEED_KLOTER_27_OKT", "DB_Registrations", "DEP-20261027", null, { total: pilgrims.length }, "Suntik 10 data jamaah kloter 27 Oktober 2026 berhak sertifikat");
+
+  return {
+    success: true,
+    message: "10 Data Jamaah Kloter 27 Oktober 2026 berhasil disuntikkan ke Google Spreadsheet!",
+    totalPilgrims: pilgrims.length,
+    departureId: "DEP-20261027",
+    departureDate: "27 Oktober 2026"
+  };
+}
+
 function createResponse(success, data, error, metadata) {
   const payload = {
     success: Boolean(success),
@@ -575,8 +734,10 @@ function doGet(e) {
           status: reg.status || "CONFIRMED",
           salesId: reg.sales_id || "USR-000001",
           docs: verifiedDocs + "/" + totalDocs,
-          payment: reg.status === 'CONFIRMED' ? 'Lunas (Terverifikasi)' : (hasVerifiedPay ? 'DP Terverifikasi' : 'Menunggu DP'),
+          payment: (reg.status === 'CONFIRMED' || reg.status === 'COMPLETED') ? 'Lunas (Terverifikasi)' : (hasVerifiedPay ? 'DP Terverifikasi' : 'Menunggu DP'),
           photoUrl: photoUrl,
+          isIssued: (reg.status === 'COMPLETED' || reg.departure_id === 'DEP-20261027'),
+          certificateNo: "SDW/CERT/2026/" + String(reg.id).replace(/\D/g, '').padStart(3, '0'),
           notes: reg.notes || "",
           createdAt: reg.created_at,
           updatedAt: reg.updated_at
@@ -787,6 +948,11 @@ function doGet(e) {
         return obj;
       }).reverse();
       return createResponse(true, items);
+    }
+
+    if (action === 'seedKloter27Okt') {
+      const res = seedKloter27Oktober2026(ss);
+      return createResponse(true, res);
     }
 
     return createResponse(false, null, "Aksi GET tidak dikenali: " + action);
@@ -1466,6 +1632,11 @@ function doPost(e) {
     // A. SETUP / BOOTSTRAP DATABASE
     if (action === 'initDatabase' || action === 'setupDatabase') {
       const res = setupDatabase();
+      return createResponse(true, res);
+    }
+
+    if (action === 'seedKloter27Okt') {
+      const res = seedKloter27Oktober2026();
       return createResponse(true, res);
     }
 
