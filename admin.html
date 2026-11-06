@@ -1971,39 +1971,23 @@
                         <input type="text" id="cert-input-no" oninput="SDW_ADMIN.updateCertificatePreview()" placeholder="Contoh: SDW/CERT/2027/2701" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-mono font-semibold text-slate-800 focus:border-sdw-pine outline-none">
                     </div>
 
-                    <!-- Upload Foto Jamaah & Penataan Crop Zoom -->
-                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <!-- Upload Foto Jamaah & Crop Interaktif -->
+                    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
                         <label class="block text-slate-700 text-xs font-bold">Pasfoto Jamaah untuk Sertifikat</label>
-                        <div class="flex items-center gap-3">
+                        <div class="flex flex-wrap items-center gap-2">
                             <label class="px-3 py-2 rounded-xl bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs cursor-pointer shadow-2xs flex items-center gap-2">
                                 <i class="fa-solid fa-cloud-arrow-up text-amber-600"></i>
                                 <span>Pilih Foto Baru</span>
                                 <input type="file" accept="image/*" onchange="SDW_ADMIN.handleCertificatePhotoUpload(this)" class="hidden">
                             </label>
-                            <span class="text-[10.5px] text-slate-400">Rasio pasfoto 3:4 atau 2:3</span>
+                            <button type="button" id="btn-reopen-cropper" onclick="SDW_ADMIN.reopenPhotoCropper()" class="px-3 py-2 rounded-xl bg-amber-50 border border-amber-300 hover:bg-amber-100 text-amber-900 font-bold text-xs cursor-pointer shadow-2xs flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-crop-simple text-amber-600"></i>
+                                <span>Crop &amp; Sesuaikan Foto</span>
+                            </button>
                         </div>
-
-                        <!-- Panel Kontrol Zoom Pasfoto (Hanya Zoom Saja) -->
-                        <div id="cert-photo-crop-panel" class="pt-2 border-t border-slate-200/80 space-y-2">
-                            <div class="flex items-center justify-between">
-                                <span class="text-[10.5px] font-extrabold text-slate-700 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-magnifying-glass-plus text-amber-600"></i>
-                                    <span>Penataan Pasfoto (Zoom)</span>
-                                </span>
-                                <button type="button" onclick="SDW_ADMIN.resetPhotoCrop()" class="text-[10px] text-amber-800 hover:text-amber-950 font-bold underline cursor-pointer">
-                                    Reset Zoom
-                                </button>
-                            </div>
-
-                            <!-- Slider Zoom -->
-                            <div>
-                                <div class="flex justify-between text-[10px] font-semibold text-slate-600 mb-0.5">
-                                    <span>Perbesar (Zoom):</span>
-                                    <span id="label-crop-zoom" class="font-mono text-amber-800 font-bold">100%</span>
-                                </div>
-                                <input type="range" id="crop-zoom" min="100" max="250" value="100" step="1" oninput="SDW_ADMIN.onPhotoCropChange()" class="w-full accent-amber-600 cursor-pointer h-1.5 bg-slate-200 rounded-lg">
-                            </div>
-                        </div>
+                        <p class="text-[10px] text-slate-400 leading-tight">
+                            Sebelum ditampilkan ke sertifikat, pratinjau foto hasil upload akan terbuka dan Anda dapat menarik pojoknya agar pas.
+                        </p>
                     </div>
                 </div>
 
@@ -2015,8 +1999,8 @@
                     <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1;">
                         <img src="assets/certificate-template.jpg" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
 
-                        <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Diskrit & Halus) -->
-                        <div id="modal-cert-preview-no" class="absolute font-mono font-medium text-slate-400 tracking-wider text-[5.5px] sm:text-[7.5px] md:text-[9px] pointer-events-none select-none opacity-80"
+                        <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan) -->
+                        <div id="modal-cert-preview-no" class="absolute font-semibold text-slate-500 tracking-normal text-[7px] sm:text-[9.5px] md:text-[11px] pointer-events-none select-none"
                              style="top: 5.8%; left: 6.8%;">
                             No: SDW/CERT/2027/2701
                         </div>
@@ -2024,7 +2008,7 @@
                         <!-- Photo Overlay di Bingkai Emas Kanan Atas (Lebar Sisi Kiri Ditambah) -->
                         <div id="modal-cert-preview-photo-box" class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100 select-none"
                              style="top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; border-radius: 2px;">
-                            <img id="modal-cert-preview-photo-img" src="" alt="Foto" class="w-full h-full object-cover hidden pointer-events-none select-none" style="transform-origin: center center;">
+                            <img id="modal-cert-preview-photo-img" src="" alt="Foto" class="w-full h-full object-cover hidden pointer-events-none select-none">
                             <div id="modal-cert-preview-photo-placeholder" class="w-full h-full flex items-center justify-center bg-slate-200 text-slate-400 pointer-events-none">
                                 <i class="fa-solid fa-user text-base sm:text-xl text-slate-400"></i>
                             </div>
@@ -2065,6 +2049,77 @@
                         <span>Simpan &amp; Terbitkan ke Jamaah</span>
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: INTERACTIVE PHOTO CROPPER ==================== -->
+    <div id="modalPhotoCropper" class="fixed inset-0 z-60 bg-slate-950/90 backdrop-blur-md hidden items-center justify-center p-3 sm:p-5 overflow-y-auto">
+        <div class="bg-slate-900 rounded-3xl max-w-xl w-full shadow-2xl border border-slate-700 overflow-hidden transform transition-all my-auto flex flex-col text-white">
+            <!-- Cropper Header -->
+            <div class="px-5 py-4 bg-slate-800/80 border-b border-slate-700 flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+                        <i class="fa-solid fa-crop-simple text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm sm:text-base leading-tight text-white">Crop &amp; Sesuaikan Pasfoto</h3>
+                        <span class="text-[10px] text-amber-300 font-medium block">Tarik sudut pojok kotak atau geser posisi wajah</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closePhotoCropperModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer" aria-label="Tutup Crop">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Cropper Workspace -->
+            <div class="p-4 sm:p-5 flex flex-col items-center justify-center space-y-3">
+                <div id="cropper-stage-container" class="relative max-w-full overflow-hidden bg-slate-950 rounded-2xl border border-slate-800 flex items-center justify-center select-none" style="max-height: 380px;">
+                    <!-- Source Image -->
+                    <img id="cropper-source-img" src="" alt="Foto Sumber" class="block max-h-[380px] max-w-full select-none pointer-events-none" style="object-fit: contain;">
+
+                    <!-- Interactive Crop Box with Dim Mask -->
+                    <div id="cropper-crop-box" class="absolute cursor-move select-none"
+                         style="border: 2px solid #fbbf24; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.65); touch-action: none;">
+                        <!-- Grid lines (Rule of thirds) -->
+                        <div class="w-full h-full grid grid-cols-3 grid-rows-3 pointer-events-none border border-amber-300/30">
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-r border-b border-white/20"></div>
+                            <div class="border-b border-white/20"></div>
+                            <div class="border-r border-white/20"></div>
+                            <div class="border-r border-white/20"></div>
+                            <div></div>
+                        </div>
+
+                        <!-- 4 Corner Handles yang bisa ditarik -->
+                        <div class="crop-corner-handle cropper-handle-nw absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nwse-resize -top-2 -left-2 z-10" data-handle="nw"></div>
+                        <div class="crop-corner-handle cropper-handle-ne absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nesw-resize -top-2 -right-2 z-10" data-handle="ne"></div>
+                        <div class="crop-corner-handle cropper-handle-sw absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nesw-resize -bottom-2 -left-2 z-10" data-handle="sw"></div>
+                        <div class="crop-corner-handle cropper-handle-se absolute w-3.5 h-3.5 bg-amber-400 border-2 border-white rounded-xs shadow cursor-nwse-resize -bottom-2 -right-2 z-10" data-handle="se"></div>
+                    </div>
+                </div>
+
+                <div class="w-full flex items-center justify-between text-xs text-slate-400 px-1">
+                    <span class="text-[11px] flex items-center gap-1.5 text-slate-300">
+                        <i class="fa-solid fa-arrows-up-down-left-right text-amber-400"></i>
+                        <span>Tarik sudut kotak untuk mengatur ukuran foto</span>
+                    </span>
+                    <span class="text-[10px] text-amber-300 font-bold bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/30">Rasio Piagam 135:171</span>
+                </div>
+            </div>
+
+            <!-- Cropper Footer -->
+            <div class="p-4 bg-slate-800/80 border-t border-slate-700 flex items-center justify-between gap-2.5 shrink-0">
+                <button type="button" onclick="SDW_ADMIN.closePhotoCropperModal()" class="px-4 py-2.5 rounded-xl border border-slate-600 hover:bg-slate-700 text-slate-300 font-bold text-xs transition cursor-pointer">
+                    Batal
+                </button>
+                <button type="button" onclick="SDW_ADMIN.applyPhotoCrop()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:brightness-110 text-slate-950 font-black text-xs transition flex items-center gap-2 cursor-pointer shadow-md">
+                    <i class="fa-solid fa-check"></i>
+                    <span>Terapkan ke Sertifikat</span>
+                </button>
             </div>
         </div>
     </div>

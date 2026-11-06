@@ -222,39 +222,32 @@
         }
     }
 
-    // 3. Sinkronisasi UI Slider Zoom
-    function syncCropSlidersUI() {
-        const zoomInput = document.getElementById('crop-zoom');
-        const zoomLabel = document.getElementById('label-crop-zoom');
+    // 3. Status & Interaksi Cropper Pasfoto Interaktif (Corner Dragging & Moving)
+    const CROP_RATIO = 135 / 171; // Rasio piagam bingkai emas (~0.7895)
+    let cropperState = {
+        isDragging: false,
+        isResizing: false,
+        activeHandle: null,
+        startX: 0,
+        startY: 0,
+        boxStartX: 0,
+        boxStartY: 0,
+        boxStartW: 0,
+        boxStartH: 0,
+        imgNaturalW: 0,
+        imgNaturalH: 0,
+        imgRenderedW: 0,
+        imgRenderedH: 0,
+        imgOffsetLeft: 0,
+        imgOffsetTop: 0,
+        initializedEvents: false
+    };
 
-        if (zoomInput) zoomInput.value = activeCertCrop.zoom || 100;
-        if (zoomLabel) zoomLabel.textContent = `${activeCertCrop.zoom || 100}%`;
-    }
-
-    // Event Handler saat slider zoom digeser
-    function onPhotoCropChange() {
-        const zoomInput = document.getElementById('crop-zoom');
-        activeCertCrop.zoom = parseInt(zoomInput ? zoomInput.value : '100', 10) || 100;
-
-        syncCropSlidersUI();
-        updatePhotoTransformPreview();
-    }
-
-    // Reset zoom pasfoto
+    // Helper compatibility
+    function syncCropSlidersUI() {}
+    function onPhotoCropChange() {}
     function resetPhotoCrop() {
         activeCertCrop = { zoom: 100 };
-        syncCropSlidersUI();
-        updatePhotoTransformPreview();
-    }
-
-    // Update transformasi CSS foto pratinjau real-time (Skala Terpusat)
-    function updatePhotoTransformPreview() {
-        const previewImg = document.getElementById('modal-cert-preview-photo-img');
-        if (!previewImg) return;
-
-        const scale = (activeCertCrop.zoom || 100) / 100;
-        previewImg.style.transform = `scale(${scale})`;
-        previewImg.style.transformOrigin = 'center center';
     }
 
     // 4. Update Real-Time Live Preview Teks di Layar Modal
@@ -274,7 +267,7 @@
 
         if (previewName) previewName.textContent = nameVal;
 
-        // Nomor Sertifikat di Pojok Kiri Atas
+        // Nomor Sertifikat di Pojok Kiri Atas (Warna & Ukuran serasi dengan tanggal)
         if (previewNo) {
             previewNo.textContent = noVal.startsWith('No') ? noVal : `No: ${noVal}`;
         }
@@ -285,13 +278,13 @@
             previewDate.textContent = cleanDateLabel;
         }
 
-        const photoToDisplay = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
+        const photoToDisplay = activeCertPhotoDataUrl || activeRawPhotoDataUrl;
 
         if (photoToDisplay) {
             if (previewImg) {
                 previewImg.src = photoToDisplay;
                 previewImg.classList.remove('hidden');
-                updatePhotoTransformPreview();
+                previewImg.style.transform = 'none';
             }
             if (previewPlaceholder) previewPlaceholder.classList.add('hidden');
         } else {
@@ -307,62 +300,326 @@
         const reader = new FileReader();
         reader.onload = function (e) {
             activeRawPhotoDataUrl = e.target.result;
-            activeCertPhotoDataUrl = e.target.result;
-            resetPhotoCrop();
-            updateCertificatePreview();
-            if (typeof admin.showToast === 'function') {
-                admin.showToast('Pasfoto berhasil diunggah! Sesuaikan zoom perbesar jika diperlukan.');
-            }
+            // Langsung buka modal pratinjau crop interaktif sebelum ditampilkan ke sertifikat!
+            openPhotoCropper(activeRawPhotoDataUrl);
         };
         reader.readAsDataURL(file);
+        input.value = ''; // Reset input agar file yang sama bisa dipilih kembali jika diinginkan
     }
 
-    // Helper: Bake / Crop Foto ke Canvas Terpusat dengan Rasio Presisi 135:171 (Resolusi Tinggi 405x513)
-    function bakeCroppedPhoto(imageSrc, scale, callback) {
-        if (!imageSrc) {
-            callback(null);
+    // Buka Modal Cropper Interaktif
+    function openPhotoCropper(imageSrc) {
+        if (!imageSrc) return;
+        const modal = document.getElementById('modalPhotoCropper');
+        const sourceImg = document.getElementById('cropper-source-img');
+        if (!modal || !sourceImg) return;
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+
+        initCropperEventListeners();
+
+        sourceImg.onload = function () {
+            initCropBoxPosition();
+        };
+        sourceImg.src = imageSrc;
+
+        if (sourceImg.complete && sourceImg.naturalWidth > 0) {
+            setTimeout(initCropBoxPosition, 60);
+        }
+    }
+
+    function closePhotoCropperModal() {
+        const modal = document.getElementById('modalPhotoCropper');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+    }
+
+    function reopenPhotoCropper() {
+        const src = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
+        if (!src) {
+            alert('Silakan pilih foto jamaah terlebih dahulu menggunakan tombol Pilih Foto Baru.');
             return;
         }
+        openPhotoCropper(src);
+    }
 
-        const img = new Image();
-        img.crossOrigin = 'anonymous';
-        img.onload = function () {
-            const targetW = 405;
-            const targetH = 513;
-            const canvas = document.createElement('canvas');
-            canvas.width = targetW;
-            canvas.height = targetH;
-            const ctx = canvas.getContext('2d');
+    // Posisikan Crop Box di tengah gambar dengan rasio piagam 135:171
+    function initCropBoxPosition() {
+        const stage = document.getElementById('cropper-stage-container');
+        const sourceImg = document.getElementById('cropper-source-img');
+        const cropBox = document.getElementById('cropper-crop-box');
+        if (!stage || !sourceImg || !cropBox) return;
 
-            ctx.fillStyle = '#f8fafc';
-            ctx.fillRect(0, 0, targetW, targetH);
+        const imgRect = sourceImg.getBoundingClientRect();
+        const stageRect = stage.getBoundingClientRect();
 
-            const imgAspect = img.width / img.height;
-            const targetAspect = targetW / targetH;
-            let drawW, drawH;
+        const imgW = imgRect.width;
+        const imgH = imgRect.height;
+        if (imgW <= 0 || imgH <= 0) return;
 
-            if (imgAspect > targetAspect) {
-                drawH = targetH * scale;
-                drawW = drawH * imgAspect;
-            } else {
-                drawW = targetW * scale;
-                drawH = drawW / imgAspect;
+        const imgLeft = imgRect.left - stageRect.left;
+        const imgTop = imgRect.top - stageRect.top;
+
+        cropperState.imgNaturalW = sourceImg.naturalWidth || imgW;
+        cropperState.imgNaturalH = sourceImg.naturalHeight || imgH;
+        cropperState.imgRenderedW = imgW;
+        cropperState.imgRenderedH = imgH;
+        cropperState.imgOffsetLeft = imgLeft;
+        cropperState.imgOffsetTop = imgTop;
+
+        // Inisialisasi crop box proporsional (~82% tinggi gambar atau lebar gambar)
+        let boxH = imgH * 0.82;
+        let boxW = boxH * CROP_RATIO;
+
+        if (boxW > imgW * 0.95) {
+            boxW = imgW * 0.95;
+            boxH = boxW / CROP_RATIO;
+        }
+
+        const boxLeft = imgLeft + (imgW - boxW) / 2;
+        const boxTop = imgTop + (imgH - boxH) / 2;
+
+        cropBox.style.left = `${boxLeft}px`;
+        cropBox.style.top = `${boxTop}px`;
+        cropBox.style.width = `${boxW}px`;
+        cropBox.style.height = `${boxH}px`;
+    }
+
+    // Pasang Event Listeners untuk drag box dan tarik sudut (corner handles)
+    function initCropperEventListeners() {
+        if (cropperState.initializedEvents) return;
+        cropperState.initializedEvents = true;
+
+        const stage = document.getElementById('cropper-stage-container');
+        const cropBox = document.getElementById('cropper-crop-box');
+        if (!stage || !cropBox) return;
+
+        function getPoint(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
             }
+            return { x: e.clientX, y: e.clientY };
+        }
 
-            const shiftX = (targetW - drawW) / 2;
-            const shiftY = (targetH - drawH) / 2;
-
-            ctx.drawImage(img, shiftX, shiftY, drawW, drawH);
-            try {
-                callback(canvas.toDataURL('image/jpeg', 0.95));
-            } catch (err) {
-                callback(imageSrc);
+        // Pointer down pada corner handle
+        stage.addEventListener('mousedown', function (e) {
+            const handle = e.target.closest('.crop-corner-handle');
+            if (handle) {
+                e.preventDefault();
+                e.stopPropagation();
+                startResize(handle.getAttribute('data-handle'), getPoint(e));
+                return;
             }
-        };
-        img.onerror = function () {
-            callback(imageSrc);
-        };
-        img.src = imageSrc;
+            if (e.target.closest('#cropper-crop-box')) {
+                e.preventDefault();
+                startDrag(getPoint(e));
+            }
+        });
+
+        stage.addEventListener('touchstart', function (e) {
+            const handle = e.target.closest('.crop-corner-handle');
+            if (handle) {
+                e.stopPropagation();
+                startResize(handle.getAttribute('data-handle'), getPoint(e));
+                return;
+            }
+            if (e.target.closest('#cropper-crop-box')) {
+                startDrag(getPoint(e));
+            }
+        }, { passive: true });
+
+        function startDrag(pt) {
+            cropperState.isDragging = true;
+            cropperState.isResizing = false;
+            cropperState.startX = pt.x;
+            cropperState.startY = pt.y;
+            cropperState.boxStartX = parseFloat(cropBox.style.left) || 0;
+            cropperState.boxStartY = parseFloat(cropBox.style.top) || 0;
+        }
+
+        function startResize(handleType, pt) {
+            cropperState.isResizing = true;
+            cropperState.isDragging = false;
+            cropperState.activeHandle = handleType;
+            cropperState.startX = pt.x;
+            cropperState.startY = pt.y;
+            cropperState.boxStartX = parseFloat(cropBox.style.left) || 0;
+            cropperState.boxStartY = parseFloat(cropBox.style.top) || 0;
+            cropperState.boxStartW = parseFloat(cropBox.style.width) || 100;
+            cropperState.boxStartH = parseFloat(cropBox.style.height) || (100 / CROP_RATIO);
+        }
+
+        function onPointerMove(e) {
+            if (!cropperState.isDragging && !cropperState.isResizing) return;
+            const pt = getPoint(e);
+
+            const minX = cropperState.imgOffsetLeft;
+            const maxX = cropperState.imgOffsetLeft + cropperState.imgRenderedW;
+            const minY = cropperState.imgOffsetTop;
+            const maxY = cropperState.imgOffsetTop + cropperState.imgRenderedH;
+            const minBoxW = 40;
+
+            if (cropperState.isDragging) {
+                const dx = pt.x - cropperState.startX;
+                const dy = pt.y - cropperState.startY;
+                const curW = parseFloat(cropBox.style.width) || cropperState.boxStartW;
+                const curH = parseFloat(cropBox.style.height) || cropperState.boxStartH;
+
+                let newL = cropperState.boxStartX + dx;
+                let newT = cropperState.boxStartY + dy;
+
+                if (newL < minX) newL = minX;
+                if (newL + curW > maxX) newL = maxX - curW;
+                if (newT < minY) newT = minY;
+                if (newT + curH > maxY) newT = maxY - curH;
+
+                cropBox.style.left = `${newL}px`;
+                cropBox.style.top = `${newT}px`;
+            } else if (cropperState.isResizing) {
+                const handle = cropperState.activeHandle;
+                const dx = pt.x - cropperState.startX;
+
+                if (handle === 'se') {
+                    // Tarik sudut Tenggara (kanan-bawah)
+                    let newW = cropperState.boxStartW + dx;
+                    let newH = newW / CROP_RATIO;
+                    if (cropperState.boxStartX + newW > maxX) {
+                        newW = maxX - cropperState.boxStartX;
+                        newH = newW / CROP_RATIO;
+                    }
+                    if (cropperState.boxStartY + newH > maxY) {
+                        newH = maxY - cropperState.boxStartY;
+                        newW = newH * CROP_RATIO;
+                    }
+                    if (newW >= minBoxW) {
+                        cropBox.style.width = `${newW}px`;
+                        cropBox.style.height = `${newH}px`;
+                    }
+                } else if (handle === 'sw') {
+                    // Tarik sudut Barat Daya (kiri-bawah)
+                    let newW = cropperState.boxStartW - dx;
+                    let newH = newW / CROP_RATIO;
+                    let newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
+
+                    if (newL < minX) {
+                        newL = minX;
+                        newW = cropperState.boxStartX + cropperState.boxStartW - minX;
+                        newH = newW / CROP_RATIO;
+                    }
+                    if (cropperState.boxStartY + newH > maxY) {
+                        newH = maxY - cropperState.boxStartY;
+                        newW = newH * CROP_RATIO;
+                        newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
+                    }
+                    if (newW >= minBoxW) {
+                        cropBox.style.left = `${newL}px`;
+                        cropBox.style.width = `${newW}px`;
+                        cropBox.style.height = `${newH}px`;
+                    }
+                } else if (handle === 'ne') {
+                    // Tarik sudut Timur Laut (kanan-atas)
+                    let newW = cropperState.boxStartW + dx;
+                    let newH = newW / CROP_RATIO;
+                    let newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+
+                    if (cropperState.boxStartX + newW > maxX) {
+                        newW = maxX - cropperState.boxStartX;
+                        newH = newW / CROP_RATIO;
+                        newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+                    }
+                    if (newT < minY) {
+                        newT = minY;
+                        newH = cropperState.boxStartY + cropperState.boxStartH - minY;
+                        newW = newH * CROP_RATIO;
+                    }
+                    if (newW >= minBoxW) {
+                        cropBox.style.top = `${newT}px`;
+                        cropBox.style.width = `${newW}px`;
+                        cropBox.style.height = `${newH}px`;
+                    }
+                } else if (handle === 'nw') {
+                    // Tarik sudut Barat Laut (kiri-atas)
+                    let newW = cropperState.boxStartW - dx;
+                    let newH = newW / CROP_RATIO;
+                    let newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
+                    let newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+
+                    if (newL < minX) {
+                        newL = minX;
+                        newW = cropperState.boxStartX + cropperState.boxStartW - minX;
+                        newH = newW / CROP_RATIO;
+                        newT = cropperState.boxStartY + (cropperState.boxStartH - newH);
+                    }
+                    if (newT < minY) {
+                        newT = minY;
+                        newH = cropperState.boxStartY + cropperState.boxStartH - minY;
+                        newW = newH * CROP_RATIO;
+                        newL = cropperState.boxStartX + (cropperState.boxStartW - newW);
+                    }
+                    if (newW >= minBoxW) {
+                        cropBox.style.left = `${newL}px`;
+                        cropBox.style.top = `${newT}px`;
+                        cropBox.style.width = `${newW}px`;
+                        cropBox.style.height = `${newH}px`;
+                    }
+                }
+            }
+        }
+
+        function onPointerUp() {
+            cropperState.isDragging = false;
+            cropperState.isResizing = false;
+            cropperState.activeHandle = null;
+        }
+
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchend', onPointerUp);
+    }
+
+    // Terapkan Hasil Crop ke Sertifikat
+    function applyPhotoCrop() {
+        const sourceImg = document.getElementById('cropper-source-img');
+        const cropBox = document.getElementById('cropper-crop-box');
+        if (!sourceImg || !cropBox) return;
+
+        const boxRect = cropBox.getBoundingClientRect();
+        const imgRect = sourceImg.getBoundingClientRect();
+
+        const scaleX = sourceImg.naturalWidth / imgRect.width;
+        const scaleY = sourceImg.naturalHeight / imgRect.height;
+
+        const cropX = Math.max(0, (boxRect.left - imgRect.left) * scaleX);
+        const cropY = Math.max(0, (boxRect.top - imgRect.top) * scaleY);
+        const cropW = Math.min(sourceImg.naturalWidth - cropX, boxRect.width * scaleX);
+        const cropH = Math.min(sourceImg.naturalHeight - cropY, boxRect.height * scaleY);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 405;
+        canvas.height = 513;
+        const ctx = canvas.getContext('2d');
+
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(sourceImg, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height);
+
+        try {
+            activeCertPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.95);
+        } catch (err) {
+            console.warn('Gagal export canvas crop:', err);
+            activeCertPhotoDataUrl = sourceImg.src;
+        }
+
+        updateCertificatePreview();
+        closePhotoCropperModal();
+
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('✅ Pasfoto berhasil disesuaikan & diterapkan ke sertifikat!');
+        }
     }
 
     // 6. Simpan Sertifikat & Terbitkan ke Aplikasi Jamaah
@@ -385,30 +642,27 @@
         }
 
         const sourcePhoto = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
-        const scale = (activeCertCrop.zoom || 100) / 100;
+        const finalPhoto = activeCertPhotoDataUrl || sourcePhoto;
 
-        bakeCroppedPhoto(sourcePhoto, scale, function (bakedUrl) {
-            const certStore = getCertificatesStore();
-            certStore[regId] = {
-                isIssued: true,
-                issuedAt: new Date().toISOString(),
-                certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
-                displayName: displayName,
-                departureDate: departureDate || '15 Januari 2027',
-                photoUrl: bakedUrl,
-                rawPhotoUrl: sourcePhoto,
-                cropZoom: activeCertCrop.zoom || 100
-            };
-            saveCertificatesStore(certStore);
+        const certStore = getCertificatesStore();
+        certStore[regId] = {
+            isIssued: true,
+            issuedAt: new Date().toISOString(),
+            certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
+            displayName: displayName,
+            departureDate: departureDate || '15 Januari 2027',
+            photoUrl: finalPhoto,
+            rawPhotoUrl: sourcePhoto
+        };
+        saveCertificatesStore(certStore);
 
-            closeCertificateModal();
-            renderCertificates();
-            if (typeof admin.showToast === 'function') {
-                admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
-            } else {
-                alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
-            }
-        });
+        closeCertificateModal();
+        renderCertificates();
+        if (typeof admin.showToast === 'function') {
+            admin.showToast(`✅ E-Sertifikat atas nama ${displayName} (${regId}) berhasil disimpan & diterbitkan!`);
+        } else {
+            alert(`E-Sertifikat atas nama ${displayName} berhasil diterbitkan!`);
+        }
     }
 
     // 7. Cetak Piagam Format A4 Landscape
@@ -439,7 +693,7 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: monospace; font-size: 10px; font-weight: 500; color: #94a3b8; letter-spacing: 0.5px; opacity: 0.85; }
+                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: sans-serif; font-size: 14.5px; font-weight: 600; color: #64748b; letter-spacing: 0.2px; }
                     .cert-photo { position: absolute; top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; object-fit: cover; border-radius: 2px; }
                     .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -526,6 +780,10 @@
     admin.closeCertificateModal = closeCertificateModal;
     admin.updateCertificatePreview = updateCertificatePreview;
     admin.handleCertificatePhotoUpload = handleCertificatePhotoUpload;
+    admin.openPhotoCropper = openPhotoCropper;
+    admin.closePhotoCropperModal = closePhotoCropperModal;
+    admin.reopenPhotoCropper = reopenPhotoCropper;
+    admin.applyPhotoCrop = applyPhotoCrop;
     admin.onPhotoCropChange = onPhotoCropChange;
     admin.resetPhotoCrop = resetPhotoCrop;
     admin.saveCertificate = saveCertificate;

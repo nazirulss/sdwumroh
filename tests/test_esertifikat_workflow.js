@@ -63,7 +63,9 @@ assert(adminHtml.includes('id="table-certificates-body"'), 'Tabel daftar sertifi
 assert(adminHtml.includes('id="modalCertificateEditor"'), 'Modal editor sertifikat harus ada');
 assert(adminHtml.includes('id="modal-cert-preview-name"'), 'Preview nama di modal editor harus ada');
 assert(adminHtml.includes('id="modal-cert-preview-no"'), 'Nomor sertifikat pojok kiri atas di modal preview harus ada');
-assert(adminHtml.includes('id="crop-zoom"'), 'Slider Zoom harus ada di modal');
+assert(adminHtml.includes('id="modalPhotoCropper"'), 'Modal Cropper Interaktif harus ada di admin.html');
+assert(adminHtml.includes('id="cropper-crop-box"'), 'Kotak seleksi crop box dengan corner handles harus ada');
+assert(adminHtml.includes('id="btn-reopen-cropper"'), 'Tombol buka kembali cropper harus ada');
 assert(adminHtml.includes('js/admin/admin-certificates.js'), 'admin-certificates.js harus dimuat di admin.html');
 console.log('  [PASS] Navigasi, tab view, live preview modal, dan script loader di admin.html terverifikasi!');
 
@@ -89,9 +91,11 @@ assert(adminCertsJs.includes('printCertificate'), 'printCertificate harus ada');
 assert(adminCertsJs.includes('generateBulkCertificates'), 'generateBulkCertificates harus ada');
 assert(adminCertsJs.includes('handleCertificatePhotoUpload'), 'handleCertificatePhotoUpload harus ada');
 assert(adminCertsJs.includes('updateCertificatePreview'), 'updateCertificatePreview harus ada');
-assert(adminCertsJs.includes('onPhotoCropChange'), 'onPhotoCropChange harus ada');
-assert(adminCertsJs.includes('resetPhotoCrop'), 'resetPhotoCrop harus ada');
-console.log('  [PASS] Fungsi-fungsi CRUD, live preview, dan Crop pasfoto admin terverifikasi!');
+assert(adminCertsJs.includes('openPhotoCropper'), 'openPhotoCropper harus ada');
+assert(adminCertsJs.includes('applyPhotoCrop'), 'applyPhotoCrop harus ada');
+assert(adminCertsJs.includes('closePhotoCropperModal'), 'closePhotoCropperModal harus ada');
+assert(adminCertsJs.includes('reopenPhotoCropper'), 'reopenPhotoCropper harus ada');
+console.log('  [PASS] Fungsi-fungsi CRUD, live preview, dan Crop pasfoto interaktif admin terverifikasi!');
 
 // 7. Pengujian Fungsional Logika Sertifikat di Lingkungan Node
 console.log('\n7. Pengujian Fungsional Logika Registrasi & Sertifikat di Lingkungan Node');
