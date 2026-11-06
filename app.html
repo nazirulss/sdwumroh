@@ -952,24 +952,25 @@
                                     </div>
                                 </div>
 
-                                <!-- BARIS TENGAH: Foto 2:3 Proporsional di Kiri • Nilai Data Murni di Kanan -->
+                                <!-- BARIS TENGAH: Foto Rasio 3:4 Gagah di Kiri • Nilai Data Murni di Kanan -->
                                 <div class="flex gap-3 sm:gap-4 items-center flex-1 my-1">
-                                    <!-- SISI KIRI: Foto 2:3 Diperbesar & Proporsional (92x138px, 100% Polos) -->
-                                    <div class="shrink-0">
-                                        <div class="w-[92px] h-[138px] sm:w-[104px] sm:h-[156px] rounded-xl overflow-hidden relative flex items-center justify-center shadow-md"
-                                             style="border: 1.5px solid rgba(220, 175, 80, 0.65); background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);">
+                                    <!-- SISI KIRI: Foto Rasio 3:4 Besar & Proporsional (108px x 144px, Inline Style Anti-Collapse) -->
+                                    <div class="shrink-0" style="width: 108px; height: 144px; min-width: 108px; min-height: 144px;">
+                                        <div class="w-full h-full rounded-xl overflow-hidden relative flex items-center justify-center shadow-md"
+                                             style="width: 108px !important; height: 144px !important; aspect-ratio: 3/4; border: 1.5px solid rgba(220, 175, 80, 0.65); background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);">
                                             <!-- Foto Jamaah Nyata (jika sudah diunggah) -->
                                             <img id="jamaah-photo-img" src="" alt="Foto Jamaah" class="w-full h-full object-cover hidden">
                                             
-                                            <!-- Placeholder Foto Polos: Siluet Avatar Netral Saja -->
-                                            <div id="jamaah-photo-placeholder" class="w-full h-full flex items-center justify-center text-slate-400">
-                                                <i class="fa-solid fa-user text-3xl sm:text-4xl text-slate-400/80"></i>
+                                            <!-- Placeholder Foto Polos: Siluet Avatar Netral Rasio 3:4 -->
+                                            <div id="jamaah-photo-placeholder" class="w-full h-full flex items-center justify-center text-slate-400"
+                                                 style="background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);">
+                                                <i class="fa-solid fa-user text-4xl text-slate-400/80"></i>
                                             </div>
                                         </div>
                                     </div>
 
                                     <!-- SISI KANAN: Hanya Nilai Data (Tanpa Label Teks), Tipografi Bersih & Elegan -->
-                                    <div class="flex-1 min-w-0 flex flex-col justify-center h-full py-0.5 space-y-1">
+                                    <div class="flex-1 min-w-0 flex flex-col justify-center h-full py-0.5 space-y-1.5">
                                         <!-- Nama Lengkap Jamaah -->
                                         <div>
                                             <h3 id="jamaah-name" class="font-black text-white text-base sm:text-lg tracking-wide uppercase leading-tight truncate"
