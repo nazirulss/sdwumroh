@@ -689,8 +689,175 @@
 
                 <!-- Konten Terautentikasi (E-Pass, Dokumen, Invoice, Manasik) -->
                 <div id="profileAuthenticatedCard" class="space-y-4">
-                    <!-- 1. KARTU DIGITAL JAMAAH (E-Pass SDW Luxury Boarding Pass Style) -->
-                <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] text-white p-5 sm:p-6 shadow-xl border border-sdw-gold/40">
+                    <!-- ==================== KONDISI 1: JAMAAH BARU (BELUM PILIH PAKET) ==================== -->
+                    <div id="profileNewPilgrimSection" class="space-y-4">
+                        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#240833] via-[#3E165B] to-[#4C1D6B] text-white p-5 sm:p-6 shadow-xl border border-sdw-gold/40">
+                            <div class="flex items-center gap-2 pb-3 border-b border-white/10">
+                                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                    LANGKAH 1 DARI 5
+                                </span>
+                                <span class="text-[11px] text-purple-200/80 font-medium">Akun Berhasil Dibuat</span>
+                            </div>
+                            <div class="py-4 space-y-2">
+                                <h3 class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                                    Ahlan wa Sahlan, <span id="new-pilgrim-name" class="text-amber-300">Jamaah</span>!
+                                </h3>
+                                <p class="text-xs text-purple-200/90 leading-relaxed">
+                                    Akun Anda telah terdaftar resmi. Silakan <strong>tentukan program paket umroh</strong> dan <strong>jadwal keberangkatan impian Anda</strong> untuk menerbitkan Boarding Pass E-Pass dan reservasi kuota hotel Haramain.
+                                </p>
+                            </div>
+
+                            <!-- Stepper Pendaftaran Baru -->
+                            <div class="pt-3 border-t border-white/10">
+                                <div class="grid grid-cols-5 gap-1 text-center text-[9px]">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs mb-1 shadow-sm">
+                                            <i class="fa-solid fa-check"></i>
+                                        </div>
+                                        <span class="font-bold text-emerald-300">Akun</span>
+                                        <span class="text-[8px] text-emerald-200/70">Aktif</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-7 h-7 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center font-black text-xs mb-1 animate-pulse shadow-md">
+                                            <i class="fa-solid fa-kaaba"></i>
+                                        </div>
+                                        <span class="font-bold text-amber-300">Pilih Paket</span>
+                                        <span class="text-[8px] text-amber-200/70">Sekarang</span>
+                                    </div>
+                                    <div class="flex flex-col items-center opacity-60">
+                                        <div class="w-7 h-7 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xs mb-1">
+                                            3
+                                        </div>
+                                        <span class="font-medium text-slate-300">Bayar DP</span>
+                                        <span class="text-[8px] text-slate-400">Rp 5 Jt</span>
+                                    </div>
+                                    <div class="flex flex-col items-center opacity-60">
+                                        <div class="w-7 h-7 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xs mb-1">
+                                            4
+                                        </div>
+                                        <span class="font-medium text-slate-300">Dokumen</span>
+                                        <span class="text-[8px] text-slate-400">Paspor</span>
+                                    </div>
+                                    <div class="flex flex-col items-center opacity-60">
+                                        <div class="w-7 h-7 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xs mb-1">
+                                            <i class="fa-solid fa-plane"></i>
+                                        </div>
+                                        <span class="font-medium text-slate-300">E-Pass</span>
+                                        <span class="text-[8px] text-slate-400">Terbang</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tombol Aksi Utama -->
+                            <div class="pt-4 flex flex-col sm:flex-row gap-2">
+                                <button type="button" onclick="window.openAppSubView('paket')" class="flex-1 py-3 px-4 rounded-2xl bg-gradient-to-r from-gold-500 via-amber-400 to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition cursor-pointer">
+                                    <i class="fa-solid fa-kaaba text-sm"></i>
+                                    <span>Pilih &amp; Booking Paket Umroh</span>
+                                </button>
+                                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20sudah%20buat%20akun%20dan%20ingin%20konsultasi%20jadwal%20keberangkatan." target="_blank" rel="noopener noreferrer" class="py-3 px-4 rounded-2xl bg-emerald-600/90 hover:bg-emerald-600 text-white font-bold text-xs flex items-center justify-center gap-2 border border-emerald-400/30 active:scale-95 transition">
+                                    <i class="fa-brands fa-whatsapp text-sm"></i>
+                                    <span>Konsultasi WA</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Shortcut Cepat Fitur Ibadah Jamaah -->
+                        <div class="p-4 bg-white rounded-3xl border border-sdw-border shadow-xs space-y-3">
+                            <h4 class="font-extrabold text-xs text-sdw-pine flex items-center gap-2">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                                <span>Fitur Ibadah &amp; Persiapan yang Siap Anda Gunakan:</span>
+                            </h4>
+                            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                <button type="button" onclick="window.openAppSubView('kiblat')" class="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-left transition active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-compass text-emerald-600 text-base mb-1 block"></i>
+                                    <span class="font-bold text-xs text-slate-800 block">Arah Kiblat</span>
+                                    <span class="text-[9.5px] text-slate-400">Kompas Digital</span>
+                                </button>
+                                <button type="button" onclick="window.openAppSubView('koper')" class="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-left transition active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-suitcase-rolling text-amber-600 text-base mb-1 block"></i>
+                                    <span class="font-bold text-xs text-slate-800 block">Checklist Koper</span>
+                                    <span class="text-[9.5px] text-slate-400">Panduan Bawaan</span>
+                                </button>
+                                <button type="button" onclick="window.openAppSubView('ziarah')" class="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-left transition active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-map-location-dot text-teal-600 text-base mb-1 block"></i>
+                                    <span class="font-bold text-xs text-slate-800 block">Peta Ziarah</span>
+                                    <span class="text-[9.5px] text-slate-400">Makkah &amp; Madinah</span>
+                                </button>
+                                <button type="button" onclick="window.openAppSubView('live')" class="p-2.5 rounded-2xl bg-slate-50 hover:bg-slate-100 border border-slate-200/80 text-left transition active:scale-95 cursor-pointer">
+                                    <i class="fa-solid fa-tower-broadcast text-rose-600 text-base mb-1 block"></i>
+                                    <span class="font-bold text-xs text-slate-800 block">Live Ka'bah</span>
+                                    <span class="text-[9.5px] text-slate-400">Streaming 24 Jam</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== KONDISI 2: MENUNGGU PEMBAYARAN DP ==================== -->
+                    <div id="profilePendingDpSection" class="hidden space-y-4">
+                        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] text-white p-5 sm:p-6 shadow-xl border border-amber-400/40">
+                            <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black bg-amber-400 text-slate-950 uppercase tracking-wider">
+                                    MENUNGGU PEMBAYARAN DP
+                                </span>
+                                <span id="pending-reg-badge" class="font-mono text-xs text-amber-300 font-bold">REG-SDW-XXXX</span>
+                            </div>
+
+                            <div class="py-3.5 space-y-2">
+                                <span class="text-[10px] text-purple-200/80 uppercase tracking-widest font-bold">Paket Pilihan Anda</span>
+                                <h3 id="pending-package-title" class="text-lg sm:text-xl font-black text-white leading-tight">
+                                    Umroh Reguler Syawal Barakah (9 Hari)
+                                </h3>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-2 text-[11px]">
+                                    <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                                        <span class="text-[9.5px] text-purple-200/70 block">Kamar</span>
+                                        <strong id="pending-room-type" class="text-white block mt-0.5">Quad</strong>
+                                    </div>
+                                    <div class="bg-black/30 p-2 rounded-xl border border-white/10">
+                                        <span class="text-[9.5px] text-purple-200/70 block">Jadwal</span>
+                                        <strong id="pending-departure-date" class="text-amber-300 block mt-0.5">Musim 1448H</strong>
+                                    </div>
+                                    <div class="bg-black/30 p-2 rounded-xl border border-white/10 col-span-2 sm:col-span-1">
+                                        <span class="text-[9.5px] text-purple-200/70 block">Total Paket</span>
+                                        <strong id="pending-total-price" class="text-white block mt-0.5">Rp 33.500.000</strong>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tagihan Nominal DP & Info Rekening -->
+                            <div class="bg-amber-400/10 border border-amber-400/30 p-4 rounded-2xl space-y-2.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-amber-200 font-semibold">Kewajiban DP Booking:</span>
+                                    <span id="pending-dp-amount" class="text-lg font-black text-amber-300">Rp 5.000.000</span>
+                                </div>
+                                <div class="pt-2 border-t border-amber-400/20 text-xs text-slate-200 space-y-1">
+                                    <p class="text-[11px] text-purple-200/80">Silakan transfer DP ke Rekening Resmi Travel:</p>
+                                    <div class="flex items-center justify-between bg-black/40 px-3 py-2 rounded-xl border border-amber-400/30">
+                                        <div>
+                                            <span class="font-extrabold text-amber-300 block text-xs">Bank Syariah Indonesia (BSI)</span>
+                                            <span class="font-mono text-sm tracking-wider font-bold text-white">714-2200-889</span>
+                                            <span class="text-[10px] text-slate-300 block">a.n. PT Samira Ali Wisata</span>
+                                        </div>
+                                        <button type="button" onclick="navigator.clipboard.writeText('7142200889'); alert('Nomor rekening BSI berhasil disalin!');" class="py-1 px-2.5 rounded-lg bg-amber-400 text-slate-950 font-bold text-[10.5px] active:scale-95 transition cursor-pointer">
+                                            Salin No. Rek
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tombol Konfirmasi Transfer WA -->
+                            <div class="pt-3">
+                                <a id="pendingDpWaBtn" href="https://wa.me/6281234567890?text=Assalamualaikum%20Finance%20SDW%20UMROH,%20saya%20sudah%20transfer%20DP%20booking%20paket." target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-black text-xs flex items-center justify-center gap-2 shadow-md hover:brightness-110 active:scale-95 transition">
+                                    <i class="fa-brands fa-whatsapp text-base"></i>
+                                    <span>Konfirmasi Pembayaran DP via WhatsApp</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== KONDISI 3: TERKONFIRMASI / DP LUNAS ==================== -->
+                    <div id="profileConfirmedSection" class="space-y-4">
+                        <!-- 1. KARTU DIGITAL JAMAAH (E-Pass SDW Luxury Boarding Pass Style) -->
+                        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] text-white p-5 sm:p-6 shadow-xl border border-sdw-gold/40">
                     <!-- Ka'bah Watermark Decor -->
                     <div class="absolute -right-6 -bottom-6 text-white/5 text-9xl pointer-events-none">
                         <i class="fa-solid fa-kaaba"></i>
@@ -867,6 +1034,7 @@
                         <!-- Rendered by js/jamaah.js -->
                     </div>
                 </div>
+                </div> <!-- End of profileConfirmedSection -->
 
                 <!-- 6. PUSAT BANTUAN & PENGATURAN AKUN -->
                 <div class="p-4 bg-white rounded-3xl border border-sdw-border shadow-xs space-y-2">
@@ -942,6 +1110,154 @@
                 <div id="inAppPaketListContainer" class="space-y-4 pt-1">
                     <!-- Rendered by renderInAppPaketList -->
                 </div>
+            </div>
+
+            <!-- ==================== SUBVIEW BOOKING: FULL-PAGE PEMESANAN PAKET IN-APP ==================== -->
+            <div id="subview-booking" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.openAppSubView('paket')" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Paket">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Form Pemesanan Paket</h2>
+                            <p class="text-[11px] text-purple-200/70">Konfirmasi Seat &amp; Rincian Kamar</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10.5px] font-bold">
+                        1-Klik Booking
+                    </span>
+                </div>
+
+                <!-- Card Ringkasan Paket Terpilih -->
+                <div id="bookingSummaryCard" class="p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#240833] text-white border border-amber-400/30 shadow-md space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span id="bookingBadgeCategory" class="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-gold-500 text-slate-950">
+                            REGULER
+                        </span>
+                        <span id="bookingDurationBadge" class="text-xs text-purple-200 font-bold">9 Hari</span>
+                    </div>
+                    <h3 id="bookingPackageTitle" class="text-base sm:text-lg font-black text-white leading-tight">
+                        Umroh Reguler Syawal Barakah
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-white/10 text-[11px] text-purple-200/80">
+                        <div>
+                            <span>Hotel Makkah:</span>
+                            <strong id="bookingHotelMakkah" class="text-white block font-bold truncate">Pullman Zamzam</strong>
+                        </div>
+                        <div>
+                            <span>Maskapai:</span>
+                            <strong id="bookingAirline" class="text-white block font-bold truncate">Saudia Airlines Direct</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Pilihan Pemesanan -->
+                <form id="inAppBookingForm" onsubmit="window.handleInAppBookingSubmit(event)" class="bg-white p-4 sm:p-6 rounded-3xl border border-purple-100 shadow-sm space-y-4">
+                    <!-- 1. Pilihan Tanggal Keberangkatan -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-regular fa-calendar text-amber-500"></i>
+                            <span>Pilih Jadwal Keberangkatan (Musim 1448H)</span>
+                        </label>
+                        <select id="bookingDepartureSelect" onchange="window.updateBookingCalculations()" required class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:bg-white focus:border-sdw-pine focus:outline-none transition">
+                            <option value="DEP-000001|15 Syawal 1448H (24 Maret 2027)|Saudia Airlines (SV-819)|45">
+                                15 Syawal 1448H (24 Maret 2027) • Saudia Airlines • Sisa 45 Seat
+                            </option>
+                            <option value="DEP-000002|28 Syaban 1448H (05 Februari 2027)|Garuda Indonesia (GA-980)|38">
+                                28 Syaban 1448H (05 Februari 2027) • Garuda Indonesia • Sisa 38 Seat
+                            </option>
+                            <option value="DEP-000003|10 Dzulqadah 1448H (17 April 2027)|Turkish Airlines (TK-57)|22">
+                                10 Dzulqa'dah 1448H (17 April 2027) • Turkish Airlines • Sisa 22 Seat
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- 2. Pilihan Tipe Kamar -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-bed text-purple-600"></i>
+                            <span>Pilihan Tipe Kamar Hotel</span>
+                        </label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="roomTypeRadio" value="QUAD" checked onchange="window.updateBookingCalculations()" class="peer sr-only">
+                                <div class="p-2.5 rounded-2xl border-2 border-slate-200 text-center peer-checked:border-sdw-pine peer-checked:bg-purple-50 transition">
+                                    <span class="block text-xs font-extrabold text-slate-800">Quad</span>
+                                    <span class="block text-[10px] text-slate-500">Ber-4</span>
+                                    <span class="block text-[9.5px] font-bold text-emerald-600 mt-0.5">Standar</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="roomTypeRadio" value="TRIPLE" onchange="window.updateBookingCalculations()" class="peer sr-only">
+                                <div class="p-2.5 rounded-2xl border-2 border-slate-200 text-center peer-checked:border-sdw-pine peer-checked:bg-purple-50 transition">
+                                    <span class="block text-xs font-extrabold text-slate-800">Triple</span>
+                                    <span class="block text-[10px] text-slate-500">Ber-3</span>
+                                    <span class="block text-[9.5px] font-bold text-amber-600 mt-0.5">+Rp 2.0 Jt</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="roomTypeRadio" value="DOUBLE" onchange="window.updateBookingCalculations()" class="peer sr-only">
+                                <div class="p-2.5 rounded-2xl border-2 border-slate-200 text-center peer-checked:border-sdw-pine peer-checked:bg-purple-50 transition">
+                                    <span class="block text-xs font-extrabold text-slate-800">Double</span>
+                                    <span class="block text-[10px] text-slate-500">Ber-2</span>
+                                    <span class="block text-[9.5px] font-bold text-amber-600 mt-0.5">+Rp 4.0 Jt</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 3. Jumlah Jamaah -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center gap-1.5">
+                            <i class="fa-solid fa-users text-teal-600"></i>
+                            <span>Jumlah Jamaah yang Didaftarkan</span>
+                        </label>
+                        <select id="bookingPaxSelect" onchange="window.updateBookingCalculations()" class="w-full px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:bg-white focus:border-sdw-pine focus:outline-none transition">
+                            <option value="1">1 Orang (Pribadi)</option>
+                            <option value="2">2 Orang (Suami &amp; Istri / Berdua)</option>
+                            <option value="3">3 Orang (Keluarga Kecil)</option>
+                            <option value="4">4 Orang (Keluarga Mandiri)</option>
+                        </select>
+                    </div>
+
+                    <!-- 4. Data Pemesan (Readonly dari Sesi Akun) -->
+                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200/80 space-y-2">
+                        <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Data Penanggung Jawab Akun:</span>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <div>
+                                <span class="text-[10px] text-slate-500 block">Nama Lengkap</span>
+                                <strong id="bookingPilgrimName" class="text-slate-800 font-bold block truncate">-</strong>
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-slate-500 block">WhatsApp</span>
+                                <strong id="bookingPilgrimPhone" class="text-slate-800 font-bold block truncate">-</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Kalkulasi & Ringkasan Biaya -->
+                    <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200/80 space-y-2 text-xs">
+                        <div class="flex items-center justify-between text-slate-700">
+                            <span>Total Estimasi Biaya Paket:</span>
+                            <span id="bookingCalculatedTotal" class="font-extrabold text-slate-900 text-sm">Rp 33.500.000</span>
+                        </div>
+                        <div class="flex items-center justify-between text-amber-900 pt-2 border-t border-amber-200 font-bold">
+                            <span>Uang Muka (DP Wajib):</span>
+                            <span id="bookingCalculatedDp" class="text-base font-black text-amber-700">Rp 5.000.000</span>
+                        </div>
+                        <p class="text-[10px] text-amber-800/80 pt-1">
+                            *DP berlaku untuk mengamankan tiket maskapai &amp; reservasi kamar hotel. Sisa biaya dapat dilunasi bertahap hingga H-30 keberangkatan.
+                        </p>
+                    </div>
+
+                    <!-- 6. Tombol Submit -->
+                    <button type="submit" id="btnSubmitBooking" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-gold-500 via-amber-400 to-amber-500 text-slate-950 font-black text-xs flex items-center justify-center gap-2 shadow-lg hover:brightness-110 active:scale-95 transition cursor-pointer">
+                        <i class="fa-solid fa-kaaba"></i>
+                        <span>Konfirmasi &amp; Ajukan Booking Sekarang</span>
+                    </button>
+                </form>
             </div>
 
             <!-- ==================== SUBVIEW 2: FULL-PAGE TITIK HOTEL & NAVIGASI ==================== -->

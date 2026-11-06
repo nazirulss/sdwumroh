@@ -477,15 +477,24 @@
         const elRoom = document.getElementById('jamaah-room-type');
         const elDeparture = document.getElementById('jamaah-departure-date');
 
+        const newPilgrimSection = document.getElementById('profileNewPilgrimSection');
+        const pendingDpSection = document.getElementById('profilePendingDpSection');
+        const confirmedSection = document.getElementById('profileConfirmedSection');
+        const elNewPilgrimName = document.getElementById('new-pilgrim-name');
+
+        const elPendingPkg = document.getElementById('pending-package-title');
+        const elPendingRoom = document.getElementById('pending-room-type');
+        const elPendingDate = document.getElementById('pending-departure-date');
+        const elPendingTotal = document.getElementById('pending-total-price');
+        const elPendingDp = document.getElementById('pending-dp-amount');
+        const elPendingRegBadge = document.getElementById('pending-reg-badge');
+        const btnPendingWa = document.getElementById('pendingDpWaBtn');
+
         if (session) {
             if (guestBanner) guestBanner.classList.add('hidden');
             if (authCard) authCard.classList.remove('hidden');
             if (logoutBtn) logoutBtn.classList.remove('hidden');
             if (loginBtnHeader) loginBtnHeader.classList.add('hidden');
-            if (badgeAktif) {
-                badgeAktif.textContent = session.status === 'NEW_PILGRIM' ? 'Terdaftar' : 'Aktif';
-                badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
-            }
 
             if (elName) elName.textContent = session.fullName;
             if (elRegId) elRegId.textContent = session.regId;
@@ -493,12 +502,60 @@
             if (elFlight) elFlight.textContent = session.flightInfo;
             if (elRoom) elRoom.textContent = session.roomType;
             if (elDeparture) elDeparture.textContent = session.departureDate;
+
+            // Conditional view rendering based on Pilgrim Lifecycle State
+            if (session.status === 'NEW_PILGRIM') {
+                if (newPilgrimSection) newPilgrimSection.classList.remove('hidden');
+                if (pendingDpSection) pendingDpSection.classList.add('hidden');
+                if (confirmedSection) confirmedSection.classList.add('hidden');
+                if (elNewPilgrimName) elNewPilgrimName.textContent = session.fullName;
+
+                if (badgeAktif) {
+                    badgeAktif.textContent = 'Terdaftar';
+                    badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-blue-100 text-blue-800 border border-blue-300';
+                }
+            } else if (session.status === 'PENDING_DP') {
+                if (newPilgrimSection) newPilgrimSection.classList.add('hidden');
+                if (pendingDpSection) pendingDpSection.classList.remove('hidden');
+                if (confirmedSection) confirmedSection.classList.add('hidden');
+
+                if (elPendingPkg) elPendingPkg.textContent = session.packageTitle || 'Program Umroh 1448H';
+                if (elPendingRoom) elPendingRoom.textContent = session.roomType || 'Quad';
+                if (elPendingDate) elPendingDate.textContent = session.departureDate || 'Musim 1448H';
+                if (elPendingTotal) elPendingTotal.textContent = session.totalPrice || 'Rp 33.500.000';
+                if (elPendingDp) elPendingDp.textContent = session.dpAmount || 'Rp 5.000.000';
+                if (elPendingRegBadge) elPendingRegBadge.textContent = session.regId || 'REG-SDW-XXXX';
+
+                if (btnPendingWa) {
+                    const waMsg = encodeURIComponent(`Assalamualaikum Finance SDW UMROH, saya atas nama ${session.fullName} (${session.regId}) ingin konfirmasi transfer DP booking paket ${session.packageTitle} sebesar ${session.dpAmount || 'Rp 5.000.000'}.`);
+                    btnPendingWa.href = `https://wa.me/6281234567890?text=${waMsg}`;
+                }
+
+                if (badgeAktif) {
+                    badgeAktif.textContent = 'Menunggu DP';
+                    badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse';
+                }
+            } else {
+                // CONFIRMED / READY_TO_FLY / Demo Account
+                if (newPilgrimSection) newPilgrimSection.classList.add('hidden');
+                if (pendingDpSection) pendingDpSection.classList.add('hidden');
+                if (confirmedSection) confirmedSection.classList.remove('hidden');
+
+                if (badgeAktif) {
+                    badgeAktif.textContent = 'Aktif (Lunas)';
+                    badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300';
+                }
+            }
         } else {
             // Guest mode
             if (guestBanner) guestBanner.classList.remove('hidden');
             if (authCard) authCard.classList.add('hidden');
             if (logoutBtn) logoutBtn.classList.add('hidden');
             if (loginBtnHeader) loginBtnHeader.classList.remove('hidden');
+
+            if (newPilgrimSection) newPilgrimSection.classList.add('hidden');
+            if (pendingDpSection) pendingDpSection.classList.add('hidden');
+            if (confirmedSection) confirmedSection.classList.add('hidden');
             if (badgeAktif) {
                 badgeAktif.textContent = 'Tamu';
                 badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300';

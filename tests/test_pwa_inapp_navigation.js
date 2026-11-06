@@ -120,6 +120,7 @@ runTest('Menu CS Khidmat tetap mengarah ke WhatsApp resmi', () => {
 console.log('\n2. Pengujian app.html Full-Screen SPA Sub-Pages (Bebas Popup)');
 const SUBVIEW_IDS = [
   'subview-paket',
+  'subview-booking',
   'subview-hotel',
   'subview-koper',
   'subview-kiblat',
@@ -211,8 +212,8 @@ runTest('Deep Link Router diinisialisasi pada startup', () => {
 console.log('\n5. Pengujian Service Worker Cache Version');
 const swJs = fs.readFileSync(path.join(process.cwd(), 'sw.js'), 'utf8');
 
-runTest('sw.js menggunakan versi cache terbaru (v33)', () => {
-  assert(swJs.includes('sdw-umroh-pwa-v33'), 'sw.js cache version is not bumped to v33');
+runTest('sw.js menggunakan versi cache terbaru (v34)', () => {
+  assert(swJs.includes('sdw-umroh-pwa-v34'), 'sw.js cache version is not bumped to v34');
 });
 
 console.log('\n========================================');

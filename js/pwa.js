@@ -2080,14 +2080,165 @@
               <i class="fa-solid fa-plane text-xs text-sky-500 shrink-0"></i>
               <span class="truncate">${pkg.airline}</span>
             </div>
-            <a href="https://wa.me/6281234567890?text=${waText}" target="_blank" rel="noopener noreferrer" class="py-2 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-sm hover:brightness-110 active:scale-95 transition-all shrink-0">
-              <i class="fa-brands fa-whatsapp text-sm"></i>
-              <span>Pesan Seat</span>
-            </a>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <a href="https://wa.me/6281234567890?text=${waText}" target="_blank" rel="noopener noreferrer" title="Tanya Jadwal via WhatsApp" class="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 active:scale-95 transition">
+                <i class="fa-brands fa-whatsapp text-sm"></i>
+              </a>
+              <button type="button" onclick="window.openBookingSubView('${pkg.id}')" class="py-2 px-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 text-slate-950 font-black text-xs flex items-center gap-1.5 shadow-sm hover:brightness-110 active:scale-95 transition-all cursor-pointer">
+                <i class="fa-solid fa-kaaba"></i>
+                <span>Booking Paket</span>
+              </button>
+            </div>
           </div>
         </div>
       `;
     }).join('');
+  };
+
+  // ==================== IN-APP BOOKING CONTROLLERS ====================
+  window.selectedBookingPackage = null;
+
+  window.openBookingSubView = function (pkgId) {
+    const pkg = IN_APP_PAKET_DATA.find((p) => p.id === pkgId) || IN_APP_PAKET_DATA[0];
+    window.selectedBookingPackage = pkg;
+
+    // Cek apakah jamaah sudah login
+    const session = typeof SDW_AUTH !== 'undefined' ? SDW_AUTH.getPilgrimSession() : null;
+    if (!session) {
+      if (typeof window.showAuthAlert === 'function') {
+        window.showAuthAlert('error', 'Silakan masuk atau buat akun terlebih dahulu untuk memesan paket umroh.');
+      }
+      window.openAppSubView('auth');
+      return;
+    }
+
+    window.openAppSubView('booking');
+    if (typeof window.initInAppBookingView === 'function') {
+      window.initInAppBookingView();
+    }
+  };
+
+  window.initInAppBookingView = function () {
+    const pkg = window.selectedBookingPackage || IN_APP_PAKET_DATA[0];
+    const session = typeof SDW_AUTH !== 'undefined' ? SDW_AUTH.getPilgrimSession() : null;
+
+    const elTitle = document.getElementById('bookingPackageTitle');
+    const elCat = document.getElementById('bookingBadgeCategory');
+    const elDur = document.getElementById('bookingDurationBadge');
+    const elHotel = document.getElementById('bookingHotelMakkah');
+    const elAirline = document.getElementById('bookingAirline');
+    const elName = document.getElementById('bookingPilgrimName');
+    const elPhone = document.getElementById('bookingPilgrimPhone');
+
+    if (elTitle) elTitle.textContent = pkg.name;
+    if (elCat) elCat.textContent = pkg.badge || 'REGULER';
+    if (elDur) elDur.textContent = pkg.duration || '9 Hari';
+    if (elHotel) elHotel.textContent = pkg.hotelMakkah || '-';
+    if (elAirline) elAirline.textContent = pkg.airline || '-';
+
+    if (session) {
+      if (elName) elName.textContent = session.fullName;
+      if (elPhone) elPhone.textContent = session.phone;
+    }
+
+    window.updateBookingCalculations();
+  };
+
+  window.updateBookingCalculations = function () {
+    const pkg = window.selectedBookingPackage || IN_APP_PAKET_DATA[0];
+    const basePriceNum = parseInt(String(pkg.startingPrice || '33500000').replace(/[^0-9]/g, '')) || 33500000;
+
+    const roomRadio = document.querySelector('input[name="roomTypeRadio"]:checked');
+    const roomType = roomRadio ? roomRadio.value : 'QUAD';
+
+    let roomAddon = 0;
+    if (roomType === 'TRIPLE') roomAddon = 2000000;
+    if (roomType === 'DOUBLE') roomAddon = 4000000;
+
+    const paxSelect = document.getElementById('bookingPaxSelect');
+    const paxCount = paxSelect ? parseInt(paxSelect.value, 10) || 1 : 1;
+
+    const pricePerPax = basePriceNum + roomAddon;
+    const totalPrice = pricePerPax * paxCount;
+    const dpAmount = 5000000 * paxCount;
+
+    const elTotal = document.getElementById('bookingCalculatedTotal');
+    const elDp = document.getElementById('bookingCalculatedDp');
+
+    if (elTotal) elTotal.textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
+    if (elDp) elDp.textContent = 'Rp ' + dpAmount.toLocaleString('id-ID');
+  };
+
+  window.handleInAppBookingSubmit = function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+    const pkg = window.selectedBookingPackage || IN_APP_PAKET_DATA[0];
+    const session = typeof SDW_AUTH !== 'undefined' ? SDW_AUTH.getPilgrimSession() : null;
+
+    if (!session) {
+      window.openAppSubView('auth');
+      return;
+    }
+
+    const depSelect = document.getElementById('bookingDepartureSelect');
+    const depVal = depSelect ? depSelect.value : '';
+    const [depId, depDate, depFlight] = depVal.split('|');
+
+    const roomRadio = document.querySelector('input[name="roomTypeRadio"]:checked');
+    const roomType = roomRadio ? roomRadio.value : 'QUAD';
+
+    const paxSelect = document.getElementById('bookingPaxSelect');
+    const paxCount = paxSelect ? parseInt(paxSelect.value, 10) || 1 : 1;
+
+    const basePriceNum = parseInt(String(pkg.startingPrice || '33500000').replace(/[^0-9]/g, '')) || 33500000;
+    let roomAddon = roomType === 'TRIPLE' ? 2000000 : (roomType === 'DOUBLE' ? 4000000 : 0);
+    const totalPrice = (basePriceNum + roomAddon) * paxCount;
+    const dpAmount = 5000000 * paxCount;
+
+    // Mutasi ke Google Apps Script / Spreadsheet
+    const bookingPayload = {
+      id: session.regId,
+      customer: session.fullName,
+      customerId: session.id,
+      departureId: depId || 'DEP-000001',
+      packageId: pkg.id || 'PKG-000001',
+      roomType: roomType,
+      paxCount: paxCount,
+      priceSnapshot: totalPrice,
+      finalPrice: totalPrice,
+      dpAmount: dpAmount,
+      status: 'PENDING_DP',
+      notes: `Booking mandiri PWA untuk ${paxCount} jamaah (${roomType})`
+    };
+
+    const api = (typeof window !== 'undefined' && window.SDW_API) ? window.SDW_API : null;
+    if (api && typeof api.post === 'function') {
+      api.post('registerPilgrim', bookingPayload).catch(() => {});
+      api.post('createLead', {
+        name: session.fullName,
+        customerId: session.id,
+        source: 'PWA_BOOKING_SUBMITTED',
+        urgency: 'HIGH',
+        budget: 'Rp ' + totalPrice.toLocaleString('id-ID'),
+        notes: `Booking paket ${pkg.name} (${roomType}) senilai Rp ${totalPrice.toLocaleString('id-ID')} - Menunggu DP Rp ${dpAmount.toLocaleString('id-ID')}`
+      }).catch(() => {});
+    }
+
+    // Update Sesi Jamaah
+    session.status = 'PENDING_DP';
+    session.packageTitle = pkg.name;
+    session.roomType = `${roomType} (${paxCount} Pax)`;
+    session.departureDate = depDate || 'Musim 1448H';
+    session.flightInfo = depFlight || pkg.airline;
+    session.totalPrice = 'Rp ' + totalPrice.toLocaleString('id-ID');
+    session.dpAmount = 'Rp ' + dpAmount.toLocaleString('id-ID');
+
+    SDW_AUTH.setPilgrimSession(session);
+
+    // Switch ke Tab Profil yang menampilkan Tagihan DP
+    window.backToAppHome();
+    SDW_AUTH.switchAppTab('tab-profile');
+
+    alert(`Alhamdulillah! Pemesanan paket ${pkg.name} berhasil diajukan.\nNominal DP Booking: Rp ${dpAmount.toLocaleString('id-ID')}.\nSilakan transfer ke rekening resmi BSI travel.`);
   };
 
   // ==================== IN-APP ZIARAH CONTROLLERS ====================
@@ -2396,7 +2547,7 @@
     'ibadahHubModal'
   ];
 
-  const IN_APP_SUBVIEW_NAMES = ['paket', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live', 'auth'];
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'live', 'auth'];
 
   // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
   window.openAppSubView = function (viewName, options = { syncHistory: true }) {
@@ -2453,6 +2604,8 @@
       if (typeof window.switchLiveFeed === 'function') window.switchLiveFeed('main');
     } else if (v === 'auth') {
       if (typeof window.switchAuthTab === 'function') window.switchAuthTab('login');
+    } else if (v === 'booking') {
+      if (typeof window.initInAppBookingView === 'function') window.initInAppBookingView();
     }
 
     // 5. Synchronize URL query parameter (?view=...)
@@ -2518,6 +2671,7 @@
 
   const APP_VIEW_MAP = {
     'paket': (opts) => window.openAppSubView('paket', opts),
+    'booking': (opts) => window.openAppSubView('booking', opts),
     'hotel': (opts) => window.openAppSubView('hotel', opts),
     'koper': (opts) => window.openAppSubView('koper', opts),
     'kiblat': (opts) => window.openAppSubView('kiblat', opts),

@@ -76,6 +76,13 @@ async function runTest(name, fn) {
     assert(appHtml.includes('id="profileLoginBtnHeader"'), 'Missing #profileLoginBtnHeader');
   });
 
+  await runTest('Section Jamaah Baru (#profileNewPilgrimSection) & Pending DP (#profilePendingDpSection) terpasang di tab profil', () => {
+    assert(appHtml.includes('id="profileNewPilgrimSection"'), 'Missing #profileNewPilgrimSection');
+    assert(appHtml.includes('id="profilePendingDpSection"'), 'Missing #profilePendingDpSection');
+    assert(appHtml.includes('id="profileConfirmedSection"'), 'Missing #profileConfirmedSection');
+    assert(appHtml.includes('id="subview-booking"'), 'Missing #subview-booking');
+  });
+
   // 2. Audit js/auth.js Module & Methods
   console.log('\n2. Pengujian Modul Autentikasi js/auth.js');
   const authJs = fs.readFileSync(path.join(process.cwd(), 'js', 'auth.js'), 'utf8');
