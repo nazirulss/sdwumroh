@@ -439,8 +439,8 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: "Courier New", monospace; font-size: 13px; font-weight: bold; color: #475569; letter-spacing: 0.5px; }
-                    .cert-photo { position: absolute; top: 15.55%; left: 77.2%; width: 13.35%; height: 25.1%; object-fit: cover; border-radius: 2px; }
+                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: monospace; font-size: 10px; font-weight: 500; color: #94a3b8; letter-spacing: 0.5px; opacity: 0.85; }
+                    .cert-photo { position: absolute; top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; object-fit: cover; border-radius: 2px; }
                     .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>

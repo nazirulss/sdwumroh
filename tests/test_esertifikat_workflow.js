@@ -27,7 +27,7 @@ const appHtml = fs.readFileSync(appHtmlPath, 'utf8');
 assert(appHtml.includes('id="pilgrimCertContainer"'), 'Container certificate preview harus ada');
 assert(appHtml.includes('id="cert-pilgrim-no"'), 'Nomor sertifikat pojok kiri atas harus ada');
 assert(appHtml.includes('id="cert-pilgrim-photo-box"'), 'Frame foto sertifikat harus ada');
-assert(appHtml.includes('top: 15.55%; left: 77.2%;'), 'Koordinat bingkai foto harus presisi dan pas geser kanan');
+assert(appHtml.includes('top: 15.55%; left: 76.8%; width: 13.75%;'), 'Koordinat bingkai foto harus presisi dan lebar kiri pas');
 assert(appHtml.includes('id="cert-pilgrim-photo-img"'), 'Image tag foto jamaah harus ada');
 assert(appHtml.includes('id="cert-pilgrim-name"'), 'Elemen nama jamaah di sertifikat harus ada');
 assert(appHtml.includes('top: 53.6%; left: 49.5%;'), 'Letak nama jamaah harus mendekati garis horizontal');
