@@ -952,72 +952,57 @@
                                     </div>
                                 </div>
 
-                                <!-- BARIS TENGAH: Foto 2:3 (POLOS) di Kiri • Data Rapi di Kanan -->
-                                <div class="flex gap-3 sm:gap-3.5 items-start">
-                                    <!-- SISI KIRI: Foto 2:3 POLOS BERSIH (Tanpa logo, tanpa stempel teks di dalam foto) -->
+                                <!-- BARIS TENGAH: Foto 2:3 Proporsional di Kiri • Nilai Data Murni di Kanan -->
+                                <div class="flex gap-3 sm:gap-4 items-center flex-1 my-1">
+                                    <!-- SISI KIRI: Foto 2:3 Diperbesar & Proporsional (92x138px, 100% Polos) -->
                                     <div class="shrink-0">
-                                        <div class="w-[76px] h-[114px] rounded-lg overflow-hidden relative flex items-center justify-center shadow-md"
-                                             style="border: 1.5px solid rgba(220, 175, 80, 0.6); background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);">
+                                        <div class="w-[92px] h-[138px] sm:w-[104px] sm:h-[156px] rounded-xl overflow-hidden relative flex items-center justify-center shadow-md"
+                                             style="border: 1.5px solid rgba(220, 175, 80, 0.65); background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);">
                                             <!-- Foto Jamaah Nyata (jika sudah diunggah) -->
                                             <img id="jamaah-photo-img" src="" alt="Foto Jamaah" class="w-full h-full object-cover hidden">
                                             
-                                            <!-- Placeholder Foto Polos: Siluet Avatar Netral Saja (100% Tanpa Logo/Teks) -->
+                                            <!-- Placeholder Foto Polos: Siluet Avatar Netral Saja -->
                                             <div id="jamaah-photo-placeholder" class="w-full h-full flex items-center justify-center text-slate-400">
-                                                <i class="fa-solid fa-user text-2xl text-slate-400/80"></i>
+                                                <i class="fa-solid fa-user text-3xl sm:text-4xl text-slate-400/80"></i>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- SISI KANAN: Susunan List Identitas & Logistik -->
-                                    <div class="flex-1 min-w-0 flex flex-col justify-between text-[9px] sm:text-[9.5px] leading-tight">
-                                        <!-- Baris 1: NAMA -->
-                                        <div class="flex items-baseline gap-1.5 truncate">
-                                            <span class="text-purple-200/70 font-semibold text-[8px] uppercase tracking-wider w-12 shrink-0">NAMA</span>
-                                            <span class="text-purple-200/50">:</span>
-                                            <strong id="jamaah-name" class="font-black text-white text-[12px] sm:text-[13px] tracking-wide uppercase truncate">NAZIR</strong>
+                                    <!-- SISI KANAN: Hanya Nilai Data (Tanpa Label Teks), Tipografi Bersih & Elegan -->
+                                    <div class="flex-1 min-w-0 flex flex-col justify-center h-full py-0.5 space-y-1">
+                                        <!-- Nama Lengkap Jamaah -->
+                                        <div>
+                                            <h3 id="jamaah-name" class="font-black text-white text-base sm:text-lg tracking-wide uppercase leading-tight truncate"
+                                                style="text-shadow: 0 1px 3px rgba(0,0,0,0.5);">
+                                                NAZIR
+                                            </h3>
                                         </div>
 
-                                        <!-- Baris 2: REG ID -->
-                                        <div class="flex items-baseline gap-1.5 mt-1 truncate">
-                                            <span class="text-purple-200/70 font-semibold text-[8px] uppercase tracking-wider w-12 shrink-0">REG ID</span>
-                                            <span class="text-purple-200/50">:</span>
-                                            <span id="jamaah-reg-id" class="font-mono text-amber-300 font-bold text-[9.5px] tracking-wider truncate">REG-SDW-3439</span>
+                                        <!-- ID Registrasi & Nama Program -->
+                                        <div class="space-y-0.5">
+                                            <span id="jamaah-reg-id" class="font-mono text-amber-300 font-bold text-xs tracking-wider block">
+                                                REG-SDW-3439
+                                            </span>
+                                            <span id="jamaah-package-title" class="text-slate-200 font-medium text-xs block truncate">
+                                                Umroh Reguler 9 Hari
+                                            </span>
                                         </div>
 
-                                        <!-- Baris 3: PAKET -->
-                                        <div class="flex items-baseline gap-1.5 mt-1 truncate">
-                                            <span class="text-purple-200/70 font-semibold text-[8px] uppercase tracking-wider w-12 shrink-0">PAKET</span>
-                                            <span class="text-purple-200/50">:</span>
-                                            <span id="jamaah-package-title" class="text-slate-100 font-semibold truncate text-[9.5px]">Umroh Reguler 9 Hari</span>
-                                        </div>
-
-                                        <!-- Garis Pemisah Halus -->
+                                        <!-- Garis Pemisah Halus Emas -->
                                         <div style="height: 1px; background: rgba(220, 175, 80, 0.25); margin: 6px 0;"></div>
 
-                                        <!-- Baris 4: Kamar & Berangkat -->
-                                        <div class="flex items-center justify-between text-[8.5px] sm:text-[9px] text-slate-300">
-                                            <div class="truncate">
-                                                <span class="text-purple-200/70 font-medium">Kamar:</span>
-                                                <strong id="jamaah-room-type" class="text-white ml-1">QUAD (1 Pax)</strong>
-                                            </div>
-                                            <span class="text-amber-400/60 mx-1">•</span>
-                                            <div class="truncate">
-                                                <span class="text-purple-200/70 font-medium">Berangkat:</span>
-                                                <strong id="jamaah-departure-date" class="text-amber-300 ml-1">15 Jan 2027</strong>
-                                            </div>
+                                        <!-- Logistik Baris 1: Kamar & Tanggal Berangkat (Hanya Nilai) -->
+                                        <div class="flex items-center gap-2 text-[11px] sm:text-xs">
+                                            <strong id="jamaah-room-type" class="text-white font-bold truncate">QUAD (1 Pax)</strong>
+                                            <span class="text-amber-400/60">•</span>
+                                            <strong id="jamaah-departure-date" class="text-amber-300 font-bold truncate">15 Jan 2027</strong>
                                         </div>
 
-                                        <!-- Baris 5: Maskapai & Total Biaya -->
-                                        <div class="flex items-center justify-between text-[8.5px] sm:text-[9.5px] text-slate-300 mt-1">
-                                            <div class="truncate">
-                                                <span class="text-purple-200/70 font-medium">Maskapai:</span>
-                                                <strong id="jamaah-flight-info" class="text-white ml-1">Saudia SV-819</strong>
-                                            </div>
-                                            <span class="text-amber-400/60 mx-1">•</span>
-                                            <div class="truncate">
-                                                <span class="text-purple-200/70 font-medium">Total:</span>
-                                                <strong id="jamaah-snapshot-price" class="text-amber-300 font-black ml-1">Rp 29.500.000</strong>
-                                            </div>
+                                        <!-- Logistik Baris 2: Maskapai & Total Biaya (Hanya Nilai) -->
+                                        <div class="flex items-center gap-2 text-[11px] sm:text-xs mt-1">
+                                            <strong id="jamaah-flight-info" class="text-white font-bold truncate">Saudia SV-819</strong>
+                                            <span class="text-amber-400/60">•</span>
+                                            <strong id="jamaah-snapshot-price" class="text-amber-300 font-black text-sm whitespace-nowrap">Rp 29.500.000</strong>
                                         </div>
                                     </div>
                                 </div>
