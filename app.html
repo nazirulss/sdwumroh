@@ -975,70 +975,80 @@
                 </div>
 
                 <!-- 2. TAHAPAN KESIAPAN KEBERANGKATAN (Interactive Journey Stepper & Inline Dynamic Panels) -->
-                <div class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden">
+                <div id="journeyStepperCard" class="bg-white rounded-3xl border border-sdw-border shadow-xs overflow-hidden transition-all">
                     <!-- Stepper Header & Interactive Nav -->
-                    <div class="p-4 sm:p-5 border-b border-sdw-border/80 bg-slate-50/60">
-                        <div class="flex items-center justify-between mb-3.5">
-                            <h3 class="font-extrabold text-xs sm:text-sm text-sdw-pine flex items-center gap-2">
+                    <div class="p-3.5 sm:p-5 border-b border-sdw-border/80 bg-slate-50/70">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-extrabold text-xs sm:text-sm text-sdw-pine flex items-center gap-1.5 sm:gap-2">
                                 <i class="fa-solid fa-bars-progress text-sdw-gold text-sm"></i>
                                 <span>Tahapan Kesiapan Keberangkatan</span>
                             </h3>
-                            <span id="journey-active-badge" class="px-2.5 py-0.5 rounded-full text-[9.5px] font-black bg-amber-100 text-amber-800 border border-amber-300">
-                                Tahap 2: Paspor &amp; Berkas
-                            </span>
+                            <div class="flex items-center gap-1.5">
+                                <span id="journey-active-badge" class="px-2.5 py-0.5 rounded-full text-[9px] sm:text-[9.5px] font-black bg-amber-100 text-amber-800 border border-amber-300">
+                                    Tahap 2: Paspor &amp; Berkas
+                                </span>
+                                <button type="button" id="journey-toggle-collapse-btn" onclick="window.toggleJourneyCollapse()" title="Buka/Tutup Rincian" class="w-6 h-6 rounded-lg bg-slate-200/80 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-xs transition cursor-pointer">
+                                    <i id="journey-collapse-icon" class="fa-solid fa-chevron-up text-[10px]"></i>
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- 5 Interactive Step Buttons Bar -->
-                        <div class="grid grid-cols-5 gap-1.5 sm:gap-2 text-center text-[10px]">
+                        <!-- 5 Interactive Step Buttons Bar (3 Baris Rapi di Bawah Ikon) -->
+                        <div class="grid grid-cols-5 gap-1 sm:gap-1.5 text-center">
                             <!-- Step 1 Button: DP Booking -->
-                            <button type="button" onclick="window.switchJourneyStep(1)" id="step-btn-1" class="journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
-                                <div id="step-icon-1" class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs">
+                            <button type="button" onclick="window.switchJourneyStep(1)" id="step-btn-1" class="journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
+                                <div id="step-icon-1" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs">
                                     <i class="fa-solid fa-check"></i>
                                 </div>
-                                <span class="font-bold text-sdw-pine block truncate w-full text-[10.5px]">1. DP</span>
-                                <span id="step-sub-1" class="text-[8.5px] text-emerald-600 font-semibold block">Lunas</span>
+                                <span class="text-[8px] sm:text-[8.5px] font-bold text-slate-400 block tracking-tight uppercase leading-none">Tahap 1</span>
+                                <span class="text-[9.5px] sm:text-[10.5px] font-black text-sdw-pine block leading-tight mt-0.5 whitespace-nowrap">DP Setor</span>
+                                <span id="step-sub-1" class="text-[7.5px] sm:text-[8px] font-extrabold text-emerald-700 bg-emerald-100/90 px-1 py-0.5 rounded-md mt-1 block">Lunas</span>
                             </button>
 
                             <!-- Step 2 Button: Paspor (Default Aktif) -->
-                            <button type="button" onclick="window.switchJourneyStep(2)" id="step-btn-2" class="journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer bg-amber-50 border border-amber-300/80 shadow-xs ring-2 ring-amber-400/40">
-                                <div id="step-icon-2" class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs ring-2 ring-amber-300/80 animate-pulse">
+                            <button type="button" onclick="window.switchJourneyStep(2)" id="step-btn-2" class="journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer bg-amber-50 border border-amber-300/80 shadow-xs ring-2 ring-amber-400/40">
+                                <div id="step-icon-2" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs ring-2 ring-amber-300/80 animate-pulse">
                                     <i class="fa-solid fa-passport"></i>
                                 </div>
-                                <span class="font-bold text-sdw-pine block truncate w-full text-[10.5px]">2. Paspor</span>
-                                <span id="step-sub-2" class="text-[8.5px] text-amber-700 font-extrabold block">Proses</span>
+                                <span class="text-[8px] sm:text-[8.5px] font-bold text-amber-600 block tracking-tight uppercase leading-none">Tahap 2</span>
+                                <span class="text-[9.5px] sm:text-[10.5px] font-black text-sdw-pine block leading-tight mt-0.5 whitespace-nowrap">Paspor</span>
+                                <span id="step-sub-2" class="text-[7.5px] sm:text-[8px] font-extrabold text-amber-800 bg-amber-200/90 px-1 py-0.5 rounded-md mt-1 block">Proses</span>
                             </button>
 
                             <!-- Step 3 Button: Pelunasan -->
-                            <button type="button" onclick="window.switchJourneyStep(3)" id="step-btn-3" class="journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
-                                <div id="step-icon-3" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs">
+                            <button type="button" onclick="window.switchJourneyStep(3)" id="step-btn-3" class="journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
+                                <div id="step-icon-3" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs">
                                     <i class="fa-solid fa-receipt"></i>
                                 </div>
-                                <span class="font-medium text-slate-600 block truncate w-full text-[10.5px]">3. Lunas</span>
-                                <span id="step-sub-3" class="text-[8.5px] text-slate-400 block">Termin 2</span>
+                                <span class="text-[8px] sm:text-[8.5px] font-bold text-slate-400 block tracking-tight uppercase leading-none">Tahap 3</span>
+                                <span class="text-[9.5px] sm:text-[10.5px] font-black text-sdw-pine block leading-tight mt-0.5 whitespace-nowrap">Pelunasan</span>
+                                <span id="step-sub-3" class="text-[7.5px] sm:text-[8px] font-semibold text-slate-500 bg-slate-100 px-1 py-0.5 rounded-md mt-1 block">Termin 2</span>
                             </button>
 
                             <!-- Step 4 Button: Manasik -->
-                            <button type="button" onclick="window.switchJourneyStep(4)" id="step-btn-4" class="journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
-                                <div id="step-icon-4" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs">
+                            <button type="button" onclick="window.switchJourneyStep(4)" id="step-btn-4" class="journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
+                                <div id="step-icon-4" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs">
                                     <i class="fa-solid fa-graduation-cap"></i>
                                 </div>
-                                <span class="font-medium text-slate-600 block truncate w-full text-[10.5px]">4. Manasik</span>
-                                <span id="step-sub-4" class="text-[8.5px] text-slate-400 block">Akbar</span>
+                                <span class="text-[8px] sm:text-[8.5px] font-bold text-slate-400 block tracking-tight uppercase leading-none">Tahap 4</span>
+                                <span class="text-[9.5px] sm:text-[10.5px] font-black text-sdw-pine block leading-tight mt-0.5 whitespace-nowrap">Manasik</span>
+                                <span id="step-sub-4" class="text-[7.5px] sm:text-[8px] font-semibold text-slate-500 bg-slate-100 px-1 py-0.5 rounded-md mt-1 block">Akbar</span>
                             </button>
 
                             <!-- Step 5 Button: Terbang & Kloter -->
-                            <button type="button" onclick="window.switchJourneyStep(5)" id="step-btn-5" class="journey-step-btn group flex flex-col items-center p-2 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
-                                <div id="step-icon-5" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-xs mb-1 transition shadow-xs">
+                            <button type="button" onclick="window.switchJourneyStep(5)" id="step-btn-5" class="journey-step-btn group flex flex-col items-center py-2 px-1 rounded-2xl transition-all cursor-pointer hover:bg-slate-100">
+                                <div id="step-icon-5" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center font-bold text-[11px] mb-1.5 transition shadow-xs">
                                     <i class="fa-solid fa-plane"></i>
                                 </div>
-                                <span class="font-medium text-slate-600 block truncate w-full text-[10.5px]">5. Terbang</span>
-                                <span id="step-sub-5" class="text-[8.5px] text-slate-400 block">Bandara</span>
+                                <span class="text-[8px] sm:text-[8.5px] font-bold text-slate-400 block tracking-tight uppercase leading-none">Tahap 5</span>
+                                <span class="text-[9.5px] sm:text-[10.5px] font-black text-sdw-pine block leading-tight mt-0.5 whitespace-nowrap">Terbang</span>
+                                <span id="step-sub-5" class="text-[7.5px] sm:text-[8px] font-semibold text-slate-500 bg-slate-100 px-1 py-0.5 rounded-md mt-1 block">Bandara</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- ==================== INLINE STEP CONTENT PANELS (NO POPUP) ==================== -->
-                    <div class="p-4 sm:p-5">
+                    <div id="journey-panels-container" class="p-4 sm:p-5 transition-all">
 
                         <!-- ========== PANEL 1: DP BOOKING ========== -->
                         <div id="journey-panel-1" class="journey-panel hidden space-y-4">

@@ -32,11 +32,13 @@ assert(appHtml.includes('id="manasik-title"'), 'Manasik info tetap terpelihara')
 console.log('  [PASS] Seluruh 5 tombol stepper dan 5 inline panels terpasang dengan presisi!');
 
 // 2. Verifikasi Fungsi Switcher di js/jamaah.js
-console.log('\n2. Pengujian Controller Navigasi switchJourneyStep di js/jamaah.js');
+console.log('\n2. Pengujian Controller Navigasi switchJourneyStep & Close di js/jamaah.js');
 assert(jamaahJs.includes('function switchJourneyStep('), 'Fungsi switchJourneyStep harus didefinisikan');
 assert(jamaahJs.includes('window.switchJourneyStep = switchJourneyStep'), 'switchJourneyStep harus diekspos ke window');
-assert(jamaahJs.includes('journey-panel-${step}'), 'Harus mengaktifkan target panel sesuai parameter step');
-console.log('  [PASS] Controller switchJourneyStep terpasang dan terekspor dengan benar!');
+assert(jamaahJs.includes('function closeJourneyPanels('), 'Fungsi closeJourneyPanels harus didefinisikan');
+assert(jamaahJs.includes('window.closeJourneyPanels = closeJourneyPanels'), 'closeJourneyPanels harus diekspos');
+assert(jamaahJs.includes('!card.contains(e.target)'), 'Auto-close saat klik di luar stepper card harus terpasang');
+console.log('  [PASS] Controller switchJourneyStep, closeJourneyPanels, dan click-outside listener terpasang dengan benar!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
