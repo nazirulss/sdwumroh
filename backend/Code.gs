@@ -404,6 +404,81 @@ function doGet(e) {
       return createResponse(true, reg);
     }
 
+    if (action === 'checkAccount') {
+      const phoneParam = e.parameter.phone;
+      if (!phoneParam) return createResponse(false, null, "Parameter phone wajib disertakan");
+
+      const cleanTarget = String(phoneParam).replace(/[^0-9]/g, '').replace(/^62/, '0').replace(/^0+/, '');
+
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+      const users = getSheetRowsAsObjects_(ss, "DB_Users");
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const packages = getSheetRowsAsObjects_(ss, "DB_Packages");
+      const departures = getSheetRowsAsObjects_(ss, "DB_Departures");
+
+      const pkgMap = {};
+      packages.forEach(function(p) { pkgMap[p.id] = p; });
+      const depMap = {};
+      departures.forEach(function(d) { depMap[d.id] = d; });
+
+      let matchedCust = null;
+      customers.forEach(function(c) {
+        const cp = String(c.phone || '').replace(/[^0-9]/g, '').replace(/^62/, '0').replace(/^0+/, '');
+        if (cp && (cp === cleanTarget || cp.endsWith(cleanTarget) || cleanTarget.endsWith(cp))) {
+          matchedCust = c;
+        }
+      });
+
+      let matchedUser = null;
+      users.forEach(function(u) {
+        const up = String(u.phone || '').replace(/[^0-9]/g, '').replace(/^62/, '0').replace(/^0+/, '');
+        if (up && (up === cleanTarget || up.endsWith(cleanTarget) || cleanTarget.endsWith(up))) {
+          matchedUser = u;
+        }
+      });
+
+      if (!matchedCust && !matchedUser) {
+        return createResponse(false, null, "Akun tidak ditemukan untuk nomor: " + phoneParam);
+      }
+
+      const custName = (matchedCust ? matchedCust.full_name : null) || (matchedUser ? matchedUser.name : "Jamaah");
+      const custId = (matchedCust ? matchedCust.id : null) || (matchedUser ? matchedUser.id : "CUS-ANON");
+      const custEmail = (matchedCust ? matchedCust.email : null) || (matchedUser ? matchedUser.email : "");
+
+      // Cari pendaftaran terkait
+      let matchedReg = null;
+      regs.forEach(function(r) {
+        if (r.customer_id === custId || r.customer_id === custName || String(r.notes || '').includes(cleanTarget)) {
+          matchedReg = r;
+        }
+      });
+
+      const pkg = matchedReg ? (pkgMap[matchedReg.package_id] || {}) : {};
+      const dep = matchedReg ? (depMap[matchedReg.departure_id] || {}) : {};
+
+      let rawPrice = matchedReg ? (matchedReg.final_price_snapshot || matchedReg.agreed_price_snapshot || 29500000) : 29500000;
+      let numPrice = Number(rawPrice);
+      if (numPrice < 100000) numPrice = numPrice * 100000;
+
+      const result = {
+        id: custId,
+        fullName: custName,
+        phone: phoneParam,
+        email: custEmail,
+        regId: matchedReg ? matchedReg.id : ("REG-SDW-" + Math.floor(1000 + Math.random() * 9000)),
+        packageTitle: pkg.name || (matchedReg ? matchedReg.package_id : "Umroh Reguler Syawal Barakah 9H"),
+        flightInfo: dep.airline || "Saudia Airlines (SV-819)",
+        roomType: matchedReg ? (matchedReg.room_type || "Quad (Ber-4)") : "Quad (Ber-4)",
+        departureDate: dep.departure_date ? (String(dep.departure_date).substring(0, 10)) : "15 Syawal 1448H",
+        totalPrice: "Rp " + numPrice.toLocaleString('id-ID'),
+        finalPrice: numPrice,
+        priceSnapshot: numPrice,
+        status: matchedReg ? (matchedReg.status || "CONFIRMED") : "CONFIRMED"
+      };
+
+      return createResponse(true, result);
+    }
+
     // ==================== READ ENDPOINTS (PULL DARI SPREADSHEET) ====================
     if (action === 'getLeads') {
       const leads = getSheetRowsAsObjects_(ss, "DB_Leads");

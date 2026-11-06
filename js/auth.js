@@ -205,6 +205,22 @@
             finalPrice: 42500000,
             status: 'CONFIRMED',
             isDemo: true
+        },
+        {
+            id: 'CUS-366092',
+            fullName: 'NAZIR',
+            phone: '089602807020',
+            email: 'nazirulmuhammad1992@gmail.com',
+            password: 'password123', // Also supports '123456'
+            regId: 'REG-SDW-3439',
+            packageTitle: 'Umroh Reguler 9 Hari',
+            flightInfo: 'Saudia Airlines (SV-819)',
+            roomType: 'QUAD (1 Pax)',
+            departureDate: '2027-01-15',
+            totalPrice: 'Rp 29.500.000',
+            finalPrice: 29500000,
+            status: 'CONFIRMED',
+            isDemo: true
         }
     ];
 
@@ -314,6 +330,67 @@
 
         setPilgrimSession(session);
         return { success: true, user: session };
+    }
+
+    async function loginPilgrimAsync(phone, password) {
+        // Coba login dari memori lokal terlebih dahulu
+        const localRes = loginPilgrim(phone, password);
+        if (localRes.success) return localRes;
+
+        const cPhone = cleanPhone(phone);
+        const accounts = getAllPilgrimAccounts();
+        const foundLocal = accounts.find(acc => cleanPhone(acc.phone) === cPhone);
+        if (foundLocal) {
+            // Nomor ada di lokal tapi password salah
+            return localRes;
+        }
+
+        // Jika nomor belum tersimpan di browser ini (misal buka di localhost atau perangkat baru),
+        // lakukan live lookup ke database Google Spreadsheet
+        try {
+            const api = (typeof window !== 'undefined' && window.SDW_API) ? window.SDW_API : null;
+            if (api && typeof api.get === 'function') {
+                const cloudRes = await api.get('checkAccount', { phone: cPhone });
+                if (cloudRes && cloudRes.success && cloudRes.data) {
+                    const cloudUser = cloudRes.data;
+                    const passStr = String(password).trim();
+                    cloudUser.password = passStr;
+
+                    const customUsers = getRegisteredUsers();
+                    if (!customUsers.some(u => cleanPhone(u.phone) === cPhone)) {
+                        customUsers.push(cloudUser);
+                        saveRegisteredUsers(customUsers);
+                    }
+
+                    const session = {
+                        id: cloudUser.id,
+                        fullName: cloudUser.fullName,
+                        phone: cloudUser.phone,
+                        email: cloudUser.email || '',
+                        regId: cloudUser.regId,
+                        packageTitle: cloudUser.packageTitle,
+                        flightInfo: cloudUser.flightInfo,
+                        roomType: cloudUser.roomType,
+                        departureDate: cloudUser.departureDate,
+                        totalPrice: cloudUser.totalPrice,
+                        finalPrice: cloudUser.finalPrice,
+                        priceSnapshot: cloudUser.priceSnapshot,
+                        status: cloudUser.status || 'CONFIRMED',
+                        loggedInAt: new Date().toISOString()
+                    };
+
+                    setPilgrimSession(session);
+                    return { success: true, user: session };
+                }
+            }
+        } catch (err) {
+            console.warn('[SDW_AUTH] Cloud lookup error:', err);
+        }
+
+        return {
+            success: false,
+            message: 'Nomor WhatsApp belum terdaftar. Silakan buat akun baru terlebih dahulu.'
+        };
     }
 
     function registerPilgrim({ fullName, phone, email, password }) {
@@ -786,16 +863,34 @@
             const phone = document.getElementById('loginPhone') ? document.getElementById('loginPhone').value : '';
             const password = document.getElementById('loginPassword') ? document.getElementById('loginPassword').value : '';
 
-            const res = loginPilgrim(phone, password);
-            if (res.success) {
-                window.showAuthAlert('success', `Alhamdulillah! Selamat datang kembali, ${res.user.fullName}.`);
-                setTimeout(() => {
-                    if (typeof window.backToAppHome === 'function') window.backToAppHome();
-                    syncPilgrimUI();
-                }, 600);
-            } else {
-                window.showAuthAlert('error', res.message);
+            const btnSubmit = document.getElementById('loginSubmitBtn');
+            const originalBtnHtml = btnSubmit ? btnSubmit.innerHTML : '';
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-300"></i><span>Memeriksa Akun di Database...</span>';
             }
+
+            (async () => {
+                try {
+                    const res = await loginPilgrimAsync(phone, password);
+                    if (res.success) {
+                        window.showAuthAlert('success', `Alhamdulillah! Selamat datang kembali, ${res.user.fullName}.`);
+                        setTimeout(() => {
+                            if (typeof window.backToAppHome === 'function') window.backToAppHome();
+                            syncPilgrimUI();
+                        }, 500);
+                    } else {
+                        window.showAuthAlert('error', res.message);
+                    }
+                } catch (err) {
+                    window.showAuthAlert('error', 'Terjadi kendala saat memeriksa akun. Silakan coba lagi.');
+                } finally {
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.innerHTML = originalBtnHtml;
+                    }
+                }
+            })();
         };
 
         window.handlePilgrimRegister = function (e) {
@@ -856,6 +951,7 @@
         setPilgrimSession: setPilgrimSession,
         clearPilgrimSession: clearPilgrimSession,
         loginPilgrim: loginPilgrim,
+        loginPilgrimAsync: loginPilgrimAsync,
         registerPilgrim: registerPilgrim,
         logoutPilgrim: logoutPilgrim,
         syncPilgrimUI: syncPilgrimUI,
