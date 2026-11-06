@@ -17,6 +17,26 @@ const CONFIG = {
   DRIVE_FOLDER_ID: '1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J'
 };
 
+/**
+ * JALANKAN FUNGSI INI 1x DI EDITOR APPS SCRIPT UNTUK MENYETUJUI IZIN GOOGLE DRIVE
+ * Pilih fungsi 'authorizeDriveAccess' di dropdown toolbar, lalu klik tombol ▶️ 'Jalankan' (Run).
+ * Klik 'Tinjau Izin' (Review Permissions) -> Akun Anda -> 'Lanjutan' (Advanced) -> 'Izinkan' (Allow).
+ */
+function authorizeDriveAccess() {
+  const folder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
+  Logger.log("✅ Izin Google Drive BERHASIL! Folder Utama: " + folder.getName());
+  const sub = folder.getFoldersByName("Pasfoto_Sertifikat");
+  const target = sub.hasNext() ? sub.next() : folder.createFolder("Pasfoto_Sertifikat");
+  Logger.log("✅ Sub-Folder Pasfoto_Sertifikat SIAP! ID: " + target.getId() + " URL: " + target.getUrl());
+  return {
+    success: true,
+    folderName: folder.getName(),
+    subfolderName: target.getName(),
+    subfolderId: target.getId(),
+    subfolderUrl: target.getUrl()
+  };
+}
+
 function createResponse(success, data, error, metadata) {
   const payload = {
     success: Boolean(success),
@@ -1030,13 +1050,22 @@ function processSingleMutation_(ss, action, payload, actor) {
       const decodedBytes = Utilities.base64Decode(cleanBase64);
       const blob = Utilities.newBlob(decodedBytes, contentType, fileName);
 
-      let targetFolder = null;
+      let parentFolder = null;
       if (CONFIG.DRIVE_FOLDER_ID && CONFIG.DRIVE_FOLDER_ID !== "__SDW_CONFIG_PENDING__") {
         try {
-          targetFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
+          parentFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
         } catch (fErr) {}
       }
-      if (!targetFolder) {
+
+      let targetFolder = null;
+      if (parentFolder) {
+        const subFolders = parentFolder.getFoldersByName("Pasfoto_Sertifikat");
+        if (subFolders.hasNext()) {
+          targetFolder = subFolders.next();
+        } else {
+          targetFolder = parentFolder.createFolder("Pasfoto_Sertifikat");
+        }
+      } else {
         const folders = DriveApp.getFoldersByName("Pasfoto_Sertifikat");
         if (folders.hasNext()) {
           targetFolder = folders.next();
