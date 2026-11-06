@@ -25,8 +25,9 @@ console.log(`  [PASS] File assets/certificate-template.jpg valid (${templateStat
 console.log('\n2. Verifikasi UI E-Sertifikat di app.html');
 const appHtml = fs.readFileSync(appHtmlPath, 'utf8');
 assert(appHtml.includes('id="pilgrimCertContainer"'), 'Container certificate preview harus ada');
+assert(appHtml.includes('id="cert-pilgrim-no"'), 'Nomor sertifikat pojok kiri atas harus ada');
 assert(appHtml.includes('id="cert-pilgrim-photo-box"'), 'Frame foto sertifikat harus ada');
-assert(appHtml.includes('top: 15.55%; left: 76.56%;'), 'Koordinat bingkai foto harus presisi 100%');
+assert(appHtml.includes('top: 15.55%; left: 77.2%;'), 'Koordinat bingkai foto harus presisi dan pas geser kanan');
 assert(appHtml.includes('id="cert-pilgrim-photo-img"'), 'Image tag foto jamaah harus ada');
 assert(appHtml.includes('id="cert-pilgrim-name"'), 'Elemen nama jamaah di sertifikat harus ada');
 assert(appHtml.includes('top: 53.6%; left: 49.5%;'), 'Letak nama jamaah harus mendekati garis horizontal');
@@ -61,9 +62,8 @@ assert(adminHtml.includes('id="tab-certificates"'), 'Container tab-certificates 
 assert(adminHtml.includes('id="table-certificates-body"'), 'Tabel daftar sertifikat jamaah harus ada');
 assert(adminHtml.includes('id="modalCertificateEditor"'), 'Modal editor sertifikat harus ada');
 assert(adminHtml.includes('id="modal-cert-preview-name"'), 'Preview nama di modal editor harus ada');
-assert(adminHtml.includes('id="crop-zoom"'), 'Slider Crop Zoom harus ada di modal');
-assert(adminHtml.includes('id="crop-offset-x"'), 'Slider Crop Offset X harus ada di modal');
-assert(adminHtml.includes('id="crop-offset-y"'), 'Slider Crop Offset Y harus ada di modal');
+assert(adminHtml.includes('id="modal-cert-preview-no"'), 'Nomor sertifikat pojok kiri atas di modal preview harus ada');
+assert(adminHtml.includes('id="crop-zoom"'), 'Slider Zoom harus ada di modal');
 assert(adminHtml.includes('js/admin/admin-certificates.js'), 'admin-certificates.js harus dimuat di admin.html');
 console.log('  [PASS] Navigasi, tab view, live preview modal, dan script loader di admin.html terverifikasi!');
 

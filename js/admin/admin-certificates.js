@@ -2,7 +2,7 @@
  * ====================================================================
  * SDW UMROH — ADMIN MODULE: E-SERTIFIKAT UMROH
  * File: js/admin/admin-certificates.js
- * Version: 2.7.2
+ * Version: 2.7.3
  * Philosophy: ONE JOURNEY, ONE PLATFORM
  * ====================================================================
  */
@@ -21,7 +21,7 @@
 
     let activeCertPhotoDataUrl = null;
     let activeRawPhotoDataUrl = null;
-    let activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
+    let activeCertCrop = { zoom: 100 };
 
     function getCertificatesStore() {
         try {
@@ -202,16 +202,11 @@
         activeRawPhotoDataUrl = cert.rawPhotoUrl || cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || null;
         activeCertPhotoDataUrl = cert.photoUrl || activeRawPhotoDataUrl;
 
-        // Pulihkan pengaturan crop tersimpan atau reset ke default
-        if (cert.cropSettings) {
-            activeCertCrop = { ...cert.cropSettings };
-        } else {
-            activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
-        }
+        // Pulihkan pengaturan zoom tersimpan atau reset ke 100%
+        activeCertCrop = { zoom: cert.cropZoom || (cert.cropSettings && cert.cropSettings.zoom) || 100 };
 
         syncCropSlidersUI();
         updateCertificatePreview();
-        initPhotoDragEvents();
 
         if (modal) {
             modal.classList.remove('hidden');
@@ -227,113 +222,62 @@
         }
     }
 
-    // 3. Sinkronisasi UI Sliders Crop
+    // 3. Sinkronisasi UI Slider Zoom
     function syncCropSlidersUI() {
         const zoomInput = document.getElementById('crop-zoom');
-        const xInput = document.getElementById('crop-offset-x');
-        const yInput = document.getElementById('crop-offset-y');
         const zoomLabel = document.getElementById('label-crop-zoom');
-        const xLabel = document.getElementById('label-crop-x');
-        const yLabel = document.getElementById('label-crop-y');
 
-        if (zoomInput) zoomInput.value = activeCertCrop.zoom;
-        if (xInput) xInput.value = activeCertCrop.offsetX;
-        if (yInput) yInput.value = activeCertCrop.offsetY;
-
-        if (zoomLabel) zoomLabel.textContent = `${activeCertCrop.zoom}%`;
-        if (xLabel) xLabel.textContent = `${activeCertCrop.offsetX}%`;
-        if (yLabel) yLabel.textContent = `${activeCertCrop.offsetY}%`;
+        if (zoomInput) zoomInput.value = activeCertCrop.zoom || 100;
+        if (zoomLabel) zoomLabel.textContent = `${activeCertCrop.zoom || 100}%`;
     }
 
-    // Event Handler saat slider crop digeser
+    // Event Handler saat slider zoom digeser
     function onPhotoCropChange() {
         const zoomInput = document.getElementById('crop-zoom');
-        const xInput = document.getElementById('crop-offset-x');
-        const yInput = document.getElementById('crop-offset-y');
-
         activeCertCrop.zoom = parseInt(zoomInput ? zoomInput.value : '100', 10) || 100;
-        activeCertCrop.offsetX = parseInt(xInput ? xInput.value : '0', 10) || 0;
-        activeCertCrop.offsetY = parseInt(yInput ? yInput.value : '0', 10) || 0;
 
         syncCropSlidersUI();
         updatePhotoTransformPreview();
     }
 
-    // Reset posisi dan zoom pasfoto
+    // Reset zoom pasfoto
     function resetPhotoCrop() {
-        activeCertCrop = { zoom: 100, offsetX: 0, offsetY: 0 };
+        activeCertCrop = { zoom: 100 };
         syncCropSlidersUI();
         updatePhotoTransformPreview();
     }
 
-    // Update transformasi CSS foto pratinjau real-time
+    // Update transformasi CSS foto pratinjau real-time (Skala Terpusat)
     function updatePhotoTransformPreview() {
         const previewImg = document.getElementById('modal-cert-preview-photo-img');
         if (!previewImg) return;
 
         const scale = (activeCertCrop.zoom || 100) / 100;
-        const offX = activeCertCrop.offsetX || 0;
-        const offY = activeCertCrop.offsetY || 0;
-
-        previewImg.style.transform = `scale(${scale}) translate(${offX}%, ${offY}%)`;
-    }
-
-    // Inisialisasi gesture Drag & Pan pada bingkai foto
-    function initPhotoDragEvents() {
-        const box = document.getElementById('modal-cert-preview-photo-box');
-        if (!box || box._dragInitialized) return;
-        box._dragInitialized = true;
-
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let startOffX = 0;
-        let startOffY = 0;
-
-        box.addEventListener('mousedown', function (e) {
-            if (!activeRawPhotoDataUrl && !activeCertPhotoDataUrl) return;
-            isDragging = true;
-            startX = e.clientX;
-            startY = e.clientY;
-            startOffX = activeCertCrop.offsetX;
-            startOffY = activeCertCrop.offsetY;
-            e.preventDefault();
-        });
-
-        window.addEventListener('mousemove', function (e) {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-
-            // Rasio geser sensitif: 1px = ~0.6%
-            const newX = Math.max(-50, Math.min(50, Math.round(startOffX + dx * 0.6)));
-            const newY = Math.max(-50, Math.min(50, Math.round(startOffY + dy * 0.6)));
-
-            activeCertCrop.offsetX = newX;
-            activeCertCrop.offsetY = newY;
-
-            syncCropSlidersUI();
-            updatePhotoTransformPreview();
-        });
-
-        window.addEventListener('mouseup', function () {
-            if (isDragging) isDragging = false;
-        });
+        previewImg.style.transform = `scale(${scale})`;
+        previewImg.style.transformOrigin = 'center center';
     }
 
     // 4. Update Real-Time Live Preview Teks di Layar Modal
     function updateCertificatePreview() {
         const nameInput = document.getElementById('cert-input-name');
         const dateInput = document.getElementById('cert-input-date');
+        const certNoInput = document.getElementById('cert-input-no');
         const previewName = document.getElementById('modal-cert-preview-name');
         const previewDate = document.getElementById('modal-cert-preview-date');
+        const previewNo = document.getElementById('modal-cert-preview-no');
         const previewImg = document.getElementById('modal-cert-preview-photo-img');
         const previewPlaceholder = document.getElementById('modal-cert-preview-photo-placeholder');
 
         const nameVal = (nameInput && nameInput.value.trim()) ? nameInput.value.trim().toUpperCase() : 'NAMA JAMAAH';
         const dateVal = (dateInput && dateInput.value.trim()) ? dateInput.value.trim() : '15 Januari 2027';
+        const noVal = (certNoInput && certNoInput.value.trim()) ? certNoInput.value.trim() : 'SDW/CERT/2027/2701';
 
         if (previewName) previewName.textContent = nameVal;
+
+        // Nomor Sertifikat di Pojok Kiri Atas
+        if (previewNo) {
+            previewNo.textContent = noVal.startsWith('No') ? noVal : `No: ${noVal}`;
+        }
 
         // Wajib 1 Baris Saja
         if (previewDate) {
@@ -367,14 +311,14 @@
             resetPhotoCrop();
             updateCertificatePreview();
             if (typeof admin.showToast === 'function') {
-                admin.showToast('Pasfoto berhasil diunggah! Sesuaikan zoom & posisi geser sesuai kebutuhan.');
+                admin.showToast('Pasfoto berhasil diunggah! Sesuaikan zoom perbesar jika diperlukan.');
             }
         };
         reader.readAsDataURL(file);
     }
 
-    // Helper: Bake / Crop Foto ke Canvas dengan Rasio Presisi 135:171 (Resolusi Tinggi 405x513)
-    function bakeCroppedPhoto(imageSrc, scale, offsetX, offsetY, callback) {
+    // Helper: Bake / Crop Foto ke Canvas Terpusat dengan Rasio Presisi 135:171 (Resolusi Tinggi 405x513)
+    function bakeCroppedPhoto(imageSrc, scale, callback) {
         if (!imageSrc) {
             callback(null);
             return;
@@ -405,8 +349,8 @@
                 drawH = drawW / imgAspect;
             }
 
-            const shiftX = (targetW - drawW) / 2 + (offsetX / 100) * targetW;
-            const shiftY = (targetH - drawH) / 2 + (offsetY / 100) * targetH;
+            const shiftX = (targetW - drawW) / 2;
+            const shiftY = (targetH - drawH) / 2;
 
             ctx.drawImage(img, shiftX, shiftY, drawW, drawH);
             try {
@@ -442,10 +386,8 @@
 
         const sourcePhoto = activeRawPhotoDataUrl || activeCertPhotoDataUrl;
         const scale = (activeCertCrop.zoom || 100) / 100;
-        const offX = activeCertCrop.offsetX || 0;
-        const offY = activeCertCrop.offsetY || 0;
 
-        bakeCroppedPhoto(sourcePhoto, scale, offX, offY, function (bakedUrl) {
+        bakeCroppedPhoto(sourcePhoto, scale, function (bakedUrl) {
             const certStore = getCertificatesStore();
             certStore[regId] = {
                 isIssued: true,
@@ -455,7 +397,7 @@
                 departureDate: departureDate || '15 Januari 2027',
                 photoUrl: bakedUrl,
                 rawPhotoUrl: sourcePhoto,
-                cropSettings: { ...activeCertCrop }
+                cropZoom: activeCertCrop.zoom || 100
             };
             saveCertificatesStore(certStore);
 
@@ -478,6 +420,7 @@
 
         const displayName = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
         const departureDate = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
+        const certNo = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
         const photoSrc = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '';
 
         const printWindow = window.open('', '_blank');
@@ -496,7 +439,8 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-photo { position: absolute; top: 15.54%; left: 76.56%; width: 13.18%; height: 25.07%; object-fit: cover; border-radius: 2px; }
+                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: "Courier New", monospace; font-size: 13px; font-weight: bold; color: #475569; letter-spacing: 0.5px; }
+                    .cert-photo { position: absolute; top: 15.55%; left: 77.2%; width: 13.35%; height: 25.1%; object-fit: cover; border-radius: 2px; }
                     .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
@@ -504,6 +448,7 @@
             <body>
                 <div class="cert-box">
                     <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
+                    <div class="cert-no">${certNo.startsWith('No') ? certNo : 'No: ' + certNo}</div>
                     ${photoSrc ? `<img src="${photoSrc}" class="cert-photo">` : ''}
                     <div class="cert-name">${displayName}</div>
                     <div class="cert-date">Keberangkatan: ${departureDate}</div>

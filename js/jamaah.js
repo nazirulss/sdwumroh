@@ -331,6 +331,7 @@
         const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
         const certNameEl = document.getElementById('cert-pilgrim-name');
         const certDateEl = document.getElementById('cert-pilgrim-date');
+        const certNoEl = document.getElementById('cert-pilgrim-no');
         const photoImg = document.getElementById('cert-pilgrim-photo-img');
         const photoPlaceholder = document.getElementById('cert-pilgrim-photo-placeholder');
 
@@ -352,6 +353,7 @@
         }
 
         const displayName = (customCert && customCert.displayName) ? customCert.displayName : (session && session.fullName ? session.fullName : 'Ahmad Jamaah Teladan');
+        const certNo = (customCert && customCert.certificateNo) ? customCert.certificateNo : (session && session.regId ? `SDW/CERT/2027/${String(session.regId).replace(/\D/g, '').padStart(3, '0')}` : 'SDW/CERT/2027/2701');
         
         let displayDate = 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
         if (customCert && customCert.departureDate) {
@@ -380,6 +382,7 @@
 
         certNameEl.textContent = displayName;
         if (certDateEl) certDateEl.textContent = displayDate;
+        if (certNoEl) certNoEl.textContent = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
 
         if (photoUrl) {
             if (photoImg) {
@@ -396,6 +399,7 @@
     function downloadCertificateImage() {
         const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah-SDW';
         const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
+        const certNo = document.getElementById('cert-pilgrim-no')?.textContent || 'No: SDW/CERT/2027/2701';
         const photoImg = document.getElementById('cert-pilgrim-photo-img');
 
         const canvas = document.createElement('canvas');
@@ -410,11 +414,18 @@
             // 1. Gambar Master Mockup Template
             ctx.drawImage(template, 0, 0, canvas.width, canvas.height);
 
-            // 2. Gambar Foto Jamaah di dalam Bingkai Emas (Presisi Sesuai Mockup 1024x682)
-            const frameX = canvas.width * 0.7656;
+            // 1b. Nomor Sertifikat di Pojok Kiri Atas
+            ctx.fillStyle = '#475569';
+            ctx.font = 'bold 16px "Courier New", monospace';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'top';
+            ctx.fillText(certNo.trim(), canvas.width * 0.068, canvas.height * 0.058);
+
+            // 2. Gambar Foto Jamaah di dalam Bingkai Emas (Presisi Pas & Geser Kanan Sesuai Mockup)
+            const frameX = canvas.width * 0.772;
             const frameY = canvas.height * 0.1554;
-            const frameW = canvas.width * 0.1318;
-            const frameH = canvas.height * 0.2507;
+            const frameW = canvas.width * 0.1335;
+            const frameH = canvas.height * 0.251;
 
             if (photoImg && !photoImg.classList.contains('hidden') && photoImg.src) {
                 try {
@@ -458,6 +469,7 @@
     function downloadCertificatePDF() {
         const certName = document.getElementById('cert-pilgrim-name')?.textContent || 'Jamaah SDW';
         const certDate = document.getElementById('cert-pilgrim-date')?.textContent || 'Keberangkatan: 15 Januari 2027 • Musim 1448 H';
+        const certNo = document.getElementById('cert-pilgrim-no')?.textContent || 'No: SDW/CERT/2027/2701';
         const photoImg = document.getElementById('cert-pilgrim-photo-img');
         const photoSrc = (photoImg && !photoImg.classList.contains('hidden')) ? photoImg.src : '';
 
@@ -477,7 +489,8 @@
                     body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-photo { position: absolute; top: 15.54%; left: 76.56%; width: 13.18%; height: 25.07%; object-fit: cover; border-radius: 2px; }
+                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: "Courier New", monospace; font-size: 13px; font-weight: bold; color: #475569; letter-spacing: 0.5px; }
+                    .cert-photo { position: absolute; top: 15.55%; left: 77.2%; width: 13.35%; height: 25.1%; object-fit: cover; border-radius: 2px; }
                     .cert-name { position: absolute; top: 53.6%; left: 49.5%; transform: translate(-50%, -100%); width: 78%; text-align: center; font-size: 32px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
@@ -485,6 +498,7 @@
             <body>
                 <div class="cert-box">
                     <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
+                    <div class="cert-no">${certNo}</div>
                     ${photoSrc ? `<img src="${photoSrc}" class="cert-photo">` : ''}
                     <div class="cert-name">${certName}</div>
                     <div class="cert-date">${certDate}</div>
