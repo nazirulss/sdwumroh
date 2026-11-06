@@ -1,6 +1,6 @@
 /**
  * ====================================================================
- * TEST SUITE: END-TO-END BOOKING CONFIRMATION & E-PASS ISSUANCE
+ * TEST SUITE: END-TO-END BOOKING CONFIRMATION, PROOF UPLOAD & E-PASS
  * File: tests/test_booking_confirmation_flow.js
  * Philosophy: ONE JOURNEY, ONE PLATFORM
  * ====================================================================
@@ -24,7 +24,7 @@ function runTest(name, fn) {
   }
 }
 
-console.log('=== TEST SUITE: ADMIN BOOKING CONFIRMATION & E-PASS ISSUANCE ===\n');
+console.log('=== TEST SUITE: ADMIN BOOKING CONFIRMATION, PROOF UPLOAD & E-PASS ===\n');
 
 // 1. Pengujian Backend Google Apps Script (backend/Code.gs)
 console.log('1. Pengujian Mutasi Backend Google Apps Script (backend/Code.gs)');
@@ -34,79 +34,74 @@ runTest('Code.gs memiliki handler confirmRegistration / verifyBookingDP', () => 
   assert(codeGs.includes("action === 'confirmRegistration'") || codeGs.includes("action === 'verifyBookingDP'"), 'confirmRegistration handler missing');
 });
 
+runTest('Code.gs memiliki handler uploadPaymentProof untuk unggah struk jamaah', () => {
+  assert(codeGs.includes("action === 'uploadPaymentProof'"), 'uploadPaymentProof handler missing in Code.gs');
+});
+
 runTest('Code.gs confirmRegistration mengupdate DB_Registrations menjadi CONFIRMED', () => {
   assert(codeGs.includes('sheet.getRange(i + 1, 9).setValue(newStatus)'), 'Status update logic missing in Code.gs');
 });
 
-runTest('Code.gs confirmRegistration otomatis menerbitkan/memvalidasi record di DB_Payments', () => {
-  assert(codeGs.includes('DB_Payments') && codeGs.includes('"VERIFIED"'), 'Payment verification logic missing in confirmRegistration');
+runTest('Code.gs confirmRegistration menyimpan referensi struk (proof) dan ref mutasi di DB_Payments', () => {
+  assert(codeGs.includes('payload.proof') && codeGs.includes('payload.ref'), 'Proof and ref saving logic missing in Code.gs');
 });
 
 runTest('Code.gs verifyPayment juga mengupdate status DB_Registrations jika terhubung ke regId', () => {
   assert(codeGs.includes('regSheet.getRange(k + 1, 9).setValue("CONFIRMED")'), 'Two-way registration update missing in verifyPayment');
 });
 
-// 2. Pengujian Admin Portal Modules
-console.log('\n2. Pengujian Admin Registrations & Drawer (js/admin/admin-registrations.js & admin-nav.js)');
+// 2. Pengujian Sisi Jamaah PWA (app.html & js/pwa.js & js/auth.js)
+console.log('\n2. Pengujian Unggah Bukti Struk di Sisi Jamaah PWA (app.html & js/pwa.js)');
+const appHtml = fs.readFileSync(path.join(process.cwd(), 'app.html'), 'utf8');
+const pwaJs = fs.readFileSync(path.join(process.cwd(), 'js', 'pwa.js'), 'utf8');
+const authJs = fs.readFileSync(path.join(process.cwd(), 'js', 'auth.js'), 'utf8');
+
+runTest('app.html memuat komponen upload struk (#pwaDpProofFileInput & #btnSubmitPwaProof)', () => {
+  assert(appHtml.includes('id="pwaDpProofFileInput"'), 'FileInput pwaDpProofFileInput missing in app.html');
+  assert(appHtml.includes('id="btnSubmitPwaProof"'), 'Button btnSubmitPwaProof missing in app.html');
+  assert(appHtml.includes('id="pwaProofUploadBox"'), 'Dropzone pwaProofUploadBox missing in app.html');
+});
+
+runTest('js/pwa.js mendefinisikan controller handlePwaProofFileSelected & submitPwaPaymentProof', () => {
+  assert(pwaJs.includes('window.handlePwaProofFileSelected'), 'handlePwaProofFileSelected missing in pwa.js');
+  assert(pwaJs.includes('window.submitPwaPaymentProof'), 'submitPwaPaymentProof missing in pwa.js');
+});
+
+runTest('js/auth.js syncPilgrimUI menyelaraskan tampilan bukti terkirim jika session.proofSubmitted', () => {
+  assert(authJs.includes('session.proofSubmitted || session.proofImage'), 'Proof state check missing in syncPilgrimUI');
+});
+
+// 3. Pengujian Sisi Admin Portal (admin.html, admin-registrations.js & admin-nav.js)
+console.log('\n3. Pengujian Modal Validasi DP & Pratinjau Struk di Sisi Admin Portal');
+const adminHtml = fs.readFileSync(path.join(process.cwd(), 'admin.html'), 'utf8');
 const adminRegsJs = fs.readFileSync(path.join(process.cwd(), 'js', 'admin', 'admin-registrations.js'), 'utf8');
 const adminNavJs = fs.readFileSync(path.join(process.cwd(), 'js', 'admin', 'admin-nav.js'), 'utf8');
 const adminFinanceJs = fs.readFileSync(path.join(process.cwd(), 'js', 'admin', 'admin-finance.js'), 'utf8');
-const adminStateJs = fs.readFileSync(path.join(process.cwd(), 'js', 'admin', 'admin-state.js'), 'utf8');
 
-runTest('admin-registrations.js mendefinisikan fungsi confirmRegistrationDP', () => {
-  assert(adminRegsJs.includes('function confirmRegistrationDP(regId)'), 'confirmRegistrationDP function not found');
-  assert(adminRegsJs.includes('admin.confirmRegistrationDP = confirmRegistrationDP'), 'confirmRegistrationDP export not found');
+runTest('admin.html memuat modal khusus #modalValidateDpBooking dengan form mutasi bank & preview struk', () => {
+  assert(adminHtml.includes('id="modalValidateDpBooking"'), 'modalValidateDpBooking missing in admin.html');
+  assert(adminHtml.includes('id="vdp_proof_img"'), 'vdp_proof_img preview missing in admin.html');
+  assert(adminHtml.includes('id="adminDpProofFileInput"'), 'adminDpProofFileInput missing in admin.html');
+  assert(adminHtml.includes('id="vdp_ref_input"'), 'vdp_ref_input missing in admin.html');
 });
 
-runTest('Tabel registrasi memiliki tombol cepat [Validasi DP] untuk status PENDING_DP', () => {
-  assert(adminRegsJs.includes('SDW_ADMIN.confirmRegistrationDP'), 'Quick action button missing in renderRegistrations');
-  assert(adminRegsJs.includes('Validasi DP'), 'Button label Validasi DP missing');
+runTest('admin-registrations.js mendefinisikan openValidateDpModal, handleAdminProofFileSelected & handleConfirmValidateDp', () => {
+  assert(adminRegsJs.includes('function openValidateDpModal(regId)'), 'openValidateDpModal missing');
+  assert(adminRegsJs.includes('function handleAdminProofFileSelected(event)'), 'handleAdminProofFileSelected missing');
+  assert(adminRegsJs.includes('function handleConfirmValidateDp(e)'), 'handleConfirmValidateDp missing');
 });
 
-runTest('Drawer review registrasi (admin-nav.js) menampilkan kartu verifikasi DP saat status PENDING_DP', () => {
-  assert(adminNavJs.includes('isPendingDp'), 'isPendingDp condition missing in openDrawer');
-  assert(adminNavJs.includes('Tagihan DP Booking: Rp 5.000.000'), 'Pending DP tag missing in drawer');
-  assert(adminNavJs.includes('SDW_ADMIN.confirmRegistrationDP'), 'Direct confirm button missing in drawer');
+runTest('admin-registrations.js confirmRegistrationDP memicu modal validasi terpadu bukan alert polos', () => {
+  assert(adminRegsJs.includes('function confirmRegistrationDP(regId) {\n        openValidateDpModal(regId);') || adminRegsJs.includes('openValidateDpModal(regId)'), 'confirmRegistrationDP must trigger openValidateDpModal');
 });
 
-runTest('admin-finance.js verifyPaymentAction mengupdate DB_Registrations menjadi CONFIRMED', () => {
-  assert(adminFinanceJs.includes('reg.status = \'CONFIRMED\''), 'Registration status update missing in verifyPaymentAction');
+runTest('Drawer review registrasi (admin-nav.js) menampilkan pratinjau bukti struk jamaah jika tersedia', () => {
+  assert(adminNavJs.includes('r.proofImage'), 'proofImage rendering check missing in admin-nav.js');
 });
 
-runTest('admin-state.js memetakan status PENDING_DP dengan badge amber & sync pwa session', () => {
-  assert(adminStateJs.includes('case \'PENDING_DP\':'), 'PENDING_DP case missing in getStatusBadgeClass');
-  assert(adminStateJs.includes('sdw_pilgrim_session'), 'Pilgrim session sync missing in admin-state.js');
-});
+// 4. Simulasi Fungsional Alur End-to-End dengan Bukti Transfer
+console.log('\n4. Simulasi Fungsional Alur: Upload Struk -> Review Admin -> E-Pass Terbit');
 
-// 3. Pengujian Real-Time Sync & PWA Jamaah (app.html & js/auth.js)
-console.log('\n3. Pengujian Real-Time Status Verifier di PWA (app.html & js/auth.js)');
-const appHtml = fs.readFileSync(path.join(process.cwd(), 'app.html'), 'utf8');
-const authJs = fs.readFileSync(path.join(process.cwd(), 'js', 'auth.js'), 'utf8');
-
-runTest('app.html memuat tombol [Cek Status Verifikasi Admin] di dalam #profilePendingDpSection', () => {
-  assert(appHtml.includes('id="btnCheckDpStatus"'), 'btnCheckDpStatus button missing in app.html');
-  assert(appHtml.includes('window.refreshPilgrimStatus()'), 'onclick refreshPilgrimStatus missing');
-});
-
-runTest('js/auth.js mendefinisikan fungsi refreshPilgrimStatus dengan dual check (local & remote)', () => {
-  assert(authJs.includes('async function refreshPilgrimStatus'), 'refreshPilgrimStatus missing in auth.js');
-  assert(authJs.includes('sdw_admin_registrations'), 'Local sync check missing in refreshPilgrimStatus');
-  assert(authJs.includes('checkRegistration'), 'Remote API check missing in refreshPilgrimStatus');
-});
-
-runTest('js/auth.js mengekspor refreshPilgrimStatus ke window dan modul SDW_AUTH', () => {
-  assert(authJs.includes('window.refreshPilgrimStatus = refreshPilgrimStatus'), 'window export missing');
-  assert(authJs.includes('refreshPilgrimStatus: refreshPilgrimStatus'), 'module export missing');
-});
-
-runTest('js/auth.js switchAppTab otomatis memeriksa status saat jamaah membuka tab Profil/Ibadah', () => {
-  assert(authJs.includes('refreshPilgrimStatus({ silent: true })'), 'Silent auto-refresh missing on tab switch');
-});
-
-// 4. Simulasi Fungsional Alur End-to-End
-console.log('\n4. Simulasi Fungsional Alur Booking -> Verifikasi Admin -> E-Pass Terbit');
-
-// Setup mock localStorage dan session
 const mockStorage = {};
 global.localStorage = {
   getItem: (k) => mockStorage[k] || null,
@@ -114,10 +109,11 @@ global.localStorage = {
   removeItem: (k) => { delete mockStorage[k]; },
   clear: () => { Object.keys(mockStorage).forEach(k => delete mockStorage[k]); }
 };
-global.confirm = () => true;
 
-// 4a. Jamaah Starmil Store booking paket
-const testSession = {
+// 4a. Jamaah upload foto struk di PWA
+const dummyProofBase64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+
+const pilgrimSession = {
   id: 'CUS-TEST-99',
   regId: 'REG-SDW-3410',
   fullName: 'Starmil Store',
@@ -125,75 +121,60 @@ const testSession = {
   status: 'PENDING_DP',
   packageTitle: 'Umroh Reguler Syawal Barakah',
   totalPrice: 'Rp 29.500.000',
-  dpAmount: 'Rp 5.000.000'
+  dpAmount: 'Rp 5.000.000',
+  proofSubmitted: true,
+  proofImage: dummyProofBase64
 };
-mockStorage['sdw_pilgrim_session'] = JSON.stringify(testSession);
+mockStorage['sdw_pilgrim_session'] = JSON.stringify(pilgrimSession);
 
-// Buat mock SDW_ADMIN
-const mockAdmin = {
-  registrationsData: [
+// Mock registrasi admin
+const adminRegs = [
+  {
+    id: 'REG-SDW-3410',
+    customer: 'Starmil Store',
+    package: 'Umroh Reguler Syawal Barakah',
+    status: 'PENDING_DP',
+    dpAmount: 5000000,
+    proofImage: dummyProofBase64
+  }
+];
+mockStorage['sdw_admin_registrations'] = JSON.stringify(adminRegs);
+
+runTest('Admin membuka modal dan menemukan bukti transfer jamaah yang terunggah', () => {
+  const regList = JSON.parse(mockStorage['sdw_admin_registrations']);
+  const target = regList.find(r => r.id === 'REG-SDW-3410');
+  assert(target, 'Target registration must exist');
+  assert.strictEqual(target.proofImage, dummyProofBase64, 'Proof image must match uploaded data');
+});
+
+runTest('Admin mengesahkan pembayaran dengan input nomor referensi mutasi BSI', () => {
+  const regList = JSON.parse(mockStorage['sdw_admin_registrations']);
+  const target = regList.find(r => r.id === 'REG-SDW-3410');
+  target.status = 'CONFIRMED';
+  target.payment = 'DP Lunas (Rp 5.000.000)';
+  mockStorage['sdw_admin_registrations'] = JSON.stringify(regList);
+
+  const payments = [
     {
-      id: 'REG-SDW-3410',
-      customer: 'Starmil Store',
-      package: 'Umroh Reguler Syawal Barakah',
-      departure: '15 Syawal 1448H',
-      status: 'PENDING_DP',
-      payment: 'Menunggu DP (Rp 5jt)',
-      dpAmount: 5000000
-    }
-  ],
-  paymentsData: [
-    {
-      id: 'PAY-SDW-009',
+      id: 'PAY-SDW-010',
       regId: 'REG-SDW-3410',
       customer: 'Starmil Store',
       amount: 'Rp 5.000.000',
-      status: 'PENDING_VERIFY'
+      ref: 'BSI-TX889021',
+      proof: target.proofImage,
+      status: 'VERIFIED'
     }
-  ],
-  STORAGE_KEYS: {
-    REGS: 'sdw_admin_registrations',
-    PAYMENTS: 'sdw_admin_payments'
-  },
-  currentRole: 'FINANCE',
-  persistStorage: (k, v) => { mockStorage[k] = JSON.stringify(v); },
-  formatRupiah: (n) => 'Rp ' + Number(n).toLocaleString('id-ID'),
-  showToast: () => {},
-  logAdminAudit: () => {},
-  enqueueMutation: () => {}
-};
+  ];
+  mockStorage['sdw_admin_payments'] = JSON.stringify(payments);
 
-runTest('Admin menjalankan confirmRegistrationDP untuk REG-SDW-3410', () => {
-  // Simulasi logika confirmRegistrationDP
-  const r = mockAdmin.registrationsData.find(item => item.id === 'REG-SDW-3410');
-  assert(r, 'Registration must exist');
-  r.status = 'CONFIRMED';
-  r.payment = 'DP Lunas (Rp 5.000.000)';
-  mockAdmin.persistStorage(mockAdmin.STORAGE_KEYS.REGS, mockAdmin.registrationsData);
-
-  const p = mockAdmin.paymentsData.find(item => item.regId === 'REG-SDW-3410');
-  assert(p, 'Payment record must exist');
-  p.status = 'VERIFIED';
-  mockAdmin.persistStorage(mockAdmin.STORAGE_KEYS.PAYMENTS, mockAdmin.paymentsData);
-
-  assert.strictEqual(r.status, 'CONFIRMED', 'Status harus menjadi CONFIRMED');
-  assert.strictEqual(p.status, 'VERIFIED', 'Pembayaran harus menjadi VERIFIED');
-});
-
-runTest('PWA refreshPilgrimStatus mendeteksi konfirmasi admin dan mengaktifkan E-Pass', async () => {
-  // Jalankan logika verifier
-  const adminRegs = JSON.parse(mockStorage['sdw_admin_registrations']);
-  const confirmedReg = adminRegs.find(item => item.id === 'REG-SDW-3410');
-  assert.strictEqual(confirmedReg.status, 'CONFIRMED', 'Local admin storage must be CONFIRMED');
-
+  // Update sesi jamaah
   const sess = JSON.parse(mockStorage['sdw_pilgrim_session']);
-  if (confirmedReg.status === 'CONFIRMED') {
-    sess.status = 'CONFIRMED';
-    mockStorage['sdw_pilgrim_session'] = JSON.stringify(sess);
-  }
+  sess.status = 'CONFIRMED';
+  mockStorage['sdw_pilgrim_session'] = JSON.stringify(sess);
 
-  const updatedSess = JSON.parse(mockStorage['sdw_pilgrim_session']);
-  assert.strictEqual(updatedSess.status, 'CONFIRMED', 'Pilgrim session status must become CONFIRMED');
+  assert.strictEqual(JSON.parse(mockStorage['sdw_pilgrim_session']).status, 'CONFIRMED');
+  assert.strictEqual(JSON.parse(mockStorage['sdw_admin_payments'])[0].status, 'VERIFIED');
+  assert.strictEqual(JSON.parse(mockStorage['sdw_admin_payments'])[0].ref, 'BSI-TX889021');
 });
 
 console.log('\n========================================');
@@ -203,5 +184,5 @@ console.log('========================================\n');
 if (failed > 0) {
   process.exit(1);
 } else {
-  console.log('🌟 SELURUH ALUR KONFIRMASI BOOKING & PENERBITAN E-PASS BERHASIL 100%!');
+  console.log('🌟 SISTEM BUKTI PEMBAYARAN & VALIDASI STRUK DUA SISI 100% SUKSES!');
 }

@@ -246,15 +246,23 @@
                     </div>
 
                     ${isPendingDp ? `
-                        <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-300 text-xs text-amber-950 space-y-1.5">
-                            <div class="font-black flex items-center gap-1.5 text-amber-900">
-                                <i class="fa-solid fa-clock"></i> Tagihan DP Booking: Rp 5.000.000
+                        <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-300 text-xs text-amber-950 space-y-2">
+                            <div class="font-black flex items-center justify-between text-amber-900">
+                                <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock"></i> Tagihan DP Booking:</span>
+                                <span class="text-sm font-black text-emerald-800">Rp 5.000.000</span>
                             </div>
-                            <p class="text-[11px] text-amber-800 leading-relaxed">
-                                Jamaah telah memilih paket di PWA dan mengajukan verifikasi DP BSI. Periksa mutasi rekening sebelum memvalidasi.
-                            </p>
-                            <button type="button" onclick="SDW_ADMIN.confirmRegistrationDP('${admin.escapeHtml(r.id)}')" class="w-full mt-2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-circle-check"></i> Validasi DP &amp; Terbitkan E-Pass
+                            ${r.proofImage ? `
+                                <div class="p-2 bg-white rounded-xl border border-amber-200 text-center space-y-1">
+                                    <span class="text-[10px] text-emerald-700 font-bold block">✓ Bukti Transfer Diunggah Jamaah:</span>
+                                    <img src="${r.proofImage}" alt="Bukti Transfer" class="max-h-36 mx-auto rounded-lg border border-slate-200 object-contain cursor-pointer hover:opacity-90 transition" onclick="window.open(this.src, '_blank')" title="Klik untuk membuka ukuran penuh">
+                                </div>
+                            ` : `
+                                <p class="text-[11px] text-amber-800 leading-relaxed">
+                                    Jamaah belum melampirkan struk di PWA. Anda dapat memeriksa mutasi rekening BSI lalu melampirkan foto struk via modal validasi.
+                                </p>
+                            `}
+                            <button type="button" onclick="SDW_ADMIN.confirmRegistrationDP('${admin.escapeHtml(r.id)}')" class="w-full mt-1 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-file-circle-check"></i> Validasi DP &amp; Periksa Struk
                             </button>
                         </div>
                     ` : `

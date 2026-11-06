@@ -2283,6 +2283,126 @@
     alert(`Alhamdulillah! Pemesanan paket ${pkg.name} berhasil diajukan.\nNominal DP Booking: Rp ${dpAmount.toLocaleString('id-ID')}.\nSilakan transfer ke rekening resmi BSI travel.`);
   };
 
+  // ==================== PWA PAYMENT PROOF CONTROLLERS ====================
+  window.tempPwaProofBase64 = null;
+
+  window.handlePwaProofFileSelected = function (e) {
+    if (!e || !e.target || !e.target.files) return;
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Ukuran file bukti transfer maksimal 5MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      window.tempPwaProofBase64 = evt.target.result;
+
+      const placeholder = document.getElementById('pwaProofPlaceholder');
+      const previewWrap = document.getElementById('pwaProofPreviewWrap');
+      const previewImg = document.getElementById('pwaProofPreviewImg');
+      const fileNameEl = document.getElementById('pwaProofFileName');
+      const senderBox = document.getElementById('pwaProofSenderBox');
+
+      if (placeholder) placeholder.classList.add('hidden');
+      if (previewWrap) previewWrap.classList.remove('hidden');
+      if (previewImg) previewImg.src = window.tempPwaProofBase64;
+      if (fileNameEl) fileNameEl.innerText = file.name;
+      if (senderBox) senderBox.classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.submitPwaPaymentProof = function () {
+    const session = typeof SDW_AUTH !== 'undefined' ? SDW_AUTH.getPilgrimSession() : null;
+    if (!session || !window.tempPwaProofBase64) {
+      alert('Silakan pilih foto struk / slip transfer terlebih dahulu.');
+      return;
+    }
+
+    const senderInput = document.getElementById('pwaProofSenderName');
+    const senderName = senderInput ? senderInput.value.trim() : '';
+
+    const btnSubmit = document.getElementById('btnSubmitPwaProof');
+    const origHtml = btnSubmit ? btnSubmit.innerHTML : '';
+    if (btnSubmit) {
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Mengirim bukti transfer...';
+    }
+
+    // 1. Simpan ke Sesi Jamaah
+    session.proofSubmitted = true;
+    session.proofImage = window.tempPwaProofBase64;
+    session.proofSender = senderName;
+    session.proofSubmittedAt = new Date().toISOString();
+    SDW_AUTH.setPilgrimSession(session);
+
+    // 2. Sinkronkan ke Data Admin Lokal (Zero-Latency Sync)
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const adminRegsRaw = localStorage.getItem('sdw_admin_registrations');
+        let adminRegs = adminRegsRaw ? JSON.parse(adminRegsRaw) : [];
+        if (Array.isArray(adminRegs)) {
+          const reg = adminRegs.find(r => r.id === session.regId);
+          if (reg) {
+            reg.proofImage = window.tempPwaProofBase64;
+            reg.proofSender = senderName;
+          }
+          localStorage.setItem('sdw_admin_registrations', JSON.stringify(adminRegs));
+        }
+
+        const adminPaysRaw = localStorage.getItem('sdw_admin_payments');
+        let adminPays = adminPaysRaw ? JSON.parse(adminPaysRaw) : [];
+        if (Array.isArray(adminPays)) {
+          const pay = adminPays.find(p => p.regId === session.regId);
+          if (pay) {
+            pay.proof = window.tempPwaProofBase64;
+            pay.sender = senderName;
+            pay.status = 'PENDING_VERIFY';
+          }
+          localStorage.setItem('sdw_admin_payments', JSON.stringify(adminPays));
+        }
+      }
+    } catch (err) {
+      console.warn('[PWA_PROOF] Local admin sync error:', err);
+    }
+
+    // 3. Kirim ke Google Apps Script / Spreadsheet
+    const api = (typeof window !== 'undefined' && window.SDW_API) ? window.SDW_API : null;
+    if (api && typeof api.post === 'function') {
+      api.post('uploadPaymentProof', {
+        regId: session.regId,
+        customer: session.fullName,
+        proofImage: window.tempPwaProofBase64,
+        sender: senderName,
+        dpAmount: session.dpAmount || 'Rp 5.000.000'
+      }).catch(() => {});
+    }
+
+    // 4. Update Tampilan PWA
+    const uploadBox = document.getElementById('pwaProofUploadBox');
+    const senderBox = document.getElementById('pwaProofSenderBox');
+    const alertBox = document.getElementById('pwaProofSubmittedAlert');
+    const badge = document.getElementById('pwaProofStatusBadge');
+
+    if (uploadBox) uploadBox.classList.add('hidden');
+    if (senderBox) senderBox.classList.add('hidden');
+    if (alertBox) alertBox.classList.remove('hidden');
+    if (badge) {
+      badge.innerText = 'Bukti Terkirim';
+      badge.className = 'text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950';
+    }
+
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = origHtml;
+    }
+
+    alert('🎉 Alhamdulillah! Bukti transfer berhasil dikirimkan ke Tim Finance SDW UMROH.\n\nStaf kami akan segera memverifikasi mutasi rekening Anda.');
+  };
+
   // ==================== IN-APP ZIARAH CONTROLLERS ====================
   const IN_APP_ZIARAH_DATA = [
     {

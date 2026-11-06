@@ -543,6 +543,34 @@
                     badgeAktif.textContent = 'Menunggu DP';
                     badgeAktif.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse';
                 }
+
+                // Sinkronkan status upload bukti transfer jamaah
+                const pwaUploadBox = document.getElementById('pwaProofUploadBox');
+                const pwaSenderBox = document.getElementById('pwaProofSenderBox');
+                const pwaAlertBox = document.getElementById('pwaProofSubmittedAlert');
+                const pwaBadge = document.getElementById('pwaProofStatusBadge');
+                const pwaPreviewWrap = document.getElementById('pwaProofPreviewWrap');
+                const pwaPreviewImg = document.getElementById('pwaProofPreviewImg');
+
+                if (session.proofSubmitted || session.proofImage) {
+                    if (pwaUploadBox) pwaUploadBox.classList.add('hidden');
+                    if (pwaSenderBox) pwaSenderBox.classList.add('hidden');
+                    if (pwaAlertBox) pwaAlertBox.classList.remove('hidden');
+                    if (pwaBadge) {
+                        pwaBadge.innerText = 'Bukti Terkirim';
+                        pwaBadge.className = 'text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-400 text-slate-950';
+                    }
+                    if (session.proofImage && pwaPreviewImg) {
+                        pwaPreviewImg.src = session.proofImage;
+                    }
+                } else {
+                    if (pwaUploadBox) pwaUploadBox.classList.remove('hidden');
+                    if (pwaAlertBox) pwaAlertBox.classList.add('hidden');
+                    if (pwaBadge) {
+                        pwaBadge.innerText = 'Belum Diunggah';
+                        pwaBadge.className = 'text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-white/10 text-slate-300 border border-white/10';
+                    }
+                }
             } else {
                 // CONFIRMED / READY_TO_FLY / Demo Account
                 if (newPilgrimSection) newPilgrimSection.classList.add('hidden');

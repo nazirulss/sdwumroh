@@ -568,6 +568,47 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { id: newId, status: "RECORDED", entity: "DB_Payments" };
   }
 
+  // 3b. MUTASI UNGGAH BUKTI PEMBAYARAN JAMAAH: UPLOAD PAYMENT PROOF
+  if (action === 'uploadPaymentProof') {
+    const paySheet = ss.getSheetByName("DB_Payments");
+    const regId = payload.regId;
+    let updated = false;
+
+    if (paySheet) {
+      const rows = paySheet.getDataRange().getValues();
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][1]).toUpperCase() === String(regId).toUpperCase()) {
+          paySheet.getRange(i + 1, 7).setValue(payload.proofImage || payload.proof || "proof_uploaded.jpg");
+          if (payload.sender) paySheet.getRange(i + 1, 12).setValue("Pengirim: " + payload.sender);
+          paySheet.getRange(i + 1, 11).setValue(nowStr);
+          updated = true;
+          break;
+        }
+      }
+      if (!updated) {
+        const newPayId = "PAY-SDW-" + String(paySheet.getLastRow()).padStart(3, '0');
+        paySheet.appendRow([
+          newPayId,
+          regId,
+          "SCH-DP",
+          payload.dpAmount || 5000000,
+          "Transfer Bank Syariah (BSI)",
+          "BSI-PENDING-" + Date.now(),
+          payload.proofImage || payload.proof || "proof_uploaded.jpg",
+          "PENDING_VERIFY",
+          nowStr,
+          "",
+          nowStr,
+          "Bukti transfer diunggah mandiri via PWA" + (payload.sender ? (" oleh " + payload.sender) : "")
+        ]);
+        updated = true;
+      }
+    }
+
+    logAudit_(actor || "Pilgrim", "UPLOAD_PAYMENT_PROOF", "DB_Payments", regId, null, { regId: regId }, "Bukti transfer diunggah mandiri via PWA");
+    return { id: regId, status: "PROOF_UPLOADED", entity: "DB_Payments" };
+  }
+
   // 4. MUTASI VALIDASI KEUANGAN: VERIFY PAYMENT
   if (action === 'verifyPayment') {
     const sheet = ss.getSheetByName("DB_Payments");
@@ -636,6 +677,8 @@ function processSingleMutation_(ss, action, payload, actor) {
       for (let j = 1; j < payRows.length; j++) {
         if (String(payRows[j][1]).toUpperCase() === String(regId).toUpperCase()) {
           paySheet.getRange(j + 1, 8).setValue("VERIFIED");
+          if (payload.ref) paySheet.getRange(j + 1, 6).setValue(payload.ref);
+          if (payload.proof) paySheet.getRange(j + 1, 7).setValue(payload.proof);
           paySheet.getRange(j + 1, 10).setValue(actor || "Finance Officer");
           paySheet.getRange(j + 1, 11).setValue(nowStr);
           payFound = true;
@@ -651,12 +694,12 @@ function processSingleMutation_(ss, action, payload, actor) {
           payload.dpAmount || 5000000,
           payload.method || "Transfer Bank Syariah (BSI)",
           payload.ref || ("BSI-REF-" + Math.floor(100000 + Math.random() * 900000)),
-          "struk_dp_verified.jpg",
+          payload.proof || "struk_dp_verified.jpg",
           "VERIFIED",
           nowStr,
           actor || "Finance Officer",
           nowStr,
-          "Validasi Pembayaran DP dan Penerbitan SDW E-PASS"
+          payload.notes || "Validasi Pembayaran DP dan Penerbitan SDW E-PASS"
         ]);
       }
     }

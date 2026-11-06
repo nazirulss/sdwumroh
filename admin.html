@@ -1265,6 +1265,126 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL 3B: VALIDASI PEMBAYARAN DP & BUKTI STRUK ==================== -->
+    <div id="modalValidateDpBooking" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none transition-all duration-200" aria-hidden="true">
+        <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden transition-all duration-200">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-emerald-800 to-teal-900 text-white">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-base">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-extrabold text-sm sm:text-base leading-tight text-white">Validasi Pembayaran DP &amp; Terbitkan E-Pass</h2>
+                        <span class="text-[10px] text-emerald-200 font-medium block">Pemeriksaan bukti struk transfer &amp; pengesahan mutasi bank</span>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalValidateDpBooking')" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition cursor-pointer">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Form -->
+            <form id="formValidateDpBooking" onsubmit="SDW_ADMIN.handleConfirmValidateDp(event)" class="p-5 overflow-y-auto space-y-4 text-xs font-semibold">
+                <input type="hidden" id="vdp_reg_id">
+
+                <!-- Ringkasan Jamaah -->
+                <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 space-y-1.5">
+                    <div class="flex items-center justify-between">
+                        <span id="vdp_customer_name" class="font-black text-sm text-slate-900">Nama Jamaah</span>
+                        <span id="vdp_reg_badge" class="font-mono text-xs font-black text-sdw-pine px-2 py-0.5 bg-purple-100 rounded-lg">REG-SDW-XXXX</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600 text-[11px]">
+                        <span>Program Paket:</span>
+                        <span id="vdp_package_name" class="font-bold text-slate-800">Umroh Reguler</span>
+                    </div>
+                    <div class="flex justify-between text-slate-600 text-[11px]">
+                        <span>Kewajiban Setoran DP:</span>
+                        <span id="vdp_dp_amount" class="font-black text-emerald-700 text-sm">Rp 5.000.000</span>
+                    </div>
+                </div>
+
+                <!-- Bagian 1: Tanda Bukti / Foto Struk Bank -->
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-slate-700 font-bold">
+                            <i class="fa-solid fa-receipt text-sdw-pine mr-1"></i> Tanda Bukti / Foto Struk Transfer
+                        </label>
+                        <span id="vdp_proof_source_badge" class="text-[9.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">
+                            Cek Berkas
+                        </span>
+                    </div>
+
+                    <!-- Container Pratinjau Foto Struk -->
+                    <div id="vdp_proof_container" class="relative rounded-2xl border-2 border-dashed border-slate-200 p-3 bg-slate-50 text-center">
+                        <div id="vdp_proof_empty_state" class="py-4 space-y-1.5">
+                            <i class="fa-solid fa-image text-slate-300 text-3xl"></i>
+                            <p class="text-xs text-slate-500 font-medium">Jamaah belum mengunggah struk via aplikasi.</p>
+                            <p class="text-[10px] text-slate-400">Admin dapat melampirkan foto struk dari WhatsApp di bawah.</p>
+                        </div>
+                        <div id="vdp_proof_image_wrap" class="hidden space-y-2">
+                            <img id="vdp_proof_img" src="" alt="Bukti Transfer DP" class="max-h-56 mx-auto rounded-xl border border-slate-200 shadow-sm object-contain cursor-pointer hover:opacity-95 transition" onclick="window.open(this.src, '_blank')" title="Klik untuk membuka ukuran penuh di tab baru">
+                            <p class="text-[10px] text-slate-500 italic">Klik gambar untuk melihat resolusi penuh di tab baru.</p>
+                        </div>
+
+                        <!-- Tombol Admin Upload / Ganti Struk -->
+                        <div class="pt-2">
+                            <input type="file" id="adminDpProofFileInput" accept="image/*,application/pdf" class="hidden" onchange="SDW_ADMIN.handleAdminProofFileSelected(event)">
+                            <button type="button" onclick="document.getElementById('adminDpProofFileInput').click()" class="px-3 py-1.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-[11px] transition cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-upload mr-1 text-sdw-pine"></i> <span id="vdp_btn_upload_label">Upload / Lampirkan Foto Struk dari WA</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bagian 2: Verifikasi Mutasi Bank -->
+                <div class="space-y-3 pt-1 border-t border-slate-100">
+                    <label class="block text-slate-700 font-bold">
+                        <i class="fa-solid fa-building-columns text-emerald-600 mr-1"></i> Data Mutasi Rekening Bank
+                    </label>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-600 mb-1 text-[11px]" for="vdp_bank_dest">Rekening Tujuan</label>
+                            <input type="text" id="vdp_bank_dest" readonly value="BSI 714-2200-889 a.n PT Samira Ali Wisata" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 bg-slate-100 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 mb-1 text-[11px]" for="vdp_ref_input">No. Referensi / ID Transaksi Bank <span class="text-rose-500">*</span></label>
+                            <input type="text" id="vdp_ref_input" required placeholder="Contoh: BSI-TX990142" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:border-emerald-600 outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-slate-600 mb-1 text-[11px]" for="vdp_amount_input">Nominal Dana Masuk (Rp) <span class="text-rose-500">*</span></label>
+                            <input type="number" id="vdp_amount_input" required value="5000000" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-mono font-bold focus:border-emerald-600 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-slate-600 mb-1 text-[11px]" for="vdp_sender_input">Nama Pengirim (Sesuai Mutasi/Slip)</label>
+                            <input type="text" id="vdp_sender_input" placeholder="Contoh: Starmil Store" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-emerald-600 outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-slate-600 mb-1 text-[11px]" for="vdp_notes_input">Catatan Verifikasi Finance</label>
+                        <input type="text" id="vdp_notes_input" placeholder="Validasi mutasi bank transfer DP resmi..." class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:border-emerald-600 outline-none">
+                    </div>
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalValidateDpBooking')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 font-bold transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" id="btnConfirmValidateDpSubmit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs transition shadow-md cursor-pointer flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Sahkan Pembayaran &amp; Terbitkan E-Pass</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- ==================== MODAL 4: FORM BUAT KLOTER BARU ==================== -->
     <div id="modalCreateTrip" class="admin-modal fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-2xs opacity-0 pointer-events-none" aria-hidden="true">
         <div class="modal-card bg-white rounded-3xl max-w-lg w-full max-h-[92vh] flex flex-col shadow-2xl border border-slate-200 transform scale-95 overflow-hidden">
