@@ -185,6 +185,8 @@
             flightInfo: 'Saudia Airlines (SV-819) • Direct CGK - JED',
             roomType: 'Quad (Sekamar Ber-4)',
             departureDate: '15 Syawal 1448H (24 Maret 2027)',
+            totalPrice: 'Rp 34.500.000',
+            finalPrice: 34500000,
             status: 'CONFIRMED',
             isDemo: true
         },
@@ -199,6 +201,8 @@
             flightInfo: 'Garuda Indonesia (GA-980) • Direct CGK - MED',
             roomType: 'Double (Sekamar Ber-2)',
             departureDate: '28 Syaban 1448H (05 Februari 2027)',
+            totalPrice: 'Rp 42.500.000',
+            finalPrice: 42500000,
             status: 'CONFIRMED',
             isDemo: true
         }
@@ -302,6 +306,8 @@
             flightInfo: found.flightInfo || 'Maskapai Bintang 5',
             roomType: found.roomType || 'Quad (Ber-4)',
             departureDate: found.departureDate || 'Musim 1448H',
+            totalPrice: found.totalPrice || (found.finalPrice ? ('Rp ' + Number(found.finalPrice).toLocaleString('id-ID')) : 'Rp 29.500.000'),
+            finalPrice: found.finalPrice || (found.totalPrice ? parseInt(String(found.totalPrice).replace(/[^0-9]/g, '')) : 29500000),
             status: found.status || 'CONFIRMED',
             loggedInAt: new Date().toISOString()
         };
@@ -484,6 +490,7 @@
         const elFlight = document.getElementById('jamaah-flight-info');
         const elRoom = document.getElementById('jamaah-room-type');
         const elDeparture = document.getElementById('jamaah-departure-date');
+        const elSnapshotPrice = document.getElementById('jamaah-snapshot-price');
 
         const newPilgrimSection = document.getElementById('profileNewPilgrimSection');
         const pendingDpSection = document.getElementById('profilePendingDpSection');
@@ -510,6 +517,32 @@
             if (elFlight) elFlight.textContent = session.flightInfo;
             if (elRoom) elRoom.textContent = session.roomType;
             if (elDeparture) elDeparture.textContent = session.departureDate;
+
+            // Sinkronkan Total Paket pada Kartu Digital SDW E-PASS
+            let displayPrice = session.totalPrice;
+            if (!displayPrice && session.finalPrice) {
+                const num = Number(session.finalPrice);
+                displayPrice = 'Rp ' + (num < 100000 ? num * 100000 : num).toLocaleString('id-ID');
+            }
+            if (!displayPrice && session.priceSnapshot) {
+                const num = Number(session.priceSnapshot);
+                displayPrice = 'Rp ' + (num < 100000 ? num * 100000 : num).toLocaleString('id-ID');
+            }
+            if (!displayPrice && typeof localStorage !== 'undefined') {
+                try {
+                    const localRegs = JSON.parse(localStorage.getItem('sdw_admin_registrations') || '[]');
+                    const r = localRegs.find(item => item.id === session.regId);
+                    if (r && (r.finalPrice || r.priceSnapshot || r.agreed_price_snapshot)) {
+                        let num = Number(r.finalPrice || r.priceSnapshot || r.agreed_price_snapshot);
+                        if (num < 100000) num = num * 100000;
+                        displayPrice = 'Rp ' + num.toLocaleString('id-ID');
+                    }
+                } catch (e) {}
+            }
+            if (!displayPrice) {
+                displayPrice = 'Rp 29.500.000';
+            }
+            if (elSnapshotPrice) elSnapshotPrice.textContent = displayPrice;
 
             // Conditional view rendering based on Pilgrim Lifecycle State
             if (session.status === 'NEW_PILGRIM') {
@@ -659,6 +692,12 @@
                 session.status = 'CONFIRMED';
                 if (updatedReg && updatedReg.package) session.packageTitle = updatedReg.package;
                 if (updatedReg && updatedReg.departure) session.departureDate = updatedReg.departure;
+                if (updatedReg && (updatedReg.finalPrice || updatedReg.priceSnapshot || updatedReg.final_price_snapshot || updatedReg.agreed_price_snapshot)) {
+                    let num = Number(updatedReg.finalPrice || updatedReg.priceSnapshot || updatedReg.final_price_snapshot || updatedReg.agreed_price_snapshot);
+                    if (num < 100000) num = num * 100000;
+                    session.totalPrice = 'Rp ' + num.toLocaleString('id-ID');
+                    session.finalPrice = num;
+                }
                 setPilgrimSession(session);
                 syncPilgrimUI();
 

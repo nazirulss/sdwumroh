@@ -132,19 +132,33 @@
 
     function renderFinance() {
         const inv = (typeof MOCK_DATA !== 'undefined' && MOCK_DATA.invoice) ? MOCK_DATA.invoice : null;
-        if (!inv) return;
 
         const elTotal = document.getElementById('jamaah-inv-total');
         const elPaid = document.getElementById('jamaah-inv-paid');
         const elRemaining = document.getElementById('jamaah-inv-remaining');
         const schedulesContainer = document.getElementById('jamaah-schedules-list');
 
-        const totalPaid = inv.payments.filter(p => p.status === 'VERIFIED').reduce((acc, p) => acc + p.amount, 0);
-        const remaining = Math.max(0, inv.total_amount - totalPaid);
+        const session = (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.getPilgrimSession === 'function') ? SDW_AUTH.getPilgrimSession() : null;
 
-        if (elTotal) elTotal.textContent = formatRupiah(inv.total_amount);
-        if (elPaid) elPaid.textContent = formatRupiah(totalPaid);
-        if (elRemaining) elRemaining.textContent = formatRupiah(remaining);
+        if (session && session.status === 'CONFIRMED') {
+            const rawPrice = session.finalPrice || (session.totalPrice ? parseInt(String(session.totalPrice).replace(/[^0-9]/g, '')) : 29500000);
+            const totalPkgPrice = rawPrice < 100000 ? rawPrice * 100000 : rawPrice;
+            const totalPaid = 5000000; // DP Terverifikasi
+            const remaining = Math.max(0, totalPkgPrice - totalPaid);
+
+            if (elTotal) elTotal.textContent = formatRupiah(totalPkgPrice);
+            if (elPaid) elPaid.textContent = formatRupiah(totalPaid);
+            if (elRemaining) elRemaining.textContent = formatRupiah(remaining);
+        } else if (inv) {
+            const totalPaid = inv.payments.filter(p => p.status === 'VERIFIED').reduce((acc, p) => acc + p.amount, 0);
+            const remaining = Math.max(0, inv.total_amount - totalPaid);
+
+            if (elTotal) elTotal.textContent = formatRupiah(inv.total_amount);
+            if (elPaid) elPaid.textContent = formatRupiah(totalPaid);
+            if (elRemaining) elRemaining.textContent = formatRupiah(remaining);
+        }
+
+        if (!inv) return;
 
         if (schedulesContainer) {
             schedulesContainer.innerHTML = inv.schedules.map(sch => {
