@@ -2234,6 +2234,48 @@
 
     SDW_AUTH.setPilgrimSession(session);
 
+    // Sinkronkan ke data antrean Admin Lokal (Zero-Latency Sync)
+    try {
+      if (typeof localStorage !== 'undefined') {
+        const adminRegsRaw = localStorage.getItem('sdw_admin_registrations');
+        let adminRegs = adminRegsRaw ? JSON.parse(adminRegsRaw) : [];
+        if (!Array.isArray(adminRegs)) adminRegs = [];
+        adminRegs = adminRegs.filter(r => r.id !== session.regId);
+        adminRegs.unshift({
+          id: session.regId,
+          customer: session.fullName,
+          nik: session.nik || '-',
+          phone: session.phone || '',
+          package: pkg.name,
+          departure: depDate || 'Musim 1448H',
+          status: 'PENDING_DP',
+          docs: '0/4',
+          payment: `Menunggu DP (Rp ${dpAmount.toLocaleString('id-ID')})`,
+          priceSnapshot: totalPrice,
+          dpAmount: dpAmount
+        });
+        localStorage.setItem('sdw_admin_registrations', JSON.stringify(adminRegs));
+
+        const adminPaysRaw = localStorage.getItem('sdw_admin_payments');
+        let adminPays = adminPaysRaw ? JSON.parse(adminPaysRaw) : [];
+        if (!Array.isArray(adminPays)) adminPays = [];
+        adminPays = adminPays.filter(p => p.regId !== session.regId);
+        adminPays.unshift({
+          id: `PAY-SDW-00${adminPays.length + 1}`,
+          regId: session.regId,
+          customer: session.fullName,
+          amount: 'Rp ' + dpAmount.toLocaleString('id-ID'),
+          method: 'Transfer Bank Syariah (BSI)',
+          ref: 'BSI-BOOKING-PWA',
+          term: 'DP Booking',
+          status: 'PENDING_VERIFY'
+        });
+        localStorage.setItem('sdw_admin_payments', JSON.stringify(adminPays));
+      }
+    } catch (e) {
+      console.warn('[PWA_BOOKING] Local admin sync notice:', e);
+    }
+
     // Switch ke Tab Profil yang menampilkan Tagihan DP
     window.backToAppHome();
     SDW_AUTH.switchAppTab('tab-profile');

@@ -126,8 +126,9 @@
                 return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
             case 'UNDER_REVIEW':
             case 'PENDING':
+            case 'PENDING_DP':
             case 'PENDING_VERIFY':
-                return 'bg-amber-100 text-amber-800 border border-amber-200';
+                return 'bg-amber-100 text-amber-800 border border-amber-200 animate-pulse';
             case 'CANCELLED':
             case 'REJECTED':
                 return 'bg-rose-100 text-rose-800 border border-rose-200';
@@ -425,6 +426,56 @@
                 { id: 'PAY-SDW-001', regId: 'REG-SDW-2701', customer: 'Ahmad Jamaah Teladan', amount: 'Rp 15.000.000', method: 'Transfer BSI Virtual Account', ref: 'BSI-TX990142', status: 'VERIFIED' }
             ];
             persistStorage(STORAGE_KEYS.PAYMENTS, state.paymentsData);
+        }
+
+        // 4b. Sync otomatis pendaftaran mandiri dari PWA jika ada sesi lokal
+        try {
+            const sessRaw = localStorage.getItem('sdw_pilgrim_session');
+            if (sessRaw) {
+                const sess = JSON.parse(sessRaw);
+                if (sess && sess.regId && sess.status && sess.status !== 'NEW_PILGRIM') {
+                    const existingRegIndex = state.registrationsData.findIndex(r => r.id === sess.regId);
+                    const regEntry = {
+                        id: sess.regId,
+                        customer: sess.fullName || 'Jamaah Mandiri PWA',
+                        nik: sess.nik || '-',
+                        phone: sess.phone || '',
+                        package: sess.packageTitle || 'Umroh Reguler Syawal Barakah',
+                        departure: sess.departureDate || 'Musim 1448H',
+                        status: sess.status || 'PENDING_DP',
+                        docs: '0/4',
+                        payment: sess.status === 'CONFIRMED' ? 'DP Lunas (Rp 5jt)' : 'Menunggu DP (Rp 5jt)',
+                        priceSnapshot: sess.totalPrice ? parseInt(String(sess.totalPrice).replace(/[^0-9]/g, '')) : 29500000,
+                        dpAmount: sess.dpAmount ? parseInt(String(sess.dpAmount).replace(/[^0-9]/g, '')) : 5000000
+                    };
+
+                    if (existingRegIndex >= 0) {
+                        state.registrationsData[existingRegIndex] = { ...state.registrationsData[existingRegIndex], ...regEntry };
+                    } else {
+                        state.registrationsData.unshift(regEntry);
+                    }
+                    persistStorage(STORAGE_KEYS.REGS, state.registrationsData);
+
+                    // Sync ke payments jika PENDING_DP atau CONFIRMED
+                    const existingPayIndex = state.paymentsData.findIndex(p => p.regId === sess.regId);
+                    if (existingPayIndex < 0) {
+                        const newPayId = `PAY-SDW-00${state.paymentsData.length + 1}`;
+                        state.paymentsData.unshift({
+                            id: newPayId,
+                            regId: sess.regId,
+                            customer: sess.fullName,
+                            amount: sess.dpAmount || 'Rp 5.000.000',
+                            method: 'Transfer Bank Syariah (BSI)',
+                            ref: 'BSI-BOOKING-PWA',
+                            term: 'DP Booking',
+                            status: sess.status === 'CONFIRMED' ? 'VERIFIED' : 'PENDING_VERIFY'
+                        });
+                        persistStorage(STORAGE_KEYS.PAYMENTS, state.paymentsData);
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('[SDW_ADMIN] Local pilgrim session sync notice:', e);
         }
 
         // 5. Trips & Kloter

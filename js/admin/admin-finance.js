@@ -220,15 +220,43 @@
 
         pay.status = 'VERIFIED';
         admin.persistStorage(admin.STORAGE_KEYS.PAYMENTS, admin.paymentsData);
+
+        // Jika pembayaran terhubung ke registrasi, otomatis update registrasi menjadi CONFIRMED & terbitkan E-Pass
+        if (pay.regId && Array.isArray(admin.registrationsData)) {
+            const reg = admin.registrationsData.find(r => r.id === pay.regId);
+            if (reg) {
+                reg.status = 'CONFIRMED';
+                reg.payment = (reg.payment && reg.payment.includes('Menunggu')) 
+                    ? reg.payment.replace('Menunggu DP', 'DP Lunas') 
+                    : 'DP Lunas (Rp 5.000.000)';
+                admin.persistStorage(admin.STORAGE_KEYS.REGS, admin.registrationsData);
+
+                // Update pilgrim session lokal jika ada
+                try {
+                    if (typeof localStorage !== 'undefined') {
+                        const sessRaw = localStorage.getItem('sdw_pilgrim_session');
+                        if (sessRaw) {
+                            const sess = JSON.parse(sessRaw);
+                            if (sess && (sess.regId === reg.id || sess.fullName === reg.customer)) {
+                                sess.status = 'CONFIRMED';
+                                localStorage.setItem('sdw_pilgrim_session', JSON.stringify(sess));
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }
+        }
+
         if (typeof admin.enqueueMutation === 'function') {
-            admin.enqueueMutation('verifyPayment', { paymentId: payId, status: 'VERIFIED' }, 'DB_Payments', payId);
+            admin.enqueueMutation('verifyPayment', { paymentId: payId, regId: pay.regId, status: 'VERIFIED' }, 'DB_Payments', payId);
         }
 
         if (typeof admin.logAdminAudit === 'function') {
             admin.logAdminAudit('VERIFY_PAYMENT', 'DB_Payments', payId, `Mutasi rekening untuk pembayaran ${payId} (${pay.amount}) tervalidasi sah oleh Finance.`);
         }
-        admin.showToast(`✅ Pembayaran ${payId} berhasil divalidasi! Kuitansi resmi siap dicetak.`);
+        admin.showToast(`✅ Pembayaran ${payId} berhasil divalidasi! E-Pass jamaah aktif & kuitansi siap dicetak.`);
         renderFinance();
+        if (typeof admin.renderRegistrations === 'function') admin.renderRegistrations();
         if (typeof admin.renderDashboard === 'function') admin.renderDashboard();
     }
 

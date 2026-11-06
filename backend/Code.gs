@@ -576,19 +576,93 @@ function processSingleMutation_(ss, action, payload, actor) {
     const payId = payload.paymentId || payload.id;
     const rows = sheet.getDataRange().getValues();
     let updated = false;
+    let targetRegId = payload.regId || null;
 
     for (let i = 1; i < rows.length; i++) {
       if (String(rows[i][0]).toUpperCase() === String(payId).toUpperCase()) {
         sheet.getRange(i + 1, 8).setValue("VERIFIED");
         sheet.getRange(i + 1, 10).setValue(actor || "Finance Officer");
         sheet.getRange(i + 1, 11).setValue(nowStr);
+        if (!targetRegId) targetRegId = rows[i][1];
         updated = true;
         break;
       }
     }
 
+    // Jika pembayaran terhubung ke DB_Registrations, update juga status registrasinya ke CONFIRMED
+    if (targetRegId) {
+      const regSheet = ss.getSheetByName("DB_Registrations");
+      if (regSheet) {
+        const regRows = regSheet.getDataRange().getValues();
+        for (let k = 1; k < regRows.length; k++) {
+          if (String(regRows[k][0]).toUpperCase() === String(targetRegId).toUpperCase()) {
+            regSheet.getRange(k + 1, 9).setValue("CONFIRMED");
+            regSheet.getRange(k + 1, 13).setValue(nowStr);
+            break;
+          }
+        }
+      }
+    }
+
     logAudit_(actor, "VERIFY_PAYMENT", "DB_Payments", payId, { status: "PENDING_VERIFY" }, { status: "VERIFIED" }, "Validasi mutasi bank resmi disahkan oleh Finance");
     return { id: payId, status: "VERIFIED", entity: "DB_Payments", found: updated };
+  }
+
+  // 4b. MUTASI VALIDASI REGISTRASI & E-PASS: CONFIRM REGISTRATION
+  if (action === 'confirmRegistration' || action === 'verifyBookingDP') {
+    const sheet = ss.getSheetByName("DB_Registrations");
+    if (!sheet) throw new Error("Sheet DB_Registrations tidak ditemukan");
+
+    const regId = payload.regId || payload.id;
+    const newStatus = payload.status || "CONFIRMED";
+    const rows = sheet.getDataRange().getValues();
+    let regFound = false;
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(regId).toUpperCase()) {
+        sheet.getRange(i + 1, 9).setValue(newStatus);
+        sheet.getRange(i + 1, 10).setValue(actor || "Finance / Admin");
+        sheet.getRange(i + 1, 13).setValue(nowStr);
+        regFound = true;
+        break;
+      }
+    }
+
+    // Pastikan tercatat di DB_Payments dengan status VERIFIED
+    const paySheet = ss.getSheetByName("DB_Payments");
+    if (paySheet) {
+      const payRows = paySheet.getDataRange().getValues();
+      let payFound = false;
+      for (let j = 1; j < payRows.length; j++) {
+        if (String(payRows[j][1]).toUpperCase() === String(regId).toUpperCase()) {
+          paySheet.getRange(j + 1, 8).setValue("VERIFIED");
+          paySheet.getRange(j + 1, 10).setValue(actor || "Finance Officer");
+          paySheet.getRange(j + 1, 11).setValue(nowStr);
+          payFound = true;
+          break;
+        }
+      }
+      if (!payFound) {
+        const newPayId = "PAY-SDW-" + String(paySheet.getLastRow()).padStart(3, '0');
+        paySheet.appendRow([
+          newPayId,
+          regId,
+          "SCH-DP",
+          payload.dpAmount || 5000000,
+          payload.method || "Transfer Bank Syariah (BSI)",
+          payload.ref || ("BSI-REF-" + Math.floor(100000 + Math.random() * 900000)),
+          "struk_dp_verified.jpg",
+          "VERIFIED",
+          nowStr,
+          actor || "Finance Officer",
+          nowStr,
+          "Validasi Pembayaran DP dan Penerbitan SDW E-PASS"
+        ]);
+      }
+    }
+
+    logAudit_(actor, "CONFIRM_REGISTRATION", "DB_Registrations", regId, { status: "PENDING_DP" }, { status: newStatus }, "Validasi DP dan Penerbitan SDW E-PASS Resmi");
+    return { id: regId, status: newStatus, entity: "DB_Registrations", found: regFound };
   }
 
   // 5. MUTASI VERIFIKASI DOKUMEN: VERIFY DOCUMENT

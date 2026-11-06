@@ -234,13 +234,39 @@
             `;
         } else if (type === 'REG') {
             const r = admin.registrationsData.find(item => item.id === id) || { id, customer: 'Jamaah', package: '-' };
+            const isPendingDp = r.status === 'PENDING_DP' || r.status === 'PENDING';
             content.innerHTML = `
                 <div class="space-y-4">
-                    <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                        <span class="text-[10px] font-black text-emerald-900 uppercase">Berkas Registrasi Terdaftar</span>
+                    <div class="p-4 ${isPendingDp ? 'bg-amber-50 border-amber-200' : 'bg-emerald-50 border-emerald-100'} rounded-2xl border">
+                        <span class="text-[10px] font-black ${isPendingDp ? 'text-amber-900' : 'text-emerald-900'} uppercase">
+                            ${isPendingDp ? 'Booking Baru — Menunggu Verifikasi DP' : 'Berkas Registrasi Terdaftar'}
+                        </span>
                         <h3 class="font-extrabold text-base text-sdw-pine mt-0.5">${admin.escapeHtml(r.customer)}</h3>
                         <p class="text-xs text-slate-500 font-mono">${admin.escapeHtml(r.id)}</p>
                     </div>
+
+                    ${isPendingDp ? `
+                        <div class="p-3.5 bg-amber-50/80 rounded-2xl border border-amber-300 text-xs text-amber-950 space-y-1.5">
+                            <div class="font-black flex items-center gap-1.5 text-amber-900">
+                                <i class="fa-solid fa-clock"></i> Tagihan DP Booking: Rp 5.000.000
+                            </div>
+                            <p class="text-[11px] text-amber-800 leading-relaxed">
+                                Jamaah telah memilih paket di PWA dan mengajukan verifikasi DP BSI. Periksa mutasi rekening sebelum memvalidasi.
+                            </p>
+                            <button type="button" onclick="SDW_ADMIN.confirmRegistrationDP('${admin.escapeHtml(r.id)}')" class="w-full mt-2 py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-black text-xs transition shadow-md cursor-pointer flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-circle-check"></i> Validasi DP &amp; Terbitkan E-Pass
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                            <div>
+                                <div class="font-bold text-emerald-800">SDW E-PASS Aktif &amp; Terverifikasi</div>
+                                <div class="text-[10.5px] text-emerald-700">DP tervalidasi, jamaah siap melengkapi paspor.</div>
+                            </div>
+                        </div>
+                    `}
+
                     <div class="space-y-2 text-xs">
                         <div class="flex justify-between py-1.5 border-b border-slate-100">
                             <span class="text-slate-500">Program Paket:</span>
@@ -251,15 +277,19 @@
                             <span class="font-bold text-slate-800">${admin.escapeHtml(r.departure)}</span>
                         </div>
                         <div class="flex justify-between py-1.5 border-b border-slate-100">
+                            <span class="text-slate-500">Status Registrasi:</span>
+                            <span class="font-bold ${r.status === 'CONFIRMED' ? 'text-emerald-700' : 'text-amber-600'}">${admin.escapeHtml(r.status)}</span>
+                        </div>
+                        <div class="flex justify-between py-1.5 border-b border-slate-100">
                             <span class="text-slate-500">Kelengkapan Dokumen:</span>
-                            <span class="font-bold text-emerald-700">${admin.escapeHtml(r.docs)} Lengkap</span>
+                            <span class="font-bold text-slate-700">${admin.escapeHtml(r.docs || '0/4')} Lengkap</span>
                         </div>
                         <div class="flex justify-between py-1.5 border-b border-slate-100">
                             <span class="text-slate-500">Status Pembayaran:</span>
                             <span class="font-bold text-sdw-pine">${admin.escapeHtml(r.payment)}</span>
                         </div>
                     </div>
-                    <div class="pt-4 flex items-center gap-2">
+                    <div class="pt-2 flex items-center gap-2">
                         <button type="button" onclick="SDW_ADMIN.openTripManifestModal('TRP-2701')" class="flex-1 py-2 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-100 transition cursor-pointer">
                             Manifest Kloter
                         </button>

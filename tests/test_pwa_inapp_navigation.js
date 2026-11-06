@@ -212,8 +212,8 @@ runTest('Deep Link Router diinisialisasi pada startup', () => {
 console.log('\n5. Pengujian Service Worker Cache Version');
 const swJs = fs.readFileSync(path.join(process.cwd(), 'sw.js'), 'utf8');
 
-runTest('sw.js menggunakan versi cache terbaru (v34)', () => {
-  assert(swJs.includes('sdw-umroh-pwa-v34'), 'sw.js cache version is not bumped to v34');
+runTest('sw.js menggunakan versi cache terbaru (v35 atau lebih tinggi)', () => {
+  assert(/sdw-umroh-pwa-v(3[5-9]|[4-9]\d)/.test(swJs), 'sw.js cache version is not bumped to v35+');
 });
 
 console.log('\n========================================');

@@ -193,13 +193,116 @@
                     <span class="px-2 py-0.5 bg-slate-100 rounded text-[11px]">${admin.escapeHtml(r.docs)} Lengkap</span>
                 </td>
                 <td class="py-3.5 px-4 font-black text-sdw-pine">${admin.escapeHtml(r.payment)}</td>
-                <td class="py-3.5 px-4 text-right">
+                <td class="py-3.5 px-4 text-right space-x-1">
+                    ${(r.status === 'PENDING_DP' || r.status === 'PENDING') ? `
+                        <button type="button" onclick="SDW_ADMIN.confirmRegistrationDP('${r.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition cursor-pointer shadow-xs mr-1" title="Konfirmasi DP &amp; Terbitkan E-Pass">
+                            <i class="fa-solid fa-circle-check mr-1"></i> Validasi DP
+                        </button>
+                    ` : ''}
                     <button type="button" onclick="SDW_ADMIN.openDrawer('REG', '${r.id}')" class="px-3 py-1 rounded-lg bg-sdw-pine hover:bg-purple-900 text-white font-bold text-[11px] transition cursor-pointer shadow-xs">
                         Review Pendaftaran
                     </button>
                 </td>
             </tr>
         `).join('');
+    }
+
+    // 4. KONFIRMASI PEMBAYARAN DP & TERBITKAN E-PASS RESMI
+    function confirmRegistrationDP(regId) {
+        if (!regId) return;
+        const r = admin.registrationsData.find(item => item.id === regId);
+        if (!r) {
+            admin.showToast('⚠️ Data registrasi tidak ditemukan: ' + regId);
+            return;
+        }
+
+        const confirmMsg = `Konfirmasi pembayaran DP untuk ${r.customer} (${r.id})?\n\n` +
+            `• Paket: ${r.package}\n` +
+            `• Status akan berubah menjadi: CONFIRMED\n` +
+            `• E-PASS Digital jamaah akan aktif secara otomatis.`;
+            
+        if (typeof confirm === 'function' && !confirm(confirmMsg)) {
+            return;
+        }
+
+        // A. Mutasi State Registrasi
+        r.status = 'CONFIRMED';
+        r.payment = (r.payment && r.payment.includes('Menunggu')) 
+            ? r.payment.replace('Menunggu DP', 'DP Lunas') 
+            : 'DP Lunas (Rp 5.000.000)';
+        admin.persistStorage(admin.STORAGE_KEYS.REGS, admin.registrationsData);
+
+        // B. Mutasi Keuangan / Payments
+        let pay = admin.paymentsData.find(p => p.regId === regId);
+        if (pay) {
+            pay.status = 'VERIFIED';
+            pay.term = 'DP Terverifikasi';
+        } else {
+            const newPayId = `PAY-SDW-00${admin.paymentsData.length + 1}`;
+            pay = {
+                id: newPayId,
+                regId: regId,
+                customer: r.customer,
+                amount: admin.formatRupiah(r.dpAmount || 5000000),
+                method: 'Transfer Bank Syariah (BSI)',
+                ref: 'BSI-TX' + Math.floor(100000 + Math.random() * 900000),
+                term: 'DP Booking',
+                status: 'VERIFIED'
+            };
+            admin.paymentsData.unshift(pay);
+        }
+        admin.persistStorage(admin.STORAGE_KEYS.PAYMENTS, admin.paymentsData);
+
+        // C. Update sesi jamaah jika berada pada browser yang sama (PWA Live Sync)
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const pilgrimSessionRaw = localStorage.getItem('sdw_pilgrim_session');
+                if (pilgrimSessionRaw) {
+                    const pilgrimSession = JSON.parse(pilgrimSessionRaw);
+                    if (pilgrimSession && (pilgrimSession.regId === regId || pilgrimSession.fullName === r.customer)) {
+                        pilgrimSession.status = 'CONFIRMED';
+                        localStorage.setItem('sdw_pilgrim_session', JSON.stringify(pilgrimSession));
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('[SDW_ADMIN] Gagal sync pilgrim session lokal:', e);
+        }
+
+        // D. Antrean Mutasi Offline-First / Kirim ke Apps Script & Google Spreadsheet
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('confirmRegistration', {
+                regId: regId,
+                status: 'CONFIRMED',
+                dpAmount: r.dpAmount || 5000000,
+                customer: r.customer,
+                paymentId: pay.id
+            }, 'DB_Registrations', regId);
+        }
+
+        // E. Audit Log
+        if (typeof admin.logAdminAudit === 'function') {
+            admin.logAdminAudit(
+                'CONFIRM_REGISTRATION',
+                'DB_Registrations',
+                regId,
+                `Pembayaran DP jamaah ${r.customer} (${regId}) telah diverifikasi sah oleh ${admin.currentRole}. E-PASS resmi diterbitkan.`,
+                'SUCCESS'
+            );
+        }
+
+        admin.showToast(`✅ Booking ${r.id} (${r.customer}) berhasil diverifikasi! E-PASS aktif.`);
+
+        // Re-render tampilan
+        renderRegistrations();
+        if (typeof admin.renderFinance === 'function') admin.renderFinance();
+        if (typeof admin.renderDashboard === 'function') admin.renderDashboard();
+
+        // Refresh Drawer jika sedang terbuka
+        const drawer = document.getElementById('adminSideDrawer');
+        if (drawer && drawer.classList.contains('active') && typeof admin.openDrawer === 'function') {
+            admin.openDrawer('REG', regId);
+        }
     }
 
     function applyRegsFilter() {
@@ -231,6 +334,7 @@
 
     // Attach to admin
     admin.handleCreateRegistration = handleCreateRegistration;
+    admin.confirmRegistrationDP = confirmRegistrationDP;
     admin.renderRegistrations = renderRegistrations;
     admin.applyRegsFilter = applyRegsFilter;
     admin.resetRegsFilter = resetRegsFilter;

@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v34';
-const RUNTIME_CACHE = 'sdw-runtime-v34';
+const CACHE_NAME = 'sdw-umroh-pwa-v35';
+const RUNTIME_CACHE = 'sdw-runtime-v35';
 
 const PRECACHE_URLS = [
   '/',

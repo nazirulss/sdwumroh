@@ -117,6 +117,14 @@
             window.renderSdwNews();
         }
 
+        // Auto-check status verifikasi jika membuka tab ibadah atau profil saat status PENDING_DP
+        if ((tabId === 'tab-profile' || tabId === 'tab-ibadah') && typeof refreshPilgrimStatus === 'function') {
+            const currentSession = getPilgrimSession();
+            if (currentSession && currentSession.status === 'PENDING_DP') {
+                refreshPilgrimStatus({ silent: true });
+            }
+        }
+
         // Update desktop nav styles
         const allNavBtns = document.querySelectorAll('[data-perm-tab]');
         allNavBtns.forEach(btn => {
@@ -570,6 +578,86 @@
         }
     }
 
+    // ==================== REAL-TIME PILGRIM STATUS VERIFIER ====================
+    async function refreshPilgrimStatus(options) {
+        const opts = options || {};
+        const session = getPilgrimSession();
+        if (!session) return false;
+
+        const checkBtn = (typeof document !== 'undefined') ? document.getElementById('btnCheckDpStatus') : null;
+        const originalBtnHtml = checkBtn ? checkBtn.innerHTML : '';
+        if (checkBtn && !opts.silent) {
+            checkBtn.disabled = true;
+            checkBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-300"></i> Memeriksa status verifikasi...';
+        }
+
+        try {
+            let isConfirmed = false;
+            let updatedReg = null;
+
+            // 1. Cek LocalStorage sdw_admin_registrations (Zero-Latency Sync pada peramban yang sama)
+            if (typeof localStorage !== 'undefined') {
+                const adminRegsRaw = localStorage.getItem('sdw_admin_registrations');
+                if (adminRegsRaw) {
+                    try {
+                        const adminRegs = JSON.parse(adminRegsRaw);
+                        if (Array.isArray(adminRegs)) {
+                            updatedReg = adminRegs.find(r => r.id === session.regId || (r.customer && r.customer.toLowerCase() === session.fullName.toLowerCase()));
+                            if (updatedReg && (updatedReg.status === 'CONFIRMED' || updatedReg.status === 'APPROVED' || updatedReg.status === 'VERIFIED')) {
+                                isConfirmed = true;
+                            }
+                        }
+                    } catch (e) {}
+                }
+            }
+
+            // 2. Jika belum confirmed di local, cek via API Google Apps Script & Spreadsheet
+            if (!isConfirmed && session.regId) {
+                const api = (typeof window !== 'undefined' && window.SDW_API) ? window.SDW_API : null;
+                if (api && typeof api.get === 'function') {
+                    const res = await api.get('checkRegistration', { regId: session.regId });
+                    if (res && res.success && res.data) {
+                        const backendStatus = res.data.status || res.data[8];
+                        if (backendStatus === 'CONFIRMED' || backendStatus === 'APPROVED' || backendStatus === 'VERIFIED') {
+                            isConfirmed = true;
+                            updatedReg = res.data;
+                        }
+                    }
+                }
+            }
+
+            // 3. Mutasi status jika terkonfirmasi
+            if (isConfirmed) {
+                session.status = 'CONFIRMED';
+                if (updatedReg && updatedReg.package) session.packageTitle = updatedReg.package;
+                if (updatedReg && updatedReg.departure) session.departureDate = updatedReg.departure;
+                setPilgrimSession(session);
+                syncPilgrimUI();
+
+                if (!opts.silent) {
+                    alert('🎉 Alhamdulillah! Pembayaran DP Anda telah divalidasi oleh Tim Finance SDW UMROH.\n\nSDW E-PASS Digital Resmi Anda kini telah aktif!');
+                }
+                return true;
+            } else {
+                if (!opts.silent) {
+                    alert('Status: Menunggu Pembayaran DP.\n\nPembayaran Anda belum diverifikasi oleh Admin. Silakan pastikan Anda telah mengirimkan bukti transfer melalui WhatsApp, lalu coba klik cek kembali setelah staf kami memvalidasi.');
+                }
+                return false;
+            }
+        } catch (err) {
+            console.warn('[SDW_AUTH] Gagal memeriksa status pendaftaran:', err);
+            if (!opts.silent) {
+                alert('Tidak dapat memeriksa ke server. Silakan pastikan koneksi internet aktif.');
+            }
+            return false;
+        } finally {
+            if (checkBtn && !opts.silent) {
+                checkBtn.disabled = false;
+                checkBtn.innerHTML = originalBtnHtml;
+            }
+        }
+    }
+
     // ==================== GLOBAL WINDOW HELPERS FOR PWA UI ====================
     if (typeof window !== 'undefined') {
         window.switchAuthTab = function (tab) {
@@ -686,6 +774,8 @@
                 }
             }
         };
+
+        window.refreshPilgrimStatus = refreshPilgrimStatus;
     }
 
     return {
@@ -702,6 +792,7 @@
         registerPilgrim: registerPilgrim,
         logoutPilgrim: logoutPilgrim,
         syncPilgrimUI: syncPilgrimUI,
+        refreshPilgrimStatus: refreshPilgrimStatus,
         getAllPilgrimAccounts: getAllPilgrimAccounts,
         syncPilgrimRegistrationToBackend: syncPilgrimRegistrationToBackend
     };
