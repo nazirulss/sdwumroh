@@ -46,7 +46,8 @@
                     admin.showToast(`🌐 Online: Mengirim ${admin.syncQueue.length} mutasi tertunda ke database...`);
                     flushSyncQueue();
                 } else {
-                    admin.showToast('🌐 Koneksi internet aktif. Database terhubung.');
+                    admin.showToast('🌐 Koneksi internet aktif. Menarik data terbaru dari database...');
+                    pullCloudDatabase();
                 }
             });
 
@@ -63,6 +64,85 @@
         // Jika online dan ada antrean tertunda dari sesi sebelumnya, otomatis flush
         if (typeof navigator !== 'undefined' && navigator.onLine && admin.syncQueue.length > 0) {
             setTimeout(flushSyncQueue, 1500);
+        } else if (typeof navigator !== 'undefined' && navigator.onLine) {
+            // Auto-pull data terbaru dari Google Spreadsheet saat dibuka
+            setTimeout(pullCloudDatabase, 1000);
+        }
+    }
+
+    /**
+     * PULL DATA TERBARU DARI GOOGLE SPREADSHEET (Two-Way Sync / Cloud Hydration)
+     */
+    async function pullCloudDatabase() {
+        if (typeof SDW_API === 'undefined' || typeof SDW_API.get !== 'function') {
+            console.warn('[SDW_SYNC] SDW_API tidak tersedia untuk pull cloud database.');
+            return false;
+        }
+        if (typeof navigator !== 'undefined' && !navigator.onLine) {
+            admin.showToast('⚠️ Perangkat offline: Menggunakan cache lokal.');
+            return false;
+        }
+
+        admin.isSyncing = true;
+        updateSyncUI();
+        admin.showToast('⏳ Menarik data live terbaru dari Google Spreadsheet...');
+
+        try {
+            const [leadsRes, regsRes, paysRes, manifestRes] = await Promise.allSettled([
+                SDW_API.get('getLeads'),
+                SDW_API.get('getRegistrations'),
+                SDW_API.get('getPayments'),
+                SDW_API.get('getManifest')
+            ]);
+
+            let pulledCount = 0;
+
+            if (leadsRes.status === 'fulfilled' && leadsRes.value && leadsRes.value.success && Array.isArray(leadsRes.value.data) && leadsRes.value.data.length > 0) {
+                admin.leadsData = leadsRes.value.data;
+                admin.persistStorage(admin.STORAGE_KEYS.LEADS, admin.leadsData);
+                pulledCount += admin.leadsData.length;
+            }
+
+            if (regsRes.status === 'fulfilled' && regsRes.value && regsRes.value.success && Array.isArray(regsRes.value.data) && regsRes.value.data.length > 0) {
+                admin.registrationsData = regsRes.value.data;
+                admin.persistStorage(admin.STORAGE_KEYS.REGS, admin.registrationsData);
+                pulledCount += admin.registrationsData.length;
+            }
+
+            if (paysRes.status === 'fulfilled' && paysRes.value && paysRes.value.success && Array.isArray(paysRes.value.data) && paysRes.value.data.length > 0) {
+                admin.paymentsData = paysRes.value.data;
+                admin.persistStorage(admin.STORAGE_KEYS.PAYMENTS, admin.paymentsData);
+                pulledCount += admin.paymentsData.length;
+            }
+
+            if (manifestRes.status === 'fulfilled' && manifestRes.value && manifestRes.value.success && manifestRes.value.data) {
+                if (Array.isArray(manifestRes.value.data.members) && manifestRes.value.data.members.length > 0) {
+                    admin.manifestData = manifestRes.value.data.members;
+                    admin.persistStorage(admin.STORAGE_KEYS.MANIFEST, admin.manifestData);
+                    pulledCount += admin.manifestData.length;
+                }
+            }
+
+            const nowIso = new Date().toISOString();
+            admin.lastSyncTimestamp = nowIso;
+            admin.persistStorage(admin.STORAGE_KEYS.LAST_SYNC, admin.lastSyncTimestamp);
+
+            // Re-render modul admin yang sedang aktif
+            if (typeof admin.renderCRM === 'function') admin.renderCRM();
+            if (typeof admin.renderRegistrations === 'function') admin.renderRegistrations();
+            if (typeof admin.renderFinance === 'function') admin.renderFinance();
+            if (typeof admin.renderOperations === 'function') admin.renderOperations();
+
+            admin.showToast(`✅ Berhasil menarik ${pulledCount} entri live dari Google Spreadsheet!`);
+            console.info(`[SDW_SYNC] pullCloudDatabase selesai. Total entri termuat: ${pulledCount}`);
+            return true;
+        } catch (err) {
+            console.error('[SDW_SYNC] Gagal menarik data dari Google Spreadsheet:', err);
+            admin.showToast('⚠️ Gagal terhubung ke Spreadsheet: ' + (err.message || 'Koneksi lambat'));
+            return false;
+        } finally {
+            admin.isSyncing = false;
+            updateSyncUI();
         }
     }
 
@@ -337,6 +417,7 @@
     admin.initSyncEngine = initSyncEngine;
     admin.enqueueMutation = enqueueMutation;
     admin.flushSyncQueue = flushSyncQueue;
+    admin.pullCloudDatabase = pullCloudDatabase;
     admin.updateSyncUI = updateSyncUI;
     admin.renderSyncStatusModal = renderSyncStatusModal;
     admin.openSyncStatusModal = openSyncStatusModal;
@@ -344,6 +425,10 @@
     admin.clearSyncHistory = clearSyncHistory;
     admin.getSyncQueue = () => admin.syncQueue;
     admin.getSyncHistory = () => admin.syncHistory;
+
+    if (typeof window !== 'undefined') {
+        window.triggerCloudPull = pullCloudDatabase;
+    }
 
     return admin;
 });

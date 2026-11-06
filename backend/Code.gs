@@ -11,7 +11,7 @@
 
 const CONFIG = {
   APP_NAME: 'SDW UMROH API',
-  VERSION: '2.1.0',
+  VERSION: '2.2.0',
   DATE_FORMAT: 'yyyy-MM-dd HH:mm:ss',
   SPREADSHEET_ID: '1UTZ2uJ76rxAljWlfOLx3MpCzV2e4JLUG5IJ7o8SZn3Q',
   DRIVE_FOLDER_ID: '1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J'
@@ -98,6 +98,32 @@ function formatDateSafe_(date) {
     return Utilities.formatDate(date, "Asia/Jakarta", CONFIG.DATE_FORMAT);
   }
   return date.toISOString().replace('T', ' ').substring(0, 19);
+}
+
+/**
+ * Helper untuk membaca sheet menjadi daftar array object (key-value header)
+ */
+function getSheetRowsAsObjects_(ss, sheetName) {
+  try {
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet || sheet.getLastRow() <= 1) return [];
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    return rows.slice(1).map(function(row) {
+      const obj = {};
+      headers.forEach(function(h, i) {
+        let val = row[i];
+        if (val instanceof Date) {
+          val = formatDateSafe_(val);
+        }
+        obj[h] = val;
+      });
+      return obj;
+    });
+  } catch (err) {
+    if (typeof Logger !== 'undefined') Logger.log("getSheetRowsAsObjects_ error on " + sheetName + ": " + err.message);
+    return [];
+  }
 }
 
 /**
@@ -376,6 +402,261 @@ function doGet(e) {
       const reg = {};
       headers.forEach(function (h, i) { reg[h] = foundRow[i]; });
       return createResponse(true, reg);
+    }
+
+    // ==================== READ ENDPOINTS (PULL DARI SPREADSHEET) ====================
+    if (action === 'getLeads') {
+      const leads = getSheetRowsAsObjects_(ss, "DB_Leads");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+
+      const mapped = leads.map(function(lead) {
+        const cust = custMap[lead.customer_id] || {};
+        return {
+          id: lead.id,
+          customerId: lead.customer_id,
+          name: cust.full_name || lead.customer_id,
+          phone: cust.phone || "-",
+          package: lead.budget_range || "Paket Umroh 1448H",
+          urgency: lead.urgency || "MEDIUM",
+          budget: lead.budget_range || "-",
+          status: lead.status || "NEW",
+          owner: lead.sales_owner_id || "Belum Ditugaskan",
+          notes: lead.notes || "",
+          source: lead.source || "WEBSITE",
+          createdAt: lead.created_at,
+          updatedAt: lead.updated_at
+        };
+      });
+      return createResponse(true, mapped);
+    }
+
+    if (action === 'getRegistrations') {
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+      const packages = getSheetRowsAsObjects_(ss, "DB_Packages");
+      const departures = getSheetRowsAsObjects_(ss, "DB_Departures");
+      const docs = getSheetRowsAsObjects_(ss, "DB_Pilgrim_Documents");
+      const payments = getSheetRowsAsObjects_(ss, "DB_Payments");
+
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+      const pkgMap = {};
+      packages.forEach(function(p) { pkgMap[p.id] = p; });
+      const depMap = {};
+      departures.forEach(function(d) { depMap[d.id] = d; });
+
+      const mapped = regs.map(function(reg) {
+        const cust = custMap[reg.customer_id] || {};
+        const pkg = pkgMap[reg.package_id] || {};
+        const dep = depMap[reg.departure_id] || {};
+
+        const regDocs = docs.filter(function(d) { return String(d.registration_id) === String(reg.id); });
+        const verifiedDocs = regDocs.filter(function(d) { return d.status === 'VERIFIED'; }).length;
+        const totalDocs = Math.max(4, regDocs.length);
+
+        const regPays = payments.filter(function(p) { return String(p.invoice_id) === String(reg.id) || String(p.registration_id) === String(reg.id); });
+        const hasVerifiedPay = regPays.some(function(p) { return p.status === 'VERIFIED'; });
+
+        return {
+          id: reg.id,
+          regId: reg.id,
+          customer: cust.full_name || reg.customer_id || "Jamaah",
+          customerId: reg.customer_id,
+          nik: cust.nik || "-",
+          phone: cust.phone || "-",
+          package: pkg.name || reg.package_id || "Umroh Reguler",
+          packageId: reg.package_id,
+          departure: dep.departure_date ? (String(dep.departure_date).substring(0, 10) + " (" + (dep.airline || "Maskapai") + ")") : "Musim 1448H",
+          departureId: reg.departure_id,
+          roomType: reg.room_type || "QUAD",
+          priceSnapshot: Number(reg.agreed_price_snapshot || 0),
+          discountSnapshot: Number(reg.discount_snapshot || 0),
+          finalPrice: Number(reg.final_price_snapshot || 0),
+          status: reg.status || "CONFIRMED",
+          salesId: reg.sales_id || "USR-000001",
+          docs: verifiedDocs + "/" + totalDocs,
+          payment: reg.status === 'CONFIRMED' ? 'Lunas (Terverifikasi)' : (hasVerifiedPay ? 'DP Terverifikasi' : 'Menunggu DP'),
+          notes: reg.notes || "",
+          createdAt: reg.created_at,
+          updatedAt: reg.updated_at
+        };
+      });
+      return createResponse(true, mapped);
+    }
+
+    if (action === 'getPayments') {
+      const payments = getSheetRowsAsObjects_(ss, "DB_Payments");
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+
+      const regMap = {};
+      regs.forEach(function(r) { regMap[r.id] = r; });
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+
+      const mapped = payments.map(function(pay) {
+        const reg = regMap[pay.invoice_id] || {};
+        const cust = custMap[reg.customer_id] || {};
+        const amountNum = Number(pay.amount || 0);
+
+        return {
+          id: pay.id,
+          regId: pay.invoice_id || pay.schedule_id || "-",
+          customer: cust.full_name || (pay.invoice_id ? "Jamaah (" + pay.invoice_id + ")" : "Anonim"),
+          amount: "Rp " + amountNum.toLocaleString('id-ID'),
+          amountNum: amountNum,
+          method: pay.payment_method || "Transfer Bank",
+          ref: pay.reference_number || "-",
+          term: (pay.schedule_id === 'SCH-000001' || pay.schedule_id === 'SCH-DP') ? 'Uang Muka (DP)' : 'Pelunasan',
+          proof: pay.proof_ref_mock || "",
+          status: pay.status || "SUBMITTED",
+          submittedAt: pay.submitted_at || "",
+          verifiedBy: pay.verified_by || "",
+          verifiedAt: pay.verified_at || "",
+          notes: pay.notes || ""
+        };
+      });
+      return createResponse(true, mapped);
+    }
+
+    if (action === 'getPilgrimDocuments') {
+      const regId = e.parameter.regId;
+      const docs = getSheetRowsAsObjects_(ss, "DB_Pilgrim_Documents");
+      const reqs = getSheetRowsAsObjects_(ss, "DB_Document_Requirements");
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+
+      const reqMap = {};
+      reqs.forEach(function(rq) { reqMap[rq.id] = rq; });
+      const regMap = {};
+      regs.forEach(function(r) { regMap[r.id] = r; });
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+
+      let filteredDocs = docs;
+      if (regId) {
+        filteredDocs = docs.filter(function(d) {
+          return String(d.registration_id).toUpperCase() === String(regId).toUpperCase();
+        });
+      }
+
+      const mapped = filteredDocs.map(function(doc) {
+        const req = reqMap[doc.requirement_id] || {};
+        const reg = regMap[doc.registration_id] || {};
+        const cust = custMap[reg.customer_id] || {};
+
+        return {
+          id: doc.id,
+          regId: doc.registration_id,
+          pilgrimName: cust.full_name || doc.registration_id,
+          requirementId: doc.requirement_id,
+          code: req.code || doc.requirement_id || "DOC",
+          title: req.title || doc.requirement_id || "Berkas Jamaah",
+          is_mandatory: req.is_mandatory === true || String(req.is_mandatory).toLowerCase() === 'true',
+          fileName: doc.file_name || "",
+          fileRef: doc.file_ref_mock || "",
+          status: doc.status || "UNDER_REVIEW",
+          reviewNotes: doc.review_notes || "",
+          verifiedBy: doc.verified_by || "",
+          verifiedAt: doc.verified_at || "",
+          updatedAt: doc.updated_at || ""
+        };
+      });
+      return createResponse(true, mapped);
+    }
+
+    if (action === 'getManifest' || action === 'getTrips') {
+      const trips = getSheetRowsAsObjects_(ss, "DB_Trips");
+      const members = getSheetRowsAsObjects_(ss, "DB_Trip_Members");
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+
+      const regMap = {};
+      regs.forEach(function(r) { regMap[r.id] = r; });
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+
+      const mappedMembers = members.map(function(m) {
+        const reg = regMap[m.registration_id] || {};
+        const cust = custMap[reg.customer_id] || {};
+
+        return {
+          id: m.registration_id || m.id,
+          manifestId: m.id,
+          tripId: m.trip_id,
+          regId: m.registration_id,
+          name: cust.full_name || m.registration_id,
+          gender: cust.gender || "L",
+          passport: m.special_assistance && m.special_assistance.startsWith('A') ? m.special_assistance : (cust.nik ? 'A' + String(cust.nik).substring(8) : "A12345678"),
+          phone: cust.phone || "-",
+          busId: m.bus_number ? ("Bus " + m.bus_number.replace('BUS-', '')) : "Bus 01",
+          seatNumber: m.bus_number ? m.bus_number.substring(0, 3) : "01A",
+          roomMakkah: m.makkah_room_number ? m.makkah_room_number.replace('RM-MAK-', '') : "1201",
+          roomMadinah: m.madinah_room_number ? m.madinah_room_number.replace('RM-MAD-', '') : "501",
+          roomType: reg.room_type || "Quad",
+          boarded: m.special_assistance === 'BOARDED',
+          kloterId: m.trip_id || "TRP-2701"
+        };
+      });
+
+      return createResponse(true, {
+        trips: trips,
+        members: mappedMembers
+      });
+    }
+
+    if (action === 'getPreparation') {
+      const prep = getSheetRowsAsObjects_(ss, "DB_Preparation");
+      const regs = getSheetRowsAsObjects_(ss, "DB_Registrations");
+      const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
+
+      const regMap = {};
+      regs.forEach(function(r) { regMap[r.id] = r; });
+      const custMap = {};
+      customers.forEach(function(c) { custMap[c.id] = c; });
+
+      const regIdParam = e.parameter.regId;
+      let filteredPrep = prep;
+      if (regIdParam) {
+        filteredPrep = prep.filter(function(p) { return String(p.registration_id) === String(regIdParam); });
+      }
+
+      const mapped = filteredPrep.map(function(p) {
+        const reg = regMap[p.registration_id] || {};
+        const cust = custMap[reg.customer_id] || {};
+        return {
+          id: p.id,
+          regId: p.registration_id,
+          name: cust.full_name || p.registration_id,
+          dimension: p.dimension,
+          itemName: p.item_name,
+          status: p.status,
+          notes: p.notes,
+          updatedAt: p.updated_at
+        };
+      });
+      return createResponse(true, mapped);
+    }
+
+    if (action === 'getManasik') {
+      const manasik = getSheetRowsAsObjects_(ss, "DB_Manasik");
+      return createResponse(true, manasik);
+    }
+
+    if (action === 'getAuditLogs') {
+      const sheet = ss.getSheetByName("DB_Audit_Logs");
+      if (!sheet || sheet.getLastRow() <= 1) return createResponse(true, []);
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const sliceRows = rows.slice(Math.max(1, rows.length - 100));
+      const items = sliceRows.map(function(row) {
+        const obj = {};
+        headers.forEach(function(h, i) { obj[h] = row[i]; });
+        return obj;
+      }).reverse();
+      return createResponse(true, items);
     }
 
     return createResponse(false, null, "Aksi GET tidak dikenali: " + action);
@@ -801,6 +1082,105 @@ function processSingleMutation_(ss, action, payload, actor) {
     const roomId = payload.roomId;
     logAudit_(actor, "UPDATE_ROOMING", "DB_Trip_Members", roomId, null, payload, "Alokasi kamar hotel Makkah & Madinah diperbarui");
     return { id: roomId, status: "ROOMING_SAVED", entity: "DB_Trip_Members" };
+  }
+
+  // 10. MUTASI LOGISTIK & PERSIAPAN OPERASIONAL: UPDATE PREPARATION
+  if (action === 'updatePreparation') {
+    const sheet = ss.getSheetByName("DB_Preparation");
+    if (!sheet) throw new Error("Sheet DB_Preparation tidak ditemukan");
+
+    const regId = payload.regId;
+    const nowStr = formatDateSafe_(new Date());
+
+    if (payload.batchAction === 'COMPLETE_ALL') {
+      const rows = sheet.getDataRange().getValues();
+      for (let i = 1; i < rows.length; i++) {
+        sheet.getRange(i + 1, 5).setValue("READY");
+        sheet.getRange(i + 1, 7).setValue(nowStr);
+      }
+      logAudit_(actor, "COMPLETE_ALL_PREPARATION", "DB_Preparation", "ALL", null, { allReady: true }, "Seluruh perlengkapan kloter ditandai LENGKAP");
+      return { status: "BATCH_UPDATED", allReady: true };
+    }
+
+    let found = false;
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][1]).toUpperCase() === String(regId).toUpperCase()) {
+        if (payload.status) sheet.getRange(i + 1, 5).setValue(payload.status);
+        if (payload.notes) sheet.getRange(i + 1, 6).setValue(payload.notes);
+        sheet.getRange(i + 1, 7).setValue(nowStr);
+        found = true;
+        break;
+      }
+    }
+
+    if (!found && regId) {
+      const newId = "PRP-" + String(sheet.getLastRow()).padStart(6, '0');
+      sheet.appendRow([
+        newId,
+        regId,
+        payload.dimension || "EQUIPMENT",
+        payload.itemName || payload.itemKey || "Koper & Perlengkapan",
+        payload.status || "READY",
+        payload.notes || "Distribusi perlengkapan jamaah",
+        nowStr
+      ]);
+    }
+
+    logAudit_(actor, "UPDATE_PREPARATION", "DB_Preparation", regId, null, payload, "Status perlengkapan jamaah diperbarui");
+    return { id: regId, status: payload.status || "UPDATED", entity: "DB_Preparation" };
+  }
+
+  // 11. MUTASI BIMBINGAN MANASIK: UPDATE MANASIK
+  if (action === 'updateManasik') {
+    const sheet = ss.getSheetByName("DB_Manasik");
+    if (!sheet) throw new Error("Sheet DB_Manasik tidak ditemukan");
+
+    const regId = payload.regId || payload.departureId || "DEP-000001";
+    const nowStr = formatDateSafe_(new Date());
+
+    if (payload.batchAction === 'ATTEND_ALL') {
+      const rows = sheet.getDataRange().getValues();
+      for (let i = 1; i < rows.length; i++) {
+        sheet.getRange(i + 1, 8).setValue("COMPLETED");
+      }
+      logAudit_(actor, "ATTEND_ALL_MANASIK", "DB_Manasik", "ALL", null, { attendAll: true }, "Presensi massal seluruh jamaah ditandai HADIR");
+      return { status: "BATCH_UPDATED", attendAll: true };
+    }
+
+    let found = false;
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(regId).toUpperCase() || String(rows[i][1]).toUpperCase() === String(regId).toUpperCase()) {
+        sheet.getRange(i + 1, 8).setValue(payload.status || "COMPLETED");
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      const newId = "MAN-" + String(sheet.getLastRow()).padStart(6, '0');
+      sheet.appendRow([
+        newId,
+        payload.departureId || "DEP-000001",
+        payload.sessionTitle || "Bimbingan Manasik Teori & Praktek",
+        payload.sessionType || "THEORY_AND_PRACTICE",
+        nowStr,
+        payload.location || "Asrama Haji / Hotel",
+        payload.muthawwifId || "USR-000005",
+        payload.status || "COMPLETED"
+      ]);
+    }
+
+    logAudit_(actor, "UPDATE_MANASIK", "DB_Manasik", regId, null, payload, "Presensi bimbingan manasik diperbarui");
+    return { id: regId, status: payload.status || "UPDATED", entity: "DB_Manasik" };
+  }
+
+  // 12. AUDIT KEAMANAN: UNMASK SENSITIVE DATA
+  if (action === 'unmaskSensitiveData') {
+    const regId = payload.regId || "UNKNOWN";
+    logAudit_(actor, "UNMASK_DATA", "DB_Registrations", regId, null, { role: payload.role || actor }, "Staf membuka akses unmask data NIK/Paspor sensitif jamaah");
+    return { id: regId, status: "UNMASKED", entity: "DB_Audit_Logs" };
   }
 
   throw new Error("Aksi tidak didukung: " + action);

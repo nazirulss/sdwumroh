@@ -169,7 +169,10 @@
     <footer id="app-footer"></footer>
 
     <!-- Scripts -->
-    <script src="js/data-mock.js"></script>
+    <script src="js/app-config.js?v=2.2"></script>
+    <script src="js/data-mock.js?v=2.2"></script>
+    <script src="js/api.js?v=2.2"></script>
+    <script src="js/departures.js?v=2.2"></script>
     <script>
         // Mobile Drawer Controller
         function toggleMobileNav(open) {
@@ -314,6 +317,11 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             renderDepartures();
+            if (typeof SDW_DEPARTURES !== 'undefined' && typeof SDW_DEPARTURES.loadDeparturesAsync === 'function') {
+                SDW_DEPARTURES.loadDeparturesAsync().then(() => {
+                    renderDepartures();
+                }).catch(() => {});
+            }
         });
     </script>
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->

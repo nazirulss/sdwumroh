@@ -1781,9 +1781,13 @@
                     <button type="button" onclick="SDW_ADMIN.closeModal('modalSyncStatus')" class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-600 text-xs font-bold transition cursor-pointer">
                         Tutup
                     </button>
+                    <button type="button" onclick="SDW_ADMIN.pullCloudDatabase()" class="px-4 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine border border-purple-200 text-xs font-bold transition cursor-pointer inline-flex items-center gap-1.5" title="Tarik data prospek dan registrasi terbaru dari Google Spreadsheet">
+                        <i class="fa-solid fa-cloud-arrow-down text-sdw-gold"></i>
+                        <span>Tarik Data Cloud</span>
+                    </button>
                     <button type="button" id="btnTriggerManualSync" onclick="SDW_ADMIN.triggerManualSync()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white text-xs font-bold transition shadow-xs cursor-pointer inline-flex items-center gap-1.5">
                         <i class="fa-solid fa-arrows-rotate"></i>
-                        <span id="btnTriggerSyncText">Sinkronkan Sekarang</span>
+                        <span id="btnTriggerSyncText">Kirim Antrean</span>
                     </button>
                 </div>
             </div>

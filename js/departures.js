@@ -18,8 +18,45 @@
 
     function initDepartures(containerId = 'departures-table-body') {
         const tbody = document.getElementById(containerId);
-        if (!tbody) return;
-        renderDeparturesTable(tbody);
+        if (tbody) renderDeparturesTable(tbody);
+        loadDeparturesAsync(containerId);
+    }
+
+    async function loadDeparturesAsync(containerId = 'departures-table-body') {
+        const tbody = document.getElementById(containerId);
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getDepartures');
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    if (typeof MOCK_DATA !== 'undefined') {
+                        const liveDeps = res.data.map(d => {
+                            const existing = (MOCK_DATA.departures || []).find(ed => ed.id === d.id) || {};
+                            return {
+                                ...existing,
+                                ...d,
+                                id: d.id,
+                                package_id: d.package_id,
+                                departure_date: d.departure_date ? String(d.departure_date).substring(0, 10) : existing.departure_date,
+                                return_date: d.return_date ? String(d.return_date).substring(0, 10) : existing.return_date,
+                                airline: d.airline || existing.airline,
+                                origin_airport: d.origin_airport || existing.origin_airport || 'CGK',
+                                capacity_total: Number(d.capacity_total) || existing.capacity_total || 45,
+                                capacity_booked: Number(d.capacity_booked) || existing.capacity_booked || 0,
+                                status: d.status || existing.status || 'OPEN',
+                                notes: d.notes || existing.notes || ''
+                            };
+                        });
+                        MOCK_DATA.departures = liveDeps;
+                    }
+                    if (tbody) renderDeparturesTable(tbody);
+                    if (typeof window.renderDepartures === 'function') window.renderDepartures();
+                    return res.data;
+                }
+            } catch (err) {
+                console.warn('[SDW_DEPARTURES] Gagal memuat jadwal live dari Spreadsheet, menggunakan cache lokal:', err);
+            }
+        }
+        if (tbody) renderDeparturesTable(tbody);
     }
 
     function renderDeparturesTable(tbody) {
@@ -92,6 +129,8 @@
     }
 
     return {
-        init: initDepartures
+        init: initDepartures,
+        loadDeparturesAsync: loadDeparturesAsync,
+        renderDeparturesTable: renderDeparturesTable
     };
 });

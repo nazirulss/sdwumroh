@@ -173,8 +173,10 @@
     <footer id="app-footer"></footer>
 
     <!-- Scripts -->
-    <script src="js/data-mock.js"></script>
-    <script src="js/catalog.js"></script>
+    <script src="js/app-config.js?v=2.2"></script>
+    <script src="js/data-mock.js?v=2.2"></script>
+    <script src="js/api.js?v=2.2"></script>
+    <script src="js/catalog.js?v=2.2"></script>
     <script>
         // Mobile Drawer Controller
         function toggleMobileNav(open) {
@@ -410,6 +412,12 @@
                 filterByCat(targetCat, btn);
             } else {
                 renderCustomCatalog();
+            }
+
+            if (typeof SDW_CATALOG !== 'undefined' && typeof SDW_CATALOG.loadPackagesAsync === 'function') {
+                SDW_CATALOG.loadPackagesAsync().then(() => {
+                    renderCustomCatalog();
+                }).catch(() => {});
             }
 
             // Optional direct open of package modal via ?pkg=PKG-000001

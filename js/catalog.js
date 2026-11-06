@@ -31,6 +31,41 @@
         const grid = document.getElementById(containerId);
         if (!grid) return;
         renderPackageList(grid);
+        loadPackagesAsync(containerId);
+    }
+
+    async function loadPackagesAsync(containerId = 'katalog-package-grid') {
+        const grid = document.getElementById(containerId);
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getPackages');
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    if (typeof MOCK_DATA !== 'undefined') {
+                        const livePackages = res.data.map(p => {
+                            const existing = (MOCK_DATA.packages || []).find(ep => ep.id === p.id) || {};
+                            return {
+                                ...existing,
+                                ...p,
+                                name: p.name || existing.name,
+                                duration_days: Number(p.duration_days) || existing.duration_days || 9,
+                                package_type: p.package_type || existing.package_type || 'REGULAR',
+                                description: p.description || existing.description,
+                                starting_price: existing.starting_price || 33500000,
+                                seats_left: existing.seats_left !== undefined ? existing.seats_left : 15,
+                                image: existing.image || 'assets/hero-haram.png'
+                            };
+                        });
+                        MOCK_DATA.packages = livePackages;
+                    }
+                    if (grid) renderPackageList(grid);
+                    if (typeof window.renderCustomCatalog === 'function') window.renderCustomCatalog();
+                    return res.data;
+                }
+            } catch (err) {
+                console.warn('[SDW_CATALOG] Gagal memuat paket live dari Spreadsheet, menggunakan cache lokal:', err);
+            }
+        }
+        if (grid) renderPackageList(grid);
     }
 
     function setCategoryFilter(category, btnElement) {
@@ -212,6 +247,7 @@
 
     return {
         init: initCatalog,
+        loadPackagesAsync: loadPackagesAsync,
         setCategoryFilter: setCategoryFilter,
         openPackageModal: openPackageModal,
         closePackageModal: closePackageModal,

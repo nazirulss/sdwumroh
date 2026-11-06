@@ -1167,6 +1167,19 @@
             const name = document.getElementById('lmName')?.value || 'Calon Jamaah';
             const phone = document.getElementById('lmPhone')?.value || '-';
             const pkg = document.getElementById('lmPackage')?.value || 'Umroh';
+
+            // Catat prospek ke Google Spreadsheet DB_Leads secara background
+            if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+                SDW_API.post('createLead', {
+                    name: name,
+                    phone: phone,
+                    source: 'WEBSITE_LEAD_MAGNET',
+                    urgency: 'HIGH',
+                    budget: pkg,
+                    notes: `Permintaan E-Brochure & Jadwal via Web Utama (${name} - ${phone})`
+                }).catch(() => {});
+            }
+
             const message = `Assalamualaikum CS SDW UMROH, saya ${name} (${phone}) berminat dengan ${pkg}. Mohon kirimkan E-Brochure lengkap dan informasi jadwal serta rincian biaya. Terima kasih.`;
             const waUrl = `https://wa.me/6281234567890?text=${encodeURIComponent(message)}`;
             window.open(waUrl, '_blank');

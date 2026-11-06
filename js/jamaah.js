@@ -29,6 +29,35 @@
         renderDocuments();
         renderFinance();
         renderManasik();
+        loadPilgrimDocumentsAsync();
+    }
+
+    async function loadPilgrimDocumentsAsync() {
+        const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
+        if (!session || !session.regId) return;
+
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getPilgrimDocuments', { regId: session.regId });
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    if (typeof MOCK_DATA !== 'undefined') {
+                        MOCK_DATA.pilgrimDocuments = res.data.map(d => ({
+                            id: d.id,
+                            code: d.code,
+                            title: d.title,
+                            is_mandatory: d.is_mandatory,
+                            file_name: d.fileName || d.file_name,
+                            file_ref_mock: d.fileRef || d.file_ref_mock,
+                            status: d.status,
+                            review_notes: d.reviewNotes || d.review_notes
+                        }));
+                    }
+                    renderDocuments();
+                }
+            } catch (err) {
+                console.warn('[SDW_JAMAAH] Gagal mengambil dokumen live dari Spreadsheet:', err);
+            }
+        }
     }
 
     function renderProfile() {
@@ -155,6 +184,8 @@
 
     return {
         init: initJamaahView,
+        loadPilgrimDocumentsAsync: loadPilgrimDocumentsAsync,
+        renderDocuments: renderDocuments,
         formatRupiah: formatRupiah
     };
 });
