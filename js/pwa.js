@@ -1424,17 +1424,23 @@
   }
 
   // ==================== IBADAH & SCROLL CONTROLLERS ====================
-  window.openIbadahModal = function () {
+  window.openIbadahModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('ibadahHubModal');
     if (modal) {
       modal.classList.remove('hidden');
       hidePwaPrompt();
+      if (options && options.syncHistory !== false && typeof syncUrlView === 'function') {
+        syncUrlView('ibadah');
+      }
     }
   };
 
-  window.closeIbadahModal = function () {
+  window.closeIbadahModal = function (options = { syncHistory: true }) {
     const modal = document.getElementById('ibadahHubModal');
     if (modal) modal.classList.add('hidden');
+    if (options && options.syncHistory !== false && typeof clearUrlView === 'function') {
+      clearUrlView();
+    }
   };
 
   window.scrollToWartaFeed = function () {
@@ -2689,8 +2695,13 @@
     if (typeof window === 'undefined' || !window.history || !window.history.pushState) return;
     try {
       const url = new URL(window.location.href);
-      if (url.searchParams.get('view') === viewName) return;
+      if (url.searchParams.get('view') === viewName && !url.searchParams.has('tab') && !url.searchParams.has('page')) return;
       url.searchParams.set('view', viewName);
+      if (viewName !== 'galeri' && viewName !== 'sertifikat') {
+        url.searchParams.delete('tab');
+        url.searchParams.delete('date');
+      }
+      url.searchParams.delete('page');
       window.history.pushState({ view: viewName }, '', url.toString());
     } catch (e) {
       console.warn('URL sync error:', e);
@@ -2701,9 +2712,10 @@
     if (typeof window === 'undefined' || !window.history) return;
     try {
       const url = new URL(window.location.href);
-      if (!url.searchParams.has('view')) return;
+      if (!url.searchParams.has('view') && !url.searchParams.has('tab') && !url.searchParams.has('page') && !url.searchParams.has('date')) return;
       url.searchParams.delete('view');
       url.searchParams.delete('tab');
+      url.searchParams.delete('page');
       url.searchParams.delete('date');
       window.history.pushState({ view: null }, '', url.toString());
     } catch (e) {
@@ -2826,44 +2838,49 @@
     } catch (e) {}
   };
 
-  window.backToAppHome = function (options = { syncHistory: true }) {
-    // 1. Hide all sub-views in app.html
+  function dismissSubViewsAndModals() {
     const allSubviews = document.querySelectorAll('[id^="subview-"]');
     allSubviews.forEach((el) => el.classList.add('hidden'));
 
-    // 2. Hide any legacy modals if open
     ALL_APP_MODAL_IDS.forEach((id) => {
       const el = document.getElementById(id);
       if (el) el.classList.add('hidden');
     });
 
-    // 3. Stop compass orientation listener if running
     if (compassListenerAttached && window.DeviceOrientationEvent) {
       window.removeEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = false;
     }
 
-    // 4. Pause live streaming video by clearing iframe src
     const liveIframe = document.getElementById('inAppLiveIframe');
     if (liveIframe) {
       liveIframe.src = 'about:blank';
     }
+  }
 
-    // 5. Restore Home Tab (#tab-jamaah) in app.html
+  window.dismissSubViewsAndModals = dismissSubViewsAndModals;
+
+  window.backToAppHome = function (options = { syncHistory: true }) {
+    dismissSubViewsAndModals();
+
+    // Restore Home Tab (#tab-jamaah) in app.html
     const homeTab = document.getElementById('tab-jamaah');
     if (homeTab) {
       homeTab.classList.remove('hidden');
     }
+    if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+      SDW_AUTH.switchAppTab('tab-jamaah', { syncUrl: false });
+    }
 
-    // 6. Clear URL query parameter
+    // Clear URL query parameter
     if (options && options.syncHistory !== false) {
       clearUrlView();
     }
 
-    // 7. Scroll smoothly to top
+    // Scroll smoothly to top
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // 8. Dispatch event
+    // Dispatch event
     try {
       window.dispatchEvent(new CustomEvent('appSubViewChanged', { detail: { view: 'home' } }));
     } catch (e) {}
@@ -2874,6 +2891,7 @@
   };
 
   const APP_VIEW_MAP = {
+    // 1. Sub-Views SPA Full Screen
     'paket': (opts) => window.openAppSubView('paket', opts),
     'booking': (opts) => window.openAppSubView('booking', opts),
     'hotel': (opts) => window.openAppSubView('hotel', opts),
@@ -2884,10 +2902,88 @@
     'sertifikat': (opts) => window.openAppSubView('galeri', { tab: 'sertifikat', ...opts }),
     'live': (opts) => window.openAppSubView('live', opts),
     'auth': (opts) => window.openAppSubView('auth', opts),
+
+    // 2. Main Navigation Tabs (Asnawiyyah 5-Tab Bar)
+    'beranda': (opts) => {
+      dismissSubViewsAndModals();
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+        SDW_AUTH.switchAppTab('tab-jamaah', { syncUrl: false });
+      }
+    },
+    'home': (opts) => APP_VIEW_MAP['beranda'](opts),
+    'jamaah': (opts) => APP_VIEW_MAP['beranda'](opts),
+
+    'berita': (opts) => {
+      dismissSubViewsAndModals();
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+        SDW_AUTH.switchAppTab('tab-berita', { syncUrl: false });
+      }
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id') || (opts && opts.id);
+        if (articleId && typeof window.openWartaModal === 'function') {
+          window.openWartaModal(articleId);
+        }
+      } catch (e) {}
+    },
+    'warta': (opts) => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id') || (opts && opts.id);
+        if (articleId && typeof window.openWartaModal === 'function') {
+          dismissSubViewsAndModals();
+          window.openWartaModal(articleId);
+        } else {
+          APP_VIEW_MAP['berita'](opts);
+        }
+      } catch (e) {
+        APP_VIEW_MAP['berita'](opts);
+      }
+    },
+
+    'kalender': (opts) => {
+      dismissSubViewsAndModals();
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+        SDW_AUTH.switchAppTab('tab-kalender', { syncUrl: false });
+      }
+    },
+    'calendar': (opts) => APP_VIEW_MAP['kalender'](opts),
+    'agenda': (opts) => APP_VIEW_MAP['kalender'](opts),
+
+    'profil': (opts) => {
+      dismissSubViewsAndModals();
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
+        SDW_AUTH.switchAppTab('tab-profile', { syncUrl: false });
+      }
+    },
+    'profile': (opts) => APP_VIEW_MAP['profil'](opts),
+    'akun': (opts) => APP_VIEW_MAP['profil'](opts),
+    'account': (opts) => APP_VIEW_MAP['profil'](opts),
+
+    // 3. Ibadah Super Hub & Modals
+    'ibadah': (opts) => {
+      let sub = null;
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        sub = urlParams.get('sub');
+      } catch (e) {}
+      if (opts && opts.sub) sub = opts.sub;
+
+      if (sub === 'doa') {
+        window.openDoaModal('niat', opts);
+      } else if (sub === 'jadwal') {
+        window.openJadwalSholatModal('MAKKAH', opts);
+      } else if (sub === 'miqat') {
+        window.openWartaModal('miqat-guide', opts);
+      } else {
+        window.openIbadahModal(opts);
+      }
+    },
+    'manasik': (opts) => APP_VIEW_MAP['ibadah'](opts),
+    'superhub': (opts) => APP_VIEW_MAP['ibadah'](opts),
+
     'doa': (opts) => window.openDoaModal('niat', opts),
-    'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts),
-    'warta': (opts) => window.openWartaModal('nusuk-pass', opts),
-    'ibadah': (opts) => window.openIbadahModal(opts)
+    'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts)
   };
 
   window.openAppViewByName = function (viewName, options = { syncHistory: true }) {
@@ -2900,13 +2996,20 @@
       window.openAppSubView(clean, options);
     } else if (APP_VIEW_MAP[clean]) {
       ALL_APP_MODAL_IDS.forEach((id) => {
+        if (clean === 'ibadah' && id === 'ibadahHubModal') return;
         const el = document.getElementById(id);
         if (el) el.classList.add('hidden');
       });
       APP_VIEW_MAP[clean](options);
       if (options && options.syncHistory) {
-        syncUrlView(clean);
+        if (clean === 'beranda' || clean === 'home' || clean === 'jamaah') {
+          clearUrlView();
+        } else {
+          syncUrlView(clean);
+        }
       }
+    } else {
+      window.backToAppHome(options);
     }
   };
 
@@ -2914,7 +3017,7 @@
   window.addEventListener('popstate', () => {
     try {
       const url = new URL(window.location.href);
-      const view = url.searchParams.get('view');
+      const view = url.searchParams.get('view') || url.searchParams.get('tab') || url.searchParams.get('page');
       if (view && (IN_APP_SUBVIEW_NAMES.includes(view.toLowerCase()) || APP_VIEW_MAP[view.toLowerCase()])) {
         window.openAppViewByName(view.toLowerCase(), { syncHistory: false });
       } else {
@@ -2928,7 +3031,7 @@
   function initDeepLinkRouter() {
     try {
       const url = new URL(window.location.href);
-      const view = url.searchParams.get('view');
+      const view = url.searchParams.get('view') || url.searchParams.get('tab') || url.searchParams.get('page');
       if (view && (IN_APP_SUBVIEW_NAMES.includes(view.toLowerCase()) || APP_VIEW_MAP[view.toLowerCase()])) {
         setTimeout(() => {
           window.openAppViewByName(view.toLowerCase(), { syncHistory: false });

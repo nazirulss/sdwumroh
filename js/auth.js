@@ -100,7 +100,11 @@
         }
     }
 
-    function switchAppTab(tabId) {
+    function switchAppTab(tabId, options = { syncUrl: true }) {
+        if (typeof window.dismissSubViewsAndModals === 'function') {
+            window.dismissSubViewsAndModals();
+        }
+
         const allViews = document.querySelectorAll('.app-view-container');
         allViews.forEach(v => v.classList.add('hidden'));
 
@@ -166,6 +170,24 @@
                 }
             }
         });
+
+        // Sync URL query string (?view=...)
+        if (options && options.syncUrl !== false && typeof window.syncUrlView === 'function') {
+            const tabViewMap = {
+                'tab-jamaah': 'beranda',
+                'tab-berita': 'berita',
+                'tab-kalender': 'kalender',
+                'tab-profile': 'profil'
+            };
+            const viewName = tabViewMap[tabId];
+            if (viewName === 'beranda') {
+                if (typeof window.clearUrlView === 'function') {
+                    window.clearUrlView();
+                }
+            } else if (viewName) {
+                window.syncUrlView(viewName);
+            }
+        }
     }
 
     // ==================== PILGRIM ACCOUNTS & AUTHENTICATION ====================

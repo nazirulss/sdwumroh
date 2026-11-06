@@ -2177,32 +2177,21 @@
             }
             if (typeof SDW_JAMAAH !== 'undefined') SDW_JAMAAH.init();
 
-            // Handle URL Tab parameter (?tab=berita, ?tab=kalender, ?tab=profil, ?tab=admin)
+            // Handle URL View / Tab parameters (?view=berita, ?view=ibadah, ?view=kalender, ?view=profil, dsb)
             const urlParams = new URLSearchParams(window.location.search);
-            const reqTab = urlParams.get('tab');
-            if (reqTab) {
-                const lower = reqTab.toLowerCase();
+            const reqView = urlParams.get('view') || urlParams.get('tab') || urlParams.get('page');
+            if (reqView) {
+                const lower = reqView.toLowerCase().trim();
                 // Jika permintaan terkait tab staf/backoffice, alihkan ke admin.html
                 if (['admin', 'crm', 'finance', 'dokumen', 'documents', 'trips', 'backoffice', 'audit'].includes(lower)) {
                     window.location.href = 'admin.html';
                     return;
                 }
-                if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
-                    const tabMap = {
-                        'beranda': 'tab-jamaah',
-                        'jamaah': 'tab-jamaah',
-                        'berita': 'tab-berita',
-                        'warta': 'tab-berita',
-                        'kalender': 'tab-kalender',
-                        'agenda': 'tab-kalender',
-                        'profil': 'tab-profile',
-                        'profile': 'tab-profile'
-                    };
-                    const targetTab = tabMap[lower] || reqTab;
-                    setTimeout(() => {
-                        SDW_AUTH.switchAppTab(targetTab);
-                    }, 100);
-                }
+                setTimeout(() => {
+                    if (typeof window.openAppViewByName === 'function') {
+                        window.openAppViewByName(lower, { syncHistory: false });
+                    }
+                }, 100);
             }
         });
     </script>
