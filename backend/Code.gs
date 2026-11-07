@@ -14,9 +14,39 @@ const CONFIG = {
   VERSION: '2.2.0',
   DATE_FORMAT: 'yyyy-MM-dd HH:mm:ss',
   SPREADSHEET_ID: '1UTZ2uJ76rxAljWlfOLx3MpCzV2e4JLUG5IJ7o8SZn3Q',
-  DRIVE_FOLDER_ID: '1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J',
-  PASFOTO_FOLDER_ID: '1CblSK1EVxRl3gQSyYsq_l8q6j0wg-Ziq'
+  DRIVE_FOLDER_ID: '1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J'
 };
+
+/**
+ * Helper: Mengambil atau membuat sub-folder Pasfoto_Sertifikat di dalam folder SDW_UMROH_Database
+ */
+function getPasfotoFolder() {
+  if (CONFIG.DRIVE_FOLDER_ID && CONFIG.DRIVE_FOLDER_ID !== '__SDW_CONFIG_PENDING__') {
+    try {
+      const parentFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
+      if (parentFolder) {
+        const subFolders = parentFolder.getFoldersByName("Pasfoto_Sertifikat");
+        if (subFolders.hasNext()) {
+          return subFolders.next();
+        }
+        return parentFolder.createFolder("Pasfoto_Sertifikat");
+      }
+    } catch (e) {
+      Logger.log("getPasfotoFolder parent error: " + e.message);
+    }
+  }
+
+  try {
+    const folders = DriveApp.getFoldersByName("Pasfoto_Sertifikat");
+    if (folders.hasNext()) {
+      return folders.next();
+    }
+    return DriveApp.createFolder("Pasfoto_Sertifikat");
+  } catch (e) {
+    Logger.log("getPasfotoFolder root error: " + e.message);
+    throw new Error("Gagal mengakses folder Pasfoto_Sertifikat di Google Drive: " + e.message);
+  }
+}
 
 /**
  * JALANKAN FUNGSI INI 1x DI EDITOR APPS SCRIPT UNTUK MENYETUJUI IZIN GOOGLE DRIVE
@@ -26,8 +56,7 @@ const CONFIG = {
 function authorizeDriveAccess() {
   const folder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
   Logger.log("✅ Izin Google Drive BERHASIL! Folder Utama: " + folder.getName());
-  const sub = folder.getFoldersByName("Pasfoto_Sertifikat");
-  const target = sub.hasNext() ? sub.next() : folder.createFolder("Pasfoto_Sertifikat");
+  const target = getPasfotoFolder();
   Logger.log("✅ Sub-Folder Pasfoto_Sertifikat SIAP! ID: " + target.getId() + " URL: " + target.getUrl());
   return {
     success: true,
@@ -39,11 +68,20 @@ function authorizeDriveAccess() {
 }
 
 function testDriveUpload() {
-  const folder = DriveApp.getFolderById(CONFIG.PASFOTO_FOLDER_ID);
-  const blob = Utilities.newBlob("Test file content", "text/plain", "test_diagnostic.txt");
+  const folder = getPasfotoFolder();
+  const blob = Utilities.newBlob("Test file pasfoto pada " + new Date().toISOString(), "text/plain", "test_diagnostic.txt");
   const file = folder.createFile(blob);
-  Logger.log("✅ Berhasil upload test ke Drive: " + file.getId() + " - " + file.getUrl());
-  return file.getUrl();
+  try {
+    file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  } catch (e) {}
+  Logger.log("✅ Berhasil upload test ke Drive! ID: " + file.getId() + " - URL: " + file.getUrl());
+  return {
+    success: true,
+    fileId: file.getId(),
+    url: file.getUrl(),
+    folderName: folder.getName(),
+    folderId: folder.getId()
+  };
 }
 
 /**
@@ -1242,27 +1280,9 @@ function processSingleMutation_(ss, action, payload, actor) {
       const decodedBytes = Utilities.base64Decode(cleanBase64);
       const blob = Utilities.newBlob(decodedBytes, contentType, fileName);
 
-      let targetFolder = null;
-      let driveAccessDiag = "";
-      if (CONFIG.PASFOTO_FOLDER_ID) {
-        try {
-          targetFolder = DriveApp.getFolderById(CONFIG.PASFOTO_FOLDER_ID);
-        } catch (subErr) {
-          driveAccessDiag += " subErr: " + subErr.message;
-        }
-      }
-      if (!targetFolder && CONFIG.DRIVE_FOLDER_ID && CONFIG.DRIVE_FOLDER_ID !== "__SDW_CONFIG_PENDING__") {
-        try {
-          const parentFolder = DriveApp.getFolderById(CONFIG.DRIVE_FOLDER_ID);
-          const subFolders = parentFolder.getFoldersByName("Pasfoto_Sertifikat");
-          targetFolder = subFolders.hasNext() ? subFolders.next() : parentFolder.createFolder("Pasfoto_Sertifikat");
-        } catch (fErr) {
-          driveAccessDiag += " fErr: " + fErr.message;
-        }
-      }
-
+      const targetFolder = getPasfotoFolder();
       if (!targetFolder) {
-        throw new Error("Folder Google Drive Pasfoto_Sertifikat tidak dapat diakses." + driveAccessDiag);
+        throw new Error("Folder Google Drive Pasfoto_Sertifikat tidak dapat diakses.");
       }
 
       const file = targetFolder.createFile(blob);
