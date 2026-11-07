@@ -609,16 +609,16 @@
         const tglPenerbitan = item.tanggalPenerbitan || tglPelaksanaan;
 
         const nameFontSize = item.ukuranFontNama || 'auto';
-        let printFontSize = '24px';
+        let printFontSize = '36px';
         if (nameFontSize !== 'auto') {
             const val = parseFloat(nameFontSize);
-            if (!isNaN(val)) printFontSize = Math.round(val * 5.8) + 'px';
+            if (!isNaN(val)) printFontSize = Math.round(val * 9.5) + 'px';
         } else {
             const len = nama.length;
-            if (len > 30) printFontSize = '19px';
-            else if (len > 22) printFontSize = '22px';
-            else if (len > 15) printFontSize = '25px';
-            else printFontSize = '28px';
+            if (len > 30) printFontSize = '28px';
+            else if (len > 23) printFontSize = '34px';
+            else if (len > 16) printFontSize = '38px';
+            else printFontSize = '44px';
         }
 
         const printWindow = window.open('', '_blank');
@@ -631,19 +631,23 @@
             <!DOCTYPE html>
             <html>
             <head>
+                <meta charset="UTF-8">
                 <title>Cetak Piagam Badal Umroh - ${nama}</title>
+                <link rel="preconnect" href="https://fonts.googleapis.com">
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+                <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
                 <style>
                     @page { size: A4 landscape; margin: 0; }
-                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
                     
-                    .cert-no { position: absolute; top: 30.5%; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 14.5px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
-                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 21px; font-weight: 800; color: #0f172a; white-space: nowrap; }
-                    .cert-nama { position: absolute; top: 49.6%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
-                    .cert-miqat { position: absolute; top: 57.5%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
-                    .cert-pelaksanaan { position: absolute; top: 60.8%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
-                    .cert-titimangsa { position: absolute; top: 74.2%; left: 50%; transform: translateX(-50%); font-size: 13.5px; font-weight: 600; color: #334155; white-space: nowrap; }
+                    .cert-no { position: absolute; top: 30.5%; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 15px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
+                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; white-space: nowrap; }
+                    .cert-nama { position: absolute; top: 49.6%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; }
+                    .cert-miqat { position: absolute; top: 57.5%; left: 46.5%; font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
+                    .cert-pelaksanaan { position: absolute; top: 60.8%; left: 46.5%; font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
+                    .cert-titimangsa { position: absolute; top: 74.2%; left: 50%; transform: translateX(-50%); font-size: 14px; font-weight: 600; color: #334155; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
                 </style>
             </head>
             <body>
@@ -726,17 +730,17 @@
         ctx.fillText(petugas, Math.round(cw * 0.5), Math.round(ch * 0.425));
 
         // 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk :)
-        let fontSizePx = 48;
+        let fontSizePx = 68;
         const nameFontSize = item.ukuranFontNama || 'auto';
         if (nameFontSize !== 'auto') {
             const val = parseFloat(nameFontSize);
-            if (!isNaN(val)) fontSizePx = Math.round(val * 12);
+            if (!isNaN(val)) fontSizePx = Math.round(val * 18);
         } else {
             const len = nama.length;
-            if (len > 30) fontSizePx = 38;
-            else if (len > 22) fontSizePx = 44;
-            else if (len > 15) fontSizePx = 50;
-            else fontSizePx = 56;
+            if (len > 30) fontSizePx = 54;
+            else if (len > 23) fontSizePx = 66;
+            else if (len > 16) fontSizePx = 76;
+            else fontSizePx = 86;
         }
 
         ctx.font = `900 ${fontSizePx}px "Playfair Display", Georgia, serif`;

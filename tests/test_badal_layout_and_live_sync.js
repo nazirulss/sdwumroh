@@ -55,8 +55,12 @@ console.log('✔ Verifikasi app.html layout sertifikat sukses');
 // 3. Verifikasi js/admin/admin-badal.js
 const adminBadalJs = fs.readFileSync(path.join(__dirname, '../js/admin/admin-badal.js'), 'utf8');
 assert.ok(
-    adminBadalJs.includes('.cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 21px;'),
-    '[PASS] admin-badal.js mencetak petugas badal dengan font-size 21px'
+    adminBadalJs.includes('.cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 20px;'),
+    '[PASS] admin-badal.js mencetak petugas badal dengan font-size 20px dan width 90%'
+);
+assert.ok(
+    adminBadalJs.includes('family=Playfair+Display'),
+    '[PASS] admin-badal.js memuat Google Font Playfair Display pada window cetak A4'
 );
 assert.ok(
     adminBadalJs.includes('.cert-nama { position: absolute; top: 49.6%'),
