@@ -5,7 +5,7 @@
 const https = require('https');
 const http = require('http');
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec';
 
 function fetchUrl(url, options = {}) {
   return new Promise((resolve, reject) => {
@@ -127,8 +127,8 @@ async function runLiveVerification() {
 
   // TEST 5: Check Specific Registration
   try {
-    process.stdout.write('\n5. Menguji Query Detail Pendaftaran (REG-SDW-2701)... ');
-    const res = await fetchUrl(`${WEB_APP_URL}?action=checkRegistration&regId=REG-SDW-2701`);
+    process.stdout.write('\n5. Menguji Query Detail Pendaftaran (REG-SDW-2601)... ');
+    const res = await fetchUrl(`${WEB_APP_URL}?action=checkRegistration&regId=REG-SDW-2601`);
     if (res.json && res.json.success && res.json.data) {
       console.log('✅ SUKSES!');
       console.log('   - No Registrasi   :', res.json.data.id);

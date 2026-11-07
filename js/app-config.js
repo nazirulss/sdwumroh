@@ -60,8 +60,8 @@
 
         // D. Infrastructure Pointers (Google Apps Script / Vercel API)
         infrastructure: Object.freeze({
-            apiBaseUrl: "https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec",
-            appsScriptWebAppUrl: "https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec",
+            apiBaseUrl: "https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec",
+            appsScriptWebAppUrl: "https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec",
             spreadsheetId: "1UTZ2uJ76rxAljWlfOLx3MpCzV2e4JLUG5IJ7o8SZn3Q",
             driveRootFolderId: "1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J",
             drivePilgrimDocumentsFolderId: "1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J"

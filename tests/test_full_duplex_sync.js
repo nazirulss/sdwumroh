@@ -10,7 +10,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjLYnPyTR8l7eB6zRdxpFwtMZ0wd2iBI97pBS7cVWIm0Cs3BJB9mTvJ4G4R_GFFDvU/exec';
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec';
 
 function fetchUrl(url, options = {}) {
   return new Promise((resolve, reject) => {
