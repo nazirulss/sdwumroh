@@ -65,6 +65,9 @@ assert(adminHtml.includes('id="modal-cert-preview-no"'), 'Nomor sertifikat pojok
 assert(adminHtml.includes('id="modalPhotoCropper"'), 'Modal Cropper Interaktif harus ada di admin.html');
 assert(adminHtml.includes('id="cropper-crop-box"'), 'Kotak seleksi crop box dengan corner handles harus ada');
 assert(adminHtml.includes('id="btn-reopen-cropper"'), 'Tombol buka kembali cropper harus ada');
+assert(adminHtml.includes('id="cert-font-size-slider"'), 'Slider kustomisasi ukuran font nama harus ada di admin.html');
+assert(adminHtml.includes('SDW_ADMIN.onNameFontSizeChange'), 'Event handler onNameFontSizeChange harus ada di admin.html');
+assert(adminHtml.includes('SDW_ADMIN.setNameFontSizePreset'), 'Event handler setNameFontSizePreset harus ada di admin.html');
 assert(adminHtml.includes('js/admin/admin-certificates.js'), 'admin-certificates.js harus dimuat di admin.html');
 console.log('  [PASS] Navigasi, tab view, live preview modal, dan script loader di admin.html terverifikasi!');
 
@@ -94,6 +97,9 @@ assert(adminCertsJs.includes('openPhotoCropper'), 'openPhotoCropper harus ada');
 assert(adminCertsJs.includes('applyPhotoCrop'), 'applyPhotoCrop harus ada');
 assert(adminCertsJs.includes('closePhotoCropperModal'), 'closePhotoCropperModal harus ada');
 assert(adminCertsJs.includes('reopenPhotoCropper'), 'reopenPhotoCropper harus ada');
+assert(adminCertsJs.includes('onNameFontSizeChange'), 'onNameFontSizeChange harus ada di admin-certificates.js');
+assert(adminCertsJs.includes('setNameFontSizePreset'), 'setNameFontSizePreset harus ada di admin-certificates.js');
+assert(adminCertsJs.includes('calculateNameFontSize'), 'calculateNameFontSize harus ada di admin-certificates.js');
 console.log('  [PASS] Fungsi-fungsi CRUD, live preview, dan Crop pasfoto interaktif admin terverifikasi!');
 
 // 7. Pengujian Fungsional Logika Sertifikat di Lingkungan Node

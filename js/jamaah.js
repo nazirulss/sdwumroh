@@ -584,7 +584,30 @@
 
         if (!certNameEl) return;
 
-        certNameEl.textContent = (p.name || 'AHMAD JAMAAH TELADAN').toUpperCase();
+        const nameText = (p.name || 'AHMAD JAMAAH TELADAN').toUpperCase();
+        certNameEl.textContent = nameText;
+
+        // Auto-fit or custom font size agar nama panjang tidak terpotong (truncate)
+        const customSize = p.nameFontSize || p.fontSize;
+        if (customSize && customSize !== 'auto') {
+            const val = parseFloat(customSize);
+            if (!isNaN(val)) {
+                certNameEl.style.fontSize = `clamp(${Math.round(val * 3.5)}px, ${val}cqi, ${Math.round(val * 7.5)}px)`;
+            }
+        } else {
+            const len = nameText.length;
+            if (len <= 14) {
+                certNameEl.style.fontSize = 'clamp(14px, 4.8cqi, 32px)';
+            } else if (len <= 20) {
+                certNameEl.style.fontSize = 'clamp(12px, 4.0cqi, 28px)';
+            } else if (len <= 26) {
+                certNameEl.style.fontSize = 'clamp(11px, 3.4cqi, 24px)';
+            } else {
+                certNameEl.style.fontSize = 'clamp(10px, 2.9cqi, 20px)';
+            }
+        }
+        certNameEl.classList.remove('truncate');
+        certNameEl.style.whiteSpace = 'nowrap';
 
         if (certDateEl) {
             const cleanD = p.departureDate.startsWith('Keberangkatan') ? p.departureDate : `Keberangkatan: ${p.departureDate}`;

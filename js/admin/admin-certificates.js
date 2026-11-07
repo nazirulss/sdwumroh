@@ -189,6 +189,79 @@
     }
 
     // 2. Buka Modal Edit & Preview E-Sertifikat
+    let activeNameFontSize = 'auto'; // 'auto' | number (e.g. 4.0)
+
+    function calculateNameFontSize(name, requestedSize) {
+        if (requestedSize && requestedSize !== 'auto') {
+            const val = parseFloat(requestedSize);
+            if (!isNaN(val)) {
+                const minPx = Math.round(val * 3.5);
+                const maxPx = Math.round(val * 7.5);
+                return {
+                    style: `clamp(${minPx}px, ${val}cqi, ${maxPx}px)`,
+                    cqi: val,
+                    label: `${val.toFixed(1)}cqi`
+                };
+            }
+        }
+        // Auto-fit calculation based on length of name
+        const len = (name || '').trim().length;
+        if (len <= 14) {
+            return { style: 'clamp(14px, 4.8cqi, 32px)', cqi: 4.8, label: 'Besar (4.8cqi - Auto)' };
+        } else if (len <= 20) {
+            return { style: 'clamp(12px, 4.0cqi, 28px)', cqi: 4.0, label: 'Sedang (4.0cqi - Auto)' };
+        } else if (len <= 26) {
+            return { style: 'clamp(11px, 3.4cqi, 24px)', cqi: 3.4, label: 'Kecil (3.4cqi - Auto)' };
+        } else {
+            return { style: 'clamp(10px, 2.9cqi, 20px)', cqi: 2.9, label: 'Sangat Kecil (2.9cqi - Auto)' };
+        }
+    }
+
+    function onNameFontSizeChange(val) {
+        activeNameFontSize = parseFloat(val);
+        updateFontSizeUI();
+        updateCertificatePreview();
+    }
+
+    function setNameFontSizePreset(preset) {
+        if (preset === 's') {
+            activeNameFontSize = 3.2;
+        } else if (preset === 'm') {
+            activeNameFontSize = 4.0;
+        } else if (preset === 'l') {
+            activeNameFontSize = 4.8;
+        } else {
+            activeNameFontSize = 'auto';
+        }
+        updateFontSizeUI();
+        updateCertificatePreview();
+    }
+
+    function updateFontSizeUI() {
+        const slider = document.getElementById('cert-font-size-slider');
+        const badge = document.getElementById('cert-font-size-badge');
+        const nameInput = document.getElementById('cert-input-name');
+        const nameVal = (nameInput && nameInput.value.trim()) || '';
+        const calc = calculateNameFontSize(nameVal, activeNameFontSize);
+
+        if (slider) slider.value = calc.cqi;
+        if (badge) badge.textContent = calc.label;
+
+        const btns = document.querySelectorAll('.cert-font-preset-btn');
+        btns.forEach(btn => {
+            const p = btn.getAttribute('data-preset');
+            const isActive = (p === 'auto' && activeNameFontSize === 'auto') ||
+                             (p === 's' && activeNameFontSize === 3.2) ||
+                             (p === 'm' && activeNameFontSize === 4.0) ||
+                             (p === 'l' && activeNameFontSize === 4.8);
+            if (isActive) {
+                btn.className = 'cert-font-preset-btn py-1 px-1.5 rounded-lg text-[10px] font-black border border-amber-500 bg-amber-400 text-slate-950 transition cursor-pointer text-center shadow-xs';
+            } else {
+                btn.className = 'cert-font-preset-btn py-1 px-1.5 rounded-lg text-[10px] font-bold border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 transition cursor-pointer text-center';
+            }
+        });
+    }
+
     function openCertificateModal(regId) {
         const regs = getRegistrationsList();
         const pilgrim = regs.find(r => r.id === regId);
@@ -216,6 +289,10 @@
 
         // Pulihkan pengaturan zoom tersimpan atau reset ke 100%
         activeCertCrop = { zoom: cert.cropZoom || (cert.cropSettings && cert.cropSettings.zoom) || 100 };
+
+        // Pulihkan ukuran font tersimpan
+        activeNameFontSize = cert.nameFontSize || 'auto';
+        updateFontSizeUI();
 
         syncCropSlidersUI();
         updateCertificatePreview();
@@ -277,7 +354,14 @@
         const dateVal = (dateInput && dateInput.value.trim()) ? dateInput.value.trim() : '15 Januari 2027';
         const noVal = (certNoInput && certNoInput.value.trim()) ? certNoInput.value.trim() : 'SDW/CERT/2027/2701';
 
-        if (previewName) previewName.textContent = nameVal;
+        if (previewName) {
+            previewName.textContent = nameVal;
+            const calc = calculateNameFontSize(nameVal, activeNameFontSize);
+            previewName.style.fontSize = calc.style;
+            previewName.classList.remove('truncate');
+            previewName.style.whiteSpace = 'nowrap';
+            updateFontSizeUI();
+        }
 
         // Nomor Sertifikat di Pojok Kiri Atas (Warna & Ukuran serasi dengan tanggal)
         if (previewNo) {
@@ -702,6 +786,7 @@
             issuedAt: new Date().toISOString(),
             certificateNo: certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`,
             displayName: displayName,
+            nameFontSize: activeNameFontSize,
             departureDate: departureDate || '15 Januari 2027',
             photoUrl: finalPhoto,
             rawPhotoUrl: sourcePhoto,
@@ -776,6 +861,19 @@
         const certNo = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
         const photoSrc = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '';
 
+        const nameFontSize = cert.nameFontSize || 'auto';
+        let printFontSize = '38px';
+        if (nameFontSize !== 'auto') {
+            const val = parseFloat(nameFontSize);
+            if (!isNaN(val)) printFontSize = Math.round(val * 8.5) + 'px';
+        } else {
+            const len = displayName.length;
+            if (len > 26) printFontSize = '26px';
+            else if (len > 20) printFontSize = '30px';
+            else if (len > 14) printFontSize = '34px';
+            else printFontSize = '38px';
+        }
+
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
             alert('Mohon izinkan popup browser untuk mencetak piagam sertifikat.');
@@ -794,7 +892,7 @@
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
                     .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: sans-serif; font-size: 14.5px; font-weight: 600; color: #64748b; letter-spacing: 0.2px; }
                     .cert-photo { position: absolute; top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; object-fit: cover; border-radius: 2px; }
-                    .cert-name { position: absolute; top: 53.4%; left: 49.5%; transform: translate(-50%, -100%); width: 80%; text-align: center; font-size: 38px; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; }
+                    .cert-name { position: absolute; top: 53.4%; left: 49.5%; transform: translate(-50%, -100%); width: 80%; text-align: center; font-size: ${printFontSize}; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
             </head>
@@ -889,6 +987,9 @@
     admin.uploadCertificatePhotoToCloud = uploadCertificatePhotoToCloud;
     admin.printCertificate = printCertificate;
     admin.generateBulkCertificates = generateBulkCertificates;
+    admin.onNameFontSizeChange = onNameFontSizeChange;
+    admin.setNameFontSizePreset = setNameFontSizePreset;
+    admin.calculateNameFontSize = calculateNameFontSize;
 
     return admin;
 });
