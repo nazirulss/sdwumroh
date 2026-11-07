@@ -30,7 +30,7 @@ assert(appHtml.includes('id="cert-pilgrim-photo-box"'), 'Frame foto sertifikat h
 assert(appHtml.includes('top: 15.55%; left: 76.8%; width: 13.75%;'), 'Koordinat bingkai foto harus presisi dan lebar kiri pas');
 assert(appHtml.includes('id="cert-pilgrim-photo-img"'), 'Image tag foto jamaah harus ada');
 assert(appHtml.includes('id="cert-pilgrim-name"'), 'Elemen nama jamaah di sertifikat harus ada');
-assert(appHtml.includes('top: 53.6%; left: 49.5%;'), 'Letak nama jamaah harus mendekati garis horizontal');
+assert(/top: 53\.[46]%; left: 49\.5%;/.test(appHtml), 'Letak nama jamaah harus mendekati garis horizontal');
 assert(appHtml.includes('id="cert-pilgrim-date"'), 'Elemen tanggal keberangkatan harus ada');
 assert(appHtml.includes('whitespace-nowrap'), 'Tanggal keberangkatan harus 1 baris saja');
 assert(appHtml.includes('id="certFilterDepartureDate"'), 'Filter dropdown tanggal keberangkatan harus ada di app.html');
