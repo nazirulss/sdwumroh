@@ -527,6 +527,114 @@
       document.body.appendChild(settingsModal);
     }
 
+    // D2. Notification Modal (Popup Pusat Pemberitahuan & Informasi)
+    if (!document.getElementById('notificationModal')) {
+      const notifModal = document.createElement('div');
+      notifModal.id = 'notificationModal';
+      notifModal.className =
+        'fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-3 sm:p-4 transition-opacity';
+      notifModal.innerHTML = `
+        <div class="bg-[#240833] rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-gold-500/30 transform transition-all text-purple-100 animate-in fade-in zoom-in-95 max-h-[88vh] overflow-y-auto">
+          <!-- Header -->
+          <div class="flex items-center justify-between pb-3.5 border-b border-gold-500/20 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center border border-amber-400/30 shrink-0">
+                <i class="fa-solid fa-bell text-base text-amber-300"></i>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-black text-base text-gold-400 leading-tight">Pemberitahuan</h3>
+                  <span class="text-[10px] bg-amber-400 text-slate-950 font-black px-2 py-0.5 rounded-full">3 Baru</span>
+                </div>
+                <p class="text-[11px] text-purple-200/90 font-medium">SDW UMROH &bull; Informasi Terkini Ibadah</p>
+              </div>
+            </div>
+            <button onclick="window.closeNotificationModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-purple-200 hover:text-white flex items-center justify-center cursor-pointer transition">
+              <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Notification Items List -->
+          <div class="space-y-3">
+            <!-- 1. Manasik Akbar -->
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-amber-400/25 space-y-1.5 transition hover:bg-black/55">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-black uppercase tracking-wider">
+                  <i class="fa-solid fa-book-quran mr-1"></i> Manasik Akbar
+                </span>
+                <span class="text-[10.5px] font-bold text-amber-200/90">Ahad, 20 Des 2026</span>
+              </div>
+              <h4 class="font-extrabold text-sm text-white leading-snug">Undangan Simulasi Manasik &amp; Pemantapan Rukun</h4>
+              <p class="text-xs text-purple-100 leading-relaxed">
+                Seluruh calon jamaah kloter keberangkatan diundang hadir di Hotel Bintang Wisata Mandiri. Harap membawa buku panduan doa dan perlengkapan ihram.
+              </p>
+            </div>
+
+            <!-- 2. E-Sertifikat Resmi -->
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-gold-500/25 space-y-1.5 transition hover:bg-black/55">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-full bg-gold-400/20 text-gold-300 border border-gold-400/30 text-[10px] font-black uppercase tracking-wider">
+                  <i class="fa-solid fa-award mr-1"></i> E-Sertifikat Resmi
+                </span>
+                <span class="text-[10.5px] font-bold text-emerald-300">Telah Terbit</span>
+              </div>
+              <h4 class="font-extrabold text-sm text-white leading-snug">Piagam Umroh &amp; Badal Mabrur Kloter 27 Oktober 2026</h4>
+              <p class="text-xs text-purple-100 leading-relaxed">
+                Alhamdulillah, piagam resmi bagi 44 jamaah dan bukti pelaksanaan badal umroh telah terbit dan dapat diakses langsung.
+              </p>
+              <button type="button" onclick="window.closeNotificationModal(); window.openAppSubView('sertifikat');" class="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition active:scale-95 shadow-xs cursor-pointer">
+                <i class="fa-solid fa-award"></i>
+                <span>Buka E-Sertifikat</span>
+              </button>
+            </div>
+
+            <!-- 3. Jadwal Penerbangan & Dokumen -->
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-emerald-400/25 space-y-1.5 transition hover:bg-black/55">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10px] font-black uppercase tracking-wider">
+                  <i class="fa-solid fa-plane-departure mr-1"></i> Penerbangan
+                </span>
+                <span class="text-[10.5px] font-bold text-emerald-300">Terkonfirmasi</span>
+              </div>
+              <h4 class="font-extrabold text-sm text-white leading-snug">Tiket Penerbangan Direct Saudia Airlines SV-818</h4>
+              <p class="text-xs text-purple-100 leading-relaxed">
+                Penerbangan langsung Jakarta (CGK) menuju Madinah (MED). Paspor fisik dan visa umroh elektronik telah siap diserahkan saat keberangkatan.
+              </p>
+            </div>
+
+            <!-- 4. Pusat Ibadah & Kompas Kiblat -->
+            <div class="p-3.5 bg-black/40 rounded-2xl border border-purple-400/25 space-y-1.5 transition hover:bg-black/55">
+              <div class="flex items-center justify-between">
+                <span class="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-200 border border-purple-400/30 text-[10px] font-black uppercase tracking-wider">
+                  <i class="fa-solid fa-kaaba mr-1"></i> Panduan Ibadah
+                </span>
+                <span class="text-[10.5px] font-bold text-purple-200">Full SPA</span>
+              </div>
+              <h4 class="font-extrabold text-sm text-white leading-snug">Jadwal Sholat 5 Waktu Haramain &amp; Arah Kiblat Digital</h4>
+              <p class="text-xs text-purple-100 leading-relaxed">
+                Pantau waktu adzan Makkah &amp; Madinah serta gunakan sensor kompas digital langsung di dalam Menu Ibadah.
+              </p>
+              <button type="button" onclick="window.closeNotificationModal(); window.openAppSubView('ibadah');" class="mt-1 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-700/60 hover:bg-purple-700 text-white font-bold text-xs transition active:scale-95 border border-purple-400/30 cursor-pointer">
+                <i class="fa-solid fa-hands-praying"></i>
+                <span>Buka Menu Ibadah</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Footer Button -->
+          <div class="pt-4 mt-4 border-t border-gold-500/20 flex items-center justify-between gap-2">
+            <button type="button" onclick="window.showToast('Semua notifikasi telah ditandai dibaca.'); window.closeNotificationModal();" class="text-xs font-bold text-purple-200 hover:text-white transition cursor-pointer">
+              Tandai Sudah Dibaca
+            </button>
+            <button type="button" onclick="window.closeNotificationModal()" class="py-2 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition cursor-pointer">
+              Tutup
+            </button>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(notifModal);
+    }
+
     // E. Modal Jadwal Sholat Lengkap 5 Waktu (Makkah & WIB)
     if (!document.getElementById('jadwalSholatModal')) {
       const jModal = document.createElement('div');
@@ -1278,24 +1386,40 @@
     if (sel) sel.value = role;
   };
 
+  window.openNotificationModal = function () {
+    const modal = document.getElementById('notificationModal');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    hidePwaPrompt();
+  };
+
+  window.closeNotificationModal = function () {
+    const modal = document.getElementById('notificationModal');
+    if (modal) modal.classList.add('hidden');
+  };
+
   window.showNotificationToast = function (msg) {
     let toast = document.getElementById('sdw-notif-toast');
     if (!toast) {
       toast = document.createElement('div');
       toast.id = 'sdw-notif-toast';
       toast.className =
-        'fixed top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 bg-[#240833]/95 text-purple-100 p-4 rounded-2xl shadow-2xl border border-gold-500/40 backdrop-blur-md transition-all duration-300 transform -translate-y-8 opacity-0 pointer-events-none flex items-start gap-3';
+        'fixed top-20 left-4 right-4 sm:left-auto sm:right-6 sm:w-96 z-50 bg-[#240833] text-white p-4 rounded-2xl shadow-2xl border border-gold-500/50 backdrop-blur-md transition-all duration-300 transform -translate-y-8 opacity-0 pointer-events-none flex items-start gap-3';
       document.body.appendChild(toast);
     }
     toast.innerHTML = `
-      <div class="w-8 h-8 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-400/30 text-sm">
+      <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0 border border-amber-400/40 text-sm shadow-xs">
         <i class="fa-solid fa-bell"></i>
       </div>
       <div class="flex-1 min-w-0">
-        <h5 class="text-xs font-extrabold text-amber-300">Pemberitahuan Manasik</h5>
-        <p class="text-xs text-slate-200 mt-0.5 leading-snug">${msg}</p>
+        <div class="flex items-center justify-between">
+          <h5 class="text-xs font-black text-amber-300 uppercase tracking-wider">Pemberitahuan Manasik</h5>
+          <span class="text-[9.5px] font-bold text-purple-200">Baru</span>
+        </div>
+        <p class="text-xs font-semibold text-white mt-1 leading-snug">${msg}</p>
+        <span class="text-[10px] font-medium text-purple-200/90 block mt-1">SDW UMROH &bull; Notifikasi Resmi</span>
       </div>
-      <button onclick="document.getElementById('sdw-notif-toast').classList.add('-translate-y-8', 'opacity-0')" class="text-slate-400 hover:text-white text-xs p-1 cursor-pointer">
+      <button onclick="document.getElementById('sdw-notif-toast').classList.add('-translate-y-8', 'opacity-0')" class="text-purple-300 hover:text-white text-xs p-1 cursor-pointer transition">
         <i class="fa-solid fa-xmark"></i>
       </button>
     `;
@@ -2806,7 +2930,9 @@
     'doaOfflineModal',
     'jadwalSholatModal',
     'wartaDetailModal',
-    'ibadahHubModal'
+    'ibadahHubModal',
+    'settingsModal',
+    'notificationModal'
   ];
 
   const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'ibadah', 'live', 'auth'];

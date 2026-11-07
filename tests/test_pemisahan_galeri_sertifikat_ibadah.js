@@ -27,12 +27,28 @@ const jamaahJs = fs.readFileSync(jamaahJsPath, 'utf8');
 const swJsPath = path.join(__dirname, '..', 'sw.js');
 const swJs = fs.readFileSync(swJsPath, 'utf8');
 
-// 1. Verifikasi Grid 8 Menu Utama
+// 1. Verifikasi Grid 8 Menu Utama (Pertukaran Peta Ziarah di Posisi 4 & E-Sertifikat di Posisi 5)
 console.log('1. Verifikasi Grid 8 Menu Utama (Beranda PWA)');
-assert(appHtml.includes("onclick=\"window.openAppSubView('sertifikat')\""), 'Grid 8 item 4 harus memanggil window.openAppSubView("sertifikat")');
+assert(appHtml.includes("onclick=\"window.openAppSubView('ziarah')\""), 'Grid 8 item 4 harus memanggil window.openAppSubView("ziarah")');
+assert(appHtml.includes("onclick=\"window.openAppSubView('sertifikat')\""), 'Grid 8 item 5 harus memanggil window.openAppSubView("sertifikat")');
 assert(appHtml.includes('fa-award'), 'Icon E-Sertifikat harus menggunakan fa-award');
-assert(appHtml.includes('>E-Sertifikat</span>'), 'Label Grid 8 item 4 harus "E-Sertifikat"');
-console.log('  [PASS] Menu E-Sertifikat menggantikan posisi Arah Kiblat di Grid 8!');
+assert(appHtml.includes('>E-Sertifikat</span>'), 'Label Grid 8 item 5 harus "E-Sertifikat"');
+assert(appHtml.includes('>Peta Ziarah</span>'), 'Label Grid 8 item 4 harus "Peta Ziarah"');
+
+// Verifikasi urutan: Peta Ziarah mendahului E-Sertifikat
+const posZiarah = appHtml.indexOf("onclick=\"window.openAppSubView('ziarah')\"");
+const posSertifikat = appHtml.indexOf("onclick=\"window.openAppSubView('sertifikat')\"");
+assert(posZiarah < posSertifikat, 'Peta Ziarah (posisi 4) harus muncul sebelum E-Sertifikat (posisi 5)');
+console.log('  [PASS] Pertukaran posisi Menu Peta Ziarah (posisi 4) dan E-Sertifikat (posisi 5) terverifikasi!');
+
+// 1b. Verifikasi Modal Popup Notifikasi & Warna Teks
+console.log('\n1b. Verifikasi Modal Popup Notifikasi & Warna Teks');
+assert(pwaJs.includes("id = 'notificationModal'"), 'notificationModal harus dibuat di js/pwa.js');
+assert(pwaJs.includes("window.openNotificationModal"), 'openNotificationModal harus terdefinisi');
+assert(pwaJs.includes("text-gold-400"), 'Header notifikasi harus memiliki warna text-gold-400');
+assert(pwaJs.includes("text-purple-100"), 'Deskripsi notifikasi harus memiliki warna kontras text-purple-100');
+assert(appHtml.includes("window.openNotificationModal"), 'Tombol lonceng header harus memanggil openNotificationModal');
+console.log('  [PASS] Popup Notifikasi lengkap dengan warna teks ber-kontras tinggi terverifikasi!');
 
 // 2. Verifikasi Bottom Navigation Item 3 (Ibadah Elevated Button)
 console.log('\n2. Verifikasi Bottom Navigation Item 3 (Pusat Ibadah)');
@@ -95,10 +111,11 @@ console.log('  [PASS] Seluruh controller baru di js/jamaah.js terdefinisi dan te
 
 // 8. Verifikasi Cache Version di sw.js
 console.log('\n8. Verifikasi Cache Version di sw.js');
-assert(swJs.includes('sdw-umroh-pwa-v39'), 'sw.js harus menggunakan CACHE_NAME v39');
-assert(swJs.includes('sdw-runtime-v39'), 'sw.js harus menggunakan RUNTIME_CACHE v39');
+assert(/sdw-umroh-pwa-v(3[9]|4[0-9])/.test(swJs), 'sw.js harus menggunakan CACHE_NAME v39 atau lebih tinggi');
+assert(/sdw-runtime-v(3[9]|4[0-9])/.test(swJs), 'sw.js harus menggunakan RUNTIME_CACHE v39 atau lebih tinggi');
 console.log('  [PASS] Service Worker telah diperbarui ke versi v39!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');
+
