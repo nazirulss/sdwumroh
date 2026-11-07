@@ -38,6 +38,14 @@ function authorizeDriveAccess() {
   };
 }
 
+function testDriveUpload() {
+  const folder = DriveApp.getFolderById(CONFIG.PASFOTO_FOLDER_ID);
+  const blob = Utilities.newBlob("Test file content", "text/plain", "test_diagnostic.txt");
+  const file = folder.createFile(blob);
+  Logger.log("✅ Berhasil upload test ke Drive: " + file.getId() + " - " + file.getUrl());
+  return file.getUrl();
+}
+
 /**
  * SEED DATA: 44 Jamaah Real Kloter 27 Oktober 2026 yang telah memenuhi 4 syarat validasi e-sertifikat
  */
@@ -1268,6 +1276,7 @@ function processSingleMutation_(ss, action, payload, actor) {
       viewLink = file.getUrl();
     } catch (driveErr) {
       driveErrorMsg = String(driveErr && driveErr.message ? driveErr.message : driveErr);
+      Logger.log("DRIVE_UPLOAD_FAILED: " + driveErrorMsg);
       fileId = "DRV-LOCAL-" + Date.now();
       driveUrl = base64Data;
       viewLink = base64Data;
@@ -1322,6 +1331,7 @@ function processSingleMutation_(ss, action, payload, actor) {
       driveUrl: driveUrl,
       viewLink: viewLink,
       regId: regId,
+      driveError: driveErrorMsg || null,
       status: "PHOTO_UPLOADED",
       entity: "DB_Pilgrim_Documents"
     };

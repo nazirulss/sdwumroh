@@ -728,19 +728,26 @@
                 certificateNo: certNo,
                 fileName: `PASFOTO_${regId}.jpg`
             });
-            if (res && res.success && res.data && res.data.driveUrl) {
-                const certStore = getCertificatesStore();
-                if (certStore[regId]) {
-                    certStore[regId].photoUrl = res.data.driveUrl;
-                    certStore[regId].driveFileId = res.data.fileId;
-                    certStore[regId].driveViewLink = res.data.viewLink;
-                    certStore[regId].isDriveSynced = true;
-                    certStore[regId].driveSyncedAt = new Date().toISOString();
-                    saveCertificatesStore(certStore);
-                    renderCertificates();
-                }
-                if (typeof admin.showToast === 'function') {
-                    admin.showToast(`🎉 Pasfoto ${displayName} berhasil tersimpan di Google Drive & Spreadsheet!`);
+            if (res && res.success && res.data) {
+                if (res.data.driveError) {
+                    console.warn('[SDW_CERT] Google Drive scope pending:', res.data.driveError);
+                    if (typeof admin.showToast === 'function') {
+                        admin.showToast(`⚠️ Foto tersimpan di spreadsheet, namun izin Google Drive perlu diperbarui via Deploy > Kelola Deployment.`);
+                    }
+                } else if (res.data.driveUrl) {
+                    const certStore = getCertificatesStore();
+                    if (certStore[regId]) {
+                        certStore[regId].photoUrl = res.data.driveUrl;
+                        certStore[regId].driveFileId = res.data.fileId;
+                        certStore[regId].driveViewLink = res.data.viewLink;
+                        certStore[regId].isDriveSynced = true;
+                        certStore[regId].driveSyncedAt = new Date().toISOString();
+                        saveCertificatesStore(certStore);
+                        renderCertificates();
+                    }
+                    if (typeof admin.showToast === 'function') {
+                        admin.showToast(`🎉 Pasfoto ${displayName} berhasil tersimpan di Google Drive & Spreadsheet!`);
+                    }
                 }
             }
         } catch (err) {
