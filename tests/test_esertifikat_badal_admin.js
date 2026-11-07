@@ -33,8 +33,16 @@ assert.ok(
     'admin.html must have modal id="modalBadalCertificateEditor"'
 );
 assert.ok(
-    adminHtml.includes('id="badal-preview-name"'),
-    'admin.html must have live preview element id="badal-preview-name"'
+    adminHtml.includes('id="badal-preview-nama"'),
+    'admin.html must have live preview element id="badal-preview-nama"'
+);
+assert.ok(
+    adminHtml.includes('id="badal-preview-petugas"'),
+    'admin.html must have live preview element id="badal-preview-petugas"'
+);
+assert.ok(
+    adminHtml.includes('id="badal-preview-miqat"'),
+    'admin.html must have live preview element id="badal-preview-miqat"'
 );
 assert.ok(
     adminHtml.includes('id="badal-font-size-slider"'),
@@ -69,14 +77,35 @@ console.log('✔ admin-nav.js tab switcher passed');
 // 4. Verify sw.js cache bump
 const swJs = fs.readFileSync(path.join(__dirname, '../sw.js'), 'utf8');
 assert.ok(
-    swJs.includes('sdw-umroh-pwa-v48'),
-    'sw.js must be bumped to v48'
+    swJs.includes('sdw-umroh-pwa-v49'),
+    'sw.js must be bumped to v49'
 );
 assert.ok(
     swJs.includes("'/js/admin/admin-badal.js'"),
     'sw.js must precache /js/admin/admin-badal.js'
 );
+assert.ok(
+    swJs.includes("'/assets/certificate-badal-template.jpg'"),
+    'sw.js must precache /assets/certificate-badal-template.jpg'
+);
 console.log('✔ sw.js cache version & precache list passed');
+
+// 4b. Verify backend/Setup.gs & backend/Code.gs new schema columns
+const setupGs = fs.readFileSync(path.join(__dirname, '../backend/Setup.gs'), 'utf8');
+const codeGs = fs.readFileSync(path.join(__dirname, '../backend/Code.gs'), 'utf8');
+const expectedColumns = [
+    'nama_petugas_badal',
+    'nama_yang_dibadalkan',
+    'tempat_miqat',
+    'tanggal_pelaksanaan',
+    'tempat_penerbitan',
+    'tanggal_penerbitan'
+];
+expectedColumns.forEach(col => {
+    assert.ok(setupGs.includes(col), `backend/Setup.gs must contain canonical column: ${col}`);
+    assert.ok(codeGs.includes(col), `backend/Code.gs must contain canonical column: ${col}`);
+});
+console.log('✔ backend Setup.gs and Code.gs canonical schema columns passed');
 
 // 5. Test admin-badal.js logic in Node environment (with mock DOM)
 global.window = {

@@ -2,7 +2,7 @@
  * ====================================================================
  * SDW UMROH — ADMIN MODULE: E-SERTIFIKAT BADAL UMROH
  * File: js/admin/admin-badal.js
- * Version: 1.0.0
+ * Version: 2.0.0
  * Philosophy: ONE JOURNEY, ONE PLATFORM
  * ====================================================================
  */
@@ -21,74 +21,118 @@
 
     const STORAGE_KEY = 'sdw_admin_badal_certificates';
 
-    // Data Awal Mock Piagam Badal Umroh (Tersinkronisasi dengan Jamaah PWA)
+    // Data Awal Mock Piagam Badal Umroh Sesuai Skema Kolom Baru
     const DEFAULT_BADAL_CERTIFICATES = [
         {
             id: 'BDL-001',
-            almarhumName: 'Alm. H. Abdullah bin Umar',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Besar Bpk. Sanali Bajuri',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2026/001',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah',
+            nomorSertifikat: 'SDW/BDL/2026/001',
+            namaPetugasBadal: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+            namaYangDibadalkan: 'Alm. H. Abdullah bin Umar',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Keluarga Besar Bpk. Sanali Bajuri',
             status: 'ISSUED',
-            nameFontSize: 'auto'
+            ukuranFontNama: 'auto',
+            catatan: "Pelaksanaan badal umroh selesai secara khusyuk dan syar'i"
         },
         {
             id: 'BDL-002',
-            almarhumName: 'Almh. Hj. Maryam binti Sulaiman',
-            beneficiaryTitle: 'Almarhumah',
-            dibadalkanOleh: 'Ibu Siti Nuriyah & Keluarga',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2026/002',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah',
+            nomorSertifikat: 'SDW/BDL/2026/002',
+            namaPetugasBadal: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+            namaYangDibadalkan: 'Almh. Hj. Maryam binti Sulaiman',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Ibu Siti Nuriyah & Keluarga',
             status: 'ISSUED',
-            nameFontSize: 'auto'
+            ukuranFontNama: 'auto',
+            catatan: 'Amanah badal telah ditunaikan dengan lancar'
         },
         {
             id: 'BDL-003',
-            almarhumName: 'Alm. K.H. Dahlan bin Syafei',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Bpk. Khasan Munadi',
-            muthawwif: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
-            muthawwifRole: 'Muthawwif Senior Makkah',
-            certNo: 'SDW/BDL/2026/003',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah',
+            nomorSertifikat: 'SDW/BDL/2026/003',
+            namaPetugasBadal: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
+            namaYangDibadalkan: 'Alm. K.H. Dahlan bin Syafei',
+            tempatMiqat: "Ji'ranah",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Keluarga Bpk. Khasan Munadi',
             status: 'ISSUED',
-            nameFontSize: 'auto'
+            ukuranFontNama: 'auto',
+            catatan: "Dokumentasi tawaf & sa'i tersimpan"
         },
         {
             id: 'BDL-004',
-            almarhumName: 'Almh. Nyai Hj. Fatimah binti Asy\'ari',
-            beneficiaryTitle: 'Almarhumah',
-            dibadalkanOleh: 'Keluarga Besar Bpk. Sugiono',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2027/004',
-            executionDate: '15 Januari 2027',
-            location: 'Makkah Al-Mukarramah',
+            nomorSertifikat: 'SDW/BDL/2027/004',
+            namaPetugasBadal: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+            namaYangDibadalkan: 'Almh. Nyai Hj. Fatimah binti Asy\'ari',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '15 Januari 2027',
+            tempatPenerbitan: 'Makkah',
+            tanggalPenerbitan: '15 Januari 2027',
+            keluargaPemesan: 'Keluarga Besar Bpk. Sugiono',
             status: 'ISSUED',
-            nameFontSize: 'auto'
+            ukuranFontNama: 'auto',
+            catatan: 'Pelaksanaan badal gelombang Januari'
         },
         {
             id: 'BDL-005',
-            almarhumName: 'Alm. H. Mansur bin Hasyim',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Ibu Sri Nuryati',
-            muthawwif: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
-            muthawwifRole: 'Muthawwif Senior Makkah',
-            certNo: 'SDW/BDL/2027/005',
-            executionDate: '28 Februari 2027',
-            location: 'Makkah Al-Mukarramah',
+            nomorSertifikat: 'SDW/BDL/2027/005',
+            namaPetugasBadal: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
+            namaYangDibadalkan: 'Alm. H. Mansur bin Hasyim',
+            tempatMiqat: 'Bir Ali / Dzulhulaifah',
+            tanggalPelaksanaan: '28 Februari 2027',
+            tempatPenerbitan: 'Makkah',
+            tanggalPenerbitan: '28 Februari 2027',
+            keluargaPemesan: 'Keluarga Ibu Sri Nuryati',
             status: 'DRAFT',
-            nameFontSize: 'auto'
+            ukuranFontNama: 'auto',
+            catatan: 'Menunggu konfirmasi jadwal muthawwif'
         }
     ];
+
+    // Helper: Normalisasi Record agar kompatibel dengan varian nama kolom
+    function normalizeBadalRecord(item) {
+        if (!item) return {};
+        const certNo = item.nomorSertifikat || item.nomor_sertifikat || item.certNo || item.cert_no || '';
+        const petugas = item.namaPetugasBadal || item.nama_petugas_badal || item.muthawwif || '';
+        const nama = item.namaYangDibadalkan || item.nama_yang_dibadalkan || item.almarhumName || item.almarhum_name || '';
+        const miqat = item.tempatMiqat || item.tempat_miqat || "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = item.tanggalPelaksanaan || item.tanggal_pelaksanaan || item.executionDate || item.execution_date || '27 Oktober 2026';
+        const tempatPenerbitan = item.tempatPenerbitan || item.tempat_penerbitan || item.location || 'Makkah';
+        const tglPenerbitan = item.tanggalPenerbitan || item.tanggal_penerbitan || tglPelaksanaan;
+        const keluarga = item.keluargaPemesan || item.keluarga_pemesan || item.dibadalkanOleh || item.dibadalkan_oleh || '';
+        const fontSize = item.ukuranFontNama || item.ukuran_font_nama || item.nameFontSize || item.name_font_size || 'auto';
+        const catatan = item.catatan || item.notes || '';
+
+        return {
+            id: item.id || '',
+            nomorSertifikat: certNo,
+            certNo: certNo,
+            namaPetugasBadal: petugas,
+            muthawwif: petugas,
+            namaYangDibadalkan: nama,
+            almarhumName: nama,
+            tempatMiqat: miqat,
+            tanggalPelaksanaan: tglPelaksanaan,
+            executionDate: tglPelaksanaan,
+            tempatPenerbitan: tempatPenerbitan,
+            tanggalPenerbitan: tglPenerbitan,
+            keluargaPemesan: keluarga,
+            dibadalkanOleh: keluarga,
+            status: item.status || 'ISSUED',
+            ukuranFontNama: fontSize,
+            nameFontSize: fontSize,
+            catatan: catatan,
+            notes: catatan,
+            createdAt: item.createdAt || item.created_at || new Date().toISOString(),
+            updatedAt: item.updatedAt || item.updated_at || new Date().toISOString()
+        };
+    }
 
     // Helper: Ambil Store Sertifikat Badal dari LocalStorage
     function getBadalStore() {
@@ -97,7 +141,7 @@
             if (raw) {
                 const parsed = JSON.parse(raw);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    return parsed;
+                    return parsed.map(normalizeBadalRecord);
                 }
             }
         } catch (e) {
@@ -105,13 +149,14 @@
         }
         // Inisialisasi awal dengan data default
         saveBadalStore(DEFAULT_BADAL_CERTIFICATES);
-        return JSON.parse(JSON.stringify(DEFAULT_BADAL_CERTIFICATES));
+        return DEFAULT_BADAL_CERTIFICATES.map(normalizeBadalRecord);
     }
 
     // Helper: Simpan Store Sertifikat Badal ke LocalStorage
     function saveBadalStore(list) {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            const normalized = list.map(normalizeBadalRecord);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(normalized));
         } catch (e) {
             console.error('Gagal menyimpan store sertifikat badal:', e);
         }
@@ -156,7 +201,7 @@
 
         // Filter Periode
         if (periodFilter && periodFilter !== 'ALL') {
-            list = list.filter(item => (item.executionDate || '').includes(periodFilter));
+            list = list.filter(item => (item.tanggalPelaksanaan || '').includes(periodFilter));
         }
 
         // Filter Status
@@ -167,19 +212,20 @@
         // Filter Pencarian
         if (query) {
             list = list.filter(item => {
-                const name = (item.almarhumName || '').toLowerCase();
+                const name = (item.namaYangDibadalkan || '').toLowerCase();
                 const id = (item.id || '').toLowerCase();
-                const certNo = (item.certNo || '').toLowerCase();
-                const amanah = (item.dibadalkanOleh || '').toLowerCase();
-                const muthawwif = (item.muthawwif || '').toLowerCase();
-                return name.includes(query) || id.includes(query) || certNo.includes(query) || amanah.includes(query) || muthawwif.includes(query);
+                const certNo = (item.nomorSertifikat || '').toLowerCase();
+                const keluarga = (item.keluargaPemesan || '').toLowerCase();
+                const petugas = (item.namaPetugasBadal || '').toLowerCase();
+                const miqat = (item.tempatMiqat || '').toLowerCase();
+                return name.includes(query) || id.includes(query) || certNo.includes(query) || keluarga.includes(query) || petugas.includes(query) || miqat.includes(query);
             });
         }
 
         if (list.length === 0) {
             tbody.innerHTML = `
                 <tr>
-                    <td colspan="7" class="px-4 py-8 text-center text-slate-400 text-xs">
+                    <td colspan="8" class="px-4 py-8 text-center text-slate-400 text-xs">
                         <i class="fa-solid fa-kaaba text-3xl mb-2 text-slate-300 block"></i>
                         ${query ? 'Tidak ada data piagam badal yang cocok dengan pencarian.' : 'Belum ada data piagam badal umroh pada periode ini.'}
                     </td>
@@ -197,23 +243,29 @@
                             ${item.id}
                         </span>
                     </td>
+                    <td class="px-4 py-3 font-mono text-[11px] text-slate-600 font-bold whitespace-nowrap">
+                        ${item.nomorSertifikat}
+                    </td>
                     <td class="px-4 py-3">
-                        <div class="font-extrabold text-slate-900 flex items-center gap-1.5">
+                        <div class="font-black text-slate-900 flex items-center gap-1.5">
                             <i class="fa-solid fa-kaaba text-[11px] text-amber-500"></i>
-                            <span>${item.almarhumName}</span>
+                            <span>${item.namaYangDibadalkan}</span>
                         </div>
-                        <div class="text-[10px] text-slate-400 mt-0.5 font-medium">Gelar: ${item.beneficiaryTitle || 'Almarhum'}</div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">Pemesan: <span class="font-medium text-slate-600">${item.keluargaPemesan}</span></div>
+                    </td>
+                    <td class="px-4 py-3 font-semibold text-slate-800">
+                        ${item.namaPetugasBadal}
                     </td>
                     <td class="px-4 py-3">
-                        <div class="font-bold text-slate-800">${item.muthawwif}</div>
-                        <div class="text-[10px] text-slate-500 mt-0.5">Atas Amanah: <span class="font-semibold text-slate-700">${item.dibadalkanOleh}</span></div>
+                        <div class="font-semibold text-slate-800 flex items-center gap-1">
+                            <i class="fa-solid fa-location-dot text-amber-600 text-[10px]"></i>
+                            <span>${item.tempatMiqat}</span>
+                        </div>
+                        <div class="text-[10px] text-slate-400 mt-0.5">${item.tanggalPelaksanaan}</div>
                     </td>
-                    <td class="px-4 py-3">
-                        <div class="font-semibold text-slate-800">${item.executionDate}</div>
-                        <div class="text-[10px] text-slate-400">${item.location}</div>
-                    </td>
-                    <td class="px-4 py-3 font-mono text-[11px] text-slate-600 font-semibold">
-                        ${item.certNo}
+                    <td class="px-4 py-3 text-slate-600">
+                        <div class="font-medium">${item.tempatPenerbitan}</div>
+                        <div class="text-[10px] text-slate-400">${item.tanggalPenerbitan}</div>
                     </td>
                     <td class="px-4 py-3">
                         ${isIssued ? `
@@ -268,13 +320,13 @@
         }
         const len = (name || '').trim().length;
         if (len <= 16) {
-            return { style: 'clamp(14px, 4.6cqi, 32px)', cqi: 4.6, label: 'Besar (4.6cqi - Auto)' };
+            return { style: 'clamp(14px, 4.4cqi, 30px)', cqi: 4.4, label: 'Besar (4.4cqi - Auto)' };
         } else if (len <= 24) {
-            return { style: 'clamp(12px, 3.8cqi, 28px)', cqi: 3.8, label: 'Sedang (3.8cqi - Auto)' };
+            return { style: 'clamp(12px, 3.8cqi, 26px)', cqi: 3.8, label: 'Sedang (3.8cqi - Auto)' };
         } else if (len <= 32) {
-            return { style: 'clamp(11px, 3.2cqi, 24px)', cqi: 3.2, label: 'Kecil (3.2cqi - Auto)' };
+            return { style: 'clamp(11px, 3.2cqi, 22px)', cqi: 3.2, label: 'Kecil (3.2cqi - Auto)' };
         } else {
-            return { style: 'clamp(10px, 2.8cqi, 20px)', cqi: 2.8, label: 'Sangat Kecil (2.8cqi - Auto)' };
+            return { style: 'clamp(10px, 2.7cqi, 19px)', cqi: 2.7, label: 'Sangat Kecil (2.7cqi - Auto)' };
         }
     }
 
@@ -301,7 +353,7 @@
     function updateBadalFontSizeUI() {
         const slider = document.getElementById('badal-font-size-slider');
         const label = document.getElementById('badal-font-size-label');
-        const nameInput = document.getElementById('badal-input-almarhum');
+        const nameInput = document.getElementById('badal-input-nama-dibadalkan');
         const name = nameInput ? nameInput.value : '';
 
         const calc = calculateBadalFontSize(name, activeBadalNameFontSize);
@@ -333,38 +385,41 @@
         }
 
         const idInput = document.getElementById('badal-input-id');
-        const almarhumInput = document.getElementById('badal-input-almarhum');
-        const amanahInput = document.getElementById('badal-input-amanah');
-        const muthawwifInput = document.getElementById('badal-input-muthawwif');
-        const roleInput = document.getElementById('badal-input-muthawwif-role');
-        const dateInput = document.getElementById('badal-input-date');
-        const locationInput = document.getElementById('badal-input-location');
         const noInput = document.getElementById('badal-input-no');
+        const petugasInput = document.getElementById('badal-input-petugas');
+        const namaInput = document.getElementById('badal-input-nama-dibadalkan');
+        const miqatInput = document.getElementById('badal-input-miqat');
+        const tglPelaksanaanInput = document.getElementById('badal-input-tgl-pelaksanaan');
+        const tempatPenerbitanInput = document.getElementById('badal-input-tempat-penerbitan');
+        const tglPenerbitanInput = document.getElementById('badal-input-tgl-penerbitan');
+        const keluargaInput = document.getElementById('badal-input-keluarga');
         const statusSelect = document.getElementById('badal-input-status');
 
         if (item) {
             if (idInput) idInput.value = item.id;
-            if (almarhumInput) almarhumInput.value = item.almarhumName || '';
-            if (amanahInput) amanahInput.value = item.dibadalkanOleh || '';
-            if (muthawwifInput) muthawwifInput.value = item.muthawwif || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
-            if (roleInput) roleInput.value = item.muthawwifRole || 'Muthawwif Mukim Makkah';
-            if (dateInput) dateInput.value = item.executionDate || '27 Oktober 2026';
-            if (locationInput) locationInput.value = item.location || 'Makkah Al-Mukarramah';
-            if (noInput) noInput.value = item.certNo || `SDW/BDL/2026/${String(list.length + 1).padStart(3, '0')}`;
+            if (noInput) noInput.value = item.nomorSertifikat || `SDW/BDL/2026/${String(item.id).replace(/\D/g, '').padStart(3, '0')}`;
+            if (petugasInput) petugasInput.value = item.namaPetugasBadal || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+            if (namaInput) namaInput.value = item.namaYangDibadalkan || '';
+            if (miqatInput) miqatInput.value = item.tempatMiqat || "Masjid Aisyah Tan'im";
+            if (tglPelaksanaanInput) tglPelaksanaanInput.value = item.tanggalPelaksanaan || '27 Oktober 2026';
+            if (tempatPenerbitanInput) tempatPenerbitanInput.value = item.tempatPenerbitan || 'Makkah';
+            if (tglPenerbitanInput) tglPenerbitanInput.value = item.tanggalPenerbitan || item.tanggalPelaksanaan || '27 Oktober 2026';
+            if (keluargaInput) keluargaInput.value = item.keluargaPemesan || '';
             if (statusSelect) statusSelect.value = item.status || 'ISSUED';
-            activeBadalNameFontSize = item.nameFontSize || 'auto';
+            activeBadalNameFontSize = item.ukuranFontNama || 'auto';
         } else {
             // Entri Baru (New Entry)
             const nextIdx = list.length + 1;
             const newId = `BDL-${String(nextIdx).padStart(3, '0')}`;
             if (idInput) idInput.value = newId;
-            if (almarhumInput) almarhumInput.value = '';
-            if (amanahInput) amanahInput.value = '';
-            if (muthawwifInput) muthawwifInput.value = 'Ustadz Ahmad Fauzi Ridwan, Lc.';
-            if (roleInput) roleInput.value = 'Muthawwif Mukim Makkah';
-            if (dateInput) dateInput.value = '27 Oktober 2026';
-            if (locationInput) locationInput.value = 'Makkah Al-Mukarramah';
             if (noInput) noInput.value = `SDW/BDL/2026/${String(nextIdx).padStart(3, '0')}`;
+            if (petugasInput) petugasInput.value = 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+            if (namaInput) namaInput.value = '';
+            if (miqatInput) miqatInput.value = "Masjid Aisyah Tan'im";
+            if (tglPelaksanaanInput) tglPelaksanaanInput.value = '27 Oktober 2026';
+            if (tempatPenerbitanInput) tempatPenerbitanInput.value = 'Makkah';
+            if (tglPenerbitanInput) tglPenerbitanInput.value = '27 Oktober 2026';
+            if (keluargaInput) keluargaInput.value = '';
             if (statusSelect) statusSelect.value = 'ISSUED';
             activeBadalNameFontSize = 'auto';
         }
@@ -387,98 +442,115 @@
     }
 
     function updateBadalPreview() {
-        const almarhumInput = document.getElementById('badal-input-almarhum');
-        const amanahInput = document.getElementById('badal-input-amanah');
-        const muthawwifInput = document.getElementById('badal-input-muthawwif');
-        const roleInput = document.getElementById('badal-input-muthawwif-role');
-        const dateInput = document.getElementById('badal-input-date');
-        const locationInput = document.getElementById('badal-input-location');
         const noInput = document.getElementById('badal-input-no');
+        const petugasInput = document.getElementById('badal-input-petugas');
+        const namaInput = document.getElementById('badal-input-nama-dibadalkan');
+        const miqatInput = document.getElementById('badal-input-miqat');
+        const tglPelaksanaanInput = document.getElementById('badal-input-tgl-pelaksanaan');
+        const tempatPenerbitanInput = document.getElementById('badal-input-tempat-penerbitan');
+        const tglPenerbitanInput = document.getElementById('badal-input-tgl-penerbitan');
 
-        const prevName = document.getElementById('badal-preview-name');
-        const prevMuthawwif = document.getElementById('badal-preview-muthawwif');
-        const prevDate = document.getElementById('badal-preview-date');
-        const prevCertNo = document.getElementById('badal-preview-cert-no');
+        const prevNo = document.getElementById('badal-preview-cert-no');
+        const prevPetugas = document.getElementById('badal-preview-petugas');
+        const prevNama = document.getElementById('badal-preview-nama');
+        const prevMiqat = document.getElementById('badal-preview-miqat');
+        const prevPelaksanaan = document.getElementById('badal-preview-pelaksanaan');
+        const prevTitimangsa = document.getElementById('badal-preview-titimangsa');
 
-        const name = (almarhumInput && almarhumInput.value.trim()) ? almarhumInput.value.trim() : 'ALM. H. ABDULLAH BIN UMAR';
-        const amanah = (amanahInput && amanahInput.value.trim()) ? amanahInput.value.trim() : 'Keluarga Besar Bpk. Sanali Bajuri';
-        const muthawwif = (muthawwifInput && muthawwifInput.value.trim()) ? muthawwifInput.value.trim() : 'Ustadz Ahmad Fauzi Ridwan, Lc.';
-        const role = (roleInput && roleInput.value.trim()) ? roleInput.value.trim() : 'Muthawwif Mukim Makkah';
-        const date = (dateInput && dateInput.value.trim()) ? dateInput.value.trim() : '27 Oktober 2026';
-        const loc = (locationInput && locationInput.value.trim()) ? locationInput.value.trim() : 'Makkah Al-Mukarramah';
         const certNo = (noInput && noInput.value.trim()) ? noInput.value.trim() : 'SDW/BDL/2026/001';
+        const petugas = (petugasInput && petugasInput.value.trim()) ? petugasInput.value.trim() : 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+        const nama = (namaInput && namaInput.value.trim()) ? namaInput.value.trim() : 'ALM. H. ABDULLAH BIN UMAR';
+        const miqat = (miqatInput && miqatInput.value.trim()) ? miqatInput.value.trim() : "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = (tglPelaksanaanInput && tglPelaksanaanInput.value.trim()) ? tglPelaksanaanInput.value.trim() : '27 Oktober 2026';
+        const tempatPenerbitan = (tempatPenerbitanInput && tempatPenerbitanInput.value.trim()) ? tempatPenerbitanInput.value.trim() : 'Makkah';
+        const tglPenerbitan = (tglPenerbitanInput && tglPenerbitanInput.value.trim()) ? tglPenerbitanInput.value.trim() : tglPelaksanaan;
 
-        if (prevCertNo) {
-            prevCertNo.innerText = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
+        if (prevNo) {
+            prevNo.innerText = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
         }
 
-        if (prevName) {
-            prevName.innerText = name.toUpperCase();
-            const calc = calculateBadalFontSize(name, activeBadalNameFontSize);
-            prevName.style.fontSize = calc.style;
+        if (prevPetugas) {
+            prevPetugas.innerText = petugas;
         }
 
-        if (prevMuthawwif) {
-            prevMuthawwif.innerHTML = `Pelaksana: <strong>${muthawwif}</strong> (${role}) &bull; Atas Amanah: <strong>${amanah}</strong>`;
+        if (prevNama) {
+            prevNama.innerText = nama.toUpperCase();
+            const calc = calculateBadalFontSize(nama, activeBadalNameFontSize);
+            prevNama.style.fontSize = calc.style;
         }
 
-        if (prevDate) {
-            prevDate.innerText = `Tanggal Pelaksanaan: ${date} di ${loc}`;
+        if (prevMiqat) {
+            prevMiqat.innerText = miqat;
+        }
+
+        if (prevPelaksanaan) {
+            prevPelaksanaan.innerText = tglPelaksanaan;
+        }
+
+        if (prevTitimangsa) {
+            prevTitimangsa.innerText = `${tempatPenerbitan}, ${tglPenerbitan}`;
         }
     }
 
     function saveBadalCertificate() {
         const idInput = document.getElementById('badal-input-id');
-        const almarhumInput = document.getElementById('badal-input-almarhum');
-        const amanahInput = document.getElementById('badal-input-amanah');
-        const muthawwifInput = document.getElementById('badal-input-muthawwif');
-        const roleInput = document.getElementById('badal-input-muthawwif-role');
-        const dateInput = document.getElementById('badal-input-date');
-        const locationInput = document.getElementById('badal-input-location');
         const noInput = document.getElementById('badal-input-no');
+        const petugasInput = document.getElementById('badal-input-petugas');
+        const namaInput = document.getElementById('badal-input-nama-dibadalkan');
+        const miqatInput = document.getElementById('badal-input-miqat');
+        const tglPelaksanaanInput = document.getElementById('badal-input-tgl-pelaksanaan');
+        const tempatPenerbitanInput = document.getElementById('badal-input-tempat-penerbitan');
+        const tglPenerbitanInput = document.getElementById('badal-input-tgl-penerbitan');
+        const keluargaInput = document.getElementById('badal-input-keluarga');
         const statusSelect = document.getElementById('badal-input-status');
 
         const id = idInput ? idInput.value : '';
-        const almarhumName = almarhumInput ? almarhumInput.value.trim() : '';
-        const dibadalkanOleh = amanahInput ? amanahInput.value.trim() : '';
-        const muthawwif = muthawwifInput ? muthawwifInput.value.trim() : '';
-        const muthawwifRole = roleInput ? roleInput.value.trim() : 'Muthawwif Mukim Makkah';
-        const executionDate = dateInput ? dateInput.value.trim() : '27 Oktober 2026';
-        const location = locationInput ? locationInput.value.trim() : 'Makkah Al-Mukarramah';
-        const certNo = noInput ? noInput.value.trim() : `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
+        const nomorSertifikat = noInput ? noInput.value.trim() : `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
+        const namaPetugasBadal = petugasInput ? petugasInput.value.trim() : '';
+        const namaYangDibadalkan = namaInput ? namaInput.value.trim() : '';
+        const tempatMiqat = miqatInput ? miqatInput.value.trim() : "Masjid Aisyah Tan'im";
+        const tanggalPelaksanaan = tglPelaksanaanInput ? tglPelaksanaanInput.value.trim() : '27 Oktober 2026';
+        const tempatPenerbitan = tempatPenerbitanInput ? tempatPenerbitanInput.value.trim() : 'Makkah';
+        const tanggalPenerbitan = tglPenerbitanInput ? tglPenerbitanInput.value.trim() : tanggalPelaksanaan;
+        const keluargaPemesan = keluargaInput ? keluargaInput.value.trim() : '';
         const status = statusSelect ? statusSelect.value : 'ISSUED';
 
-        if (!almarhumName) {
-            alert('Silakan masukkan nama almarhum/almarhumah.');
-            if (almarhumInput) almarhumInput.focus();
+        if (!namaYangDibadalkan) {
+            alert('Silakan masukkan nama yang dibadalkan (almarhum/almarhumah).');
+            if (namaInput) namaInput.focus();
             return;
         }
 
-        if (!dibadalkanOleh) {
+        if (!namaPetugasBadal) {
+            alert('Silakan masukkan nama petugas badal (muthawwif).');
+            if (petugasInput) petugasInput.focus();
+            return;
+        }
+
+        if (!keluargaPemesan) {
             alert('Silakan masukkan nama keluarga pemesan amanah badal.');
-            if (amanahInput) amanahInput.focus();
+            if (keluargaInput) keluargaInput.focus();
             return;
         }
 
         const list = getBadalStore();
         const existingIdx = list.findIndex(b => b.id === id);
 
-        const beneficiaryTitle = almarhumName.toLowerCase().includes('almh') || almarhumName.toLowerCase().includes('hj.') ? 'Almarhumah' : 'Almarhum';
-
-        const record = {
+        const record = normalizeBadalRecord({
             id: id || `BDL-${String(list.length + 1).padStart(3, '0')}`,
-            almarhumName,
-            beneficiaryTitle,
-            dibadalkanOleh,
-            muthawwif,
-            muthawwifRole,
-            executionDate,
-            location,
-            certNo,
+            nomorSertifikat,
+            namaPetugasBadal,
+            namaYangDibadalkan,
+            tempatMiqat,
+            tanggalPelaksanaan,
+            tempatPenerbitan,
+            tanggalPenerbitan,
+            keluargaPemesan,
             status,
-            nameFontSize: activeBadalNameFontSize,
+            ukuranFontNama: activeBadalNameFontSize,
+            catatan: `Amanah badal selesai secara syar'i di ${tempatMiqat}`,
             updatedAt: new Date().toISOString()
-        };
+        });
 
         if (existingIdx >= 0) {
             list[existingIdx] = record;
@@ -497,7 +569,7 @@
         }
 
         if (typeof admin.showToast === 'function') {
-            admin.showToast(`Piagam Badal untuk "${almarhumName}" berhasil disimpan & diterbitkan.`);
+            admin.showToast(`Piagam Badal untuk "${namaYangDibadalkan}" berhasil disimpan & diterbitkan.`);
         }
     }
 
@@ -506,25 +578,25 @@
         const list = getBadalStore();
         const item = list.find(b => b.id === id) || list[0] || {};
 
-        const almarhumName = (item.almarhumName || 'Alm. H. Abdullah bin Umar').toUpperCase();
-        const executionDate = item.executionDate || '27 Oktober 2026';
-        const location = item.location || 'Makkah Al-Mukarramah';
-        const muthawwif = item.muthawwif || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
-        const role = item.muthawwifRole || 'Muthawwif Mukim Makkah';
-        const dibadalkanOleh = item.dibadalkanOleh || 'Keluarga';
-        const certNo = item.certNo || `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
-        const nameFontSize = item.nameFontSize || 'auto';
+        const certNo = item.nomorSertifikat || `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
+        const petugas = item.namaPetugasBadal || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+        const nama = (item.namaYangDibadalkan || 'Alm. H. Abdullah bin Umar').toUpperCase();
+        const miqat = item.tempatMiqat || "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = item.tanggalPelaksanaan || '27 Oktober 2026';
+        const tempatPenerbitan = item.tempatPenerbitan || 'Makkah';
+        const tglPenerbitan = item.tanggalPenerbitan || tglPelaksanaan;
 
-        let printFontSize = '38px';
+        const nameFontSize = item.ukuranFontNama || 'auto';
+        let printFontSize = '24px';
         if (nameFontSize !== 'auto') {
             const val = parseFloat(nameFontSize);
-            if (!isNaN(val)) printFontSize = Math.round(val * 8.5) + 'px';
+            if (!isNaN(val)) printFontSize = Math.round(val * 5.8) + 'px';
         } else {
-            const len = almarhumName.length;
-            if (len > 30) printFontSize = '26px';
-            else if (len > 22) printFontSize = '30px';
-            else if (len > 15) printFontSize = '34px';
-            else printFontSize = '38px';
+            const len = nama.length;
+            if (len > 30) printFontSize = '19px';
+            else if (len > 22) printFontSize = '22px';
+            else if (len > 15) printFontSize = '25px';
+            else printFontSize = '28px';
         }
 
         const printWindow = window.open('', '_blank');
@@ -537,37 +609,30 @@
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Cetak Piagam Badal Umroh - ${almarhumName}</title>
+                <title>Cetak Piagam Badal Umroh - ${nama}</title>
                 <style>
                     @page { size: A4 landscape; margin: 0; }
-                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: "Playfair Display", Georgia, serif; }
+                    body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; background: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
-                    .cert-badge-top { position: absolute; top: 5.5%; right: 7.0%; background: #b45309; color: #fff; font-family: sans-serif; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid #fbbf24; }
-                    .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: sans-serif; font-size: 14.5px; font-weight: 600; color: #64748b; letter-spacing: 0.2px; }
-                    .cert-kaaba-badge { position: absolute; top: 15.55%; left: 78.2%; width: 14.0%; height: 25.0%; background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 2.5px solid #fbbf24; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fbbf24; text-align: center; box-sizing: border-box; }
-                    .cert-header { position: absolute; top: 47.5%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 13.5px; font-weight: 600; color: #475569; font-family: sans-serif; }
-                    .cert-name { position: absolute; top: 53.4%; left: 49.5%; transform: translate(-50%, -100%); width: 80%; text-align: center; font-size: ${printFontSize}; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
-                    .cert-muthawwif { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 13.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-                    .cert-date { position: absolute; top: 58.0%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 12.5px; font-weight: 500; color: #64748b; font-family: sans-serif; white-space: nowrap; }
+                    
+                    .cert-no { position: absolute; top: 30.5%; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 14.5px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
+                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 17.5px; font-weight: 800; color: #0f172a; white-space: nowrap; }
+                    .cert-nama { position: absolute; top: 51.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+                    .cert-miqat { position: absolute; top: 57.5%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
+                    .cert-pelaksanaan { position: absolute; top: 61.8%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
+                    .cert-titimangsa { position: absolute; top: 74.2%; left: 50%; transform: translateX(-50%); font-size: 13.5px; font-weight: 600; color: #334155; white-space: nowrap; }
                 </style>
             </head>
             <body>
                 <div class="cert-box">
-                    <img src="${window.location.origin}/assets/certificate-template.jpg" class="cert-bg">
-                    <div class="cert-badge-top">Piagam Badal Umroh</div>
+                    <img src="${window.location.origin}/assets/certificate-badal-template.jpg" class="cert-bg">
                     <div class="cert-no">${certNo.startsWith('No') ? certNo : 'No: ' + certNo}</div>
-                    <div class="cert-kaaba-badge">
-                        <svg width="42" height="42" viewBox="0 0 24 24" fill="#fbbf24" style="margin-bottom: 4px;">
-                            <path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.2L18.8 8 12 11.8 5.2 8 12 4.2zM5 9.8l6 3.3v7.3l-6-3.3V9.8zm8 10.6v-7.3l6-3.3v7.3l-6 3.3z"/>
-                        </svg>
-                        <span style="font-family: sans-serif; font-size: 11px; font-weight: 900; letter-spacing: 1px; color: #fbbf24; text-transform: uppercase;">AMANAH</span>
-                        <span style="font-family: sans-serif; font-size: 9px; font-weight: 600; color: #e2e8f0; margin-top: 1px;">Badal Mabrur</span>
-                    </div>
-                    <div class="cert-header">Diberikan Sebagai Bukti Pelaksanaan Badal Umroh Kepada:</div>
-                    <div class="cert-name">${almarhumName}</div>
-                    <div class="cert-muthawwif">Pelaksana: <strong>${muthawwif}</strong> (${role}) &bull; Atas Amanah: <strong>${dibadalkanOleh}</strong></div>
-                    <div class="cert-date">Tanggal Pelaksanaan: ${executionDate} di ${location}</div>
+                    <div class="cert-petugas">${petugas}</div>
+                    <div class="cert-nama">${nama}</div>
+                    <div class="cert-miqat">${miqat}</div>
+                    <div class="cert-pelaksanaan">${tglPelaksanaan}</div>
+                    <div class="cert-titimangsa">${tempatPenerbitan}, ${tglPenerbitan}</div>
                 </div>
                 <script>
                     window.onload = function() {
@@ -592,27 +657,26 @@
         const list = getBadalStore();
         const item = list.find(b => b.id === id) || list[0] || {};
 
-        const almarhumName = (item.almarhumName || 'Alm. H. Abdullah bin Umar').toUpperCase();
-        const executionDate = item.executionDate || '27 Oktober 2026';
-        const location = item.location || 'Makkah Al-Mukarramah';
-        const muthawwif = item.muthawwif || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
-        const role = item.muthawwifRole || 'Muthawwif Mukim Makkah';
-        const dibadalkanOleh = item.dibadalkanOleh || 'Keluarga';
-        const certNo = item.certNo || `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
-        const nameFontSize = item.nameFontSize || 'auto';
+        const certNo = item.nomorSertifikat || `SDW/BDL/2026/${String(id).replace(/\D/g, '').padStart(3, '0')}`;
+        const petugas = item.namaPetugasBadal || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+        const nama = (item.namaYangDibadalkan || 'Alm. H. Abdullah bin Umar').toUpperCase();
+        const miqat = item.tempatMiqat || "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = item.tanggalPelaksanaan || '27 Oktober 2026';
+        const tempatPenerbitan = item.tempatPenerbitan || 'Makkah';
+        const tglPenerbitan = item.tanggalPenerbitan || tglPelaksanaan;
 
-        // Load Background Template
+        // Load Background Template Resmi
         const bgImg = new Image();
         bgImg.crossOrigin = 'anonymous';
         await new Promise((resolve) => {
             bgImg.onload = resolve;
             bgImg.onerror = () => resolve(null);
-            bgImg.src = 'assets/certificate-template.jpg';
+            bgImg.src = 'assets/certificate-badal-template.jpg';
         });
 
         const canvas = document.createElement('canvas');
         const cw = 2048;
-        const ch = 1364;
+        const ch = 1446; // 1024 x 723 scaled 2x
         canvas.width = cw;
         canvas.height = ch;
         const ctx = canvas.getContext('2d');
@@ -624,123 +688,63 @@
             ctx.fillRect(0, 0, cw, ch);
         }
 
-        // 1. Badge Top-Right: PIAGAM BADAL UMROH
-        const badgeX = Math.round(cw * 0.77);
-        const badgeY = Math.round(ch * 0.05);
-        const badgeW = 220;
-        const badgeH = 46;
-        ctx.fillStyle = '#b45309';
-        ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 8) : ctx.rect(badgeX, badgeY, badgeW, badgeH);
-        ctx.fill();
-        ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-
-        ctx.font = '800 18px sans-serif';
-        ctx.fillStyle = '#ffffff';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('PIAGAM BADAL UMROH', badgeX + badgeW / 2, badgeY + badgeH / 2);
-
-        // 2. Ka'bah Amanah Badge (Di posisi bingkai foto emas)
-        const px = Math.round(784 * 2); // 1568
-        const py = Math.round(106 * 2); // 212
-        const pw = Math.round(135 * 2); // 270
-        const ph = Math.round(170 * 2); // 340
-
-        // Background Gradient Badge
-        const grad = ctx.createLinearGradient(px, py, px + pw, py + ph);
-        grad.addColorStop(0, '#1e1b4b');
-        grad.addColorStop(1, '#0f172a');
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.roundRect ? ctx.roundRect(px, py, pw, ph, 8) : ctx.rect(px, py, pw, ph);
-        ctx.fill();
-
-        // Border Emas
-        ctx.strokeStyle = '#fbbf24';
-        ctx.lineWidth = 5;
-        ctx.stroke();
-
-        // Ka'bah Icon / Ilustrasi Geometris Elegan di dalam Badge
-        const kCenterX = px + pw / 2;
-        const kCenterY = py + 120;
-        const kw = 90;
-        const kh = 90;
-
-        ctx.fillStyle = '#09090b';
-        ctx.fillRect(kCenterX - kw / 2, kCenterY - kh / 2, kw, kh);
-
-        // Pita Kiswah Emas
-        ctx.fillStyle = '#fbbf24';
-        ctx.fillRect(kCenterX - kw / 2, kCenterY - kh / 2 + 18, kw, 12);
-
-        // Pintu Ka'bah Emas (Bab at-Taubah)
-        ctx.fillStyle = '#f59e0b';
-        ctx.fillRect(kCenterX + 6, kCenterY + 4, 18, 32);
-
-        // Teks "AMANAH"
-        ctx.font = '900 24px sans-serif';
-        ctx.fillStyle = '#fbbf24';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('AMANAH', px + pw / 2, py + 225);
-
-        // Teks "Badal Mabrur"
-        ctx.font = '600 18px sans-serif';
-        ctx.fillStyle = '#e2e8f0';
-        ctx.fillText('Badal Mabrur', px + pw / 2, py + 265);
-
-        // 3. Nomor Sertifikat (Top-Left)
-        ctx.font = '600 28px sans-serif';
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        const cleanNo = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
-        ctx.fillText(cleanNo, Math.round(cw * 0.068), Math.round(ch * 0.058));
-
-        // 4. Header: Diberikan Sebagai Bukti Pelaksanaan Badal Umroh Kepada:
-        ctx.font = '600 28px sans-serif';
+        // 1. Nomor Sertifikat (Di bawah teks BADAL UMROH)
+        ctx.font = '700 28px monospace';
         ctx.fillStyle = '#475569';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText('Diberikan Sebagai Bukti Pelaksanaan Badal Umroh Kepada:', Math.round(cw * 0.495), Math.round(ch * 0.475));
+        ctx.textBaseline = 'middle';
+        const cleanNo = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
+        ctx.fillText(cleanNo, Math.round(cw * 0.5), Math.round(ch * 0.305));
 
-        // 5. Nama Almarhum / Almarhumah
-        let fontSizePx = 68;
+        // 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini...)
+        ctx.font = '800 34px "Playfair Display", Georgia, serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(petugas, Math.round(cw * 0.5), Math.round(ch * 0.425));
+
+        // 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk :)
+        let fontSizePx = 48;
+        const nameFontSize = item.ukuranFontNama || 'auto';
         if (nameFontSize !== 'auto') {
             const val = parseFloat(nameFontSize);
-            if (!isNaN(val)) fontSizePx = Math.round(val * 17);
+            if (!isNaN(val)) fontSizePx = Math.round(val * 12);
         } else {
-            const len = almarhumName.length;
-            if (len > 30) fontSizePx = 46;
-            else if (len > 22) fontSizePx = 54;
-            else if (len > 15) fontSizePx = 62;
-            else fontSizePx = 70;
+            const len = nama.length;
+            if (len > 30) fontSizePx = 38;
+            else if (len > 22) fontSizePx = 44;
+            else if (len > 15) fontSizePx = 50;
+            else fontSizePx = 56;
         }
 
         ctx.font = `900 ${fontSizePx}px "Playfair Display", Georgia, serif`;
-        ctx.fillStyle = '#1e293b';
+        ctx.fillStyle = '#1e1b4b';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'bottom';
-        ctx.fillText(almarhumName, Math.round(cw * 0.495), Math.round(ch * 0.534));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.515));
 
-        // 6. Muthawwif & Amanah line
-        ctx.font = '600 26px sans-serif';
+        // 4. Tempat Miqat (Di samping Tempat Miqat :)
+        ctx.font = '700 30px sans-serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(miqat, Math.round(cw * 0.465), Math.round(ch * 0.582));
+
+        // 5. Pelaksanaan (Di samping Pelaksanaan :)
+        ctx.font = '700 30px sans-serif';
+        ctx.fillStyle = '#0f172a';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(tglPelaksanaan, Math.round(cw * 0.465), Math.round(ch * 0.625));
+
+        // 6. Tempat & Tanggal Penerbitan (Di atas kolom tanda tangan)
+        ctx.font = '600 27px sans-serif';
         ctx.fillStyle = '#334155';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillText(`Pelaksana: ${muthawwif} (${role}) • Atas Amanah: ${dibadalkanOleh}`, Math.round(cw * 0.495), Math.round(ch * 0.554));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${tempatPenerbitan}, ${tglPenerbitan}`, Math.round(cw * 0.5), Math.round(ch * 0.748));
 
-        // 7. Date & Location line
-        ctx.font = '500 24px sans-serif';
-        ctx.fillStyle = '#64748b';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillText(`Tanggal Pelaksanaan: ${executionDate} di ${location}`, Math.round(cw * 0.495), Math.round(ch * 0.582));
-
-        const safeName = almarhumName.replace(/[^a-zA-Z0-9]/g, '_');
+        const safeName = nama.replace(/[^a-zA-Z0-9]/g, '_');
         return {
             canvas,
             filename: `Piagam_Badal_Umroh_${safeName}_${id}.jpg`
@@ -814,7 +818,6 @@
             } catch (err) {
                 console.warn(`Gagal memproses piagam ${b.id}:`, err);
             }
-            // Delay 600ms antar file agar browser tidak memblokir multiple downloads
             await new Promise(r => setTimeout(r, 600));
         }
 
@@ -830,11 +833,9 @@
             return;
         }
 
-        let updatedCount = 0;
         list.forEach(b => {
             if (b.status !== 'ISSUED') {
                 b.status = 'ISSUED';
-                updatedCount++;
             }
         });
 
@@ -852,15 +853,17 @@
         const b = list.find(item => item.id === id) || list[0] || {};
 
         const origin = window.location.origin || 'https://sdwumroh-ui.vercel.app';
-        const shareUrl = `${origin}/app?view=sertifikat&tab=badal&date=${encodeURIComponent(b.executionDate)}`;
+        const shareUrl = `${origin}/app?view=sertifikat&tab=badal&date=${encodeURIComponent(b.tanggalPelaksanaan)}`;
 
         let text = `*PIAGAM RESMI BADAL UMROH PT SDW MANDIRI UTAMA*\n`;
-        text += `Almarhum/ah: *${b.almarhumName}*\n`;
-        text += `Nomor Sertifikat: *${b.certNo}*\n`;
-        text += `Pelaksana Amanah: *${b.muthawwif}* (${b.muthawwifRole})\n`;
-        text += `Tanggal Pelaksanaan: *${b.executionDate}* di ${b.location}\n`;
-        text += `Atas Amanah Dari: *${b.dibadalkanOleh}*\n\n`;
-        text += `Alhamdulillah, rangkaian rukun Badal Umroh telah ditunaikan secara khusyuk dan syar'i. Semoga amal ibadah ini diterima oleh Allah SWT dan pahalanya mengalir sempurna kepada almarhum/almarhumah. Aamiin ya Rabbal 'Alamin.\n\n`;
+        text += `Nama Yang Dibadalkan: *${b.namaYangDibadalkan}*\n`;
+        text += `Nomor Sertifikat: *${b.nomorSertifikat}*\n`;
+        text += `Petugas Badal (Muthawwif): *${b.namaPetugasBadal}*\n`;
+        text += `Tempat Miqat: *${b.tempatMiqat}*\n`;
+        text += `Pelaksanaan: *${b.tanggalPelaksanaan}*\n`;
+        text += `Tempat/Tanggal Penerbitan: *${b.tempatPenerbitan}, ${b.tanggalPenerbitan}*\n`;
+        text += `Atas Amanah Dari: *${b.keluargaPemesan}*\n\n`;
+        text += `Semoga Allah SWT mengabulkan umrohnya dan dijadikan umroh yang Mabrur, aamiin ya rabbal 'alamin.\n\n`;
         text += `Lihat Piagam Digital: ${shareUrl}`;
 
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
@@ -908,4 +911,3 @@
 
     return admin;
 });
-

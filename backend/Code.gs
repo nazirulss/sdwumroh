@@ -406,7 +406,7 @@ function setupDatabase() {
     DB_Announcements: ['id', 'target_role', 'departure_id', 'title', 'body_content', 'priority', 'published_at', 'created_by'],
     DB_Notifications: ['id', 'user_id', 'title', 'message', 'category', 'is_read', 'action_link', 'created_at'],
     DB_Audit_Logs: ['id', 'timestamp', 'actor', 'action', 'entity', 'entity_id', 'before', 'after', 'reason'],
-    DB_Badal_Certificates: ['id', 'almarhum_name', 'beneficiary_title', 'dibadalkan_oleh', 'muthawwif', 'muthawwif_role', 'cert_no', 'execution_date', 'location', 'status', 'name_font_size', 'notes', 'created_at', 'updated_at']
+    DB_Badal_Certificates: ['id', 'nomor_sertifikat', 'nama_petugas_badal', 'nama_yang_dibadalkan', 'tempat_miqat', 'tanggal_pelaksanaan', 'tempat_penerbitan', 'tanggal_penerbitan', 'keluarga_pemesan', 'status', 'ukuran_font_nama', 'catatan', 'created_at', 'updated_at']
   };
 
   const createdSheets = [];
@@ -553,11 +553,11 @@ function seedInitialData_(ss, nowStr) {
       ['AUD-BOOTSTRAP', nowStr, 'SYSTEM', 'INIT_DATABASE', 'DATABASE', 'SDW_UMROH_DB', null, '23_SHEETS_CREATED', 'Inisialisasi otomatis arsitektur 23 sheet Google Spreadsheet SDW UMROH.']
     ],
     DB_Badal_Certificates: [
-      ['BDL-001', 'Alm. H. Abdullah bin Umar', 'Almarhum', 'Keluarga Besar Bpk. Sanali Bajuri', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2026/001', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Amanah badal selesai secara syar\'i', nowStr, nowStr],
-      ['BDL-002', 'Almh. Hj. Maryam binti Sulaiman', 'Almarhumah', 'Ibu Siti Nuriyah & Keluarga', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2026/002', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Amanah badal telah ditunaikan', nowStr, nowStr],
-      ['BDL-003', 'Alm. K.H. Dahlan bin Syafei', 'Almarhum', 'Keluarga Bpk. Khasan Munadi', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Muthawwif Senior Makkah', 'SDW/BDL/2026/003', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Dokumentasi tawaf & sa\'i tersimpan', nowStr, nowStr],
-      ['BDL-004', 'Almh. Nyai Hj. Fatimah binti Asy\'ari', 'Almarhumah', 'Keluarga Besar Bpk. Sugiono', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2027/004', '15 Januari 2027', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Pelaksanaan badal gelombang Januari', nowStr, nowStr],
-      ['BDL-005', 'Alm. H. Mansur bin Hasyim', 'Almarhum', 'Keluarga Ibu Sri Nuryati', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Muthawwif Senior Makkah', 'SDW/BDL/2027/005', '28 Februari 2027', 'Makkah Al-Mukarramah', 'DRAFT', 'auto', 'Menunggu konfirmasi jadwal muthawwif', nowStr, nowStr]
+      ['BDL-001', 'SDW/BDL/2026/001', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Alm. H. Abdullah bin Umar', "Masjid Aisyah Tan'im", '27 Oktober 2026', 'Makkah Al-Mukarramah', '27 Oktober 2026', 'Keluarga Besar Bpk. Sanali Bajuri', 'ISSUED', 'auto', 'Pelaksanaan badal umroh selesai secara khusyuk dan syar\'i', nowStr, nowStr],
+      ['BDL-002', 'SDW/BDL/2026/002', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Almh. Hj. Maryam binti Sulaiman', "Masjid Aisyah Tan'im", '27 Oktober 2026', 'Makkah Al-Mukarramah', '27 Oktober 2026', 'Ibu Siti Nuriyah & Keluarga', 'ISSUED', 'auto', 'Amanah badal telah ditunaikan dengan lancar', nowStr, nowStr],
+      ['BDL-003', 'SDW/BDL/2026/003', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Alm. K.H. Dahlan bin Syafei', 'Ji\'ranah', '27 Oktober 2026', 'Makkah Al-Mukarramah', '27 Oktober 2026', 'Keluarga Bpk. Khasan Munadi', 'ISSUED', 'auto', 'Dokumentasi tawaf & sa\'i tersimpan', nowStr, nowStr],
+      ['BDL-004', 'SDW/BDL/2027/004', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Almh. Nyai Hj. Fatimah binti Asy\'ari', "Masjid Aisyah Tan'im", '15 Januari 2027', 'Makkah Al-Mukarramah', '15 Januari 2027', 'Keluarga Besar Bpk. Sugiono', 'ISSUED', 'auto', 'Pelaksanaan badal gelombang Januari', nowStr, nowStr],
+      ['BDL-005', 'SDW/BDL/2027/005', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Alm. H. Mansur bin Hasyim', 'Bir Ali / Dzulhulaifah', '28 Februari 2027', 'Makkah Al-Mukarramah', '28 Februari 2027', 'Keluarga Ibu Sri Nuryati', 'DRAFT', 'auto', 'Menunggu konfirmasi jadwal muthawwif', nowStr, nowStr]
     ]
   };
 
@@ -1036,19 +1036,37 @@ function doGet(e) {
           if (val instanceof Date) val = formatDateSafe_(val);
           obj[h] = val;
         });
+        const certNo = obj.nomor_sertifikat || obj.cert_no || '';
+        const petugas = obj.nama_petugas_badal || obj.muthawwif || '';
+        const dibadalkan = obj.nama_yang_dibadalkan || obj.almarhum_name || '';
+        const miqat = obj.tempat_miqat || "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = obj.tanggal_pelaksanaan || obj.execution_date || '';
+        const tempatPenerbitan = obj.tempat_penerbitan || obj.location || 'Makkah Al-Mukarramah';
+        const tglPenerbitan = obj.tanggal_penerbitan || obj.execution_date || '';
+        const keluarga = obj.keluarga_pemesan || obj.dibadalkan_oleh || '';
+        const fontSize = obj.ukuran_font_nama || obj.name_font_size || 'auto';
+        const catatan = obj.catatan || obj.notes || '';
+
         return {
           id: obj.id,
-          almarhumName: obj.almarhum_name,
-          beneficiaryTitle: obj.beneficiary_title,
-          dibadalkanOleh: obj.dibadalkan_oleh,
-          muthawwif: obj.muthawwif,
-          muthawwifRole: obj.muthawwif_role,
-          certNo: obj.cert_no,
-          executionDate: obj.execution_date,
-          location: obj.location,
-          status: obj.status,
-          nameFontSize: obj.name_font_size || 'auto',
-          notes: obj.notes,
+          nomorSertifikat: certNo,
+          certNo: certNo,
+          namaPetugasBadal: petugas,
+          muthawwif: petugas,
+          namaYangDibadalkan: dibadalkan,
+          almarhumName: dibadalkan,
+          tempatMiqat: miqat,
+          tanggalPelaksanaan: tglPelaksanaan,
+          executionDate: tglPelaksanaan,
+          tempatPenerbitan: tempatPenerbitan,
+          tanggalPenerbitan: tglPenerbitan,
+          keluargaPemesan: keluarga,
+          dibadalkanOleh: keluarga,
+          status: obj.status || 'ISSUED',
+          nameFontSize: fontSize,
+          ukuranFontNama: fontSize,
+          notes: catatan,
+          catatan: catatan,
           createdAt: obj.created_at,
           updatedAt: obj.updated_at
         };
@@ -1712,17 +1730,17 @@ function processSingleMutation_(ss, action, payload, actor) {
 
     const rowData = [
       id,
-      payload.almarhumName || payload.almarhum_name || '',
-      payload.beneficiaryTitle || payload.beneficiary_title || 'Almarhum',
-      payload.dibadalkanOleh || payload.dibadalkan_oleh || '',
-      payload.muthawwif || '',
-      payload.muthawwifRole || payload.muthawwif_role || 'Muthawwif Mukim Makkah',
-      payload.certNo || payload.cert_no || '',
-      payload.executionDate || payload.execution_date || '',
-      payload.location || 'Makkah Al-Mukarramah',
+      payload.nomorSertifikat || payload.nomor_sertifikat || payload.certNo || payload.cert_no || '',
+      payload.namaPetugasBadal || payload.nama_petugas_badal || payload.muthawwif || '',
+      payload.namaYangDibadalkan || payload.nama_yang_dibadalkan || payload.almarhumName || payload.almarhum_name || '',
+      payload.tempatMiqat || payload.tempat_miqat || "Masjid Aisyah Tan'im",
+      payload.tanggalPelaksanaan || payload.tanggal_pelaksanaan || payload.executionDate || payload.execution_date || '',
+      payload.tempatPenerbitan || payload.tempat_penerbitan || payload.location || 'Makkah Al-Mukarramah',
+      payload.tanggalPenerbitan || payload.tanggal_penerbitan || payload.tanggalPelaksanaan || payload.executionDate || '',
+      payload.keluargaPemesan || payload.keluarga_pemesan || payload.dibadalkanOleh || payload.dibadalkan_oleh || '',
       payload.status || 'ISSUED',
-      payload.nameFontSize || payload.name_font_size || 'auto',
-      payload.notes || '',
+      payload.ukuranFontNama || payload.ukuran_font_nama || payload.nameFontSize || payload.name_font_size || 'auto',
+      payload.catatan || payload.notes || '',
       rowIndex > 0 ? rows[rowIndex - 1][12] : nowStr,
       nowStr
     ];

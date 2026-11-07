@@ -1056,10 +1056,11 @@
                                 <thead>
                                     <tr class="bg-slate-50/80 border-b border-slate-200 text-[10.5px] font-extrabold text-slate-500 uppercase tracking-wider">
                                         <th class="px-4 py-3">No / ID</th>
-                                        <th class="px-4 py-3">Nama Almarhum / Almarhumah</th>
-                                        <th class="px-4 py-3">Pelaksana &amp; Amanah Dari</th>
-                                        <th class="px-4 py-3">Tanggal &amp; Lokasi</th>
-                                        <th class="px-4 py-3">No. Piagam</th>
+                                        <th class="px-4 py-3">No. Sertifikat</th>
+                                        <th class="px-4 py-3">Nama Yang Dibadalkan</th>
+                                        <th class="px-4 py-3">Petugas Badal</th>
+                                        <th class="px-4 py-3">Tempat Miqat &amp; Pelaksanaan</th>
+                                        <th class="px-4 py-3">Penerbitan</th>
                                         <th class="px-4 py-3">Status</th>
                                         <th class="px-4 py-3 text-right">Aksi</th>
                                     </tr>
@@ -2200,51 +2201,14 @@
             <!-- Modal Body (Split: Controls & Live Preview) -->
             <div class="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col lg:flex-row gap-6">
                 <!-- Left: Form Controls (5 cols) -->
-                <div class="w-full lg:w-5/12 space-y-3.5 text-xs text-slate-700">
+                <div class="w-full lg:w-5/12 space-y-3 text-xs text-slate-700">
                     <input type="hidden" id="badal-input-id" value="">
 
-                    <!-- Nama Almarhum / Almarhumah -->
-                    <div>
-                        <label class="block font-bold text-slate-800 mb-1">Nama Almarhum / Almarhumah <span class="text-rose-500">*</span></label>
-                        <input type="text" id="badal-input-almarhum" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Contoh: Alm. H. Abdullah bin Umar" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                        <span class="text-[10px] text-slate-400 mt-0.5 block">Sertakan sebutan (Alm. / Almh.) dan nama bin / binti almarhum</span>
-                    </div>
-
-                    <!-- Atas Amanah Dari (Keluarga) -->
-                    <div>
-                        <label class="block font-bold text-slate-800 mb-1">Atas Amanah Dari (Keluarga Pemesan) <span class="text-rose-500">*</span></label>
-                        <input type="text" id="badal-input-amanah" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Contoh: Keluarga Besar Bpk. Sanali Bajuri" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                    </div>
-
-                    <!-- Pelaksana (Muthawwif) & Peran -->
+                    <!-- 1. Nomor Sertifikat (Di bawah teks BADAL UMROH) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                         <div>
-                            <label class="block font-bold text-slate-800 mb-1">Muthawwif Pelaksana <span class="text-rose-500">*</span></label>
-                            <input type="text" id="badal-input-muthawwif" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Ustadz Ahmad Fauzi, Lc." class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-800 mb-1">Peran / Kredensial</label>
-                            <input type="text" id="badal-input-muthawwif-role" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Muthawwif Mukim Makkah" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                        </div>
-                    </div>
-
-                    <!-- Tanggal Pelaksanaan & Lokasi -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block font-bold text-slate-800 mb-1">Tanggal Pelaksanaan <span class="text-rose-500">*</span></label>
-                            <input type="text" id="badal-input-date" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="27 Oktober 2026" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                        </div>
-                        <div>
-                            <label class="block font-bold text-slate-800 mb-1">Lokasi Ibadah</label>
-                            <input type="text" id="badal-input-location" oninput="SDW_ADMIN.updateBadalPreview()" value="Makkah Al-Mukarramah" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
-                        </div>
-                    </div>
-
-                    <!-- Nomor Piagam & Status -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                        <div>
-                            <label class="block font-bold text-slate-800 mb-1">Nomor Piagam Badal</label>
-                            <input type="text" id="badal-input-no" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="SDW/BDL/2026/001" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[11px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                            <label class="block font-bold text-slate-800 mb-1">Nomor Sertifikat <span class="text-rose-500">*</span></label>
+                            <input type="text" id="badal-input-no" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="SDW/BDL/2026/001" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono text-[11px] font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
                         </div>
                         <div>
                             <label class="block font-bold text-slate-800 mb-1">Status Piagam</label>
@@ -2255,12 +2219,56 @@
                         </div>
                     </div>
 
-                    <!-- Pengaturan Ukuran Font Nama Almarhum -->
+                    <!-- 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini) -->
+                    <div>
+                        <label class="block font-bold text-slate-800 mb-1">Nama Petugas Badal (Muthawwif) <span class="text-rose-500">*</span></label>
+                        <input type="text" id="badal-input-petugas" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Contoh: Ustadz Ahmad Fauzi Ridwan, Lc." class="w-full px-3 py-2 rounded-xl border border-slate-200 font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Ditampilkan di bawah teks: <em>Yang bertanda tangan dibawah ini menerangkan bahwa :</em></span>
+                    </div>
+
+                    <!-- 3. Nama yang Dibadalkan (Di bawah teks BADAL UMROH untuk) -->
+                    <div>
+                        <label class="block font-bold text-slate-800 mb-1">Nama Yang Dibadalkan <span class="text-rose-500">*</span></label>
+                        <input type="text" id="badal-input-nama-dibadalkan" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Contoh: Alm. H. Abdullah bin Umar" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-black text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        <span class="text-[10px] text-slate-400 mt-0.5 block">Ditampilkan di bawah teks: <em>telah melaksanakan BADAL UMROH untuk :</em></span>
+                    </div>
+
+                    <!-- 4. Tempat Miqat & Pelaksanaan -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block font-bold text-slate-800 mb-1">Tempat Miqat <span class="text-rose-500">*</span></label>
+                            <input type="text" id="badal-input-miqat" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Masjid Aisyah Tan'im" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 mb-1">Pelaksanaan (Tgl/Bln/Thn) <span class="text-rose-500">*</span></label>
+                            <input type="text" id="badal-input-tgl-pelaksanaan" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="27 Oktober 2026" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        </div>
+                    </div>
+
+                    <!-- 5. Tempat & Tanggal Penerbitan (Di atas kolom tanda tangan) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="block font-bold text-slate-800 mb-1">Tempat Penerbitan</label>
+                            <input type="text" id="badal-input-tempat-penerbitan" oninput="SDW_ADMIN.updateBadalPreview()" value="Makkah" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-800 mb-1">Tanggal Penerbitan</label>
+                            <input type="text" id="badal-input-tgl-penerbitan" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="27 Oktober 2026" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                        </div>
+                    </div>
+
+                    <!-- 6. Keluarga Pemesan (Atas Amanah Dari) -->
+                    <div>
+                        <label class="block font-bold text-slate-800 mb-1">Atas Amanah Dari (Keluarga Pemesan) <span class="text-rose-500">*</span></label>
+                        <input type="text" id="badal-input-keluarga" oninput="SDW_ADMIN.updateBadalPreview()" placeholder="Contoh: Keluarga Besar Bpk. Sanali Bajuri" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500 bg-slate-50">
+                    </div>
+
+                    <!-- Pengaturan Ukuran Font Nama Yang Dibadalkan -->
                     <div class="p-3 bg-amber-50/60 rounded-2xl border border-amber-200/80 space-y-2">
                         <div class="flex items-center justify-between">
                             <span class="font-extrabold text-[11px] text-amber-950 flex items-center gap-1.5">
                                 <i class="fa-solid fa-text-height text-amber-600"></i>
-                                <span>Ukuran Font Nama Almarhum</span>
+                                <span>Ukuran Font Nama Yang Dibadalkan</span>
                             </span>
                             <span id="badal-font-size-label" class="text-[10px] font-black text-amber-800 bg-white px-2 py-0.5 rounded-md border border-amber-300">Auto</span>
                         </div>
@@ -2279,60 +2287,49 @@
                     <div class="flex items-center justify-between mb-2 px-1">
                         <span class="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
                             <i class="fa-solid fa-eye text-amber-500"></i>
-                            <span>Live Real-Time Preview (Gold Mockup):</span>
+                            <span>Live Real-Time Preview (Template Resmi):</span>
                         </span>
                         <span class="text-[10px] font-black text-amber-700 bg-amber-100 px-2 py-0.5 rounded-md border border-amber-300">Format A4 Landscape</span>
                     </div>
 
-                    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-slate-300 bg-white" style="aspect-ratio: 1.501; container-type: inline-size;">
-                        <!-- Certificate Background Template -->
-                        <img src="assets/certificate-template.jpg" alt="Template Piagam" class="w-full h-full object-cover pointer-events-none select-none">
+                    <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-slate-300 bg-white" style="aspect-ratio: 1024 / 723; container-type: inline-size;">
+                        <!-- Certificate Background Template Resmi -->
+                        <img src="assets/certificate-badal-template.jpg" alt="Template Piagam Badal" class="w-full h-full object-cover pointer-events-none select-none">
 
-                        <!-- Badge Top-Right: PIAGAM BADAL UMROH -->
-                        <div class="absolute" style="top: 5.5%; right: 7.0%;">
-                            <span class="px-2.5 py-1 rounded-md text-[9px] font-black bg-gradient-to-r from-amber-600 to-amber-700 text-white shadow-sm border border-amber-400/60 uppercase tracking-wider">
-                                Piagam Badal Umroh
-                            </span>
-                        </div>
-
-                        <!-- Certificate Number (Top Left) -->
-                        <div id="badal-preview-cert-no" class="absolute font-semibold text-slate-500 select-none pointer-events-none"
-                             style="top: 5.8%; left: 6.8%; font-size: clamp(8px, 1.35cqi, 13px); font-family: sans-serif;">
+                        <!-- 1. Nomor Sertifikat (Di bawah teks BADAL UMROH) -->
+                        <div id="badal-preview-cert-no" class="absolute font-mono font-bold select-none pointer-events-none text-center"
+                             style="top: 30.5%; left: 50%; transform: translateX(-50%); font-size: clamp(8px, 1.35cqi, 13.5px); color: #475569; letter-spacing: 0.5px; white-space: nowrap;">
                             No: SDW/BDL/2026/001
                         </div>
 
-                        <!-- Ka'bah Amanah Badge (Top Right Photo Frame) -->
-                        <div class="absolute flex flex-col items-center justify-center text-center select-none shadow-md"
-                             style="top: 15.55%; left: 78.2%; width: 14%; height: 25%; background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 2px solid #fbbf24; border-radius: 4px;">
-                            <i class="fa-solid fa-kaaba text-amber-400 mb-0.5" style="font-size: clamp(14px, 2.8cqi, 28px);"></i>
-                            <span class="font-black text-amber-300 uppercase tracking-widest" style="font-size: clamp(6px, 1.1cqi, 10px);">Amanah</span>
-                            <span class="text-white/80 font-medium" style="font-size: clamp(5px, 0.9cqi, 8.5px);">Badal Mabrur</span>
+                        <!-- 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini) -->
+                        <div id="badal-preview-petugas" class="absolute font-extrabold select-none pointer-events-none text-center"
+                             style="top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(9.5px, 1.65cqi, 17px); color: #0f172a; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Ustadz Ahmad Fauzi Ridwan, Lc.
                         </div>
 
-                        <!-- Center Title: Diberikan Sebagai Bukti Badal Kepada -->
-                        <div class="absolute text-center select-none pointer-events-none"
-                             style="top: 47.5%; left: 49.5%; transform: translateX(-50%); width: 85%;">
-                            <span class="text-slate-600 font-semibold" style="font-size: clamp(7.5px, 1.25cqi, 12px); font-family: sans-serif;">
-                                Diberikan Sebagai Bukti Pelaksanaan Badal Umroh Kepada:
-                            </span>
-                        </div>
-
-                        <!-- Dynamic Almarhum Name -->
-                        <div id="badal-preview-name" class="absolute font-black text-slate-800 text-center uppercase tracking-wide select-none pointer-events-none"
-                             style="top: 53.4%; left: 49.5%; transform: translate(-50%, -100%); width: 82%; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(12px, 4.0cqi, 28px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <!-- 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk) -->
+                        <div id="badal-preview-nama" class="absolute font-black select-none pointer-events-none text-center uppercase tracking-wide"
+                             style="top: 51.5%; left: 50%; transform: translateX(-50%); width: 85%; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(12px, 2.3cqi, 24px); color: #1e1b4b; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             ALM. H. ABDULLAH BIN UMAR
                         </div>
 
-                        <!-- Muthawwif & Amanah line -->
-                        <div id="badal-preview-muthawwif" class="absolute font-semibold text-slate-600 text-center select-none pointer-events-none"
-                             style="top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; font-size: clamp(7px, 1.25cqi, 12px); font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            Pelaksana: Ustadz Ahmad Fauzi Ridwan, Lc. • Atas Amanah: Keluarga Besar Bpk. Sanali Bajuri
+                        <!-- 4. Tempat Miqat (Di samping Tempat Miqat :) -->
+                        <div id="badal-preview-miqat" class="absolute font-bold select-none pointer-events-none"
+                             style="top: 57.5%; left: 46.5%; font-size: clamp(9px, 1.45cqi, 15px); color: #0f172a; white-space: nowrap;">
+                            Masjid Aisyah Tan'im
                         </div>
 
-                        <!-- Date & Location line -->
-                        <div id="badal-preview-date" class="absolute font-medium text-slate-500 text-center select-none pointer-events-none"
-                             style="top: 58.0%; left: 49.5%; transform: translateX(-50%); width: 85%; font-size: clamp(6.5px, 1.15cqi, 11px); font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            Tanggal Pelaksanaan: 27 Oktober 2026 di Makkah Al-Mukarramah
+                        <!-- 5. Pelaksanaan (Di samping Pelaksanaan :) -->
+                        <div id="badal-preview-pelaksanaan" class="absolute font-bold select-none pointer-events-none"
+                             style="top: 61.8%; left: 46.5%; font-size: clamp(9px, 1.45cqi, 15px); color: #0f172a; white-space: nowrap;">
+                            27 Oktober 2026
+                        </div>
+
+                        <!-- 6. Tempat, Tanggal Penerbitan (Di atas kolom tanda tangan) -->
+                        <div id="badal-preview-titimangsa" class="absolute font-semibold select-none pointer-events-none text-center"
+                             style="top: 74.2%; left: 50%; transform: translateX(-50%); font-size: clamp(8px, 1.3cqi, 13.5px); color: #334155; white-space: nowrap;">
+                            Makkah, 27 Oktober 2026
                         </div>
                     </div>
                 </div>

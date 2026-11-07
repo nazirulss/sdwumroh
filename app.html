@@ -1950,51 +1950,45 @@
                         </button>
                     </div>
 
-                    <!-- Bingkai Sertifikat Badal (Piagam Emas Badal Umroh) -->
-                    <div id="badalCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-purple-400/50 select-none bg-slate-900 mx-auto"
-                         style="aspect-ratio: 1.48 / 1; max-width: 720px; container-type: inline-size;">
-                        <img src="assets/certificate-template.jpg" alt="Template Sertifikat Badal SDW" class="w-full h-full object-cover pointer-events-none select-none block">
+                    <!-- Bingkai Sertifikat Badal (Piagam Resmi Badal Umroh) -->
+                    <div id="badalCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-purple-400/50 select-none bg-white mx-auto"
+                         style="aspect-ratio: 1024 / 723; max-width: 720px; container-type: inline-size;">
+                        <img src="assets/certificate-badal-template.jpg" alt="Template Sertifikat Badal SDW" class="w-full h-full object-cover pointer-events-none select-none block">
 
-                        <!-- Badge Badal di Pojok Atas -->
-                        <div class="absolute font-bold text-amber-800 bg-amber-100/90 px-2.5 py-0.5 rounded-full border border-amber-300 pointer-events-none select-none uppercase tracking-wider"
-                             style="top: 5.5%; right: 7%; font-size: clamp(6px, 1.6cqi, 9.5px); line-height: 1.2;">
-                            PIAGAM BADAL UMROH
-                        </div>
-
-                        <!-- No Sertifikat Badal -->
-                        <div id="badal-cert-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
-                             style="top: 5.8%; left: 6.8%; font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
+                        <!-- 1. Nomor Sertifikat (Di bawah teks BADAL UMROH) -->
+                        <div id="badal-cert-no" class="absolute font-mono font-bold select-none pointer-events-none text-center"
+                             style="top: 30.5%; left: 50%; transform: translateX(-50%); font-size: clamp(7.5px, 1.35cqi, 12.5px); color: #475569; letter-spacing: 0.5px; white-space: nowrap;">
                             No: SDW/BDL/2026/001
                         </div>
 
-                        <!-- Icon Ka'bah Emas Pengganti Foto untuk Badal -->
-                        <div class="absolute overflow-hidden shadow-inner flex flex-col items-center justify-center bg-gradient-to-b from-purple-900 to-slate-900 border border-amber-400 text-amber-400"
-                             style="top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; border-radius: 2px;">
-                            <i class="fa-solid fa-kaaba text-lg sm:text-2xl text-amber-300"></i>
-                            <span class="text-[7px] sm:text-[9px] font-bold text-amber-200 mt-1 uppercase tracking-tight">Amanah</span>
+                        <!-- 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini...) -->
+                        <div id="badal-executor-info" class="absolute font-extrabold select-none pointer-events-none text-center"
+                             style="top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(9px, 1.65cqi, 15px); color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            Ustadz Ahmad Fauzi Ridwan, Lc.
                         </div>
 
-                        <!-- Nama Almarhum / Almarhumah yang Dibadalkan -->
-                        <div class="absolute text-center px-4 w-[80%] pointer-events-none"
-                             style="top: 52%; left: 49.5%; transform: translate(-50%, -100%);">
-                            <span class="text-[8px] sm:text-[11px] font-semibold text-amber-800 uppercase tracking-widest block mb-0.5">Diberikan Sebagai Bukti Badal Kepada:</span>
-                            <h2 id="badal-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight"
-                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12); font-size: clamp(13px, 4.5cqi, 30px); line-height: 1.15;">
-                                Alm. H. Abdullah bin Umar
-                            </h2>
+                        <!-- 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk :) -->
+                        <div id="badal-pilgrim-name" class="absolute font-black select-none pointer-events-none text-center uppercase tracking-wide"
+                             style="top: 51.5%; left: 50%; transform: translateX(-50%); width: 85%; font-family: 'Playfair Display', Georgia, serif; font-size: clamp(11.5px, 2.3cqi, 22px); color: #1e1b4b; letter-spacing: 0.8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ALM. H. ABDULLAH BIN UMAR
                         </div>
 
-                        <!-- Keterangan Pelaksana Amanah Badal & Tanggal -->
-                        <div class="absolute text-center px-4 w-[85%] pointer-events-none space-y-0.5"
-                             style="top: 55%; left: 49.5%; transform: translateX(-50%);">
-                            <p id="badal-executor-info" class="font-medium text-slate-700 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
-                               style="font-size: clamp(6px, 1.7cqi, 10px); line-height: 1.2;">
-                                Pelaksana: <strong>Ustadz Ahmad Fauzi Ridwan, Lc.</strong> (Muthawwif Mukim Makkah)
-                            </p>
-                            <p id="badal-cert-date" class="font-semibold text-slate-500 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
-                               style="font-size: clamp(5.5px, 1.5cqi, 9px); line-height: 1.2;">
-                                Tanggal Pelaksanaan: 27 Oktober 2026 di Makkah Al-Mukarramah
-                            </p>
+                        <!-- 4. Tempat Miqat (Di samping Tempat Miqat :) -->
+                        <div id="badal-cert-miqat" class="absolute font-bold select-none pointer-events-none"
+                             style="top: 57.5%; left: 46.5%; font-size: clamp(8px, 1.45cqi, 13px); color: #0f172a; white-space: nowrap;">
+                            Masjid Aisyah Tan'im
+                        </div>
+
+                        <!-- 5. Pelaksanaan (Di samping Pelaksanaan :) -->
+                        <div id="badal-cert-date" class="absolute font-bold select-none pointer-events-none"
+                             style="top: 61.8%; left: 46.5%; font-size: clamp(8px, 1.45cqi, 13px); color: #0f172a; white-space: nowrap;">
+                            27 Oktober 2026
+                        </div>
+
+                        <!-- 6. Tempat, Tanggal Penerbitan (Di atas kolom tanda tangan) -->
+                        <div id="badal-cert-titimangsa" class="absolute font-semibold select-none pointer-events-none text-center"
+                             style="top: 74.2%; left: 50%; transform: translateX(-50%); font-size: clamp(7.5px, 1.3cqi, 12px); color: #334155; white-space: nowrap;">
+                            Makkah, 27 Oktober 2026
                         </div>
                     </div>
 

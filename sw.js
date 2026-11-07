@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v48';
-const RUNTIME_CACHE = 'sdw-runtime-v48';
+const CACHE_NAME = 'sdw-umroh-pwa-v49';
+const RUNTIME_CACHE = 'sdw-runtime-v49';
 
 const PRECACHE_URLS = [
   '/',
@@ -33,6 +33,7 @@ const PRECACHE_URLS = [
   '/assets/icon-192.png',
   '/assets/icon-512.png',
   '/assets/icon-maskable.png',
+  '/assets/certificate-badal-template.jpg',
   '/js/components.js',
   '/js/app-config.js',
   '/js/data-mock.js',

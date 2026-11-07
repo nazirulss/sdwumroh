@@ -51,7 +51,22 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Announcements": ["id", "target_role", "departure_id", "title", "body_content", "priority", "published_at", "created_by"],
   "DB_Notifications": ["id", "user_id", "title", "message", "category", "is_read", "action_link", "created_at"],
   "DB_Audit_Logs": ["id", "timestamp", "actor", "action", "entity", "entity_id", "before", "after", "reason"],
-  "DB_Badal_Certificates": ["id", "almarhum_name", "beneficiary_title", "dibadalkan_oleh", "muthawwif", "muthawwif_role", "cert_no", "execution_date", "location", "status", "name_font_size", "notes", "created_at", "updated_at"]
+  "DB_Badal_Certificates": [
+    "id",
+    "nomor_sertifikat",
+    "nama_petugas_badal",
+    "nama_yang_dibadalkan",
+    "tempat_miqat",
+    "tanggal_pelaksanaan",
+    "tempat_penerbitan",
+    "tanggal_penerbitan",
+    "keluarga_pemesan",
+    "status",
+    "ukuran_font_nama",
+    "catatan",
+    "created_at",
+    "updated_at"
+  ]
 };
 
 // ============================================================
@@ -163,23 +178,36 @@ function seedDocumentRequirements_(ss) {
 
 function seedBadalCertificates_(ss) {
   var sheet = ss.getSheetByName("DB_Badal_Certificates");
-  if (sheet && sheet.getLastRow() <= 1) {
-    var nowStr = new Date().toISOString();
-    var defaultBadal = [
-      ["BDL-001", "Alm. H. Abdullah bin Umar", "Almarhum", "Keluarga Besar Bpk. Sanali Bajuri", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Muthawwif Mukim Makkah", "SDW/BDL/2026/001", "27 Oktober 2026", "Makkah Al-Mukarramah", "ISSUED", "auto", "Pelaksanaan badal umroh selesai secara khusyuk dan syar'i", nowStr, nowStr],
-      ["BDL-002", "Almh. Hj. Maryam binti Sulaiman", "Almarhumah", "Ibu Siti Nuriyah & Keluarga", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Muthawwif Mukim Makkah", "SDW/BDL/2026/002", "27 Oktober 2026", "Makkah Al-Mukarramah", "ISSUED", "auto", "Amanah badal telah ditunaikan dengan lancar", nowStr, nowStr],
-      ["BDL-003", "Alm. K.H. Dahlan bin Syafei", "Almarhum", "Keluarga Bpk. Khasan Munadi", "Ustadz Muhammad Syakir, Lc., M.Ag.", "Muthawwif Senior Makkah", "SDW/BDL/2026/003", "27 Oktober 2026", "Makkah Al-Mukarramah", "ISSUED", "auto", "Dokumentasi tawaf & sa'i tersimpan", nowStr, nowStr],
-      ["BDL-004", "Almh. Nyai Hj. Fatimah binti Asy'ari", "Almarhumah", "Keluarga Besar Bpk. Sugiono", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Muthawwif Mukim Makkah", "SDW/BDL/2027/004", "15 Januari 2027", "Makkah Al-Mukarramah", "ISSUED", "auto", "Pelaksanaan badal gelombang Januari", nowStr, nowStr],
-      ["BDL-005", "Alm. H. Mansur bin Hasyim", "Almarhum", "Keluarga Ibu Sri Nuryati", "Ustadz Muhammad Syakir, Lc., M.Ag.", "Muthawwif Senior Makkah", "SDW/BDL/2027/005", "28 Februari 2027", "Makkah Al-Mukarramah", "DRAFT", "auto", "Menunggu konfirmasi jadwal muthawwif", nowStr, nowStr]
-    ];
-    sheet.getRange(2, 1, defaultBadal.length, defaultBadal[0].length).setValues(defaultBadal);
-    Logger.log("✓ Data Awal Piagam Badal Umroh berhasil diinjeksi (" + defaultBadal.length + " data).");
+  if (sheet) {
+    var headers = AUTHORITATIVE_SCHEMAS_["DB_Badal_Certificates"];
+    // Selalu pastikan header baris 1 ter-update sesuai skema resmi terbaru
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sheet.getRange(1, 1, 1, headers.length)
+         .setBackground("#0F3D2E")
+         .setFontColor("#FFFFFF")
+         .setFontWeight("bold")
+         .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+
+    if (sheet.getLastRow() <= 1) {
+      var nowStr = new Date().toISOString();
+      var defaultBadal = [
+        ["BDL-001", "SDW/BDL/2026/001", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Alm. H. Abdullah bin Umar", "Masjid Aisyah Tan'im", "27 Oktober 2026", "Makkah Al-Mukarramah", "27 Oktober 2026", "Keluarga Besar Bpk. Sanali Bajuri", "ISSUED", "auto", "Pelaksanaan badal umroh selesai secara khusyuk dan syar'i", nowStr, nowStr],
+        ["BDL-002", "SDW/BDL/2026/002", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Almh. Hj. Maryam binti Sulaiman", "Masjid Aisyah Tan'im", "27 Oktober 2026", "Makkah Al-Mukarramah", "27 Oktober 2026", "Ibu Siti Nuriyah & Keluarga", "ISSUED", "auto", "Amanah badal telah ditunaikan dengan lancar", nowStr, nowStr],
+        ["BDL-003", "SDW/BDL/2026/003", "Ustadz Muhammad Syakir, Lc., M.Ag.", "Alm. K.H. Dahlan bin Syafei", "Ji'ranah", "27 Oktober 2026", "Makkah Al-Mukarramah", "27 Oktober 2026", "Keluarga Bpk. Khasan Munadi", "ISSUED", "auto", "Dokumentasi tawaf & sa'i tersimpan", nowStr, nowStr],
+        ["BDL-004", "SDW/BDL/2027/004", "Ustadz Ahmad Fauzi Ridwan, Lc.", "Almh. Nyai Hj. Fatimah binti Asy'ari", "Masjid Aisyah Tan'im", "15 Januari 2027", "Makkah Al-Mukarramah", "15 Januari 2027", "Keluarga Besar Bpk. Sugiono", "ISSUED", "auto", "Pelaksanaan badal gelombang Januari", nowStr, nowStr],
+        ["BDL-005", "SDW/BDL/2027/005", "Ustadz Muhammad Syakir, Lc., M.Ag.", "Alm. H. Mansur bin Hasyim", "Bir Ali / Dzulhulaifah", "28 Februari 2027", "Makkah Al-Mukarramah", "28 Februari 2027", "Keluarga Ibu Sri Nuryati", "DRAFT", "auto", "Menunggu konfirmasi jadwal muthawwif", nowStr, nowStr]
+      ];
+      sheet.getRange(2, 1, defaultBadal.length, defaultBadal[0].length).setValues(defaultBadal);
+      Logger.log("✓ Data Awal Piagam Badal Umroh berhasil diinjeksi (" + defaultBadal.length + " data).");
+    }
+    sheet.autoResizeColumns(1, headers.length);
   }
 }
 
 /**
- * Helper Mandiri: Jalankan fungsi ini untuk membuat sheet 'DB_Badal_Certificates' secara langsung
- * tanpa perlu menginisialisasi ulang seluruh sheet lainnya.
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Badal_Certificates'
+ * secara langsung sesuai skema kolom terbaru.
  */
 function setupBadalCertificatesSheet() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -189,17 +217,10 @@ function setupBadalCertificatesSheet() {
 
   if (!sheet) {
     sheet = ss.insertSheet(sheetName);
-    sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
-    sheet.getRange(1, 1, 1, headers.length)
-         .setBackground("#0F3D2E")
-         .setFontColor("#FFFFFF")
-         .setFontWeight("bold")
-         .setFontFamily("Plus Jakarta Sans");
-    sheet.setFrozenRows(1);
-    sheet.autoResizeColumns(1, headers.length);
     Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
   }
 
+  // Terapkan header dan seeding data
   seedBadalCertificates_(ss);
   Logger.log("=== SETUP SHEET DB_Badal_Certificates SELESAI ===");
 }

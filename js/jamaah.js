@@ -838,16 +838,24 @@
         const noEl = document.getElementById('badal-cert-no');
         const nameEl = document.getElementById('badal-pilgrim-name');
         const execEl = document.getElementById('badal-executor-info');
+        const miqatEl = document.getElementById('badal-cert-miqat');
         const dateEl = document.getElementById('badal-cert-date');
+        const titimangsaEl = document.getElementById('badal-cert-titimangsa');
 
-        if (noEl) noEl.textContent = `No: ${b.certNo}`;
-        if (nameEl) nameEl.textContent = b.almarhumName.toUpperCase();
-        if (execEl) {
-            execEl.innerHTML = `Pelaksana: <strong>${b.muthawwif}</strong> (${b.muthawwifRole}) &bull; Atas Amanah: ${b.dibadalkanOleh}`;
-        }
-        if (dateEl) {
-            dateEl.textContent = `Tanggal Pelaksanaan: ${b.executionDate} di ${b.location}`;
-        }
+        const certNo = b.nomorSertifikat || b.certNo || 'SDW/BDL/2026/001';
+        const nama = (b.namaYangDibadalkan || b.almarhumName || '').toUpperCase();
+        const petugas = b.namaPetugasBadal || b.muthawwif || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
+        const miqat = b.tempatMiqat || "Masjid Aisyah Tan'im";
+        const tgl = b.tanggalPelaksanaan || b.executionDate || '27 Oktober 2026';
+        const tempatPenerbitan = b.tempatPenerbitan || b.location || 'Makkah';
+        const tglPenerbitan = b.tanggalPenerbitan || tgl;
+
+        if (noEl) noEl.textContent = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
+        if (nameEl) nameEl.textContent = nama;
+        if (execEl) execEl.textContent = petugas;
+        if (miqatEl) miqatEl.textContent = miqat;
+        if (dateEl) dateEl.textContent = tgl;
+        if (titimangsaEl) titimangsaEl.textContent = `${tempatPenerbitan}, ${tglPenerbitan}`;
 
         const switcherEl = document.getElementById('badalPilgrimSwitcher');
         if (switcherEl) {
