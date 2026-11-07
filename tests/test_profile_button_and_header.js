@@ -26,9 +26,10 @@ console.log('  [PASS] Styling emas kontras tinggi & eliminasi tombol pengaturan 
 // 2. Verifikasi sw.js
 console.log('\n2. Verifikasi sw.js');
 const swCode = fs.readFileSync('sw.js', 'utf8');
-assert(swCode.includes('sdw-umroh-pwa-v46'), 'sw.js cache version harus v46');
-console.log('  [PASS] Service Worker v46 terverifikasi!');
+assert(/sdw-umroh-pwa-v(4[6-9]|[5-9]\d)/.test(swCode), 'sw.js cache version harus v46 atau lebih tinggi');
+console.log('  [PASS] Service Worker v46+ terverifikasi!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');
+

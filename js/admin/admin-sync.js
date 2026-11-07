@@ -132,6 +132,7 @@
             if (typeof admin.renderRegistrations === 'function') admin.renderRegistrations();
             if (typeof admin.renderFinance === 'function') admin.renderFinance();
             if (typeof admin.renderOperations === 'function') admin.renderOperations();
+            if (typeof admin.renderCertificates === 'function') admin.renderCertificates();
 
             admin.showToast(`✅ Berhasil menarik ${pulledCount} entri live dari Google Spreadsheet!`);
             console.info(`[SDW_SYNC] pullCloudDatabase selesai. Total entri termuat: ${pulledCount}`);

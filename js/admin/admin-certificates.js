@@ -39,13 +39,52 @@
         }
     }
 
-    // Helper: Normalisasi Google Drive Photo URL agar selalu memiliki size parameter (=s0)
+    // Helper: Ekstraksi Google Drive File ID dari berbagai macam format URL
+    function extractDriveFileId(url) {
+        if (!url || typeof url !== 'string') return null;
+        const trimmed = url.trim();
+        const m1 = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (m1 && m1[1] && m1[1] !== 'file') return m1[1];
+        const m2 = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (m2 && m2[1]) return m2[1];
+        return null;
+    }
+
+    // Helper: Normalisasi Google Drive Photo URL agar selalu memiliki direct streamable CDN URL (=s0)
     function normalizePhotoUrl(url) {
         if (!url || typeof url !== 'string') return '';
-        if (url.includes('googleusercontent.com/d/') && !url.includes('=')) {
-            return url + '=s0';
+        const trimmed = url.trim();
+        if (!trimmed || trimmed === 'null' || trimmed === 'undefined') return '';
+        if (trimmed.startsWith('data:image/') || trimmed.startsWith('blob:')) return trimmed;
+
+        const fileId = extractDriveFileId(trimmed);
+        if (fileId) {
+            return `https://lh3.googleusercontent.com/d/${fileId}=s0`;
         }
-        return url;
+        return trimmed;
+    }
+
+    // Handler Fallback jika Google User Content CDN mengalami rate-limiting / blocking
+    if (typeof window !== 'undefined') {
+        window.handleCertPhotoError = function (img) {
+            if (!img) return;
+            const src = img.getAttribute('src') || '';
+            if (!img.dataset.triedFallback && (src.includes('googleusercontent.com/d/') || src.includes('drive.google.com'))) {
+                img.dataset.triedFallback = '1';
+                const fileId = extractDriveFileId(src);
+                if (fileId) {
+                    img.src = `https://drive.google.com/thumbnail?id=${fileId}&sz=w400`;
+                    return;
+                }
+            }
+            // Sembunyikan gambar yang gagal dan tampilkan ikon avatar default
+            img.style.display = 'none';
+            const parent = img.parentElement;
+            if (parent) {
+                const fallbackIcon = parent.querySelector('.fallback-user-icon');
+                if (fallbackIcon) fallbackIcon.classList.remove('hidden');
+            }
+        };
     }
 
     // Helper: Format tanggal bersih 1 baris
@@ -132,14 +171,40 @@
             const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
             const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departure || r.departure_date || '15 Jan 2027');
             const certNo = (cert && cert.certificateNo) ? cert.certificateNo : (r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`);
-            const photoSrc = normalizePhotoUrl((cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || ''));
+            
+            // Prioritaskan photo live dari Spreadsheet/Drive jika valid, atau cert lokal jika berupa base64 baru
+            let candidatePhoto = '';
+            if (r.photoUrl && (r.photoUrl.includes('googleusercontent') || r.photoUrl.includes('drive.google'))) {
+                candidatePhoto = r.photoUrl;
+            } else if (cert && cert.photoUrl) {
+                candidatePhoto = cert.photoUrl;
+            } else {
+                candidatePhoto = r.photoUrl || r.photo || '';
+            }
+            const photoSrc = normalizePhotoUrl(candidatePhoto);
+
+            // Sinkronisasi otomatis ke certStore lokal jika data live cloud tersedia
+            if (photoSrc && cert && (!cert.photoUrl || !cert.isDriveSynced)) {
+                cert.photoUrl = photoSrc;
+                cert.isDriveSynced = true;
+            }
 
             return `
                 <tr class="hover:bg-slate-50 transition border-b border-slate-100 text-xs">
                     <td class="px-4 py-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-9 h-12 rounded-lg overflow-hidden bg-slate-100 border border-amber-300 flex items-center justify-center shrink-0 shadow-2xs">
-                                ${photoSrc ? `<img src="${photoSrc}" class="w-full h-full object-cover">` : `<i class="fa-solid fa-user text-slate-400 text-sm"></i>`}
+                            <div class="w-9 h-12 rounded-lg overflow-hidden bg-slate-100 border border-amber-300 flex items-center justify-center shrink-0 shadow-2xs relative">
+                                ${photoSrc ? `
+                                    <img src="${photoSrc}" 
+                                         alt="Pasfoto ${displayName}" 
+                                         referrerpolicy="no-referrer" 
+                                         loading="lazy" 
+                                         class="w-full h-full object-cover block" 
+                                         onerror="window.handleCertPhotoError && window.handleCertPhotoError(this)">
+                                    <i class="fa-solid fa-user text-slate-400 text-sm hidden fallback-user-icon"></i>
+                                ` : `
+                                    <i class="fa-solid fa-user text-slate-400 text-sm"></i>
+                                `}
                             </div>
                             <div>
                                 <span class="font-mono text-[10px] text-amber-800 font-extrabold flex items-center gap-1">

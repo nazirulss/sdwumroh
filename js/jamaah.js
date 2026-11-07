@@ -376,12 +376,28 @@
         return str;
     }
 
+    // Helper: Ekstraksi Google Drive File ID dari berbagai macam format URL
+    function extractDriveFileId(url) {
+        if (!url || typeof url !== 'string') return null;
+        const trimmed = url.trim();
+        const m1 = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/);
+        if (m1 && m1[1] && m1[1] !== 'file') return m1[1];
+        const m2 = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (m2 && m2[1]) return m2[1];
+        return null;
+    }
+
     function normalizePhotoUrl(url) {
         if (!url || typeof url !== 'string') return null;
-        if (url.includes('googleusercontent.com/d/') && !url.includes('=')) {
-            return url + '=s0';
+        const trimmed = url.trim();
+        if (!trimmed || trimmed === 'null' || trimmed === 'undefined') return null;
+        if (trimmed.startsWith('data:image/') || trimmed.startsWith('blob:')) return trimmed;
+
+        const fileId = extractDriveFileId(trimmed);
+        if (fileId) {
+            return `https://lh3.googleusercontent.com/d/${fileId}=s0`;
         }
-        return url;
+        return trimmed;
     }
 
     // Helper cek apakah pasfoto jamaah sudah tersedia/ter-upload
