@@ -642,12 +642,12 @@
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
                     
-                    .cert-no { position: absolute; top: 30.5%; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 15px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
-                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; white-space: nowrap; }
-                    .cert-nama { position: absolute; top: 49.6%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; }
-                    .cert-miqat { position: absolute; top: 57.5%; left: 46.5%; font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
-                    .cert-pelaksanaan { position: absolute; top: 60.8%; left: 46.5%; font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
-                    .cert-titimangsa { position: absolute; top: 74.2%; left: 50%; transform: translateX(-50%); font-size: 14px; font-weight: 600; color: #334155; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
+                    .cert-no { position: absolute; top: 33.0%; left: 50%; transform: translate(-50%, -50%); font-family: monospace; font-size: 15px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
+                    .cert-petugas { position: absolute; top: 44.4%; left: 50%; transform: translate(-50%, -50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 21px; font-weight: 800; color: #0f172a; letter-spacing: 0.5px; white-space: nowrap; }
+                    .cert-nama { position: absolute; top: 53.5%; left: 50%; transform: translate(-50%, -50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 0.8px; white-space: nowrap; }
+                    .cert-miqat { position: absolute; top: 59.0%; left: 47.5%; transform: translateY(-50%); font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
+                    .cert-pelaksanaan { position: absolute; top: 62.5%; left: 47.5%; transform: translateY(-50%); font-size: 16px; font-weight: 700; color: #0f172a; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
+                    .cert-titimangsa { position: absolute; top: 74.4%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; font-weight: 600; color: #334155; font-family: "Plus Jakarta Sans", sans-serif; white-space: nowrap; }
                 </style>
             </head>
             <body>
@@ -724,19 +724,19 @@
         ctx.font = '700 28px monospace';
         ctx.fillStyle = '#475569';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
+        ctx.textBaseline = 'middle';
         const cleanNo = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
-        ctx.fillText(cleanNo, Math.round(cw * 0.5), Math.round(ch * 0.305));
+        ctx.fillText(cleanNo, Math.round(cw * 0.5), Math.round(ch * 0.330));
 
         // 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini...)
         ctx.font = '800 42px "Playfair Display", Georgia, serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillText(petugas, Math.round(cw * 0.5), Math.round(ch * 0.425));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(petugas, Math.round(cw * 0.5), Math.round(ch * 0.444));
 
         // 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk :)
-        let fontSizePx = 68;
+        let fontSizePx = 72;
         const nameFontSize = item.ukuranFontNama || 'auto';
         if (nameFontSize !== 'auto') {
             const val = parseFloat(nameFontSize);
@@ -752,29 +752,29 @@
         ctx.font = `900 ${fontSizePx}px "Playfair Display", Georgia, serif`;
         ctx.fillStyle = '#1e1b4b';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.496));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.535));
 
         // 4. Tempat Miqat (Di samping Tempat Miqat :)
         ctx.font = '700 30px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.fillText(miqat, Math.round(cw * 0.465), Math.round(ch * 0.575));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(miqat, Math.round(cw * 0.475), Math.round(ch * 0.590));
 
         // 5. Pelaksanaan (Di samping Pelaksanaan :)
         ctx.font = '700 30px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'top';
-        ctx.fillText(formatBadalDateIndo(tglPelaksanaan), Math.round(cw * 0.465), Math.round(ch * 0.608));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(formatBadalDateIndo(tglPelaksanaan), Math.round(cw * 0.475), Math.round(ch * 0.625));
 
         // 6. Tempat & Tanggal Penerbitan (Di atas kolom tanda tangan)
         ctx.font = '600 27px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#334155';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'top';
-        ctx.fillText(`${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}`, Math.round(cw * 0.5), Math.round(ch * 0.742));
+        ctx.textBaseline = 'middle';
+        ctx.fillText(`${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}`, Math.round(cw * 0.5), Math.round(ch * 0.744));
 
         const safeName = nama.replace(/[^a-zA-Z0-9]/g, '_');
         return {

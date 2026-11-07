@@ -17,16 +17,16 @@ console.log('=== TEST SUITE: LAYOUT & LIVE DATA E-SERTIFIKAT BADAL UMROH ===');
 // 1. Verifikasi layout di admin.html
 const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
 
-// Cek posisi nama yang dibadalkan (top: 49.6%)
+// Cek posisi nama yang dibadalkan (top: 53.5%)
 assert.ok(
-    adminHtml.includes('id="badal-preview-nama"') && adminHtml.includes('top: 49.6%'),
-    '[PASS] admin.html meletakkan nama yang dibadalkan di top: 49.6% (lebih ke atas)'
+    adminHtml.includes('id="badal-preview-nama"') && adminHtml.includes('top: 53.5%'),
+    '[PASS] admin.html meletakkan nama yang dibadalkan di top: 53.5% (calibrated midpoint)'
 );
 
-// Cek posisi tanggal pelaksanaan (top: 60.8%)
+// Cek posisi tanggal pelaksanaan (top: 62.5%)
 assert.ok(
-    adminHtml.includes('id="badal-preview-pelaksanaan"') && adminHtml.includes('top: 60.8%'),
-    '[PASS] admin.html meletakkan tanggal pelaksanaan di top: 60.8% (lebih ke atas)'
+    adminHtml.includes('id="badal-preview-pelaksanaan"') && adminHtml.includes('top: 62.5%'),
+    '[PASS] admin.html meletakkan tanggal pelaksanaan di top: 62.5% (calibrated midpoint)'
 );
 
 // Cek ukuran font petugas badal lebih besar di admin.html
@@ -39,12 +39,12 @@ console.log('✔ Verifikasi admin.html layout preview sukses');
 // 2. Verifikasi layout di app.html
 const appHtml = fs.readFileSync(path.join(__dirname, '../app.html'), 'utf8');
 assert.ok(
-    appHtml.includes('id="badal-pilgrim-name"') && appHtml.includes('top: 49.6%'),
-    '[PASS] app.html meletakkan nama yang dibadalkan di top: 49.6%'
+    appHtml.includes('id="badal-pilgrim-name"') && appHtml.includes('top: 53.5%'),
+    '[PASS] app.html meletakkan nama yang dibadalkan di top: 53.5%'
 );
 assert.ok(
-    appHtml.includes('id="badal-cert-date"') && appHtml.includes('top: 60.8%'),
-    '[PASS] app.html meletakkan tanggal pelaksanaan di top: 60.8%'
+    appHtml.includes('id="badal-cert-date"') && appHtml.includes('top: 62.5%'),
+    '[PASS] app.html meletakkan tanggal pelaksanaan di top: 62.5%'
 );
 assert.ok(
     appHtml.includes('id="badal-executor-info"') && appHtml.includes('clamp(10.5px, 1.95cqi, 18px)'),
@@ -55,36 +55,36 @@ console.log('✔ Verifikasi app.html layout sertifikat sukses');
 // 3. Verifikasi js/admin/admin-badal.js
 const adminBadalJs = fs.readFileSync(path.join(__dirname, '../js/admin/admin-badal.js'), 'utf8');
 assert.ok(
-    adminBadalJs.includes('.cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 90%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 20px;'),
-    '[PASS] admin-badal.js mencetak petugas badal dengan font-size 20px dan width 90%'
+    adminBadalJs.includes('.cert-petugas { position: absolute; top: 44.4%; left: 50%; transform: translate(-50%, -50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 21px;'),
+    '[PASS] admin-badal.js mencetak petugas badal dengan font-size 21px dan calibrated position'
 );
 assert.ok(
     adminBadalJs.includes('family=Playfair+Display'),
     '[PASS] admin-badal.js memuat Google Font Playfair Display pada window cetak A4'
 );
 assert.ok(
-    adminBadalJs.includes('.cert-nama { position: absolute; top: 49.6%'),
-    '[PASS] admin-badal.js mencetak nama yang dibadalkan di top: 49.6%'
+    adminBadalJs.includes('.cert-nama { position: absolute; top: 53.5%'),
+    '[PASS] admin-badal.js mencetak nama yang dibadalkan di top: 53.5%'
 );
 assert.ok(
-    adminBadalJs.includes('.cert-pelaksanaan { position: absolute; top: 60.8%'),
-    '[PASS] admin-badal.js mencetak tanggal pelaksanaan di top: 60.8%'
+    adminBadalJs.includes('.cert-pelaksanaan { position: absolute; top: 62.5%'),
+    '[PASS] admin-badal.js mencetak tanggal pelaksanaan di top: 62.5%'
 );
 assert.ok(
     adminBadalJs.includes('ctx.font = \'800 42px "Playfair Display", Georgia, serif\';'),
     '[PASS] admin-badal.js canvas menggunakan font 42px untuk petugas badal'
 );
 assert.ok(
-    adminBadalJs.includes('Math.round(ch * 0.496)'),
-    '[PASS] admin-badal.js canvas menggambar nama yang dibadalkan di Y 49.6%'
+    adminBadalJs.includes('Math.round(ch * 0.535)'),
+    '[PASS] admin-badal.js canvas menggambar nama yang dibadalkan di Y 53.5%'
 );
 assert.ok(
-    adminBadalJs.includes('Math.round(ch * 0.608)'),
-    '[PASS] admin-badal.js canvas menggambar pelaksanaan di Y 60.8%'
+    adminBadalJs.includes('Math.round(ch * 0.625)'),
+    '[PASS] admin-badal.js canvas menggambar pelaksanaan di Y 62.5%'
 );
 assert.ok(
-    adminBadalJs.includes("ctx.textBaseline = 'top';"),
-    '[PASS] admin-badal.js canvas menggunakan textBaseline top agar tidak menumpuk dengan teks template'
+    adminBadalJs.includes("ctx.textBaseline = 'middle';"),
+    '[PASS] admin-badal.js canvas menggunakan textBaseline middle untuk keselarasan sempurna dengan preview DOM'
 );
 console.log('✔ Verifikasi admin-badal.js layout print & canvas sukses');
 
