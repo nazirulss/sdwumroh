@@ -376,6 +376,14 @@
         return str;
     }
 
+    function normalizePhotoUrl(url) {
+        if (!url || typeof url !== 'string') return null;
+        if (url.includes('googleusercontent.com/d/') && !url.includes('=')) {
+            return url + '=s0';
+        }
+        return url;
+    }
+
     // Ambil daftar seluruh sertifikat & jamaah
     function getAllPilgrimCertificates() {
         const list = [];
@@ -413,7 +421,7 @@
                     name: cert.displayName || r.customer || r.name || r.full_name || 'Jamaah Umroh',
                     departureDate: cleanDep,
                     certNo: cert.certificateNo || r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
-                    photoUrl: cert.photoUrl || r.photoUrl || r.photo || null,
+                    photoUrl: normalizePhotoUrl(cert.photoUrl || r.photoUrl || r.photo || null),
                     isIssued: true
                 });
             }
@@ -588,9 +596,10 @@
             certNoEl.textContent = cleanNo.startsWith('No') ? cleanNo : `No: ${cleanNo}`;
         }
 
-        if (p.photoUrl) {
+        const resolvedPhoto = normalizePhotoUrl(p.photoUrl);
+        if (resolvedPhoto) {
             if (photoImg) {
-                photoImg.src = p.photoUrl;
+                photoImg.src = resolvedPhoto;
                 photoImg.classList.remove('hidden');
             }
             if (photoPlaceholder) photoPlaceholder.classList.add('hidden');

@@ -39,6 +39,15 @@
         }
     }
 
+    // Helper: Normalisasi Google Drive Photo URL agar selalu memiliki size parameter (=s0)
+    function normalizePhotoUrl(url) {
+        if (!url || typeof url !== 'string') return '';
+        if (url.includes('googleusercontent.com/d/') && !url.includes('=')) {
+            return url + '=s0';
+        }
+        return url;
+    }
+
     // Helper: Format tanggal bersih 1 baris
     function formatCleanDate(str) {
         if (!str) return '15 Januari 2027';
@@ -123,7 +132,7 @@
             const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
             const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departure || r.departure_date || '15 Jan 2027');
             const certNo = (cert && cert.certificateNo) ? cert.certificateNo : (r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`);
-            const photoSrc = (cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || '');
+            const photoSrc = normalizePhotoUrl((cert && cert.photoUrl) ? cert.photoUrl : (r.photo || r.photoUrl || ''));
 
             return `
                 <tr class="hover:bg-slate-50 transition border-b border-slate-100 text-xs">

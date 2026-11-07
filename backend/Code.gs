@@ -777,7 +777,10 @@ function doGet(e) {
         const regPays = payments.filter(function(p) { return String(p.invoice_id) === String(reg.id) || String(p.registration_id) === String(reg.id); });
         const hasVerifiedPay = regPays.some(function(p) { return p.status === 'VERIFIED'; });
         const photoDoc = regDocs.find(function(d) { return String(d.requirement_id) === 'DCR-000004' || String(d.requirement_id) === 'PASPHOTO'; });
-        const photoUrl = photoDoc ? (photoDoc.file_ref_mock || "") : "";
+        let photoUrl = photoDoc ? (photoDoc.file_ref_mock || "") : "";
+        if (photoUrl && photoUrl.indexOf("googleusercontent.com/d/") !== -1 && photoUrl.indexOf("=") === -1) {
+          photoUrl += "=s0";
+        }
 
         return {
           id: reg.id,
@@ -1291,9 +1294,9 @@ function processSingleMutation_(ss, action, payload, actor) {
         file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
       } catch (shareErr) {}
 
-      // Tautan Direct CDN Google Drive agar langsung tampil di tag <img> tanpa CORS blocker
-      driveUrl = "https://lh3.googleusercontent.com/d/" + fileId;
-      viewLink = file.getUrl();
+      // Tautan Direct CDN Google Drive dengan parameter =s0 agar langsung tampil di tag <img> dan browser tanpa error 404
+      driveUrl = "https://lh3.googleusercontent.com/d/" + fileId + "=s0";
+      viewLink = "https://drive.google.com/file/d/" + fileId + "/view?usp=sharing";
     } catch (driveErr) {
       driveErrorMsg = String(driveErr && driveErr.message ? driveErr.message : driveErr);
       Logger.log("DRIVE_UPLOAD_FAILED: " + driveErrorMsg);
