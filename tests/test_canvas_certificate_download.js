@@ -34,3 +34,4 @@ testCanvasGeneration().then(() => {
     console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
     console.log('========================================\n');
 });
+

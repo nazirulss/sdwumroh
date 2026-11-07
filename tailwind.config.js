@@ -10,6 +10,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        gold: {
+          300: '#FCD34D',
+          400: '#FBBF24',
+          500: '#E5A93C',
+          600: '#D97706'
+        },
         sdw: {
           pine: '#4C1D6B',        /* TicketPlan Signature Deep Royal Plum / Violet */
           pineLight: '#632585',   /* TicketPlan Vibrant Rich Purple */

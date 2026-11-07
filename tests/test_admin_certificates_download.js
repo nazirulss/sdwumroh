@@ -39,9 +39,10 @@ console.log('  [PASS] Tombol Download Massal & tombol modal di admin.html terver
 // 3. Verifikasi sw.js
 console.log('\n3. Verifikasi sw.js');
 const swCode = fs.readFileSync('sw.js', 'utf8');
-assert(swCode.includes('sdw-umroh-pwa-v45'), 'sw.js cache version harus v45');
-console.log('  [PASS] Service Worker v45 terverifikasi!');
+assert(/sdw-umroh-pwa-v(4[5-9]|[5-9]\d)/.test(swCode), 'sw.js cache version harus v45 atau lebih tinggi');
+console.log('  [PASS] Service Worker v45+ terverifikasi!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');
+
