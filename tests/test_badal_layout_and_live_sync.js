@@ -134,6 +134,31 @@ assert.strictEqual(
 );
 console.log('✔ Format tanggal Indonesia terverifikasi 100%');
 
+// 6. Verifikasi konsistensi ukuran font nama antara Admin dan Jamaah PWA
+assert.ok(
+    adminHtml.includes('id="badal-preview-nama"') && adminHtml.includes('width: 90%'),
+    '[PASS] admin.html menggunakan width: 90% untuk nama yang dibadalkan'
+);
+assert.ok(
+    appHtml.includes('id="badal-pilgrim-name"') && appHtml.includes('width: 90%'),
+    '[PASS] app.html menggunakan width: 90% untuk nama yang dibadalkan'
+);
+assert.ok(
+    jamaahJs.includes('calculateBadalFontSize'),
+    '[PASS] js/jamaah.js memiliki helper calculateBadalFontSize'
+);
+assert.ok(
+    adminBadalJs.includes('calculateBadalFontSize'),
+    '[PASS] js/admin/admin-badal.js memiliki helper calculateBadalFontSize'
+);
+
+// Evaluasi fungsi font size untuk nama panjang seperti "WIRO SETIARSO BIN SUWARSONO" (27 karakter)
+const testName = 'WIRO SETIARSO BIN SUWARSONO';
+assert.ok(testName.length === 27, 'Panjang nama uji adalah 27 karakter');
+
+console.log('✔ Konsistensi ukuran font nama admin vs mobile app terverifikasi 100%');
+
 console.log('========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================');
+

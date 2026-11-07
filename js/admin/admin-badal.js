@@ -330,8 +330,8 @@
         if (requestedSize && requestedSize !== 'auto') {
             const val = parseFloat(requestedSize);
             if (!isNaN(val)) {
-                const minPx = Math.round(val * 3.5);
-                const maxPx = Math.round(val * 7.5);
+                const minPx = Math.round(val * 2.5);
+                const maxPx = Math.round(val * 6.5);
                 return {
                     style: `clamp(${minPx}px, ${val}cqi, ${maxPx}px)`,
                     cqi: val,
@@ -341,13 +341,13 @@
         }
         const len = (name || '').trim().length;
         if (len <= 16) {
-            return { style: 'clamp(14px, 4.4cqi, 30px)', cqi: 4.4, label: 'Besar (4.4cqi - Auto)' };
-        } else if (len <= 24) {
-            return { style: 'clamp(12px, 3.8cqi, 26px)', cqi: 3.8, label: 'Sedang (3.8cqi - Auto)' };
-        } else if (len <= 32) {
-            return { style: 'clamp(11px, 3.2cqi, 22px)', cqi: 3.2, label: 'Kecil (3.2cqi - Auto)' };
+            return { style: 'clamp(11px, 4.2cqi, 26px)', cqi: 4.2, label: 'Besar (4.2cqi - Auto)' };
+        } else if (len <= 23) {
+            return { style: 'clamp(9.5px, 3.5cqi, 22px)', cqi: 3.5, label: 'Sedang (3.5cqi - Auto)' };
+        } else if (len <= 30) {
+            return { style: 'clamp(8px, 2.8cqi, 18px)', cqi: 2.8, label: 'Kecil (2.8cqi - Auto)' };
         } else {
-            return { style: 'clamp(10px, 2.7cqi, 19px)', cqi: 2.7, label: 'Sangat Kecil (2.7cqi - Auto)' };
+            return { style: 'clamp(7px, 2.3cqi, 15px)', cqi: 2.3, label: 'Sangat Kecil (2.3cqi - Auto)' };
         }
     }
 
@@ -498,6 +498,7 @@
             prevNama.innerText = nama.toUpperCase();
             const calc = calculateBadalFontSize(nama, activeBadalNameFontSize);
             prevNama.style.fontSize = calc.style;
+            prevNama.style.letterSpacing = nama.length > 22 ? '0.3px' : '0.6px';
         }
 
         if (prevMiqat) {
@@ -919,6 +920,7 @@
     admin.updateBadalPreview = updateBadalPreview;
     admin.onBadalNameFontSizeChange = onBadalNameFontSizeChange;
     admin.setBadalNameFontSizePreset = setBadalNameFontSizePreset;
+    admin.calculateBadalFontSize = calculateBadalFontSize;
     admin.saveBadalCertificate = saveBadalCertificate;
     admin.printBadalCertificate = printBadalCertificate;
     admin.printBadalFromModal = printBadalFromModal;

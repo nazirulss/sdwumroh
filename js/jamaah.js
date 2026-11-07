@@ -858,6 +858,31 @@
         return str;
     }
 
+    function calculateBadalFontSize(name, requestedSize) {
+        if (requestedSize && requestedSize !== 'auto') {
+            const val = parseFloat(requestedSize);
+            if (!isNaN(val)) {
+                const minPx = Math.round(val * 2.5);
+                const maxPx = Math.round(val * 6.5);
+                return {
+                    style: `clamp(${minPx}px, ${val}cqi, ${maxPx}px)`,
+                    cqi: val,
+                    label: `${val.toFixed(1)}cqi`
+                };
+            }
+        }
+        const len = (name || '').trim().length;
+        if (len <= 16) {
+            return { style: 'clamp(11px, 4.2cqi, 26px)', cqi: 4.2, label: 'Besar (4.2cqi - Auto)' };
+        } else if (len <= 23) {
+            return { style: 'clamp(9.5px, 3.5cqi, 22px)', cqi: 3.5, label: 'Sedang (3.5cqi - Auto)' };
+        } else if (len <= 30) {
+            return { style: 'clamp(8px, 2.8cqi, 18px)', cqi: 2.8, label: 'Kecil (2.8cqi - Auto)' };
+        } else {
+            return { style: 'clamp(7px, 2.3cqi, 15px)', cqi: 2.3, label: 'Sangat Kecil (2.3cqi - Auto)' };
+        }
+    }
+
     function getBadalCertificatesList() {
         try {
             const raw = localStorage.getItem('sdw_admin_badal_certificates');
@@ -947,12 +972,9 @@
         if (noEl) noEl.textContent = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
         if (nameEl) {
             nameEl.textContent = nama;
-            if (b.ukuranFontNama && b.ukuranFontNama !== 'auto') {
-                const fs = String(b.ukuranFontNama).includes('px') ? b.ukuranFontNama : `${b.ukuranFontNama}px`;
-                nameEl.style.fontSize = fs;
-            } else {
-                nameEl.style.fontSize = '';
-            }
+            const calc = calculateBadalFontSize(nama, b.ukuranFontNama);
+            nameEl.style.fontSize = calc.style;
+            nameEl.style.letterSpacing = nama.length > 22 ? '0.3px' : '0.6px';
         }
         if (execEl) execEl.textContent = petugas;
         if (miqatEl) miqatEl.textContent = miqat;
@@ -1287,6 +1309,7 @@
         window.onBadalDateFilterChange = onBadalDateFilterChange;
         window.selectBadalPilgrim = selectBadalPilgrim;
         window.shareBadalCertificateWA = shareBadalCertificateWA;
+        window.calculateBadalFontSize = calculateBadalFontSize;
         window.syncLiveBadalCertificatesAsync = syncLiveBadalCertificatesAsync;
         window.renderGaleriKloter = renderGaleriKloter;
         window.onGaleriKloterFilterChange = onGaleriKloterFilterChange;
@@ -1315,6 +1338,7 @@
         onBadalDateFilterChange: onBadalDateFilterChange,
         selectBadalPilgrim: selectBadalPilgrim,
         shareBadalCertificateWA: shareBadalCertificateWA,
+        calculateBadalFontSize: calculateBadalFontSize,
         syncLiveBadalCertificatesAsync: syncLiveBadalCertificatesAsync,
         renderGaleriKloter: renderGaleriKloter,
         onGaleriKloterFilterChange: onGaleriKloterFilterChange,
