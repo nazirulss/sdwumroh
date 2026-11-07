@@ -22,9 +22,9 @@ console.log('  [PASS] UI Legend Belum Upload Foto (Nama Merah) di app.html terve
 // 3. Verifikasi sw.js
 console.log('\n3. Verifikasi sw.js');
 const swCode = fs.readFileSync('sw.js', 'utf8');
-assert(swCode.includes('sdw-umroh-pwa-v43'), 'sw.js cache version harus v43');
-assert(swCode.includes('sdw-runtime-v43'), 'sw.js runtime cache version harus v43');
-console.log('  [PASS] Service Worker v43 terverifikasi!');
+assert(/sdw-umroh-pwa-v(4[3-9]|[5-9]\d)/.test(swCode), 'sw.js cache version harus v43 atau lebih tinggi');
+assert(/sdw-runtime-v(4[3-9]|[5-9]\d)/.test(swCode), 'sw.js runtime cache version harus v43 atau lebih tinggi');
+console.log('  [PASS] Service Worker v43+ terverifikasi!');
 
 // 4. Simulasi Logika Render Switcher
 console.log('\n4. Simulasi Logika Render Switcher');
@@ -53,3 +53,4 @@ console.log('  [PASS] Filter status upload foto berfungsi dengan sempurna!');
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');
+

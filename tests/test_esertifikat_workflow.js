@@ -90,6 +90,7 @@ assert(adminCertsJs.includes('renderCertificates'), 'renderCertificates harus ad
 assert(adminCertsJs.includes('openCertificateModal'), 'openCertificateModal harus ada');
 assert(adminCertsJs.includes('saveCertificate'), 'saveCertificate harus ada');
 assert(adminCertsJs.includes('printCertificate'), 'printCertificate harus ada');
+assert(adminCertsJs.includes('left: 78.2%'), 'Posisi foto pada cetak fisik A4 harus left: 78.2% agar presisi di dalam bingkai emas');
 assert(adminCertsJs.includes('generateBulkCertificates'), 'generateBulkCertificates harus ada');
 assert(adminCertsJs.includes('handleCertificatePhotoUpload'), 'handleCertificatePhotoUpload harus ada');
 assert(adminCertsJs.includes('updateCertificatePreview'), 'updateCertificatePreview harus ada');

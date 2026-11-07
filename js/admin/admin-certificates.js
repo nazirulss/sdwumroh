@@ -891,7 +891,7 @@
                     .cert-box { position: relative; width: 297mm; height: 210mm; overflow: hidden; }
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
                     .cert-no { position: absolute; top: 5.8%; left: 6.8%; font-family: sans-serif; font-size: 14.5px; font-weight: 600; color: #64748b; letter-spacing: 0.2px; }
-                    .cert-photo { position: absolute; top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; object-fit: cover; border-radius: 2px; }
+                    .cert-photo { position: absolute; top: 15.55%; left: 78.2%; width: 14.0%; height: 25.0%; object-fit: cover; border-radius: 2px; }
                     .cert-name { position: absolute; top: 53.4%; left: 49.5%; transform: translate(-50%, -100%); width: 80%; text-align: center; font-size: ${printFontSize}; font-weight: 900; color: #1e293b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
                     .cert-date { position: absolute; top: 55.4%; left: 49.5%; transform: translateX(-50%); width: 85%; text-align: center; font-size: 14.5px; font-weight: 600; color: #475569; font-family: sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
                 </style>
