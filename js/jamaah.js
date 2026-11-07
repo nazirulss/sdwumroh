@@ -1220,6 +1220,22 @@
             }
         });
 
+        // Manajemen Sensor Kompas Kiblat Presisi Tinggi
+        if (tab === 'kiblat') {
+            if (typeof window.SDW_KIBLAT !== 'undefined') {
+                if (typeof window.SDW_KIBLAT.startCompassListener === 'function') {
+                    window.SDW_KIBLAT.startCompassListener();
+                }
+                if (typeof window.SDW_KIBLAT.updateQiblaValuesUI === 'function') {
+                    window.SDW_KIBLAT.updateQiblaValuesUI();
+                }
+            }
+        } else {
+            if (typeof window.SDW_KIBLAT !== 'undefined' && typeof window.SDW_KIBLAT.stopCompassListener === 'function') {
+                window.SDW_KIBLAT.stopCompassListener();
+            }
+        }
+
         try {
             const url = new URL(window.location.href);
             url.searchParams.set('tab', tab);

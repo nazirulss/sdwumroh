@@ -2031,6 +2031,14 @@
   };
 
   function handleOrientation(e) {
+    if (typeof window.SDW_KIBLAT !== 'undefined' && typeof window.SDW_KIBLAT.extractCompassHeading === 'function') {
+      const heading = window.SDW_KIBLAT.extractCompassHeading(e);
+      if (heading !== null) {
+        window.SDW_KIBLAT.updateCompassUI(heading);
+        return;
+      }
+    }
+
     const needles = [
       document.getElementById('compassNeedle'),
       document.getElementById('compassNeedleInIbadah')
@@ -2039,7 +2047,10 @@
 
     let heading = e.webkitCompassHeading || (e.alpha ? 360 - e.alpha : null);
     if (heading !== null) {
-      const qiblaAngle = (295 - heading + 360) % 360;
+      const bearing = (typeof window.SDW_KIBLAT !== 'undefined' && typeof window.SDW_KIBLAT.getQiblaBearing === 'function')
+        ? window.SDW_KIBLAT.getQiblaBearing()
+        : 295;
+      const qiblaAngle = (bearing - heading + 360) % 360;
       needles.forEach(n => {
         n.style.transform = `rotate(${qiblaAngle}deg)`;
       });
@@ -3020,7 +3031,14 @@
         window.switchIbadahTab(targetTab);
       }
       if (targetTab === 'kiblat') {
-        if (!compassListenerAttached && window.DeviceOrientationEvent) {
+        if (typeof window.SDW_KIBLAT !== 'undefined') {
+          if (typeof window.SDW_KIBLAT.startCompassListener === 'function') {
+            window.SDW_KIBLAT.startCompassListener();
+          }
+          if (typeof window.SDW_KIBLAT.updateQiblaValuesUI === 'function') {
+            window.SDW_KIBLAT.updateQiblaValuesUI();
+          }
+        } else if (!compassListenerAttached && window.DeviceOrientationEvent) {
           window.addEventListener('deviceorientation', handleOrientation, true);
           compassListenerAttached = true;
         }
@@ -3066,6 +3084,9 @@
     if (compassListenerAttached && window.DeviceOrientationEvent) {
       window.removeEventListener('deviceorientation', handleOrientation, true);
       compassListenerAttached = false;
+    }
+    if (typeof window.SDW_KIBLAT !== 'undefined' && typeof window.SDW_KIBLAT.stopCompassListener === 'function') {
+      window.SDW_KIBLAT.stopCompassListener();
     }
 
     const liveIframe = document.getElementById('inAppLiveIframe');

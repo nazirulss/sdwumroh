@@ -111,8 +111,8 @@ console.log('  [PASS] Seluruh controller baru di js/jamaah.js terdefinisi dan te
 
 // 8. Verifikasi Cache Version di sw.js
 console.log('\n8. Verifikasi Cache Version di sw.js');
-assert(/sdw-umroh-pwa-v(3[9]|4[0-9])/.test(swJs), 'sw.js harus menggunakan CACHE_NAME v39 atau lebih tinggi');
-assert(/sdw-runtime-v(3[9]|4[0-9])/.test(swJs), 'sw.js harus menggunakan RUNTIME_CACHE v39 atau lebih tinggi');
+assert(/sdw-umroh-pwa-v(3[9]|[4-9][0-9])/.test(swJs), 'sw.js harus menggunakan CACHE_NAME v39 atau lebih tinggi');
+assert(/sdw-runtime-v(3[9]|[4-9][0-9])/.test(swJs), 'sw.js harus menggunakan RUNTIME_CACHE v39 atau lebih tinggi');
 console.log('  [PASS] Service Worker telah diperbarui ke versi v39!');
 
 console.log('\n========================================');

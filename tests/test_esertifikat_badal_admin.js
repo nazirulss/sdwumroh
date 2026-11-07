@@ -77,8 +77,8 @@ console.log('✔ admin-nav.js tab switcher passed');
 // 4. Verify sw.js cache bump
 const swJs = fs.readFileSync(path.join(__dirname, '../sw.js'), 'utf8');
 assert.ok(
-    swJs.includes('sdw-umroh-pwa-v54'),
-    'sw.js must be bumped to v54'
+    swJs.includes('sdw-umroh-pwa-v55') || swJs.includes('sdw-umroh-pwa-v54'),
+    'sw.js must be bumped to v54 or higher'
 );
 assert.ok(
     swJs.includes("'/js/admin/admin-badal.js'"),
