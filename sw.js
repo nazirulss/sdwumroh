@@ -1,3 +1,4 @@
+/// <reference lib="webworker" />
 const CACHE_NAME = 'sdw-umroh-pwa-v55';
 const RUNTIME_CACHE = 'sdw-runtime-v55';
 
