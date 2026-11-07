@@ -173,13 +173,14 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-1.5">
-                            <button type="button" onclick="SDW_ADMIN.openCertificateModal('${r.id}')" class="px-2.5 py-1.5 rounded-lg bg-sdw-pine text-white hover:bg-slate-800 font-bold text-[10.5px] flex items-center gap-1 shadow-2xs cursor-pointer transition">
-                                <i class="fa-solid fa-pen-to-square text-[9.5px]"></i>
-                                <span>Edit &amp; Preview</span>
+                            <button type="button" onclick="SDW_ADMIN.openCertificateModal('${r.id}')" class="w-8 h-8 rounded-lg bg-sdw-pine text-white hover:bg-slate-800 flex items-center justify-center shadow-2xs cursor-pointer transition active:scale-95" title="Edit &amp; Preview E-Sertifikat">
+                                <i class="fa-solid fa-pen-to-square text-xs"></i>
                             </button>
-                            <button type="button" onclick="SDW_ADMIN.printCertificate('${r.id}')" class="px-2.5 py-1.5 rounded-lg bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300 font-bold text-[10.5px] flex items-center gap-1 cursor-pointer transition" title="Cetak Piagam A4">
-                                <i class="fa-solid fa-print text-[9.5px]"></i>
-                                <span>Cetak A4</span>
+                            <button type="button" onclick="SDW_ADMIN.printCertificate('${r.id}')" class="w-8 h-8 rounded-lg bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300 flex items-center justify-center shadow-2xs cursor-pointer transition active:scale-95" title="Cetak Piagam Fisik A4">
+                                <i class="fa-solid fa-print text-xs"></i>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.downloadSingleCertificate('${r.id}')" class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-900 hover:bg-emerald-200 border border-emerald-300 flex items-center justify-center shadow-2xs cursor-pointer transition active:scale-95" title="Download E-Sertifikat (JPG)">
+                                <i class="fa-solid fa-download text-xs"></i>
                             </button>
                         </div>
                     </td>
@@ -970,6 +971,209 @@
         }
     }
 
+    // 9. Generasi Kanvas Sertifikat High-Resolution untuk Download (2048 x 1364)
+    async function generateCertificateCanvas(regId) {
+        const certStore = getCertificatesStore();
+        const regs = getRegistrationsList();
+        const pilgrim = regs.find(r => r.id === regId) || {};
+        const cert = certStore[regId] || {};
+
+        const displayName = (cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh').toUpperCase();
+        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
+        const certNo = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
+        const photoSrc = normalizePhotoUrl(cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '');
+        const nameFontSize = cert.nameFontSize || 'auto';
+
+        // Load Background Template
+        const bgImg = new Image();
+        bgImg.crossOrigin = 'anonymous';
+        await new Promise((resolve) => {
+            bgImg.onload = resolve;
+            bgImg.onerror = () => resolve(null);
+            bgImg.src = 'assets/certificate-template.jpg';
+        });
+
+        const canvas = document.createElement('canvas');
+        const cw = 2048;
+        const ch = 1364;
+        canvas.width = cw;
+        canvas.height = ch;
+        const ctx = canvas.getContext('2d');
+
+        if (bgImg && bgImg.width) {
+            ctx.drawImage(bgImg, 0, 0, cw, ch);
+        } else {
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, cw, ch);
+        }
+
+        // Gambar Pasfoto Jamaah jika ada (presisi dalam bingkai emas)
+        if (photoSrc) {
+            try {
+                const pImg = new Image();
+                pImg.crossOrigin = 'anonymous';
+                await new Promise((resolve) => {
+                    pImg.onload = resolve;
+                    pImg.onerror = () => resolve(null);
+                    pImg.src = photoSrc;
+                });
+
+                if (pImg.naturalWidth && pImg.naturalHeight) {
+                    const px = Math.round(784 * 2); // 1568
+                    const py = Math.round(106 * 2); // 212
+                    const pw = Math.round(135 * 2); // 270
+                    const ph = Math.round(170 * 2); // 340
+
+                    const imgRatio = pImg.naturalWidth / pImg.naturalHeight;
+                    const targetRatio = pw / ph;
+                    let sx, sy, sw, sh;
+                    if (imgRatio > targetRatio) {
+                        sh = pImg.naturalHeight;
+                        sw = sh * targetRatio;
+                        sx = (pImg.naturalWidth - sw) / 2;
+                        sy = 0;
+                    } else {
+                        sw = pImg.naturalWidth;
+                        sh = sw / targetRatio;
+                        sx = 0;
+                        sy = (pImg.naturalHeight - sh) / 2;
+                    }
+                    ctx.drawImage(pImg, sx, sy, sw, sh, px, py, pw, ph);
+                }
+            } catch (e) {
+                console.warn('Gagal memuat pasfoto pada kanvas sertifikat:', e);
+            }
+        }
+
+        // Render Nomor Sertifikat
+        ctx.font = '600 28px sans-serif';
+        ctx.fillStyle = '#64748b';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        const cleanNo = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
+        ctx.fillText(cleanNo, Math.round(cw * 0.068), Math.round(ch * 0.058));
+
+        // Render Nama Jamaah
+        let fontSizePx = 68;
+        if (nameFontSize !== 'auto') {
+            const val = parseFloat(nameFontSize);
+            if (!isNaN(val)) fontSizePx = Math.round(val * 17);
+        } else {
+            const len = displayName.length;
+            if (len > 26) fontSizePx = 48;
+            else if (len > 20) fontSizePx = 56;
+            else if (len > 14) fontSizePx = 64;
+            else fontSizePx = 72;
+        }
+
+        ctx.font = `900 ${fontSizePx}px "Playfair Display", Georgia, serif`;
+        ctx.fillStyle = '#1e293b';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(displayName, Math.round(cw * 0.495), Math.round(ch * 0.534));
+
+        // Render Tanggal Keberangkatan
+        ctx.font = '600 28px sans-serif';
+        ctx.fillStyle = '#475569';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        const cleanDep = departureDate.startsWith('Keberangkatan') ? departureDate : `Keberangkatan: ${departureDate}`;
+        ctx.fillText(cleanDep, Math.round(cw * 0.495), Math.round(ch * 0.554));
+
+        const safeName = displayName.replace(/[^a-zA-Z0-9]/g, '_');
+        return {
+            canvas,
+            filename: `Sertifikat_Umroh_${safeName}_${regId}.jpg`
+        };
+    }
+
+    // 10. Download Sertifikat Individual (Single)
+    async function downloadSingleCertificate(regId) {
+        if (!regId) return;
+        try {
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('Menyiapkan file gambar sertifikat...');
+            }
+
+            const { canvas, filename } = await generateCertificateCanvas(regId);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            if (typeof admin.showToast === 'function') {
+                admin.showToast(`✅ Sertifikat berhasil diunduh: ${filename}`);
+            }
+        } catch (err) {
+            console.error('Download certificate error:', err);
+            if (confirm('Browser membatasi unduhan kanvas langsung. Buka mode Cetak / Simpan PDF?')) {
+                printCertificate(regId);
+            }
+        }
+    }
+
+    // 11. Download Massal Seluruh Sertifikat Kloter
+    async function downloadBulkCertificates() {
+        const regs = getRegistrationsList();
+        const certStore = getCertificatesStore();
+
+        const issuedList = regs.filter(r => {
+            const cert = certStore[r.id];
+            return (cert && cert.isIssued !== undefined) ? !!cert.isIssued : (r.isIssued === true || r.status === 'COMPLETED');
+        });
+
+        if (issuedList.length === 0) {
+            const msg = 'Belum ada piagam sertifikat dengan status Terbit untuk diunduh.';
+            if (typeof admin.showToast === 'function') admin.showToast(msg);
+            else alert(msg);
+            return;
+        }
+
+        if (!confirm(`Mulai download massal ${issuedList.length} E-Sertifikat ke komputer/perangkat Anda?`)) {
+            return;
+        }
+
+        if (typeof admin.showToast === 'function') {
+            admin.showToast(`Memulai proses download massal (${issuedList.length} sertifikat)...`);
+        }
+
+        let successCount = 0;
+        for (let i = 0; i < issuedList.length; i++) {
+            const r = issuedList[i];
+            try {
+                const { canvas, filename } = await generateCertificateCanvas(r.id);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+
+                const link = document.createElement('a');
+                link.download = filename;
+                link.href = dataUrl;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                successCount++;
+
+                if (typeof admin.showToast === 'function' && (successCount % 5 === 0 || successCount === issuedList.length)) {
+                    admin.showToast(`Mengunduh ${successCount}/${issuedList.length} sertifikat...`);
+                }
+
+                // Beri jeda 350ms antar file agar browser tidak memblokir multiple automated downloads
+                await new Promise(res => setTimeout(res, 350));
+            } catch (err) {
+                console.error(`Gagal mengunduh sertifikat ${r.id}:`, err);
+            }
+        }
+
+        if (typeof admin.showToast === 'function') {
+            admin.showToast(`✅ Selesai! Berhasil mengunduh ${successCount} sertifikat.`);
+        } else {
+            alert(`✅ Selesai! Berhasil mengunduh ${successCount} sertifikat.`);
+        }
+    }
+
     // Bind ke SDW_ADMIN
     admin.getRegistrations = getRegistrationsList;
     admin.renderCertificates = renderCertificates;
@@ -987,6 +1191,9 @@
     admin.uploadCertificatePhotoToCloud = uploadCertificatePhotoToCloud;
     admin.printCertificate = printCertificate;
     admin.generateBulkCertificates = generateBulkCertificates;
+    admin.generateCertificateCanvas = generateCertificateCanvas;
+    admin.downloadSingleCertificate = downloadSingleCertificate;
+    admin.downloadBulkCertificates = downloadBulkCertificates;
     admin.onNameFontSizeChange = onNameFontSizeChange;
     admin.setNameFontSizePreset = setNameFontSizePreset;
     admin.calculateNameFontSize = calculateNameFontSize;
