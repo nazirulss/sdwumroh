@@ -384,6 +384,17 @@
         return url;
     }
 
+    // Helper cek apakah pasfoto jamaah sudah tersedia/ter-upload
+    function pilgrimHasPhoto(p) {
+        if (!p) return false;
+        const url = p.photoUrl || p.photo;
+        if (!url || typeof url !== 'string') return false;
+        const trimmed = url.trim();
+        if (!trimmed || trimmed === 'null' || trimmed === 'undefined') return false;
+        if (trimmed.includes('placeholder') || trimmed.includes('default-avatar')) return false;
+        return true;
+    }
+
     // Ambil daftar seluruh sertifikat & jamaah
     function getAllPilgrimCertificates() {
         const list = [];
@@ -521,10 +532,29 @@
             if (switcherEl) {
                 const buttons = switcherEl.querySelectorAll('button');
                 buttons.forEach(btn => {
-                    if (btn.getAttribute('data-reg-id') === regId) {
-                        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-sdw-pine text-white';
+                    const bRegId = btn.getAttribute('data-reg-id');
+                    const bHasPhoto = btn.getAttribute('data-has-photo') === '1';
+                    const isActive = bRegId === regId;
+
+                    if (isActive) {
+                        btn.className = bHasPhoto
+                            ? 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs bg-sdw-pine text-white border border-transparent'
+                            : 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs bg-sdw-pine text-red-300 border-2 border-red-500';
                     } else {
-                        btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-slate-100 text-slate-700 hover:bg-slate-200';
+                        btn.className = bHasPhoto
+                            ? 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/50'
+                            : 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-red-50/90 text-red-600 hover:bg-red-100 border border-red-200/80';
+                    }
+
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = `fa-solid fa-user text-[10px] mr-1 ${bHasPhoto ? (isActive ? 'text-white' : 'text-slate-500') : (isActive ? 'text-red-400' : 'text-red-500')}`;
+                    }
+                    const span = btn.querySelector('span');
+                    if (span) {
+                        span.className = bHasPhoto
+                            ? (isActive ? 'text-white' : 'text-slate-700')
+                            : (isActive ? 'text-red-300 font-extrabold' : 'text-red-600 font-bold');
                     }
                 });
             }
@@ -560,10 +590,27 @@
                 switcherEl.innerHTML = kloterPilgrims.map(p => {
                     const isActive = p.regId === pilgrimToShow.regId;
                     const shortName = (p.name || 'Jamaah').split(' ').slice(0, 2).join(' ');
+                    const hasPhoto = pilgrimHasPhoto(p);
+
+                    const btnClass = isActive
+                        ? (hasPhoto
+                            ? 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs bg-sdw-pine text-white border border-transparent'
+                            : 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-xs bg-sdw-pine text-red-300 border-2 border-red-500')
+                        : (hasPhoto
+                            ? 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200/50'
+                            : 'px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs bg-red-50/90 text-red-600 hover:bg-red-100 border border-red-200/80');
+
+                    const iconClass = `fa-solid fa-user text-[10px] mr-1 ${hasPhoto ? (isActive ? 'text-white' : 'text-slate-500') : (isActive ? 'text-red-400' : 'text-red-500')}`;
+                    const textClass = hasPhoto
+                        ? (isActive ? 'text-white' : 'text-slate-700')
+                        : (isActive ? 'text-red-300 font-extrabold' : 'text-red-600 font-bold');
+
+                    const titleHint = hasPhoto ? `${p.name} (Foto Lengkap)` : `${p.name} (Belum Upload Foto)`;
+
                     return `
-                        <button type="button" data-reg-id="${p.regId}" onclick="window.selectPilgrimInKloter('${p.regId}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs ${isActive ? 'bg-sdw-pine text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
-                            <i class="fa-solid fa-user text-[10px] mr-1"></i>
-                            <span>${shortName}</span>
+                        <button type="button" data-reg-id="${p.regId}" data-has-photo="${hasPhoto ? '1' : '0'}" title="${titleHint}" onclick="window.selectPilgrimInKloter('${p.regId}')" class="${btnClass}">
+                            <i class="${iconClass}"></i>
+                            <span class="${textClass}">${shortName}</span>
                         </button>
                     `;
                 }).join('');
