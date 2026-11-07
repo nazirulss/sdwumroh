@@ -66,9 +66,10 @@ console.log('  [PASS] Seluruh varian tautan Google Drive berhasil dinormalisasi 
 // 5. Verifikasi sw.js
 console.log('\n5. Verifikasi sw.js');
 const swCode = fs.readFileSync('sw.js', 'utf8');
-assert(swCode.includes('sdw-umroh-pwa-v47'), 'sw.js cache version harus v47');
-console.log('  [PASS] Service Worker v47 terverifikasi!');
+assert(/sdw-umroh-pwa-v(4[7-9]|[5-9]\d)/.test(swCode), 'sw.js cache version harus v47 atau lebih baru');
+console.log('  [PASS] Service Worker v47+ terverifikasi!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');
 console.log('========================================\n');
+

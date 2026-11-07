@@ -101,6 +101,7 @@
         if (tabId === 'tab-finance' && typeof admin.renderFinance === 'function') admin.renderFinance();
         if (tabId === 'tab-operations' && typeof admin.renderOperations === 'function') admin.renderOperations();
         if (tabId === 'tab-certificates' && typeof admin.renderCertificates === 'function') admin.renderCertificates();
+        if (tabId === 'tab-badal-certificates' && typeof admin.renderBadalCertificates === 'function') admin.renderBadalCertificates();
         if (tabId === 'tab-audit' && typeof admin.renderAuditLogs === 'function') admin.renderAuditLogs();
 
         // Di layar mobile, tutup sidebar otomatis

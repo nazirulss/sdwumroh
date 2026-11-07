@@ -34,19 +34,20 @@
         LAST_SYNC: 'sdw_last_sync_timestamp',
         LOGISTICS: 'sdw_admin_logistics',
         MANASIK: 'sdw_admin_manasik',
-        CERTS: 'sdw_admin_certificates'
+        CERTS: 'sdw_admin_certificates',
+        BADAL: 'sdw_admin_badal_certificates'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-audit'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
         'SALES': ['tab-dashboard', 'tab-crm', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
-        'OPERATIONS': ['tab-dashboard', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-docs'],
-        'TOUR_LEADER': ['tab-dashboard', 'tab-operations', 'tab-certificates']
+        'OPERATIONS': ['tab-dashboard', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
+        'TOUR_LEADER': ['tab-dashboard', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
     };
 
     // 3. Central Reactive State Container

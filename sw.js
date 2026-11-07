@@ -1,5 +1,5 @@
-const CACHE_NAME = 'sdw-umroh-pwa-v47';
-const RUNTIME_CACHE = 'sdw-runtime-v47';
+const CACHE_NAME = 'sdw-umroh-pwa-v48';
+const RUNTIME_CACHE = 'sdw-runtime-v48';
 
 const PRECACHE_URLS = [
   '/',
@@ -48,6 +48,7 @@ const PRECACHE_URLS = [
   '/js/admin/admin-finance.js',
   '/js/admin/admin-operations.js',
   '/js/admin/admin-certificates.js',
+  '/js/admin/admin-badal.js',
   '/js/admin/admin-security.js',
   '/js/admin/admin-sync.js',
   '/js/admin/admin-export.js',
