@@ -700,6 +700,12 @@
             bgImg.src = 'assets/certificate-badal-template.jpg';
         });
 
+        if (typeof document !== 'undefined' && document.fonts) {
+            try {
+                await document.fonts.ready;
+            } catch (e) {}
+        }
+
         const canvas = document.createElement('canvas');
         const cw = 2048;
         const ch = 1446; // 1024 x 723 scaled 2x
@@ -718,7 +724,7 @@
         ctx.font = '700 28px monospace';
         ctx.fillStyle = '#475569';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         const cleanNo = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
         ctx.fillText(cleanNo, Math.round(cw * 0.5), Math.round(ch * 0.305));
 
@@ -726,7 +732,7 @@
         ctx.font = '800 42px "Playfair Display", Georgia, serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         ctx.fillText(petugas, Math.round(cw * 0.5), Math.round(ch * 0.425));
 
         // 3. Nama Yang Dibadalkan (Di bawah teks BADAL UMROH untuk :)
@@ -746,28 +752,28 @@
         ctx.font = `900 ${fontSizePx}px "Playfair Display", Georgia, serif`;
         ctx.fillStyle = '#1e1b4b';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.496));
 
         // 4. Tempat Miqat (Di samping Tempat Miqat :)
-        ctx.font = '700 30px sans-serif';
+        ctx.font = '700 30px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         ctx.fillText(miqat, Math.round(cw * 0.465), Math.round(ch * 0.575));
 
         // 5. Pelaksanaan (Di samping Pelaksanaan :)
-        ctx.font = '700 30px sans-serif';
+        ctx.font = '700 30px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         ctx.fillText(formatBadalDateIndo(tglPelaksanaan), Math.round(cw * 0.465), Math.round(ch * 0.608));
 
         // 6. Tempat & Tanggal Penerbitan (Di atas kolom tanda tangan)
-        ctx.font = '600 27px sans-serif';
+        ctx.font = '600 27px "Plus Jakarta Sans", sans-serif';
         ctx.fillStyle = '#334155';
         ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
+        ctx.textBaseline = 'top';
         ctx.fillText(`${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}`, Math.round(cw * 0.5), Math.round(ch * 0.742));
 
         const safeName = nama.replace(/[^a-zA-Z0-9]/g, '_');

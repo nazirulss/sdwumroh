@@ -82,6 +82,10 @@ assert.ok(
     adminBadalJs.includes('Math.round(ch * 0.608)'),
     '[PASS] admin-badal.js canvas menggambar pelaksanaan di Y 60.8%'
 );
+assert.ok(
+    adminBadalJs.includes("ctx.textBaseline = 'top';"),
+    '[PASS] admin-badal.js canvas menggunakan textBaseline top agar tidak menumpuk dengan teks template'
+);
 console.log('✔ Verifikasi admin-badal.js layout print & canvas sukses');
 
 // 4. Verifikasi js/jamaah.js live dynamic data & sync
