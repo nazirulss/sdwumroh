@@ -249,12 +249,12 @@
                             <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Checklist Koper</span>
                         </button>
 
-                        <!-- 4. Arah Kiblat -->
-                        <button type="button" onclick="window.openAppSubView('kiblat')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
-                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
-                                <i class="fa-solid fa-compass"></i>
+                        <!-- 4. Menu Sertifikat (Pengganti Arah Kiblat) -->
+                        <button type="button" onclick="window.openAppSubView('sertifikat')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                            <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-amber-600 group-hover:text-white transition-all duration-300 border border-amber-200/80">
+                                <i class="fa-solid fa-award"></i>
                             </div>
-                            <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Arah Kiblat</span>
+                            <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">E-Sertifikat</span>
                         </button>
 
                         <!-- 5. Peta Ziarah -->
@@ -1771,7 +1771,7 @@
                 </div>
             </div>
 
-            <!-- ==================== SUBVIEW 6: FULL-PAGE GALERI KLOTER ==================== -->
+            <!-- ==================== SUBVIEW 6: FULL-PAGE GALERI DOKUMENTASI KLOTER ==================== -->
             <div id="subview-galeri" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
                 <!-- Sticky Top App Bar -->
                 <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
@@ -1780,74 +1780,79 @@
                             <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
                         </button>
                         <div>
-                            <h2 class="text-base font-extrabold text-white leading-tight">Galeri &amp; E-Sertifikat</h2>
-                            <p class="text-[11px] text-purple-200/70">Dokumentasi Kloter &amp; Penghargaan Mabrur</p>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Galeri Dokumentasi Kloter</h2>
+                            <p class="text-[11px] text-purple-200/70">Foto &amp; Video Perjalanan Ibadah Jamaah</p>
                         </div>
                     </div>
-                    <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition">
+                    <a id="galeriDriveLinkBtn" href="https://drive.google.com/drive/folders/1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J?usp=sharing" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-gold-500 text-slate-950 font-bold text-xs flex items-center gap-1.5 shadow-sm active:scale-95 transition">
                         <i class="fa-solid fa-cloud-arrow-down"></i>
                         <span class="hidden sm:inline">Drive</span>
                     </a>
                 </div>
 
-                <!-- Tabs -->
-                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
-                    <button type="button" id="galeriTabFotoBtn" onclick="window.switchGaleriTab('foto')" class="py-2.5 px-3 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">
-                        <i class="fa-solid fa-photo-film mr-1.5"></i> Foto Perjalanan
-                    </button>
-                    <button type="button" id="galeriTabSertifikatBtn" onclick="window.switchGaleriTab('sertifikat')" class="py-2.5 px-3 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">
-                        <i class="fa-solid fa-award mr-1.5"></i> E-Sertifikat Mabrur
-                    </button>
+                <!-- Filter Kloter Keberangkatan -->
+                <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5">
+                    <div class="flex-1 flex items-center gap-2 min-w-[200px]">
+                        <label for="galeriFilterKloterSelect" class="text-xs font-bold text-slate-700 shrink-0 flex items-center gap-1.5">
+                            <i class="fa-solid fa-plane-departure text-purple-700"></i>
+                            <span>Pilih Kloter:</span>
+                        </label>
+                        <select id="galeriFilterKloterSelect" onchange="window.onGaleriKloterFilterChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-sdw-pine outline-none transition cursor-pointer">
+                            <option value="2026-10-27">27 Oktober 2026 (Kloter Utama SV-818 - 44 Jamaah)</option>
+                            <option value="2027-01-15">15 Januari 2027 (Kloter Musim 1448H)</option>
+                            <option value="2027-02-28">28 Februari 2027 (Kloter Barakah GA-980)</option>
+                            <option value="ALL">Semua Album Perjalanan</option>
+                        </select>
+                    </div>
+                    <div id="galeriFotoCountBadge" class="px-3 py-1.5 rounded-xl bg-purple-50 text-sdw-pine border border-purple-100 text-xs font-bold">
+                        <i class="fa-solid fa-images mr-1 text-sdw-gold"></i>
+                        <span id="galeriTotalFotoText">Memuat foto...</span>
+                    </div>
                 </div>
 
-                <!-- Tab 1: Galeri Foto -->
-                <div id="galeriTabContentFoto" class="space-y-4 pt-1">
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
-                            <img src="assets/hero-haram.png" alt="Dokumentasi Manasik" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="p-2.5 text-xs">
-                                <span class="font-bold text-slate-800 block truncate">Bimbingan Manasik Akbar</span>
-                                <span class="text-[10px] text-slate-500">Hotel Griptha Kudus</span>
-                            </div>
-                        </div>
-                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
-                            <img src="assets/hero-twilight.jpg" alt="Dokumentasi Thawaf" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="p-2.5 text-xs">
-                                <span class="font-bold text-slate-800 block truncate">Thawaf Umroh Bersama</span>
-                                <span class="text-[10px] text-slate-500">Pelataran Ka'bah Makkah</span>
-                            </div>
-                        </div>
-                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
-                            <img src="assets/hero-haram.png" alt="Dokumentasi Raudhah" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="p-2.5 text-xs">
-                                <span class="font-bold text-slate-800 block truncate">Ziarah Raudhah Syarifah</span>
-                                <span class="text-[10px] text-slate-500">Masjid Nabawi Madinah</span>
-                            </div>
-                        </div>
-                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
-                            <img src="assets/hero-twilight.jpg" alt="Dokumentasi Jabal Uhud" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="p-2.5 text-xs">
-                                <span class="font-bold text-slate-800 block truncate">Ziarah Bukit Uhud</span>
-                                <span class="text-[10px] text-slate-500">Makam Syuhada Uhud</span>
-                            </div>
-                        </div>
-                        <div class="rounded-2xl overflow-hidden bg-slate-100 border border-slate-200 relative group shadow-2xs">
-                            <img src="assets/hero-haram.png" alt="Dokumentasi Kepulangan" class="w-full h-36 object-cover group-hover:scale-105 transition-transform duration-300">
-                            <div class="p-2.5 text-xs">
-                                <span class="font-bold text-slate-800 block truncate">Pelepasan Bandara Jeddah</span>
-                                <span class="text-[10px] text-slate-500">King Abdulaziz Airport</span>
-                            </div>
+                <!-- Grid Foto Dokumentasi Kloter -->
+                <div id="galeriFotoGridContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+                    <!-- Dynamic rendering by window.renderGaleriKloter -->
+                </div>
+
+                <!-- Tombol Unduh Full Batch Drive -->
+                <a id="galeriDownloadFullBatchBtn" href="https://drive.google.com/drive/folders/1Xz5QTa68fcipY9BN_vIXsdLklH6bws-J?usp=sharing" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-purple-50 text-sdw-pine border border-purple-200 hover:bg-purple-100 text-xs font-bold flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-cloud-arrow-down text-sm text-sdw-gold"></i>
+                    <span>Unduh Dokumentasi Resolusi Asli Google Drive Kloter Ini</span>
+                </a>
+            </div>
+
+            <!-- ==================== SUBVIEW 7: FULL-PAGE E-SERTIFIKAT (UMROH & BADAL) ==================== -->
+            <div id="subview-sertifikat" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-12">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">E-Sertifikat Resmi</h2>
+                            <p class="text-[11px] text-purple-200/70">Piagam Penghargaan Alumni Umroh &amp; Badal Mabrur</p>
                         </div>
                     </div>
-                    <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="w-full py-3 px-4 rounded-2xl bg-purple-50 text-sdw-pine border border-purple-200 hover:bg-purple-100 text-xs font-bold flex items-center justify-center gap-2 transition">
-                        <i class="fa-solid fa-cloud-arrow-down text-sm text-sdw-gold"></i>
-                        <span>Unduh Seluruh Dokumentasi Foto &amp; Video Kloter (Google Drive)</span>
-                    </a>
+                    <span class="px-2.5 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10.5px] font-black uppercase tracking-wider">
+                        <i class="fa-solid fa-award mr-1"></i> RESMI
+                    </span>
                 </div>
 
-                <!-- Tab 2: E-Sertifikat Mabrur (Mockup Resmi dengan Dynamic Canvas Overlay) -->
-                <div id="galeriTabContentSertifikat" class="hidden space-y-3 pt-1">
-                    <!-- Bar Filter Keberangkatan & Tombol Bagikan WA Kloter -->
+                <!-- 2 Tab Switcher: Tab Umroh & Tab Badal -->
+                <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl text-xs font-bold max-w-md mx-auto">
+                    <button type="button" id="certTabUmrohBtn" onclick="window.switchCertificateTab('umroh')" class="py-2.5 px-3 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">
+                        <i class="fa-solid fa-kaaba mr-1.5"></i> Sertifikat Umroh
+                    </button>
+                    <button type="button" id="certTabBadalBtn" onclick="window.switchCertificateTab('badal')" class="py-2.5 px-3 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
+                        <i class="fa-solid fa-hands-holding-child mr-1.5"></i> Sertifikat Badal
+                    </button>
+                </div>
+
+                <!-- TAB 1 CONTENT: SERTIFIKAT UMROH -->
+                <div id="certTabContentUmroh" class="space-y-3 pt-1">
+                    <!-- Filter Keberangkatan & Tombol Bagikan WA -->
                     <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 max-w-2xl mx-auto">
                         <div class="flex-1 flex items-center gap-2 min-w-[180px]">
                             <label for="certFilterDepartureDate" class="text-xs font-bold text-slate-700 shrink-0 flex items-center gap-1.5">
@@ -1855,7 +1860,7 @@
                                 <span>Keberangkatan:</span>
                             </label>
                             <select id="certFilterDepartureDate" onchange="window.onCertificateDateFilterChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-sdw-pine outline-none transition cursor-pointer">
-                                <!-- Pilihan Tanggal Keberangkatan -->
+                                <!-- Populated dynamically by js/jamaah.js -->
                             </select>
                         </div>
                         <button type="button" id="btnShareCertificateWA" onclick="window.shareKloterCertificateWA()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer shadow-md shrink-0">
@@ -1867,17 +1872,15 @@
                     <!-- Bingkai Sertifikat Landscape Piagam (Rasio Asli 1.48 / A4) -->
                     <div id="pilgrimCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-amber-400/50 select-none bg-slate-900 mx-auto"
                          style="aspect-ratio: 1.48 / 1; max-width: 720px; container-type: inline-size;">
-                        
-                        <!-- Master Mockup Template Image -->
                         <img id="certTemplateImg" src="assets/certificate-template.jpg" alt="Template Sertifikat Umroh SDW" class="w-full h-full object-cover pointer-events-none select-none block">
 
-                        <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan) -->
+                        <!-- Dynamic Overlay 0: Nomor Sertifikat -->
                         <div id="cert-pilgrim-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
                              style="top: 5.8%; left: 6.8%; font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
-                            No: SDW/CERT/2027/2701
+                            No: SDW/CERT/2026/2601
                         </div>
 
-                        <!-- Dynamic Overlay 1: Foto Jamaah dalam Bingkai Emas Kanan Atas (Lebar Sisi Kiri Ditambah) -->
+                        <!-- Dynamic Overlay 1: Foto Jamaah -->
                         <div id="cert-pilgrim-photo-box" class="absolute overflow-hidden shadow-inner flex items-center justify-center bg-slate-100"
                              style="top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; border-radius: 2px;">
                             <img id="cert-pilgrim-photo-img" src="" alt="Foto Jamaah" class="w-full h-full object-cover hidden pointer-events-none select-none">
@@ -1886,27 +1889,27 @@
                             </div>
                         </div>
 
-                        <!-- Dynamic Overlay 2: Nama Jamaah di Atas Garis Tengah (Mendekati Garis Horizontal Bawah) -->
+                        <!-- Dynamic Overlay 2: Nama Jamaah -->
                         <div class="absolute text-center px-4 w-[80%] pointer-events-none"
                              style="top: 53.6%; left: 49.5%; transform: translate(-50%, -100%);">
                             <h2 id="cert-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate"
                                 style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12); font-size: clamp(10px, 3.2cqi, 20px); line-height: 1.1;">
-                                Ahmad Jamaah Teladan
+                                KHASAN MUNADI
                             </h2>
                         </div>
 
-                        <!-- Dynamic Overlay 3: Tanggal & Musim Keberangkatan di Bawah Garis Tengah (Wajib 1 Baris Saja) -->
+                        <!-- Dynamic Overlay 3: Tanggal & Musim Keberangkatan -->
                         <div class="absolute text-center px-4 w-[85%] pointer-events-none"
                              style="top: 55.4%; left: 49.5%; transform: translateX(-50%);">
                             <p id="cert-pilgrim-date" class="font-semibold text-slate-600 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
                                style="font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
-                                Keberangkatan: 15 Januari 2027
+                                Keberangkatan: 27 Oktober 2026
                             </p>
                         </div>
                     </div>
 
-                    <!-- Switcher Jamaah (Jika dalam Kloter Ini Ada Beberapa Sertifikat) -->
-                    <div id="certPilgrimSwitcher" class="hidden flex items-center justify-center gap-1.5 flex-wrap max-w-2xl mx-auto pt-1">
+                    <!-- Switcher Jamaah (Pill Buttons) -->
+                    <div id="certPilgrimSwitcher" class="flex items-center justify-center gap-1.5 flex-wrap max-w-2xl mx-auto pt-1">
                         <!-- Pill buttons dynamically rendered by js/jamaah.js -->
                     </div>
 
@@ -1914,9 +1917,288 @@
                     <div class="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/80 text-amber-950 text-xs flex items-start gap-2.5 max-w-2xl mx-auto">
                         <i class="fa-solid fa-circle-info text-amber-600 mt-0.5 text-sm shrink-0"></i>
                         <p class="leading-relaxed text-[11.5px]">
-                            <strong>Piagam Cetak Fisik Resmi:</strong> Sertifikat berstempel emas dan bertanda tangan basah pimpinan SDW Umroh juga dapat diambil di kantor operasional atau dikirimkan langsung ke alamat Anda setelah kepulangan kloter.
+                            <strong>Piagam Cetak Fisik Resmi:</strong> Sertifikat berstempel emas dan bertanda tangan basah pimpinan SDW Umroh dapat diambil di kantor operasional atau dikirimkan langsung ke alamat jamaah setelah kepulangan kloter.
                         </p>
                     </div>
+                </div>
+
+                <!-- TAB 2 CONTENT: SERTIFIKAT BADAL UMROH -->
+                <div id="certTabContentBadal" class="hidden space-y-3 pt-1">
+                    <!-- Filter Kloter / Periode Badal & Tombol WA -->
+                    <div class="bg-white p-3 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 max-w-2xl mx-auto">
+                        <div class="flex-1 flex items-center gap-2 min-w-[180px]">
+                            <label for="badalFilterDate" class="text-xs font-bold text-slate-700 shrink-0 flex items-center gap-1.5">
+                                <i class="fa-solid fa-calendar-check text-purple-700"></i>
+                                <span>Periode Badal:</span>
+                            </label>
+                            <select id="badalFilterDate" onchange="window.onBadalDateFilterChange(this.value)" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 bg-slate-50 focus:bg-white focus:border-sdw-pine outline-none transition cursor-pointer">
+                                <option value="27 Oktober 2026">27 Oktober 2026 (Musim 1448H)</option>
+                                <option value="15 Januari 2027">15 Januari 2027 (Musim Rajab 1448H)</option>
+                                <option value="28 Februari 2027">28 Februari 2027 (Musim Ramadhan 1448H)</option>
+                            </select>
+                        </div>
+                        <button type="button" id="btnShareBadalWA" onclick="window.shareBadalCertificateWA()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition active:scale-95 cursor-pointer shadow-md shrink-0">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>Kirim ke Keluarga</span>
+                        </button>
+                    </div>
+
+                    <!-- Bingkai Sertifikat Badal (Piagam Emas Badal Umroh) -->
+                    <div id="badalCertContainer" class="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-purple-400/50 select-none bg-slate-900 mx-auto"
+                         style="aspect-ratio: 1.48 / 1; max-width: 720px; container-type: inline-size;">
+                        <img src="assets/certificate-template.jpg" alt="Template Sertifikat Badal SDW" class="w-full h-full object-cover pointer-events-none select-none block">
+
+                        <!-- Badge Badal di Pojok Atas -->
+                        <div class="absolute font-bold text-amber-800 bg-amber-100/90 px-2.5 py-0.5 rounded-full border border-amber-300 pointer-events-none select-none uppercase tracking-wider"
+                             style="top: 5.5%; right: 7%; font-size: clamp(6px, 1.6cqi, 9.5px); line-height: 1.2;">
+                            PIAGAM BADAL UMROH
+                        </div>
+
+                        <!-- No Sertifikat Badal -->
+                        <div id="badal-cert-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
+                             style="top: 5.8%; left: 6.8%; font-size: clamp(6px, 1.8cqi, 10.5px); line-height: 1.2;">
+                            No: SDW/BDL/2026/001
+                        </div>
+
+                        <!-- Icon Ka'bah Emas Pengganti Foto untuk Badal -->
+                        <div class="absolute overflow-hidden shadow-inner flex flex-col items-center justify-center bg-gradient-to-b from-purple-900 to-slate-900 border border-amber-400 text-amber-400"
+                             style="top: 15.55%; left: 76.8%; width: 13.75%; height: 25.1%; border-radius: 2px;">
+                            <i class="fa-solid fa-kaaba text-lg sm:text-2xl text-amber-300"></i>
+                            <span class="text-[7px] sm:text-[9px] font-bold text-amber-200 mt-1 uppercase tracking-tight">Amanah</span>
+                        </div>
+
+                        <!-- Nama Almarhum / Almarhumah yang Dibadalkan -->
+                        <div class="absolute text-center px-4 w-[80%] pointer-events-none"
+                             style="top: 52%; left: 49.5%; transform: translate(-50%, -100%);">
+                            <span class="text-[8px] sm:text-[11px] font-semibold text-amber-800 uppercase tracking-widest block mb-0.5">Diberikan Sebagai Bukti Badal Kepada:</span>
+                            <h2 id="badal-pilgrim-name" class="font-serif font-black text-slate-900 tracking-wide uppercase leading-tight truncate"
+                                style="font-family: 'Playfair Display', Georgia, serif; text-shadow: 0 1px 1px rgba(0,0,0,0.12); font-size: clamp(10px, 3.2cqi, 20px); line-height: 1.1;">
+                                Alm. H. Abdullah bin Umar
+                            </h2>
+                        </div>
+
+                        <!-- Keterangan Pelaksana Amanah Badal & Tanggal -->
+                        <div class="absolute text-center px-4 w-[85%] pointer-events-none space-y-0.5"
+                             style="top: 55%; left: 49.5%; transform: translateX(-50%);">
+                            <p id="badal-executor-info" class="font-medium text-slate-700 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
+                               style="font-size: clamp(6px, 1.7cqi, 10px); line-height: 1.2;">
+                                Pelaksana: <strong>Ustadz Ahmad Fauzi Ridwan, Lc.</strong> (Muthawwif Mukim Makkah)
+                            </p>
+                            <p id="badal-cert-date" class="font-semibold text-slate-500 tracking-normal whitespace-nowrap overflow-hidden text-ellipsis"
+                               style="font-size: clamp(5.5px, 1.5cqi, 9px); line-height: 1.2;">
+                                Tanggal Pelaksanaan: 27 Oktober 2026 di Makkah Al-Mukarramah
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Switcher Badal (Pill Buttons) -->
+                    <div id="badalPilgrimSwitcher" class="flex items-center justify-center gap-1.5 flex-wrap max-w-2xl mx-auto pt-1">
+                        <!-- Pill buttons dynamically rendered by js/jamaah.js -->
+                    </div>
+
+                    <!-- Informasi Amanah Badal -->
+                    <div class="p-3.5 rounded-2xl bg-purple-50/80 border border-purple-200/80 text-purple-950 text-xs flex items-start gap-2.5 max-w-2xl mx-auto">
+                        <i class="fa-solid fa-hands-praying text-purple-700 mt-0.5 text-sm shrink-0"></i>
+                        <p class="leading-relaxed text-[11.5px]">
+                            <strong>Amanah Badal Umroh Syar'i:</strong> Seluruh rukun badal umroh telah ditunaikan secara tertib dan tuntas di Tanah Suci oleh muthawwif mukim berpengalaman, dengan dokumentasi video saat ihram, tawaf, dan sa'i yang dapat diakses oleh keluarga pewakil.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SUBVIEW 8: FULL-PAGE PUSAT IBADAH & MANASIK (ALA ASNAWIYYAH) ==================== -->
+            <div id="subview-ibadah" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-16">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-gold-500/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-gold-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-extrabold text-white leading-tight">Pusat Panduan Ibadah &amp; Manasik</h2>
+                            <p class="text-[11px] text-purple-200/70">Bimbingan Rukun, Doa, Jadwal Sholat &amp; Arah Kiblat</p>
+                        </div>
+                    </div>
+                    <span class="px-2.5 py-1 rounded-full bg-gold-400/20 text-gold-300 border border-gold-400/30 text-[10.5px] font-bold">
+                        <i class="fa-solid fa-kaaba mr-1 text-gold-400"></i> Haramain
+                    </span>
+                </div>
+
+                <!-- Tab Segment Switcher di Menu Ibadah -->
+                <div class="grid grid-cols-4 gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-[11px] font-bold">
+                    <button type="button" id="ibadahTabKiblatBtn" onclick="window.switchIbadahTab('kiblat')" class="ibadah-tab-btn py-2 px-1 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">
+                        <i class="fa-solid fa-compass mr-1"></i> Kiblat
+                    </button>
+                    <button type="button" id="ibadahTabSholatBtn" onclick="window.switchIbadahTab('sholat')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
+                        <i class="fa-solid fa-clock mr-1"></i> Sholat
+                    </button>
+                    <button type="button" id="ibadahTabManasikBtn" onclick="window.switchIbadahTab('manasik')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
+                        <i class="fa-solid fa-book-quran mr-1"></i> Manasik
+                    </button>
+                    <button type="button" id="ibadahTabDoaBtn" onclick="window.switchIbadahTab('doa')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
+                        <i class="fa-solid fa-hands-praying mr-1"></i> Doa/Dzikir
+                    </button>
+                </div>
+
+                <!-- 1. TAB KIBLAT: Kompas Arah Kiblat Digital (Dipindahkan dari menu utama) -->
+                <div id="ibadahTabContentKiblat" class="space-y-4 pt-1">
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-purple-100 shadow-md text-center space-y-6">
+                        <div class="relative w-64 h-64 sm:w-72 sm:h-72 mx-auto rounded-full bg-gradient-to-b from-purple-50 to-amber-50/40 border-4 border-gold-500/40 shadow-inner flex items-center justify-center overflow-hidden">
+                            <div class="absolute inset-2 rounded-full border border-dashed border-purple-200"></div>
+                            <span class="absolute top-3 font-bold text-xs text-rose-600">U (0°)</span>
+                            <span class="absolute bottom-3 font-bold text-xs text-slate-400">S (180°)</span>
+                            <span class="absolute right-3 font-bold text-xs text-slate-400">T (90°)</span>
+                            <span class="absolute left-3 font-bold text-xs text-slate-400">B (270°)</span>
+
+                            <!-- Rotating Needle -->
+                            <div id="compassNeedleInIbadah" class="relative w-full h-full flex items-center justify-center transition-transform duration-200 ease-out">
+                                <div class="absolute top-8 flex flex-col items-center">
+                                    <div class="w-9 h-9 rounded-xl bg-sdw-pine text-gold-400 flex items-center justify-center text-sm shadow-md border border-gold-400/50 animate-bounce">
+                                        <i class="fa-solid fa-kaaba"></i>
+                                    </div>
+                                    <span class="text-[9px] font-black text-sdw-pine uppercase tracking-wider mt-1">Kiblat</span>
+                                </div>
+                                <div class="w-1.5 h-32 bg-gradient-to-t from-slate-300 via-amber-400 to-rose-600 rounded-full shadow-sm"></div>
+                                <div class="w-4 h-4 rounded-full bg-slate-900 border-2 border-white absolute"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5 max-w-md mx-auto">
+                            <div class="text-sm font-extrabold text-slate-900">Arah Kiblat Indonesia: &plusmn; 295° (Barat Laut)</div>
+                            <p class="text-xs text-slate-500 leading-relaxed">
+                                Pegang smartphone dalam posisi datar mendatar (horizontal) dan putar tubuh perlahan hingga jarum Ka'bah tegak lurus ke atas.
+                            </p>
+                        </div>
+
+                        <div class="p-3.5 bg-purple-50 rounded-2xl border border-purple-100 text-left text-xs text-purple-900/90 leading-relaxed">
+                            <div class="font-bold mb-1 text-sdw-pine flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-quran text-amber-500"></i>
+                                <span>QS. Al-Baqarah: 144</span>
+                            </div>
+                            <em>"Maka hadapkanlah wajahmu ke arah Masjidil Haram. Dan di mana saja kamu berada, hadapkanlah wajahmu ke arahnya."</em>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. TAB SHOLAT: Jadwal Sholat Makkah, Madinah & Indonesia -->
+                <div id="ibadahTabContentSholat" class="hidden space-y-4 pt-1">
+                    <div class="grid grid-cols-3 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
+                        <button type="button" onclick="window.switchSholatCity('MAKKAH', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">🕋 Makkah</button>
+                        <button type="button" onclick="window.switchSholatCity('MADINAH', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🕌 Madinah</button>
+                        <button type="button" onclick="window.switchSholatCity('INDONESIA', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🇮🇩 Indonesia</button>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Subuh</span>
+                            <span id="sholatTimeSubuh" class="text-base font-extrabold text-sdw-pine">05:02 AST</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Syuruq</span>
+                            <span id="sholatTimeSyuruq" class="text-base font-extrabold text-slate-700">06:21 AST</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-amber-300 bg-amber-50/50 shadow-2xs">
+                            <span class="text-[10px] font-bold text-amber-700 block uppercase">Dzuhur</span>
+                            <span id="sholatTimeDzuhur" class="text-base font-extrabold text-amber-800">12:12 AST</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Ashar</span>
+                            <span id="sholatTimeAshar" class="text-base font-extrabold text-slate-700">15:28 AST</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Maghrib</span>
+                            <span id="sholatTimeMaghrib" class="text-base font-extrabold text-slate-700">17:49 AST</span>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Isya</span>
+                            <span id="sholatTimeIsya" class="text-base font-extrabold text-slate-700">19:19 AST</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. TAB MANASIK: Panduan Rukun & Niat Umroh -->
+                <div id="ibadahTabContentManasik" class="hidden space-y-3 pt-1">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 1</span>
+                            <span class="text-xs text-slate-400">Di Miqat (Bir Ali / Yalamlam)</span>
+                        </div>
+                        <h3 class="font-extrabold text-sm text-slate-900">Ihram &amp; Berniat Umroh</h3>
+                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
+                            لَبَّيْكَ اللَّهُمَّ عُمْرَةً
+                        </p>
+                        <p class="text-xs text-slate-600 italic">"Labbaika Allahumma 'Umratan"</p>
+                        <p class="text-[11.5px] text-slate-500">Artinya: Aku penuhi panggilan-Mu ya Allah untuk menunaikan ibadah umroh.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 2</span>
+                            <span class="text-xs text-slate-400">Masjidil Haram (7 Putaran)</span>
+                        </div>
+                        <h3 class="font-extrabold text-sm text-slate-900">Thawaf Mengelilingi Ka'bah</h3>
+                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
+                            بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ
+                        </p>
+                        <p class="text-xs text-slate-600 italic">"Bismillahi wallahu Akbar"</p>
+                        <p class="text-[11.5px] text-slate-500">Mulai dari garis Hajar Aswad berlawanan arah jarum jam sebanyak 7 putaran penuh.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 3</span>
+                            <span class="text-xs text-slate-400">Bukit Shafa ke Marwah</span>
+                        </div>
+                        <h3 class="font-extrabold text-sm text-slate-900">Sa'i 7 Kali Perjalanan</h3>
+                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
+                            إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ
+                        </p>
+                        <p class="text-[11.5px] text-slate-500">Dimulai dari Bukit Shafa dan berakhir di Bukit Marwah dengan memperbanyak doa dan dzikir.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 4</span>
+                            <span class="text-xs text-slate-400">Penyempurna Ibadah</span>
+                        </div>
+                        <h3 class="font-extrabold text-sm text-slate-900">Tahallul (Mencukur / Memotong Rambut)</h3>
+                        <p class="text-[11.5px] text-slate-500">Mencukur gundul (afdol bagi laki-laki) atau memotong minimal 3 helai rambut, tanda selesainya rukun umroh.</p>
+                    </div>
+                </div>
+
+                <!-- 4. TAB DOA: Dzikir & Doa Harian -->
+                <div id="ibadahTabContentDoa" class="hidden space-y-3 pt-1">
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <h3 class="font-extrabold text-sm text-slate-900">Doa Masuk Masjidil Haram</h3>
+                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
+                            اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ
+                        </p>
+                        <p class="text-xs text-slate-600 italic">"Allahummaftah lii abwaaba rahmatik"</p>
+                        <p class="text-[11.5px] text-slate-500">Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.</p>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
+                        <h3 class="font-extrabold text-sm text-slate-900">Doa Antara Rukun Yamani &amp; Hajar Aswad</h3>
+                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
+                            رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ
+                        </p>
+                        <p class="text-xs text-slate-600 italic">"Rabbana aatina fiddunya hasanah wa fil aakhirati hasanah wa qinaa 'adzaban naar"</p>
+                    </div>
+                </div>
+
+                <!-- Konsultasi Muthawwif Card -->
+                <div class="p-4 rounded-2xl bg-gradient-to-r from-purple-950 via-sdw-pine to-emerald-900 text-white flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 shadow-md">
+                    <div class="space-y-1">
+                        <div class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                            <i class="fa-solid fa-headset"></i>
+                            <span>Bimbingan Manasik Langsung</span>
+                        </div>
+                        <p class="text-[11px] text-purple-200/80">Konsultasikan fiqih thawaf, sa'i, atau uzur syar'i langsung kepada Muthawwif SDW.</p>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Ustadz%20Muthawwif%20SDW,%20saya%20ingin%20berkonsultasi%20mengenai%20fiqih%20ibadah%20manasik." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shrink-0 shadow-sm">
+                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                        <span>Chat Muthawwif</span>
+                    </a>
                 </div>
             </div>
 
@@ -2133,8 +2415,8 @@
                 <span class="text-[9.5px] font-semibold mt-1">Berita</span>
             </button>
 
-            <!-- 3. Ibadah (Elevated Center Action Button - Menggantikan Buku Doa) -->
-            <button type="button" onclick="window.openIbadahModal()" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
+            <!-- 3. Ibadah (Elevated Center Action Button - Full-Screen SPA ala Asnawiyyah) -->
+            <button type="button" onclick="window.openAppSubView('ibadah')" class="flex flex-col items-center justify-center -mt-4 transition group cursor-pointer active:scale-95" aria-label="Pusat Ibadah &amp; Manasik">
                 <div class="w-12 h-12 rounded-full bg-gradient-to-tr from-amber-500 via-sdw-gold to-yellow-400 text-slate-950 flex items-center justify-center shadow-lg shadow-amber-500/35 ring-4 ring-white active:scale-95 transition-transform">
                     <i class="fa-solid fa-hands-praying text-lg text-slate-950"></i>
                 </div>

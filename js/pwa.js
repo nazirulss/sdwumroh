@@ -1907,13 +1907,18 @@
   };
 
   function handleOrientation(e) {
-    const needle = document.getElementById('compassNeedle');
-    if (!needle) return;
+    const needles = [
+      document.getElementById('compassNeedle'),
+      document.getElementById('compassNeedleInIbadah')
+    ].filter(Boolean);
+    if (needles.length === 0) return;
 
     let heading = e.webkitCompassHeading || (e.alpha ? 360 - e.alpha : null);
     if (heading !== null) {
       const qiblaAngle = (295 - heading + 360) % 360;
-      needle.style.transform = `rotate(${qiblaAngle}deg)`;
+      needles.forEach(n => {
+        n.style.transform = `rotate(${qiblaAngle}deg)`;
+      });
     }
   }
 
@@ -2804,16 +2809,16 @@
     'ibadahHubModal'
   ];
 
-  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'live', 'auth'];
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'ibadah', 'live', 'auth'];
 
   // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
   window.openAppSubView = function (viewName, options = { syncHistory: true }) {
     if (!viewName) return;
     let v = String(viewName).toLowerCase().trim();
     if (v === 'sertifikat' || v === 'cert') {
-      v = 'galeri';
-      if (!options) options = {};
-      options.tab = 'sertifikat';
+      v = 'sertifikat';
+    } else if (v === 'kiblat') {
+      return window.openAppSubView('ibadah', { ...options, tab: 'kiblat' });
     }
     const targetSubView = document.getElementById('subview-' + v);
 
@@ -2851,28 +2856,49 @@
       if (typeof window.switchHotelTab === 'function') window.switchHotelTab('makkah');
     } else if (v === 'koper') {
       if (typeof window.renderKoperChecklist === 'function') window.renderKoperChecklist();
-    } else if (v === 'kiblat') {
-      if (typeof window.initDigitalCompass === 'function') {
-        window.initDigitalCompass();
-      } else if (!compassListenerAttached && window.DeviceOrientationEvent) {
-        window.addEventListener('deviceorientation', handleOrientation, true);
-        compassListenerAttached = true;
-      }
     } else if (v === 'ziarah') {
       if (typeof window.renderInAppZiarahList === 'function') window.renderInAppZiarahList('ALL');
     } else if (v === 'galeri') {
-      let targetTab = 'foto';
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const qTab = urlParams.get('tab');
         if (qTab === 'sertifikat' || qTab === 'cert') {
-          targetTab = 'sertifikat';
+          return window.openAppSubView('sertifikat', { ...options, tab: 'umroh' });
         }
       } catch (e) {}
-      if (options && options.tab) {
-        targetTab = options.tab;
+      if (typeof window.renderGaleriKloter === 'function') {
+        window.renderGaleriKloter();
       }
-      if (typeof window.switchGaleriTab === 'function') window.switchGaleriTab(targetTab);
+    } else if (v === 'sertifikat') {
+      let targetTab = 'umroh';
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const qTab = urlParams.get('tab');
+        if (qTab === 'badal') targetTab = 'badal';
+      } catch (e) {}
+      if (options && options.tab) targetTab = options.tab;
+      if (typeof window.switchCertificateTab === 'function') {
+        window.switchCertificateTab(targetTab);
+      } else if (typeof window.renderPilgrimCertificate === 'function') {
+        window.renderPilgrimCertificate();
+      }
+    } else if (v === 'ibadah') {
+      let targetTab = 'kiblat';
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const qTab = urlParams.get('tab');
+        if (['kiblat', 'sholat', 'manasik', 'doa'].includes(qTab)) targetTab = qTab;
+      } catch (e) {}
+      if (options && options.tab) targetTab = options.tab;
+      if (typeof window.switchIbadahTab === 'function') {
+        window.switchIbadahTab(targetTab);
+      }
+      if (targetTab === 'kiblat') {
+        if (!compassListenerAttached && window.DeviceOrientationEvent) {
+          window.addEventListener('deviceorientation', handleOrientation, true);
+          compassListenerAttached = true;
+        }
+      }
     } else if (v === 'live') {
       if (typeof window.switchLiveFeed === 'function') window.switchLiveFeed('main');
     } else if (v === 'auth') {
@@ -2884,10 +2910,10 @@
     // 5. Synchronize URL query parameter (?view=...)
     if (options && options.syncHistory !== false) {
       syncUrlView(v);
-      if (v === 'galeri' && options && options.tab === 'sertifikat') {
+      if (options && options.tab) {
         try {
           const url = new URL(window.location.href);
-          url.searchParams.set('tab', 'sertifikat');
+          url.searchParams.set('tab', options.tab);
           window.history.replaceState(window.history.state, '', url.toString());
         } catch (e) {}
       }
@@ -2960,10 +2986,11 @@
     'booking': (opts) => window.openAppSubView('booking', opts),
     'hotel': (opts) => window.openAppSubView('hotel', opts),
     'koper': (opts) => window.openAppSubView('koper', opts),
-    'kiblat': (opts) => window.openAppSubView('kiblat', opts),
+    'kiblat': (opts) => window.openAppSubView('ibadah', { tab: 'kiblat', ...opts }),
     'ziarah': (opts) => window.openAppSubView('ziarah', opts),
     'galeri': (opts) => window.openAppSubView('galeri', opts),
-    'sertifikat': (opts) => window.openAppSubView('galeri', { tab: 'sertifikat', ...opts }),
+    'sertifikat': (opts) => window.openAppSubView('sertifikat', opts),
+    'cert': (opts) => window.openAppSubView('sertifikat', opts),
     'live': (opts) => window.openAppSubView('live', opts),
     'auth': (opts) => window.openAppSubView('auth', opts),
 
@@ -3024,30 +3051,22 @@
     'akun': (opts) => APP_VIEW_MAP['profil'](opts),
     'account': (opts) => APP_VIEW_MAP['profil'](opts),
 
-    // 3. Ibadah Super Hub & Modals
+    // 3. Ibadah Super Hub Full-Screen SPA (Sesuai Konsep Asnawiyyah)
     'ibadah': (opts) => {
-      let sub = null;
+      let tab = 'kiblat';
       try {
         const urlParams = new URLSearchParams(window.location.search);
-        sub = urlParams.get('sub');
+        const qTab = urlParams.get('tab') || urlParams.get('sub');
+        if (qTab) tab = qTab;
       } catch (e) {}
-      if (opts && opts.sub) sub = opts.sub;
-
-      if (sub === 'doa') {
-        window.openDoaModal('niat', opts);
-      } else if (sub === 'jadwal') {
-        window.openJadwalSholatModal('MAKKAH', opts);
-      } else if (sub === 'miqat') {
-        window.openWartaModal('miqat-guide', opts);
-      } else {
-        window.openIbadahModal(opts);
-      }
+      if (opts && (opts.tab || opts.sub)) tab = opts.tab || opts.sub;
+      window.openAppSubView('ibadah', { tab, ...opts });
     },
-    'manasik': (opts) => APP_VIEW_MAP['ibadah'](opts),
-    'superhub': (opts) => APP_VIEW_MAP['ibadah'](opts),
+    'manasik': (opts) => window.openAppSubView('ibadah', { tab: 'manasik', ...opts }),
+    'superhub': (opts) => window.openAppSubView('ibadah', opts),
 
-    'doa': (opts) => window.openDoaModal('niat', opts),
-    'jadwal': (opts) => window.openJadwalSholatModal('MAKKAH', opts)
+    'doa': (opts) => window.openAppSubView('ibadah', { tab: 'doa', ...opts }),
+    'jadwal': (opts) => window.openAppSubView('ibadah', { tab: 'sholat', ...opts })
   };
 
   window.openAppViewByName = function (viewName, options = { syncHistory: true }) {

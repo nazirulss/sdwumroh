@@ -117,12 +117,11 @@ console.log(`  [PASS] getRegistrations() berhasil mengembalikan ${regsList.lengt
 
 // 8. Pengujian Verifikasi Deep-Link Router & WhatsApp Share Link
 console.log('\n8. Verifikasi Deep-Link Router & WhatsApp Share Link');
-assert(pwaJs.includes("qTab === 'sertifikat' || qTab === 'cert'"), 'pwa.js harus mendeteksi query parameter tab=sertifikat');
-assert(pwaJs.includes("url.searchParams.set('tab', 'sertifikat')"), 'pwa.js switchGaleriTab harus menyinkronkan URL tab=sertifikat');
-assert(pwaJs.includes("'sertifikat': (opts) => window.openAppSubView('galeri', { tab: 'sertifikat'"), 'APP_VIEW_MAP harus memetakan sertifikat ke galeri tab sertifikat');
-assert(jamaahJs.includes('view=galeri&tab=sertifikat&date='), 'Pesan share WhatsApp harus menyertakan link dengan tab=sertifikat dan parameter date');
+assert(pwaJs.includes("qTab === 'sertifikat' || qTab === 'cert'"), 'pwa.js harus mendeteksi query parameter tab=sertifikat untuk backward compatibility');
+assert(pwaJs.includes("'sertifikat': (opts) => window.openAppSubView('sertifikat'"), 'APP_VIEW_MAP harus memetakan sertifikat ke subview mandiri sertifikat');
+assert(jamaahJs.includes('view=sertifikat&tab=umroh&date='), 'Pesan share WhatsApp harus menyertakan link mandiri sertifikat dan parameter date');
 assert(jamaahJs.includes("urlParams.get('date')"), 'jamaah.js harus membaca query parameter date dari URL untuk auto-select kloter');
-console.log('  [PASS] Deep-link router (?view=galeri&tab=sertifikat&date=...) dan pesan WhatsApp terverifikasi!');
+console.log('  [PASS] Deep-link router (?view=sertifikat&tab=umroh&date=...) dan pesan WhatsApp terverifikasi!');
 
 console.log('\n========================================');
 console.log('TOTAL TEST RESULT: ALL PASSED (100% SUKSES)');

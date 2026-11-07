@@ -171,7 +171,7 @@ async function runFullDuplexTests() {
     }
 
     process.stdout.write('3.4 Menguji Live checkRegistration (PWA E-PASS)... ');
-    const chkRes = await fetchUrl(`${WEB_APP_URL}?action=checkRegistration&regId=REG-SDW-2701`);
+    const chkRes = await fetchUrl(`${WEB_APP_URL}?action=checkRegistration&regId=REG-SDW-2601`);
     if (chkRes.json && chkRes.json.success && chkRes.json.data) {
       console.log(`✅ SUKSES! (Status: ${chkRes.json.data.status})`);
       passed++;
