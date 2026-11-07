@@ -31,6 +31,7 @@
         renderManasik();
         loadPilgrimDocumentsAsync();
         syncLiveRegistrationsAsync();
+        syncLiveBadalCertificatesAsync();
     }
 
     async function syncLiveRegistrationsAsync() {
@@ -753,6 +754,7 @@
             if (badalContent) badalContent.classList.remove('hidden');
             if (umrohContent) umrohContent.classList.add('hidden');
             renderBadalCertificate();
+            syncLiveBadalCertificatesAsync();
         }
 
         try {
@@ -763,78 +765,170 @@
     }
 
     // ==================== SERTIFIKAT BADAL UMROH CONTROLLERS ====================
-    const BADAL_CERTIFICATES = [
+    const DEFAULT_BADAL_CERTIFICATES = [
         {
             id: 'BDL-001',
-            almarhumName: 'Alm. H. Abdullah bin Umar',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Besar Bpk. Sanali Bajuri',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2026/001',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah'
+            nomorSertifikat: 'SDW/BDL/2026/001',
+            namaPetugasBadal: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+            namaYangDibadalkan: 'Alm. H. Abdullah bin Umar',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah Al-Mukarramah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Keluarga Besar Bpk. Sanali Bajuri',
+            status: 'ISSUED',
+            ukuranFontNama: 'auto'
         },
         {
             id: 'BDL-002',
-            almarhumName: 'Almh. Hj. Maryam binti Sulaiman',
-            beneficiaryTitle: 'Almarhumah',
-            dibadalkanOleh: 'Ibu Siti Nuriyah & Keluarga',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2026/002',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah'
+            nomorSertifikat: 'SDW/BDL/2026/002',
+            namaPetugasBadal: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
+            namaYangDibadalkan: 'Almh. Hj. Maryam binti Sulaiman',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah Al-Mukarramah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Ibu Siti Nuriyah & Keluarga',
+            status: 'ISSUED',
+            ukuranFontNama: 'auto'
         },
         {
             id: 'BDL-003',
-            almarhumName: 'Alm. K.H. Dahlan bin Syafei',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Bpk. Khasan Munadi',
-            muthawwif: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
-            muthawwifRole: 'Muthawwif Senior Makkah',
-            certNo: 'SDW/BDL/2026/003',
-            executionDate: '27 Oktober 2026',
-            location: 'Makkah Al-Mukarramah'
-        },
-        {
-            id: 'BDL-004',
-            almarhumName: 'Almh. Nyai Hj. Fatimah binti Asy\'ari',
-            beneficiaryTitle: 'Almarhumah',
-            dibadalkanOleh: 'Keluarga Besar Bpk. Sugiono',
-            muthawwif: 'Ustadz Ahmad Fauzi Ridwan, Lc.',
-            muthawwifRole: 'Muthawwif Mukim Makkah',
-            certNo: 'SDW/BDL/2027/004',
-            executionDate: '15 Januari 2027',
-            location: 'Makkah Al-Mukarramah'
-        },
-        {
-            id: 'BDL-005',
-            almarhumName: 'Alm. H. Mansur bin Hasyim',
-            beneficiaryTitle: 'Almarhum',
-            dibadalkanOleh: 'Keluarga Ibu Sri Nuryati',
-            muthawwif: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
-            muthawwifRole: 'Muthawwif Senior Makkah',
-            certNo: 'SDW/BDL/2027/005',
-            executionDate: '28 Februari 2027',
-            location: 'Makkah Al-Mukarramah'
+            nomorSertifikat: 'SDW/BDL/2026/003',
+            namaPetugasBadal: 'Ustadz Muhammad Syakir, Lc., M.Ag.',
+            namaYangDibadalkan: 'Alm. K.H. Dahlan bin Syafei',
+            tempatMiqat: "Masjid Aisyah Tan'im",
+            tanggalPelaksanaan: '27 Oktober 2026',
+            tempatPenerbitan: 'Makkah Al-Mukarramah',
+            tanggalPenerbitan: '27 Oktober 2026',
+            keluargaPemesan: 'Keluarga Bpk. Khasan Munadi',
+            status: 'ISSUED',
+            ukuranFontNama: 'auto'
         }
     ];
 
-    let activeBadalDateFilter = '27 Oktober 2026';
+    function normalizeBadalRecord(item) {
+        if (!item) return {};
+        const certNo = item.nomorSertifikat || item.nomor_sertifikat || item.certNo || item.cert_no || '';
+        const petugas = item.namaPetugasBadal || item.nama_petugas_badal || item.muthawwif || '';
+        const nama = item.namaYangDibadalkan || item.nama_yang_dibadalkan || item.almarhumName || item.almarhum_name || '';
+        const miqat = item.tempatMiqat || item.tempat_miqat || "Masjid Aisyah Tan'im";
+        const tglPelaksanaan = item.tanggalPelaksanaan || item.tanggal_pelaksanaan || item.executionDate || item.execution_date || '27 Oktober 2026';
+        const tempatPenerbitan = item.tempatPenerbitan || item.tempat_penerbitan || item.location || 'Makkah Al-Mukarramah';
+        const tglPenerbitan = item.tanggalPenerbitan || item.tanggal_penerbitan || tglPelaksanaan;
+        const keluarga = item.keluargaPemesan || item.keluarga_pemesan || item.dibadalkanOleh || item.dibadalkan_oleh || '';
+        const fontSize = item.ukuranFontNama || item.ukuran_font_nama || item.nameFontSize || 'auto';
+        return {
+            id: item.id || '',
+            nomorSertifikat: certNo,
+            certNo: certNo,
+            namaPetugasBadal: petugas,
+            muthawwif: petugas,
+            namaYangDibadalkan: nama,
+            almarhumName: nama,
+            tempatMiqat: miqat,
+            tanggalPelaksanaan: tglPelaksanaan,
+            executionDate: tglPelaksanaan,
+            tempatPenerbitan: tempatPenerbitan,
+            tanggalPenerbitan: tglPenerbitan,
+            keluargaPemesan: keluarga,
+            dibadalkanOleh: keluarga,
+            status: item.status || 'ISSUED',
+            ukuranFontNama: fontSize
+        };
+    }
+
+    function formatBadalDateIndo(rawDate) {
+        if (!rawDate) return '';
+        let str = String(rawDate).trim();
+        str = str.replace(/[T ]\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?$/, '').trim();
+        const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (isoMatch) {
+            const y = parseInt(isoMatch[1], 10);
+            const m = parseInt(isoMatch[2], 10) - 1;
+            const d = parseInt(isoMatch[3], 10);
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            if (m >= 0 && m < 12) {
+                return `${d} ${months[m]} ${y}`;
+            }
+        }
+        return str;
+    }
+
+    function getBadalCertificatesList() {
+        try {
+            const raw = localStorage.getItem('sdw_admin_badal_certificates');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    return parsed.map(normalizeBadalRecord);
+                }
+            }
+        } catch (e) {
+            console.warn('[SDW_JAMAAH] Gagal membaca sdw_admin_badal_certificates:', e);
+        }
+        return DEFAULT_BADAL_CERTIFICATES.map(normalizeBadalRecord);
+    }
+
+    let activeBadalDateFilter = '';
     let activeBadalPilgrim = null;
 
-    function renderBadalCertificate() {
+    function populateBadalDateFilter(allBadal) {
         const filterEl = document.getElementById('badalFilterDate');
-        const selectedDate = (filterEl && filterEl.value) || activeBadalDateFilter || '27 Oktober 2026';
+        if (!filterEl) return;
+        const list = allBadal || getBadalCertificatesList();
+        const dateMap = new Map();
+        list.forEach(b => {
+            const raw = b.tanggalPelaksanaan || '27 Oktober 2026';
+            const formatted = formatBadalDateIndo(raw);
+            if (!dateMap.has(formatted)) {
+                dateMap.set(formatted, raw);
+            }
+        });
+
+        const currentVal = filterEl.value;
+        const entries = Array.from(dateMap.entries());
+        if (entries.length > 0) {
+            filterEl.innerHTML = entries.map(([formatted]) => {
+                return `<option value="${formatted}">${formatted}</option>`;
+            }).join('');
+            if (currentVal && dateMap.has(currentVal)) {
+                filterEl.value = currentVal;
+            } else {
+                filterEl.selectedIndex = 0;
+            }
+            activeBadalDateFilter = filterEl.value;
+        }
+    }
+
+    function renderBadalCertificate() {
+        const allBadal = getBadalCertificatesList();
+        const filterEl = document.getElementById('badalFilterDate');
+
+        if (filterEl && (!filterEl.options || filterEl.options.length <= 1)) {
+            populateBadalDateFilter(allBadal);
+        }
+
+        const selectedDate = (filterEl && filterEl.value) || activeBadalDateFilter;
         activeBadalDateFilter = selectedDate;
 
-        const badalList = BADAL_CERTIFICATES.filter(b => b.executionDate === selectedDate);
-        if (!activeBadalPilgrim || activeBadalPilgrim.executionDate !== selectedDate) {
-            activeBadalPilgrim = badalList[0] || BADAL_CERTIFICATES[0];
+        const badalList = allBadal.filter(b => {
+            if (!selectedDate) return true;
+            const formatted = formatBadalDateIndo(b.tanggalPelaksanaan);
+            return formatted === selectedDate || b.tanggalPelaksanaan === selectedDate;
+        });
+
+        const listToUse = badalList.length > 0 ? badalList : allBadal;
+        if (!activeBadalPilgrim || !listToUse.some(b => b.id === activeBadalPilgrim.id)) {
+            activeBadalPilgrim = listToUse[0] || allBadal[0];
         }
 
         const b = activeBadalPilgrim;
+        if (!b) return;
+
         const noEl = document.getElementById('badal-cert-no');
         const nameEl = document.getElementById('badal-pilgrim-name');
         const execEl = document.getElementById('badal-executor-info');
@@ -846,12 +940,20 @@
         const nama = (b.namaYangDibadalkan || b.almarhumName || '').toUpperCase();
         const petugas = b.namaPetugasBadal || b.muthawwif || 'Ustadz Ahmad Fauzi Ridwan, Lc.';
         const miqat = b.tempatMiqat || "Masjid Aisyah Tan'im";
-        const tgl = b.tanggalPelaksanaan || b.executionDate || '27 Oktober 2026';
-        const tempatPenerbitan = b.tempatPenerbitan || b.location || 'Makkah';
-        const tglPenerbitan = b.tanggalPenerbitan || tgl;
+        const tgl = formatBadalDateIndo(b.tanggalPelaksanaan || '27 Oktober 2026');
+        const tempatPenerbitan = b.tempatPenerbitan || 'Makkah Al-Mukarramah';
+        const tglPenerbitan = formatBadalDateIndo(b.tanggalPenerbitan || b.tanggalPelaksanaan || '27 Oktober 2026');
 
         if (noEl) noEl.textContent = certNo.startsWith('No') ? certNo : `No: ${certNo}`;
-        if (nameEl) nameEl.textContent = nama;
+        if (nameEl) {
+            nameEl.textContent = nama;
+            if (b.ukuranFontNama && b.ukuranFontNama !== 'auto') {
+                const fs = String(b.ukuranFontNama).includes('px') ? b.ukuranFontNama : `${b.ukuranFontNama}px`;
+                nameEl.style.fontSize = fs;
+            } else {
+                nameEl.style.fontSize = '';
+            }
+        }
         if (execEl) execEl.textContent = petugas;
         if (miqatEl) miqatEl.textContent = miqat;
         if (dateEl) dateEl.textContent = tgl;
@@ -859,13 +961,14 @@
 
         const switcherEl = document.getElementById('badalPilgrimSwitcher');
         if (switcherEl) {
-            if (badalList.length > 1) {
-                switcherEl.innerHTML = badalList.map(item => {
+            if (listToUse.length > 1) {
+                switcherEl.innerHTML = listToUse.map(item => {
                     const isActive = item.id === b.id;
+                    const displayName = item.namaYangDibadalkan || item.almarhumName || item.id;
                     return `
                         <button type="button" onclick="window.selectBadalPilgrim('${item.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shadow-2xs ${isActive ? 'bg-purple-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}">
                             <i class="fa-solid fa-kaaba text-[10px] mr-1 text-amber-400"></i>
-                            <span>${item.almarhumName}</span>
+                            <span>${displayName}</span>
                         </button>
                     `;
                 }).join('');
@@ -883,7 +986,8 @@
     }
 
     function selectBadalPilgrim(id) {
-        const found = BADAL_CERTIFICATES.find(b => b.id === id);
+        const allBadal = getBadalCertificatesList();
+        const found = allBadal.find(b => b.id === id);
         if (found) {
             activeBadalPilgrim = found;
             renderBadalCertificate();
@@ -891,19 +995,42 @@
     }
 
     function shareBadalCertificateWA() {
-        const b = activeBadalPilgrim || BADAL_CERTIFICATES[0];
-        const shareUrl = `${window.location.origin}/app?view=sertifikat&tab=badal&date=${encodeURIComponent(b.executionDate)}`;
+        const b = activeBadalPilgrim || getBadalCertificatesList()[0];
+        if (!b) return;
+        const formattedDate = formatBadalDateIndo(b.tanggalPelaksanaan);
+        const shareUrl = `${window.location.origin}/app?view=sertifikat&tab=badal&date=${encodeURIComponent(formattedDate)}`;
 
         let text = `*PIAGAM RESMI BADAL UMROH PT SDW MANDIRI UTAMA*\n`;
-        text += `Almarhum/ah: *${b.almarhumName}*\n`;
-        text += `Nomor Sertifikat: *${b.certNo}*\n`;
-        text += `Pelaksana Amanah: *${b.muthawwif}* (${b.muthawwifRole})\n`;
-        text += `Tanggal Pelaksanaan: *${b.executionDate}* di ${b.location}\n`;
-        text += `Atas Amanah Dari: *${b.dibadalkanOleh}*\n\n`;
-        text += `Alhamdulillah, rangkaian rukun Badal Umroh telah ditunaikan secara khusyuk dan syar'i. Semoga amal ibadah ini diterima oleh Allah SWT dan pahalanya mengalir sempurna kepada almarhum/almarhumah. Aamiin ya Rabbal 'Alamin.\n\n`;
+        text += `Nama Yang Dibadalkan: *${b.namaYangDibadalkan}*\n`;
+        text += `Nomor Sertifikat: *${b.nomorSertifikat}*\n`;
+        text += `Pelaksana Amanah (Muthawwif): *${b.namaPetugasBadal}*\n`;
+        text += `Tempat Miqat: *${b.tempatMiqat}*\n`;
+        text += `Pelaksanaan: *${formattedDate}*\n`;
+        if (b.keluargaPemesan) {
+            text += `Atas Amanah Dari: *${b.keluargaPemesan}*\n`;
+        }
+        text += `\nAlhamdulillah, rangkaian rukun Badal Umroh telah ditunaikan secara khusyuk dan syar'i. Semoga amal ibadah ini diterima oleh Allah SWT dan pahalanya mengalir sempurna kepada almarhum/almarhumah. Aamiin ya Rabbal 'Alamin.\n\n`;
         text += `Lihat Piagam Digital: ${shareUrl}`;
 
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    async function syncLiveBadalCertificatesAsync() {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getBadalCertificates');
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    try {
+                        localStorage.setItem('sdw_admin_badal_certificates', JSON.stringify(res.data));
+                    } catch (e) {}
+                    const allBadal = res.data.map(normalizeBadalRecord);
+                    populateBadalDateFilter(allBadal);
+                    renderBadalCertificate();
+                }
+            } catch (err) {
+                console.warn('[SDW_JAMAAH] Gagal mengambil data sertifikat badal live dari Spreadsheet:', err);
+            }
+        }
     }
 
     // ==================== GALERI FOTO DOKUMENTASI KLOTER ====================
@@ -1160,6 +1287,7 @@
         window.onBadalDateFilterChange = onBadalDateFilterChange;
         window.selectBadalPilgrim = selectBadalPilgrim;
         window.shareBadalCertificateWA = shareBadalCertificateWA;
+        window.syncLiveBadalCertificatesAsync = syncLiveBadalCertificatesAsync;
         window.renderGaleriKloter = renderGaleriKloter;
         window.onGaleriKloterFilterChange = onGaleriKloterFilterChange;
         window.switchIbadahTab = switchIbadahTab;
@@ -1187,6 +1315,7 @@
         onBadalDateFilterChange: onBadalDateFilterChange,
         selectBadalPilgrim: selectBadalPilgrim,
         shareBadalCertificateWA: shareBadalCertificateWA,
+        syncLiveBadalCertificatesAsync: syncLiveBadalCertificatesAsync,
         renderGaleriKloter: renderGaleriKloter,
         onGaleriKloterFilterChange: onGaleriKloterFilterChange,
         switchIbadahTab: switchIbadahTab,

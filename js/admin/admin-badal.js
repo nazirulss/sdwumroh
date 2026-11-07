@@ -134,6 +134,27 @@
         };
     }
 
+    // Helper: Format tanggal Indonesia (mengubah format ISO/timestamp seperti "2026-11-05 00:00:00" menjadi "5 November 2026")
+    function formatBadalDateIndo(rawDate) {
+        if (!rawDate) return '';
+        let str = String(rawDate).trim();
+        str = str.replace(/[T ]\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?$/, '').trim();
+        const isoMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+        if (isoMatch) {
+            const y = parseInt(isoMatch[1], 10);
+            const m = parseInt(isoMatch[2], 10) - 1;
+            const d = parseInt(isoMatch[3], 10);
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            if (m >= 0 && m < 12) {
+                return `${d} ${months[m]} ${y}`;
+            }
+        }
+        return str;
+    }
+
     // Helper: Ambil Store Sertifikat Badal dari LocalStorage
     function getBadalStore() {
         try {
@@ -484,11 +505,11 @@
         }
 
         if (prevPelaksanaan) {
-            prevPelaksanaan.innerText = tglPelaksanaan;
+            prevPelaksanaan.innerText = formatBadalDateIndo(tglPelaksanaan);
         }
 
         if (prevTitimangsa) {
-            prevTitimangsa.innerText = `${tempatPenerbitan}, ${tglPenerbitan}`;
+            prevTitimangsa.innerText = `${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}`;
         }
     }
 
@@ -617,10 +638,10 @@
                     .cert-bg { width: 100%; height: 100%; object-fit: cover; }
                     
                     .cert-no { position: absolute; top: 30.5%; left: 50%; transform: translateX(-50%); font-family: monospace; font-size: 14.5px; font-weight: 700; color: #475569; letter-spacing: 0.5px; white-space: nowrap; }
-                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 17.5px; font-weight: 800; color: #0f172a; white-space: nowrap; }
-                    .cert-nama { position: absolute; top: 51.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+                    .cert-petugas { position: absolute; top: 42.5%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: 21px; font-weight: 800; color: #0f172a; white-space: nowrap; }
+                    .cert-nama { position: absolute; top: 49.6%; left: 50%; transform: translateX(-50%); width: 85%; text-align: center; font-family: "Playfair Display", Georgia, serif; font-size: ${printFontSize}; font-weight: 900; color: #1e1b4b; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
                     .cert-miqat { position: absolute; top: 57.5%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
-                    .cert-pelaksanaan { position: absolute; top: 61.8%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
+                    .cert-pelaksanaan { position: absolute; top: 60.8%; left: 46.5%; font-size: 15.5px; font-weight: 700; color: #0f172a; white-space: nowrap; }
                     .cert-titimangsa { position: absolute; top: 74.2%; left: 50%; transform: translateX(-50%); font-size: 13.5px; font-weight: 600; color: #334155; white-space: nowrap; }
                 </style>
             </head>
@@ -631,8 +652,8 @@
                     <div class="cert-petugas">${petugas}</div>
                     <div class="cert-nama">${nama}</div>
                     <div class="cert-miqat">${miqat}</div>
-                    <div class="cert-pelaksanaan">${tglPelaksanaan}</div>
-                    <div class="cert-titimangsa">${tempatPenerbitan}, ${tglPenerbitan}</div>
+                    <div class="cert-pelaksanaan">${formatBadalDateIndo(tglPelaksanaan)}</div>
+                    <div class="cert-titimangsa">${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}</div>
                 </div>
                 <script>
                     window.onload = function() {
@@ -697,7 +718,7 @@
         ctx.fillText(cleanNo, Math.round(cw * 0.5), Math.round(ch * 0.305));
 
         // 2. Nama Petugas Badal (Di bawah teks Yang bertanda tangan dibawah ini...)
-        ctx.font = '800 34px "Playfair Display", Georgia, serif';
+        ctx.font = '800 42px "Playfair Display", Georgia, serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -721,28 +742,28 @@
         ctx.fillStyle = '#1e1b4b';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.515));
+        ctx.fillText(nama, Math.round(cw * 0.5), Math.round(ch * 0.496));
 
         // 4. Tempat Miqat (Di samping Tempat Miqat :)
         ctx.font = '700 30px sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(miqat, Math.round(cw * 0.465), Math.round(ch * 0.582));
+        ctx.fillText(miqat, Math.round(cw * 0.465), Math.round(ch * 0.575));
 
         // 5. Pelaksanaan (Di samping Pelaksanaan :)
         ctx.font = '700 30px sans-serif';
         ctx.fillStyle = '#0f172a';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(tglPelaksanaan, Math.round(cw * 0.465), Math.round(ch * 0.625));
+        ctx.fillText(formatBadalDateIndo(tglPelaksanaan), Math.round(cw * 0.465), Math.round(ch * 0.608));
 
         // 6. Tempat & Tanggal Penerbitan (Di atas kolom tanda tangan)
         ctx.font = '600 27px sans-serif';
         ctx.fillStyle = '#334155';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(`${tempatPenerbitan}, ${tglPenerbitan}`, Math.round(cw * 0.5), Math.round(ch * 0.748));
+        ctx.fillText(`${tempatPenerbitan}, ${formatBadalDateIndo(tglPenerbitan)}`, Math.round(cw * 0.5), Math.round(ch * 0.742));
 
         const safeName = nama.replace(/[^a-zA-Z0-9]/g, '_');
         return {
