@@ -105,3 +105,4 @@ assert.ok(typeof adminBadal.deleteBadalCertificate === 'function', 'deleteBadalC
 
 console.log('✔ admin-badal.js function exports passed');
 console.log('--- ALL TEST SUITE CHECKS PASSED (100%) ---');
+

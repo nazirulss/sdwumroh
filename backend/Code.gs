@@ -405,7 +405,8 @@ function setupDatabase() {
     DB_Trip_Members: ['id', 'trip_id', 'registration_id', 'bus_number', 'makkah_room_number', 'madinah_room_number', 'special_assistance'],
     DB_Announcements: ['id', 'target_role', 'departure_id', 'title', 'body_content', 'priority', 'published_at', 'created_by'],
     DB_Notifications: ['id', 'user_id', 'title', 'message', 'category', 'is_read', 'action_link', 'created_at'],
-    DB_Audit_Logs: ['id', 'timestamp', 'actor', 'action', 'entity', 'entity_id', 'before', 'after', 'reason']
+    DB_Audit_Logs: ['id', 'timestamp', 'actor', 'action', 'entity', 'entity_id', 'before', 'after', 'reason'],
+    DB_Badal_Certificates: ['id', 'almarhum_name', 'beneficiary_title', 'dibadalkan_oleh', 'muthawwif', 'muthawwif_role', 'cert_no', 'execution_date', 'location', 'status', 'name_font_size', 'notes', 'created_at', 'updated_at']
   };
 
   const createdSheets = [];
@@ -549,7 +550,14 @@ function seedInitialData_(ss, nowStr) {
       ['MBR-000003', 'TRP-2701', 'REG-SDW-2703', 'BUS-02', 'RM-MAK-201', 'RM-MAD-301', 'None']
     ],
     DB_Audit_Logs: [
-      ['AUD-BOOTSTRAP', nowStr, 'SYSTEM', 'INIT_DATABASE', 'DATABASE', 'SDW_UMROH_DB', null, '22_SHEETS_CREATED', 'Inisialisasi otomatis arsitektur 22 sheet Google Spreadsheet SDW UMROH.']
+      ['AUD-BOOTSTRAP', nowStr, 'SYSTEM', 'INIT_DATABASE', 'DATABASE', 'SDW_UMROH_DB', null, '23_SHEETS_CREATED', 'Inisialisasi otomatis arsitektur 23 sheet Google Spreadsheet SDW UMROH.']
+    ],
+    DB_Badal_Certificates: [
+      ['BDL-001', 'Alm. H. Abdullah bin Umar', 'Almarhum', 'Keluarga Besar Bpk. Sanali Bajuri', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2026/001', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Amanah badal selesai secara syar\'i', nowStr, nowStr],
+      ['BDL-002', 'Almh. Hj. Maryam binti Sulaiman', 'Almarhumah', 'Ibu Siti Nuriyah & Keluarga', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2026/002', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Amanah badal telah ditunaikan', nowStr, nowStr],
+      ['BDL-003', 'Alm. K.H. Dahlan bin Syafei', 'Almarhum', 'Keluarga Bpk. Khasan Munadi', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Muthawwif Senior Makkah', 'SDW/BDL/2026/003', '27 Oktober 2026', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Dokumentasi tawaf & sa\'i tersimpan', nowStr, nowStr],
+      ['BDL-004', 'Almh. Nyai Hj. Fatimah binti Asy\'ari', 'Almarhumah', 'Keluarga Besar Bpk. Sugiono', 'Ustadz Ahmad Fauzi Ridwan, Lc.', 'Muthawwif Mukim Makkah', 'SDW/BDL/2027/004', '15 Januari 2027', 'Makkah Al-Mukarramah', 'ISSUED', 'auto', 'Pelaksanaan badal gelombang Januari', nowStr, nowStr],
+      ['BDL-005', 'Alm. H. Mansur bin Hasyim', 'Almarhum', 'Keluarga Ibu Sri Nuryati', 'Ustadz Muhammad Syakir, Lc., M.Ag.', 'Muthawwif Senior Makkah', 'SDW/BDL/2027/005', '28 Februari 2027', 'Makkah Al-Mukarramah', 'DRAFT', 'auto', 'Menunggu konfirmasi jadwal muthawwif', nowStr, nowStr]
     ]
   };
 
@@ -1013,6 +1021,38 @@ function doGet(e) {
         headers.forEach(function(h, i) { obj[h] = row[i]; });
         return obj;
       }).reverse();
+      return createResponse(true, items);
+    }
+
+    if (action === 'getBadalCertificates') {
+      const sheet = ss.getSheetByName("DB_Badal_Certificates");
+      if (!sheet || sheet.getLastRow() <= 1) return createResponse(true, []);
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function(row) {
+        const obj = {};
+        headers.forEach(function(h, i) {
+          let val = row[i];
+          if (val instanceof Date) val = formatDateSafe_(val);
+          obj[h] = val;
+        });
+        return {
+          id: obj.id,
+          almarhumName: obj.almarhum_name,
+          beneficiaryTitle: obj.beneficiary_title,
+          dibadalkanOleh: obj.dibadalkan_oleh,
+          muthawwif: obj.muthawwif,
+          muthawwifRole: obj.muthawwif_role,
+          certNo: obj.cert_no,
+          executionDate: obj.execution_date,
+          location: obj.location,
+          status: obj.status,
+          nameFontSize: obj.name_font_size || 'auto',
+          notes: obj.notes,
+          createdAt: obj.created_at,
+          updatedAt: obj.updated_at
+        };
+      });
       return createResponse(true, items);
     }
 
@@ -1651,6 +1691,66 @@ function processSingleMutation_(ss, action, payload, actor) {
     const regId = payload.regId || "UNKNOWN";
     logAudit_(actor, "UNMASK_DATA", "DB_Registrations", regId, null, { role: payload.role || actor }, "Staf membuka akses unmask data NIK/Paspor sensitif jamaah");
     return { id: regId, status: "UNMASKED", entity: "DB_Audit_Logs" };
+  }
+
+  // 13. MANAJEMEN E-SERTIFIKAT BADAL UMROH
+  if (action === 'saveBadalCertificate') {
+    const sheet = ss.getSheetByName("DB_Badal_Certificates");
+    if (!sheet) throw new Error("Sheet DB_Badal_Certificates tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const id = payload.id || ("BDL-" + String(sheet.getLastRow()).padStart(3, '0'));
+    const nowStr = new Date().toISOString();
+    let rowIndex = -1;
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) === String(id)) {
+        rowIndex = i + 1;
+        break;
+      }
+    }
+
+    const rowData = [
+      id,
+      payload.almarhumName || payload.almarhum_name || '',
+      payload.beneficiaryTitle || payload.beneficiary_title || 'Almarhum',
+      payload.dibadalkanOleh || payload.dibadalkan_oleh || '',
+      payload.muthawwif || '',
+      payload.muthawwifRole || payload.muthawwif_role || 'Muthawwif Mukim Makkah',
+      payload.certNo || payload.cert_no || '',
+      payload.executionDate || payload.execution_date || '',
+      payload.location || 'Makkah Al-Mukarramah',
+      payload.status || 'ISSUED',
+      payload.nameFontSize || payload.name_font_size || 'auto',
+      payload.notes || '',
+      rowIndex > 0 ? rows[rowIndex - 1][12] : nowStr,
+      nowStr
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, "SAVE_BADAL_CERTIFICATE", "DB_Badal_Certificates", id, null, payload, "Piagam badal umroh berhasil disimpan");
+    return { id: id, status: payload.status || "ISSUED", entity: "DB_Badal_Certificates" };
+  }
+
+  if (action === 'deleteBadalCertificate') {
+    const sheet = ss.getSheetByName("DB_Badal_Certificates");
+    if (!sheet) throw new Error("Sheet DB_Badal_Certificates tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]) === String(id)) {
+        sheet.deleteRow(i + 1);
+        logAudit_(actor, "DELETE_BADAL_CERTIFICATE", "DB_Badal_Certificates", id, null, null, "Piagam badal umroh dihapus");
+        return { id: id, deleted: true, entity: "DB_Badal_Certificates" };
+      }
+    }
+    return { id: id, deleted: false, message: "ID tidak ditemukan" };
   }
 
   throw new Error("Aksi tidak didukung: " + action);

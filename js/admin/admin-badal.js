@@ -117,8 +117,29 @@
         }
     }
 
+    // Helper: Sinkronisasi Live dengan Spreadsheet Cloud (Jika Online & Terhubung)
+    let hasSyncedCloud = false;
+    async function syncLiveBadalCertificatesAsync() {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
+            try {
+                const res = await SDW_API.get('getBadalCertificates');
+                if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
+                    saveBadalStore(res.data);
+                    renderBadalCertificates();
+                }
+            } catch (err) {
+                console.warn('[SDW_BADAL] Gagal mengambil data badal live dari Spreadsheet:', err);
+            }
+        }
+    }
+
     // ==================== 1. RENDER TABEL BADAL CERTIFICATES ====================
     function renderBadalCertificates() {
+        if (!hasSyncedCloud) {
+            hasSyncedCloud = true;
+            syncLiveBadalCertificatesAsync();
+        }
+
         const tbody = document.getElementById('table-badal-certificates-body');
         if (!tbody) return;
 
@@ -468,6 +489,12 @@
         saveBadalStore(list);
         closeBadalModal();
         renderBadalCertificates();
+
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+            SDW_API.post('saveBadalCertificate', record).catch(function(err) {
+                console.warn('[SDW_BADAL] Sinkronisasi background ke cloud gagal/offline:', err);
+            });
+        }
 
         if (typeof admin.showToast === 'function') {
             admin.showToast(`Piagam Badal untuk "${almarhumName}" berhasil disimpan & diterbitkan.`);
@@ -850,6 +877,12 @@
         saveBadalStore(list);
         renderBadalCertificates();
 
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+            SDW_API.post('deleteBadalCertificate', { id }).catch(function(err) {
+                console.warn('[SDW_BADAL] Sinkronisasi delete cloud gagal/offline:', err);
+            });
+        }
+
         if (typeof admin.showToast === 'function') {
             admin.showToast(`Piagam badal ${id} berhasil dihapus.`);
         }
@@ -875,3 +908,4 @@
 
     return admin;
 });
+
