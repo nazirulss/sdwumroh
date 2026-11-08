@@ -2028,19 +2028,23 @@
                     </span>
                 </div>
 
-                <!-- Tab Segment Switcher di Menu Ibadah -->
-                <div class="grid grid-cols-4 gap-1.5 bg-slate-100 p-1.5 rounded-2xl text-[11px] font-bold">
-                    <button type="button" id="ibadahTabKiblatBtn" onclick="window.switchIbadahTab('kiblat')" class="ibadah-tab-btn py-2 px-1 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">
-                        <i class="fa-solid fa-compass mr-1"></i> Kiblat
+                <!-- Tab Segment Switcher di Menu Ibadah (Royal Purple & Gold Luxury) -->
+                <div class="bg-white/95 backdrop-blur-md p-1.5 rounded-2xl shadow-sm border border-purple-100/90 grid grid-cols-4 gap-1 sm:gap-2 text-xs font-bold select-none">
+                    <button type="button" id="ibadahTabKiblatBtn" onclick="window.switchIbadahTab('kiblat')" class="ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl bg-gradient-to-r from-[#240833] to-[#3a0f50] text-amber-300 font-black shadow-md border border-gold-400/30 transition text-center cursor-pointer flex items-center justify-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-compass text-amber-400"></i>
+                        <span>Kiblat</span>
                     </button>
-                    <button type="button" id="ibadahTabSholatBtn" onclick="window.switchIbadahTab('sholat')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
-                        <i class="fa-solid fa-clock mr-1"></i> Sholat
+                    <button type="button" id="ibadahTabSholatBtn" onclick="window.switchIbadahTab('sholat')" class="ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl text-slate-600 hover:text-purple-950 hover:bg-purple-50/80 transition text-center cursor-pointer font-bold flex items-center justify-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>Sholat</span>
                     </button>
-                    <button type="button" id="ibadahTabManasikBtn" onclick="window.switchIbadahTab('manasik')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
-                        <i class="fa-solid fa-book-quran mr-1"></i> Manasik
+                    <button type="button" id="ibadahTabManasikBtn" onclick="window.switchIbadahTab('manasik')" class="ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl text-slate-600 hover:text-purple-950 hover:bg-purple-50/80 transition text-center cursor-pointer font-bold flex items-center justify-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-kaaba"></i>
+                        <span>Manasik</span>
                     </button>
-                    <button type="button" id="ibadahTabDoaBtn" onclick="window.switchIbadahTab('doa')" class="ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold">
-                        <i class="fa-solid fa-hands-praying mr-1"></i> Doa/Dzikir
+                    <button type="button" id="ibadahTabDoaBtn" onclick="window.switchIbadahTab('doa')" class="ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl text-slate-600 hover:text-purple-950 hover:bg-purple-50/80 transition text-center cursor-pointer font-bold flex items-center justify-center gap-1.5 text-xs">
+                        <i class="fa-solid fa-hands-praying"></i>
+                        <span>Doa/Dzikir</span>
                     </button>
                 </div>
 
@@ -2298,11 +2302,11 @@
 
                         <!-- Dalil Al-Qur'an (QS. Al-Baqarah: 144) -->
                         <div class="relative z-10 p-3.5 bg-black/30 backdrop-blur-md rounded-2xl border border-gold-500/30 text-left text-xs text-amber-100/90 leading-relaxed">
-                            <div class="font-bold mb-1 text-amber-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-book-quran"></i>
+                            <div class="font-bold mb-1 text-gold-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-book-quran text-gold-400"></i>
                                 <span>QS. Al-Baqarah: 144</span>
                             </div>
-                            <em>"Maka hadapkanlah wajahmu ke arah Masjidil Haram. Dan di mana saja kamu berada, hadapkanlah wajahmu ke arahnya."</em>
+                            <em class="text-[11.5px] italic">"Maka hadapkanlah wajahmu ke arah Masjidil Haram. Dan di mana saja kamu berada, hadapkanlah wajahmu ke arahnya."</em>
                         </div>
 
                     </div>
@@ -2353,133 +2357,439 @@
                         </button>
                     </div>
                 </div>
-                        <div class="relative z-10 p-3.5 bg-black/30 backdrop-blur-md rounded-2xl border border-gold-500/30 text-left text-xs text-amber-100/90 leading-relaxed">
-                            <div class="font-bold mb-1 text-gold-300 flex items-center gap-1.5">
-                                <i class="fa-solid fa-book-quran text-gold-400"></i>
-                                <span>QS. Al-Baqarah: 144</span>
-                            </div>
-                            <em class="text-[11.5px] italic">"Maka hadapkanlah wajahmu ke arah Masjidil Haram. Dan di mana saja kamu berada, hadapkanlah wajahmu ke arahnya."</em>
-                        </div>
-
-                    </div>
-                </div>
 
                 <!-- 2. TAB SHOLAT: Jadwal Sholat Makkah, Madinah & Indonesia -->
                 <div id="ibadahTabContentSholat" class="hidden space-y-4 pt-1">
-                    <div class="grid grid-cols-3 gap-2 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
-                        <button type="button" onclick="window.switchSholatCity('MAKKAH', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black">🕋 Makkah</button>
-                        <button type="button" onclick="window.switchSholatCity('MADINAH', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🕌 Madinah</button>
-                        <button type="button" onclick="window.switchSholatCity('INDONESIA', this)" class="inapp-sholat-city-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer">🇮🇩 Indonesia</button>
-                    </div>
+                    <!-- Hero Header Card Jadwal Sholat -->
+                    <div class="bg-gradient-to-br from-[#1F0628] via-[#350E46] to-[#1a0522] text-white rounded-3xl p-5 sm:p-6 border border-purple-800/50 shadow-xl space-y-4 relative overflow-hidden">
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Subuh</span>
-                            <span id="sholatTimeSubuh" class="text-base font-extrabold text-sdw-pine">05:02 AST</span>
+                        <!-- Top City Switcher (Pill Tabs) -->
+                        <div class="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-white/10">
+                            <div>
+                                <span class="text-[10px] text-purple-200/80 uppercase tracking-widest font-bold block">Pilihan Wilayah Waktu:</span>
+                                <h3 id="sholatActiveCityTitle" class="text-sm sm:text-base font-extrabold text-white flex items-center gap-1.5">
+                                    <span>Makkah Al-Mukarramah</span>
+                                    <span class="text-xs text-amber-300 font-mono font-normal">(AST)</span>
+                                </h3>
+                            </div>
+                            <!-- Switcher Buttons -->
+                            <div class="flex items-center gap-1 bg-white/10 p-1 rounded-2xl border border-white/10">
+                                <button type="button" onclick="window.switchSholatCity('MAKKAH', this)" class="inapp-sholat-city-btn py-1.5 px-3 rounded-xl bg-gradient-to-r from-[#240833] to-[#3a0f50] text-amber-300 transition text-center cursor-pointer shadow-sm font-black text-xs flex items-center justify-center gap-1 border border-gold-400/40">
+                                    <span>🕋 Makkah</span>
+                                </button>
+                                <button type="button" onclick="window.switchSholatCity('MADINAH', this)" class="inapp-sholat-city-btn py-1.5 px-3 rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition text-center cursor-pointer font-bold text-xs flex items-center justify-center gap-1 border border-transparent">
+                                    <span>🕌 Madinah</span>
+                                </button>
+                                <button type="button" onclick="window.switchSholatCity('INDONESIA', this)" class="inapp-sholat-city-btn py-1.5 px-3 rounded-xl text-slate-200 hover:text-white hover:bg-white/10 transition text-center cursor-pointer font-bold text-xs flex items-center justify-center gap-1 border border-transparent">
+                                    <span>🇮🇩 Indonesia</span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Syuruq</span>
-                            <span id="sholatTimeSyuruq" class="text-base font-extrabold text-slate-700">06:21 AST</span>
+
+                        <!-- Banner Info Kalender Sholat -->
+                        <div class="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-sm border border-amber-400/30">
+                                    <i class="fa-solid fa-mosque"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] text-purple-200 block font-medium">Kalender Sholat &amp; Adzan</span>
+                                    <span class="text-xs font-bold text-white">Standar Ummul Qura &amp; Kemenag RI</span>
+                                </div>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10.5px] font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-circle-dot text-[8px] animate-pulse"></i> Waktu Akurat
+                            </span>
                         </div>
-                        <div class="p-3.5 rounded-2xl bg-white border border-amber-300 bg-amber-50/50 shadow-2xs">
-                            <span class="text-[10px] font-bold text-amber-700 block uppercase">Dzuhur</span>
-                            <span id="sholatTimeDzuhur" class="text-base font-extrabold text-amber-800">12:12 AST</span>
+
+                        <!-- Grid 6 Waktu Sholat -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                            <!-- Subuh -->
+                            <div class="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-amber-400/40 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-purple-200 group-hover:text-white uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-cloud-sun text-amber-400"></i> Subuh
+                                    </span>
+                                    <span class="font-arabic text-xs text-amber-200">الفجر</span>
+                                </div>
+                                <span id="sholatTimeSubuh" class="text-xl sm:text-2xl font-black text-amber-300 font-mono tracking-tight block">05:02 AST</span>
+                                <span class="text-[10px] text-purple-200/70 block mt-0.5">Imsak: <span id="sholatTimeImsak" class="font-mono text-purple-100">04:52 AST</span></span>
+                            </div>
+
+                            <!-- Syuruq -->
+                            <div class="p-3.5 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 hover:border-white/20 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-slate-300 uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-sun text-yellow-400"></i> Syuruq
+                                    </span>
+                                    <span class="font-arabic text-xs text-slate-400">الشروق</span>
+                                </div>
+                                <span id="sholatTimeSyuruq" class="text-xl sm:text-2xl font-black text-white font-mono tracking-tight block">06:21 AST</span>
+                                <span class="text-[10px] text-slate-400 block mt-0.5">Terbit Matahari</span>
+                            </div>
+
+                            <!-- Dzuhur -->
+                            <div class="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-amber-400/40 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-purple-200 group-hover:text-white uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-sun text-amber-400"></i> Dzuhur
+                                    </span>
+                                    <span class="font-arabic text-xs text-amber-200">الظهر</span>
+                                </div>
+                                <span id="sholatTimeDzuhur" class="text-xl sm:text-2xl font-black text-amber-300 font-mono tracking-tight block">12:12 AST</span>
+                                <span class="text-[10px] text-purple-200/70 block mt-0.5">Matahari Tergelincir</span>
+                            </div>
+
+                            <!-- Ashar -->
+                            <div class="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-amber-400/40 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-purple-200 group-hover:text-white uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-cloud-sun text-orange-400"></i> Ashar
+                                    </span>
+                                    <span class="font-arabic text-xs text-amber-200">العصر</span>
+                                </div>
+                                <span id="sholatTimeAshar" class="text-xl sm:text-2xl font-black text-amber-300 font-mono tracking-tight block">15:28 AST</span>
+                                <span class="text-[10px] text-purple-200/70 block mt-0.5">Bayangan Benda Sama</span>
+                            </div>
+
+                            <!-- Maghrib -->
+                            <div class="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-amber-400/40 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-purple-200 group-hover:text-white uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-cloud-moon text-rose-400"></i> Maghrib
+                                    </span>
+                                    <span class="font-arabic text-xs text-amber-200">المغرب</span>
+                                </div>
+                                <span id="sholatTimeMaghrib" class="text-xl sm:text-2xl font-black text-amber-300 font-mono tracking-tight block">17:49 AST</span>
+                                <span class="text-[10px] text-purple-200/70 block mt-0.5">Matahari Terbenam</span>
+                            </div>
+
+                            <!-- Isya -->
+                            <div class="p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 hover:border-amber-400/40 transition group">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-[10.5px] font-bold text-purple-200 group-hover:text-white uppercase flex items-center gap-1.5">
+                                        <i class="fa-solid fa-moon text-indigo-400"></i> Isya
+                                    </span>
+                                    <span class="font-arabic text-xs text-amber-200">العشاء</span>
+                                </div>
+                                <span id="sholatTimeIsya" class="text-xl sm:text-2xl font-black text-amber-300 font-mono tracking-tight block">19:19 AST</span>
+                                <span class="text-[10px] text-purple-200/70 block mt-0.5">Mega Merah Lenyap</span>
+                            </div>
                         </div>
-                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Ashar</span>
-                            <span id="sholatTimeAshar" class="text-base font-extrabold text-slate-700">15:28 AST</span>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Maghrib</span>
-                            <span id="sholatTimeMaghrib" class="text-base font-extrabold text-slate-700">17:49 AST</span>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-2xs">
-                            <span class="text-[10px] font-bold text-slate-400 block uppercase">Isya</span>
-                            <span id="sholatTimeIsya" class="text-base font-extrabold text-slate-700">19:19 AST</span>
+
+                        <!-- Info Keutamaan Sholat Haramain -->
+                        <div class="p-3.5 bg-black/30 backdrop-blur-md rounded-2xl border border-gold-500/30 text-xs text-amber-100/90 leading-relaxed space-y-1.5">
+                            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                                <i class="fa-solid fa-award"></i>
+                                <span>Keutamaan Berlipat Pahala Sholat di Tanah Suci:</span>
+                            </div>
+                            <ul class="space-y-1 text-[11.5px] text-purple-100/90">
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-amber-400 mt-0.5 shrink-0 text-xs"></i>
+                                    <span><strong>Masjidil Haram (Makkah):</strong> 1 kali sholat bernilai 100.000 kali sholat di tempat lain (HR. Ahmad &amp; Ibnu Majah).</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-amber-400 mt-0.5 shrink-0 text-xs"></i>
+                                    <span><strong>Masjid Nabawi (Madinah):</strong> 1 kali sholat bernilai 1.000 kali sholat di tempat lain (HR. Bukhari &amp; Muslim).</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i class="fa-solid fa-check text-amber-400 mt-0.5 shrink-0 text-xs"></i>
+                                    <span><strong>Masjid Quba:</strong> Sholat 2 rakaat di Masjid Quba bernilai pahala satu kali umroh (HR. Tirmidzi).</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
                 <!-- 3. TAB MANASIK: Panduan Rukun & Niat Umroh -->
                 <div id="ibadahTabContentManasik" class="hidden space-y-3 pt-1">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 1</span>
-                            <span class="text-xs text-slate-400">Di Miqat (Bir Ali / Yalamlam)</span>
+                    <!-- Header Info Manasik -->
+                    <div class="bg-gradient-to-r from-[#240833] via-[#350E46] to-[#1a0522] text-white p-4 sm:p-5 rounded-3xl border border-purple-800/50 shadow-md flex items-center justify-between gap-3">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30 text-[10px] font-bold">Panduan Resmi</span>
+                                <span class="text-xs text-purple-200">Tertib &amp; Sesuai Sunnah</span>
+                            </div>
+                            <h3 class="font-black text-sm sm:text-base text-white">4 Rukun Umroh yang Wajib Dikerjakan</h3>
+                            <p class="text-[11px] text-purple-200/80">Rukun umroh tidak dapat diganti dengan dam (denda) dan harus dikerjakan secara berurutan.</p>
                         </div>
-                        <h3 class="font-extrabold text-sm text-slate-900">Ihram &amp; Berniat Umroh</h3>
-                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
-                            لَبَّيْكَ اللَّهُمَّ عُمْرَةً
-                        </p>
-                        <p class="text-xs text-slate-600 italic">"Labbaika Allahumma 'Umratan"</p>
-                        <p class="text-[11.5px] text-slate-500">Artinya: Aku penuhi panggilan-Mu ya Allah untuk menunaikan ibadah umroh.</p>
+                        <div class="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-xl shrink-0 border border-amber-400/30">
+                            <i class="fa-solid fa-kaaba"></i>
+                        </div>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 2</span>
-                            <span class="text-xs text-slate-400">Masjidil Haram (7 Putaran)</span>
+                    <!-- Rukun 1: Ihram & Niat -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-full bg-[#240833] text-amber-300 font-black text-xs flex items-center justify-center">1</span>
+                                <h4 class="font-black text-sm sm:text-base text-slate-900">Ihram &amp; Berniat di Miqat</h4>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-900 text-[10px] font-extrabold uppercase">Miqat Makani</span>
                         </div>
-                        <h3 class="font-extrabold text-sm text-slate-900">Thawaf Mengelilingi Ka'bah</h3>
-                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
-                            بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Mandi sunnah ihram, memakai pakaian ihram (2 helai kain tak berjahit bagi pria; pakaian syar'i bagi wanita), lalu sholat sunnah ihram 2 rakaat dan melafadzkan niat umroh di batas Miqat (Bir Ali / Tan'im / Yalamlam).
                         </p>
-                        <p class="text-xs text-slate-600 italic">"Bismillahi wallahu Akbar"</p>
-                        <p class="text-[11.5px] text-slate-500">Mulai dari garis Hajar Aswad berlawanan arah jarum jam sebanyak 7 putaran penuh.</p>
+                        <!-- Kotak Lafadz Niat -->
+                        <div class="p-3.5 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-1.5 text-right">
+                            <span class="text-[10px] font-bold text-purple-900 uppercase block text-left">Lafadz Niat Umroh:</span>
+                            <p class="font-arabic text-xl sm:text-2xl text-purple-950 font-bold py-1 leading-loose" dir="rtl">
+                                لَبَّيْكَ اللَّهُمَّ عُمْرَةً
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Labbaika Allahumma 'Umratan"</p>
+                            <p class="text-[11.5px] text-slate-600 text-left">Artinya: "Aku penuhi panggilan-Mu ya Allah untuk menunaikan ibadah umroh."</p>
+                        </div>
+                        <!-- Kotak Talbiyah -->
+                        <div class="p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200 space-y-1.5 text-right">
+                            <span class="text-[10px] font-bold text-amber-900 uppercase block text-left">Bacaan Talbiyah (Disunnahkan Terus Dibaca Sepanjang Perjalanan):</span>
+                            <p class="font-arabic text-lg sm:text-xl text-amber-950 font-bold py-1 leading-loose" dir="rtl">
+                                لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ، لَبَّيْكَ لاَ شَرِيكَ لَكَ لَبَّيْكَ، إِنَّ الْحَمْدَ وَالنِّعْمَةَ لَكَ وَالْمُلْكَ لاَ شَرِيكَ لَكَ
+                            </p>
+                            <p class="text-xs text-amber-900 font-semibold italic text-left">"Labbaikallahumma labbaik, labbaika laa syariika laka labbaik, innal hamda wan ni'mata laka wal mulk, laa syariika lak"</p>
+                        </div>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 3</span>
-                            <span class="text-xs text-slate-400">Bukit Shafa ke Marwah</span>
+                    <!-- Rukun 2: Thawaf -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-full bg-[#240833] text-amber-300 font-black text-xs flex items-center justify-center">2</span>
+                                <h4 class="font-black text-sm sm:text-base text-slate-900">Thawaf 7 Putaran di Ka'bah</h4>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-900 text-[10px] font-extrabold uppercase">Masjidil Haram</span>
                         </div>
-                        <h3 class="font-extrabold text-sm text-slate-900">Sa'i 7 Kali Perjalanan</h3>
-                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
-                            إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Suci dari hadats besar dan kecil. Posisi pundak kanan dibuka (Idh-thiba') bagi pria. Mulai dari rukun Hajar Aswad (lampu hijau) menghadap Ka'bah seraya melambaikan tangan kanan membaca:
                         </p>
-                        <p class="text-[11.5px] text-slate-500">Dimulai dari Bukit Shafa dan berakhir di Bukit Marwah dengan memperbanyak doa dan dzikir.</p>
+                        <div class="p-3 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-1 text-right">
+                            <p class="font-arabic text-lg sm:text-xl text-purple-950 font-bold py-0.5" dir="rtl">بِسْمِ اللَّهِ وَاللَّهُ أَكْبَرُ</p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Bismillahi wallahu Akbar"</p>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Lakukan 7 putaran penuh berlawanan arah jarum jam dengan Ka'bah selalu berada di sebelah kiri Anda. Di antara Rukun Yamani dan Hajar Aswad membaca:
+                        </p>
+                        <div class="p-3.5 bg-amber-50/70 rounded-2xl border border-amber-200 space-y-1 text-right">
+                            <p class="font-arabic text-lg sm:text-xl text-amber-950 font-bold py-1 leading-loose" dir="rtl">
+                                رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ
+                            </p>
+                            <p class="text-xs text-amber-900 font-semibold italic text-left">"Rabbana aatina fiddunya hasanah wa fil aakhirati hasanah wa qinaa 'adzaban naar"</p>
+                        </div>
+                        <p class="text-[11px] text-slate-500 italic">
+                            *Setelah 7 putaran selesai, tutup kembali pundak kanan, sholat sunnah 2 rakaat di belakang Maqam Ibrahim, dan disunnahkan minum air Zam-zam.
+                        </p>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Rukun 4</span>
-                            <span class="text-xs text-slate-400">Penyempurna Ibadah</span>
+                    <!-- Rukun 3: Sa'i -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-full bg-[#240833] text-amber-300 font-black text-xs flex items-center justify-center">3</span>
+                                <h4 class="font-black text-sm sm:text-base text-slate-900">Sa'i 7 Putaran (Shafa ke Marwah)</h4>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-900 text-[10px] font-extrabold uppercase">Mas'a (Shafa - Marwah)</span>
                         </div>
-                        <h3 class="font-extrabold text-sm text-slate-900">Tahallul (Mencukur / Memotong Rambut)</h3>
-                        <p class="text-[11.5px] text-slate-500">Mencukur gundul (afdol bagi laki-laki) atau memotong minimal 3 helai rambut, tanda selesainya rukun umroh.</p>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Naik ke Bukit Shafa, menghadap ke Ka'bah sambil bertakbir 3 kali dan membaca ayat:
+                        </p>
+                        <div class="p-3 bg-purple-50/70 rounded-2xl border border-purple-100 space-y-1 text-right">
+                            <p class="font-arabic text-base sm:text-lg text-purple-950 font-bold py-0.5" dir="rtl">إِنَّ الصَّفَا وَالْمَرْوَةَ مِنْ شَعَائِرِ اللَّهِ</p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Innash-shafaa wal-marwata min sya'aa-irillaah"</p>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Berjalan menuju Bukit Marwah dihitung 1 putaran. Bagi laki-laki disunnahkan berlari-lari kecil di antara dua pilar berlampu hijau. Dari Marwah ke Shafa dihitung putaran ke-2. Rangkaian Sa'i berakhir pada putaran ke-7 di Bukit Marwah.
+                        </p>
+                    </div>
+
+                    <!-- Rukun 4: Tahallul -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-full bg-[#240833] text-amber-300 font-black text-xs flex items-center justify-center">4</span>
+                                <h4 class="font-black text-sm sm:text-base text-slate-900">Tahallul (Cukur / Potong Rambut)</h4>
+                            </div>
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase">Penyempurna Ibadah</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Mencukur gundul (Halq - lebih utama bagi pria) atau memendekkan rambut (Taqshir). Bagi wanita memotong ujung rambut minimal 1 ruas jari (± 2 cm). Dengan bertahallul, seluruh larangan ihram kembali halal dan ibadah umroh sah &amp; sempurna.
+                        </p>
+                    </div>
+
+                    <!-- Tabel Larangan Ihram (Do's & Don'ts) -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-rose-200 shadow-sm space-y-2.5">
+                        <div class="flex items-center gap-2 text-rose-700 font-black text-xs uppercase tracking-wide">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <span>Hal yang Dilarang Selama Berihram:</span>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+                            <div class="p-2.5 rounded-xl bg-rose-50/50 border border-rose-100 space-y-1">
+                                <strong class="text-rose-900 font-bold block">Khusus Laki-laki:</strong>
+                                <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-600">
+                                    <li>Memakai pakaian berjahit/berbentuk (celana, kaos, pakaian dalam).</li>
+                                    <li>Menutup kepala dengan penutup yang menempel (peci, topi).</li>
+                                </ul>
+                            </div>
+                            <div class="p-2.5 rounded-xl bg-rose-50/50 border border-rose-100 space-y-1">
+                                <strong class="text-rose-900 font-bold block">Khusus Perempuan:</strong>
+                                <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-600">
+                                    <li>Menutup wajah dengan cadar/masker menempel.</li>
+                                    <li>Memakai sarung tangan yang menutup telapak tangan.</li>
+                                </ul>
+                            </div>
+                            <div class="sm:col-span-2 p-2.5 rounded-xl bg-rose-50/50 border border-rose-100 space-y-1">
+                                <strong class="text-rose-900 font-bold block">Larangan Umum (Pria &amp; Wanita):</strong>
+                                <p class="text-[11px] text-slate-600 leading-relaxed">
+                                    Memakai wewangian setelah berniat ihram, memotong rambut/kuku, mencabut pepohonan, membunuh hewan buruan, melamar/menikah, dan bercumbu/bersenggama.
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- 4. TAB DOA: Dzikir & Doa Harian -->
                 <div id="ibadahTabContentDoa" class="hidden space-y-3 pt-1">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <h3 class="font-extrabold text-sm text-slate-900">Doa Masuk Masjidil Haram</h3>
-                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
-                            اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ
-                        </p>
-                        <p class="text-xs text-slate-600 italic">"Allahummaftah lii abwaaba rahmatik"</p>
-                        <p class="text-[11.5px] text-slate-500">Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.</p>
+                    <!-- Filter Chips Kategori Doa -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none select-none">
+                        <button type="button" onclick="window.filterDoaCategory('all', this)" class="doa-filter-btn px-3 py-1.5 rounded-full text-xs font-black text-amber-300 bg-[#240833] border border-gold-400/40 shadow-xs transition cursor-pointer whitespace-nowrap">
+                            ✨ Semua Doa
+                        </button>
+                        <button type="button" onclick="window.filterDoaCategory('rukun', this)" class="doa-filter-btn px-3 py-1.5 rounded-full text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer whitespace-nowrap">
+                            🕋 Rukun Umroh
+                        </button>
+                        <button type="button" onclick="window.filterDoaCategory('masjid', this)" class="doa-filter-btn px-3 py-1.5 rounded-full text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer whitespace-nowrap">
+                            🕌 Masjidil Haram &amp; Nabawi
+                        </button>
+                        <button type="button" onclick="window.filterDoaCategory('harian', this)" class="doa-filter-btn px-3 py-1.5 rounded-full text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer whitespace-nowrap">
+                            🤲 Dzikir &amp; Harian
+                        </button>
                     </div>
 
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2">
-                        <h3 class="font-extrabold text-sm text-slate-900">Doa Antara Rukun Yamani &amp; Hajar Aswad</h3>
-                        <p class="font-serif text-right text-base text-sdw-pine py-1 leading-loose" dir="rtl">
-                            رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ
-                        </p>
-                        <p class="text-xs text-slate-600 italic">"Rabbana aatina fiddunya hasanah wa fil aakhirati hasanah wa qinaa 'adzaban naar"</p>
+                    <!-- Doa 1: Masuk Masjidil Haram -->
+                    <div class="doa-item-card bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2.5" data-doa-category="masjid">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Masjidil Haram</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="window.copyPrayerText(this, 'doa-text-masuk-masjid')" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> <span>Salin</span>
+                                </button>
+                                <button type="button" onclick="window.sharePrayerWA('Doa Masuk Masjidil Haram', 'اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ', 'Allahummaftah lii abwaaba rahmatik', 'Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu.')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> <span>Bagikan</span>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Doa Masuk Masjidil Haram &amp; Masjid Nabawi</h4>
+                        <div id="doa-text-masuk-masjid" class="space-y-1.5 text-right">
+                            <p class="font-arabic text-xl sm:text-2xl text-[#240833] font-bold py-1 leading-loose" dir="rtl">
+                                اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Allahummaftah lii abwaaba rahmatik"</p>
+                            <p class="text-xs text-slate-600 text-left">Artinya: "Ya Allah, bukakanlah untukku pintu-pintu rahmat-Mu."</p>
+                        </div>
+                    </div>
+
+                    <!-- Doa 2: Keluar Masjid -->
+                    <div class="doa-item-card bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2.5" data-doa-category="masjid">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-purple-900 text-[10px] font-black uppercase">Masjidil Haram</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="window.copyPrayerText(this, 'doa-text-keluar-masjid')" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> <span>Salin</span>
+                                </button>
+                                <button type="button" onclick="window.sharePrayerWA('Doa Keluar Masjid', 'اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ', 'Allahumma inni as-aluka min fadlik', 'Ya Allah, sesungguhnya aku memohon karunia-Mu.')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> <span>Bagikan</span>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Doa Keluar Masjid</h4>
+                        <div id="doa-text-keluar-masjid" class="space-y-1.5 text-right">
+                            <p class="font-arabic text-xl sm:text-2xl text-[#240833] font-bold py-1 leading-loose" dir="rtl">
+                                اللَّهُمَّ إِنِّي أَسْأَلُكَ مِنْ فَضْلِكَ
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Allahumma inni as-aluka min fadlik"</p>
+                            <p class="text-xs text-slate-600 text-left">Artinya: "Ya Allah, sesungguhnya aku memohon karunia-Mu."</p>
+                        </div>
+                    </div>
+
+                    <!-- Doa 3: Thawaf (Antara Rukun Yamani & Hajar Aswad) -->
+                    <div class="doa-item-card bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2.5" data-doa-category="rukun">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase">Thawaf</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="window.copyPrayerText(this, 'doa-text-rukun-yamani')" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> <span>Salin</span>
+                                </button>
+                                <button type="button" onclick="window.sharePrayerWA('Doa Antara Rukun Yamani & Hajar Aswad', 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ', 'Rabbana aatina fiddunya hasanah wa fil aakhirati hasanah wa qinaa adzaban naar', 'Wahai Tuhan kami, berikanlah kepada kami kebaikan di dunia dan kebaikan di akhirat, dan lindungilah kami dari siksa api neraka.')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> <span>Bagikan</span>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Doa Antara Rukun Yamani &amp; Hajar Aswad (Doa Sapu Jagad)</h4>
+                        <div id="doa-text-rukun-yamani" class="space-y-1.5 text-right">
+                            <p class="font-arabic text-xl sm:text-2xl text-[#240833] font-bold py-1 leading-loose" dir="rtl">
+                                رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Rabbana aatina fiddunya hasanah wa fil aakhirati hasanah wa qinaa 'adzaban naar"</p>
+                            <p class="text-xs text-slate-600 text-left">Artinya: "Wahai Tuhan kami, berikanlah kami kebaikan di dunia dan kebaikan di akhirat, serta lindungilah kami dari siksa api neraka."</p>
+                        </div>
+                    </div>
+
+                    <!-- Doa 4: Minum Air Zam-zam -->
+                    <div class="doa-item-card bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2.5" data-doa-category="rukun">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 text-[10px] font-black uppercase">Zam-zam</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="window.copyPrayerText(this, 'doa-text-zamzam')" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> <span>Salin</span>
+                                </button>
+                                <button type="button" onclick="window.sharePrayerWA('Doa Minum Air Zam-zam', 'اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا وَاسِعًا وَشِفَاءً مِنْ كُلِّ دَاءٍ', 'Allahumma inni as-aluka ilman naafian wa rizqan waasian wa syifaa-an min kulli daa-in', 'Ya Allah, sesungguhnya aku memohon kepada-Mu ilmu yang bermanfaat, rezeki yang luas, dan kesembuhan dari segala macam penyakit.')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> <span>Bagikan</span>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Doa Minum Air Zam-zam</h4>
+                        <div id="doa-text-zamzam" class="space-y-1.5 text-right">
+                            <p class="font-arabic text-xl sm:text-2xl text-[#240833] font-bold py-1 leading-loose" dir="rtl">
+                                اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا وَاسِعًا وَشِفَاءً مِنْ كُلِّ دَاءٍ
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Allahumma inni as-aluka 'ilman naafi'an wa rizqan waasi'an wa syifaa-an min kulli daa-in"</p>
+                            <p class="text-xs text-slate-600 text-left">Artinya: "Ya Allah, sesungguhnya aku memohon kepada-Mu ilmu yang bermanfaat, rezeki yang melimpah, dan penawar kesembuhan dari segala penyakit."</p>
+                        </div>
+                    </div>
+
+                    <!-- Doa 5: Sayyidul Istighfar -->
+                    <div class="doa-item-card bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2.5" data-doa-category="harian">
+                        <div class="flex items-center justify-between">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 text-[10px] font-black uppercase">Dzikir Utama</span>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="window.copyPrayerText(this, 'doa-text-istighfar')" class="px-2.5 py-1 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-regular fa-copy"></i> <span>Salin</span>
+                                </button>
+                                <button type="button" onclick="window.sharePrayerWA('Sayyidul Istighfar', 'اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ...', 'Allahumma Anta Rabbi laa ilaaha illa Anta khalaqtani...', 'Penghulu permohonan ampunan hamba kepada Allah.')" class="px-2.5 py-1 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-[11px] font-bold transition flex items-center gap-1 cursor-pointer">
+                                    <i class="fa-brands fa-whatsapp text-emerald-600"></i> <span>Bagikan</span>
+                                </button>
+                            </div>
+                        </div>
+                        <h4 class="font-extrabold text-sm sm:text-base text-slate-900">Sayyidul Istighfar (Penghulu Doa Ampunan)</h4>
+                        <div id="doa-text-istighfar" class="space-y-1.5 text-right">
+                            <p class="font-arabic text-lg sm:text-xl text-[#240833] font-bold py-1 leading-loose" dir="rtl">
+                                اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ
+                            </p>
+                            <p class="text-xs text-purple-900 font-semibold italic text-left">"Allahumma Anta Rabbii laa ilaaha illaa Anta, khalaqtanii wa ana 'abduka, wa ana 'alaa 'ahdika wa wa'dika mastatha'tu..."</p>
+                            <p class="text-xs text-slate-600 text-left">Artinya: "Ya Allah, Engkau adalah Tuhanku, tidak ada Tuhan selain Engkau. Engkau yang menciptakanku dan aku adalah hamba-Mu... Ampunilah aku karena tidak ada yang mengampuni dosa selain Engkau."</p>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Konsultasi Muthawwif Card -->
-                <div class="p-4 rounded-2xl bg-gradient-to-r from-purple-950 via-sdw-pine to-emerald-900 text-white flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 shadow-md">
+                <div class="p-4 rounded-3xl bg-gradient-to-r from-purple-950 via-[#2e0942] to-emerald-950 text-white flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 shadow-md border border-gold-500/30">
                     <div class="space-y-1">
                         <div class="font-bold text-xs text-amber-300 flex items-center gap-1.5">
-                            <i class="fa-solid fa-headset"></i>
-                            <span>Bimbingan Manasik Langsung</span>
+                            <i class="fa-solid fa-headset text-amber-400"></i>
+                            <span>Bimbingan &amp; Konsultasi Manasik Langsung</span>
                         </div>
-                        <p class="text-[11px] text-purple-200/80">Konsultasikan fiqih thawaf, sa'i, atau uzur syar'i langsung kepada Muthawwif SDW.</p>
+                        <p class="text-[11px] text-purple-200/80">Konsultasikan kendala fiqih thawaf, sa'i, atau uzur syar'i langsung kepada Muthawwif SDW.</p>
                     </div>
-                    <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Ustadz%20Muthawwif%20SDW,%20saya%20ingin%20berkonsultasi%20mengenai%20fiqih%20ibadah%20manasik." target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shrink-0 shadow-sm">
+                    <a href="https://wa.me/6281234567890?text=Assalamu%27alaikum%20Ustadz%20Muthawwif%20SDW,%20saya%20ingin%20berkonsultasi%20mengenai%20fiqih%20ibadah%20manasik." target="_blank" rel="noopener noreferrer" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-xs flex items-center gap-1.5 transition active:scale-95 shrink-0 shadow-md">
                         <i class="fa-brands fa-whatsapp text-sm"></i>
                         <span>Chat Muthawwif</span>
                     </a>

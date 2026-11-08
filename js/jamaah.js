@@ -1209,12 +1209,12 @@
 
             if (t === tab) {
                 if (btn) {
-                    btn.className = 'ibadah-tab-btn py-2 px-1 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black';
+                    btn.className = 'ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl bg-gradient-to-r from-[#240833] to-[#3a0f50] text-amber-300 shadow-md border border-gold-400/30 transition text-center cursor-pointer font-black flex items-center justify-center gap-1.5 text-xs';
                 }
                 if (content) content.classList.remove('hidden');
             } else {
                 if (btn) {
-                    btn.className = 'ibadah-tab-btn py-2 px-1 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer font-bold';
+                    btn.className = 'ibadah-tab-btn py-2.5 px-1.5 sm:px-3 rounded-2xl text-slate-600 hover:text-purple-950 hover:bg-purple-50/80 transition text-center cursor-pointer font-bold flex items-center justify-center gap-1.5 text-xs';
                 }
                 if (content) content.classList.add('hidden');
             }
@@ -1245,6 +1245,9 @@
 
     const SHOLAT_CITY_TIMES = {
         MAKKAH: {
+            title: 'Makkah Al-Mukarramah',
+            tz: 'AST (GMT+3)',
+            imsak: '04:52 AST',
             subuh: '05:02 AST',
             syuruq: '06:21 AST',
             dzuhur: '12:12 AST',
@@ -1253,6 +1256,9 @@
             isya: '19:19 AST'
         },
         MADINAH: {
+            title: 'Madinah Al-Munawwarah',
+            tz: 'AST (GMT+3)',
+            imsak: '04:55 AST',
             subuh: '05:05 AST',
             syuruq: '06:24 AST',
             dzuhur: '12:13 AST',
@@ -1261,6 +1267,9 @@
             isya: '19:17 AST'
         },
         INDONESIA: {
+            title: 'Jakarta & Sekitarnya',
+            tz: 'WIB (GMT+7)',
+            imsak: '04:05 WIB',
             subuh: '04:15 WIB',
             syuruq: '05:32 WIB',
             dzuhur: '11:42 WIB',
@@ -1272,7 +1281,7 @@
 
     function switchSholatCity(city = 'MAKKAH', clickedBtn) {
         const cityKey = String(city).toUpperCase();
-        const times = SHOLAT_CITY_TIMES[cityKey] || SHOLAT_CITY_TIMES.MAKKAH;
+        const data = SHOLAT_CITY_TIMES[cityKey] || SHOLAT_CITY_TIMES.MAKKAH;
 
         const subuhEl = document.getElementById('sholatTimeSubuh');
         const syuruqEl = document.getElementById('sholatTimeSyuruq');
@@ -1280,21 +1289,84 @@
         const asharEl = document.getElementById('sholatTimeAshar');
         const maghribEl = document.getElementById('sholatTimeMaghrib');
         const isyaEl = document.getElementById('sholatTimeIsya');
+        const imsakEl = document.getElementById('sholatTimeImsak');
+        const titleEl = document.getElementById('sholatActiveCityTitle');
 
-        if (subuhEl) subuhEl.textContent = times.subuh;
-        if (syuruqEl) syuruqEl.textContent = times.syuruq;
-        if (dzuhurEl) dzuhurEl.textContent = times.dzuhur;
-        if (asharEl) asharEl.textContent = times.ashar;
-        if (maghribEl) maghribEl.textContent = times.maghrib;
-        if (isyaEl) isyaEl.textContent = times.isya;
+        if (subuhEl) subuhEl.textContent = data.subuh;
+        if (syuruqEl) syuruqEl.textContent = data.syuruq;
+        if (dzuhurEl) dzuhurEl.textContent = data.dzuhur;
+        if (asharEl) asharEl.textContent = data.ashar;
+        if (maghribEl) maghribEl.textContent = data.maghrib;
+        if (isyaEl) isyaEl.textContent = data.isya;
+        if (imsakEl) imsakEl.textContent = data.imsak;
+        if (titleEl) titleEl.textContent = `${data.title} (${data.tz})`;
 
         const allCityBtns = document.querySelectorAll('.inapp-sholat-city-btn');
         allCityBtns.forEach(btn => {
-            btn.className = 'inapp-sholat-city-btn py-2 px-2 rounded-xl text-slate-600 hover:text-slate-900 transition text-center cursor-pointer';
+            btn.className = 'inapp-sholat-city-btn py-2 px-2.5 rounded-xl text-slate-600 hover:text-purple-950 hover:bg-slate-100 transition text-center cursor-pointer font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-200';
         });
         if (clickedBtn) {
-            clickedBtn.className = 'inapp-sholat-city-btn py-2 px-2 rounded-xl bg-sdw-pine text-white transition text-center cursor-pointer shadow-xs font-black';
+            clickedBtn.className = 'inapp-sholat-city-btn py-2 px-2.5 rounded-xl bg-gradient-to-r from-[#240833] to-[#3a0f50] text-amber-300 transition text-center cursor-pointer shadow-sm font-black text-xs flex items-center justify-center gap-1.5 border border-gold-400/40';
         }
+    }
+
+    function filterDoaCategory(category, clickedBtn) {
+        const allCards = document.querySelectorAll('.doa-item-card');
+        allCards.forEach(card => {
+            if (!category || category === 'all' || card.getAttribute('data-doa-category') === category) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        const allBtns = document.querySelectorAll('.doa-filter-btn');
+        allBtns.forEach(btn => {
+            btn.className = 'doa-filter-btn px-3 py-1.5 rounded-full text-xs font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition cursor-pointer';
+        });
+        if (clickedBtn) {
+            clickedBtn.className = 'doa-filter-btn px-3 py-1.5 rounded-full text-xs font-black text-amber-300 bg-[#240833] border border-gold-400/40 shadow-xs transition cursor-pointer';
+        }
+    }
+
+    function copyPrayerText(btn, elementId) {
+        const container = document.getElementById(elementId);
+        if (!container) return;
+        const text = container.innerText;
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopyFeedback(btn);
+            }).catch(() => fallbackCopy(text, btn));
+        } else {
+            fallbackCopy(text, btn);
+        }
+    }
+
+    function showCopyFeedback(btn) {
+        if (!btn) return;
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-400 mr-1"></i> Tersalin!';
+        setTimeout(() => {
+            btn.innerHTML = orig;
+        }, 2000);
+    }
+
+    function fallbackCopy(text, btn) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+            document.execCommand('copy');
+            showCopyFeedback(btn);
+        } catch (e) {}
+        document.body.removeChild(ta);
+    }
+
+    function sharePrayerWA(title, arab, latin, arti) {
+        const fullMsg = `*${title}*\n\n${arab}\n\n_${latin}_\n\n"${arti}"\n\n_Panduan Ibadah Umroh Resmi SDW UMROH_`;
+        const url = `https://wa.me/?text=${encodeURIComponent(fullMsg)}`;
+        window.open(url, '_blank');
     }
 
     function downloadCertificateImage() {}
@@ -1331,6 +1403,9 @@
         window.onGaleriKloterFilterChange = onGaleriKloterFilterChange;
         window.switchIbadahTab = switchIbadahTab;
         window.switchSholatCity = switchSholatCity;
+        window.filterDoaCategory = filterDoaCategory;
+        window.copyPrayerText = copyPrayerText;
+        window.sharePrayerWA = sharePrayerWA;
     }
 
     return {
@@ -1359,6 +1434,9 @@
         renderGaleriKloter: renderGaleriKloter,
         onGaleriKloterFilterChange: onGaleriKloterFilterChange,
         switchIbadahTab: switchIbadahTab,
-        switchSholatCity: switchSholatCity
+        switchSholatCity: switchSholatCity,
+        filterDoaCategory: filterDoaCategory,
+        copyPrayerText: copyPrayerText,
+        sharePrayerWA: sharePrayerWA
     };
 });
