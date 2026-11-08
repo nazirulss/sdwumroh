@@ -81,6 +81,19 @@
     let isRequestingLocation = false;
     let hasAbsoluteOrientation = false;
     let sensorCheckTimer = null;
+    let sensorAccuracy = "Presisi 3D";
+    let gpsWatchId = null;
+    let currentMode = "compass"; // 'compass' | 'map'
+    let leafletMapInstance = null;
+    let userMarker = null;
+    let kaabaMarker = null;
+    let qiblaPolyline = null;
+
+    let manualOffset = 0;
+    try {
+        const savedOffset = localStorage.getItem("sdw_qibla_offset");
+        if (savedOffset) manualOffset = parseFloat(savedOffset) || 0;
+    } catch (e) {}
 
     // Load saved coords from localStorage
     try {
@@ -143,6 +156,15 @@
 
         // A. iOS Safari: WebkitCompassHeading (True/Magnetic Heading 0 - 360°)
         if (typeof event.webkitCompassHeading === "number" && !isNaN(event.webkitCompassHeading)) {
+            if (typeof event.webkitCompassAccuracy === "number") {
+                if (event.webkitCompassAccuracy >= 0 && event.webkitCompassAccuracy <= 15) {
+                    sensorAccuracy = `Tinggi (±${Math.round(event.webkitCompassAccuracy)}°)`;
+                } else if (event.webkitCompassAccuracy > 15 && event.webkitCompassAccuracy <= 30) {
+                    sensorAccuracy = `Sedang (±${Math.round(event.webkitCompassAccuracy)}°)`;
+                } else if (event.webkitCompassAccuracy < 0 || event.webkitCompassAccuracy > 30) {
+                    sensorAccuracy = "Perlu Kalibrasi";
+                }
+            }
             return event.webkitCompassHeading;
         }
 
@@ -191,6 +213,7 @@
     function onAbsoluteOrientationEvent(event) {
         hasSensorSupport = true;
         hasAbsoluteOrientation = true;
+        sensorAccuracy = "Presisi 3D Aktif";
         const raw = extractCompassHeading(event);
         if (raw !== null) {
             currentHeading = filterHeading((raw + 360) % 360);
@@ -201,6 +224,9 @@
     function onRelativeOrientationEvent(event) {
         if (hasAbsoluteOrientation) return; // Prioritaskan absolute jika tersedia
         hasSensorSupport = true;
+        if (sensorAccuracy === "Presisi 3D") {
+            sensorAccuracy = "Orientasi Sensor";
+        }
         const raw = extractCompassHeading(event);
         if (raw !== null) {
             currentHeading = filterHeading((raw + 360) % 360);
@@ -210,6 +236,10 @@
 
     // 6. UPDATE TAMPILAN KOMPAS REAL-TIME (Sinkronisasi Semua Dial & Needle)
     function updateCompassUI(heading) {
+        if (typeof document === "undefined") return;
+        // Terapkan koreksi kalibrasi manual (Manual Offset)
+        const effectiveHeading = (heading + manualOffset + 360) % 360;
+
         // Seleksi elemen yang ada di kiblat.html dan app.html
         const dials = [
             document.getElementById("qibla-compass-dial"),
@@ -237,13 +267,13 @@
             document.getElementById("app-qibla-heading-deg")
         ].filter(Boolean);
 
-        // Putar piringan mata angin kompas sebesar -heading
+        // Putar piringan mata angin kompas sebesar -effectiveHeading
         dials.forEach(d => {
-            d.style.transform = `rotate(${-heading}deg)`;
+            d.style.transform = `rotate(${-effectiveHeading}deg)`;
         });
 
-        // Putar jarum Ka'bah: needleAngle = (qiblaBearing - heading)
-        const diff = (qiblaBearing - heading + 360) % 360;
+        // Putar jarum Ka'bah: needleAngle = (qiblaBearing - effectiveHeading)
+        const diff = (qiblaBearing - effectiveHeading + 360) % 360;
         const needleAngle = diff;
 
         needles.forEach(n => {
@@ -251,7 +281,7 @@
         });
 
         headingDisplays.forEach(h => {
-            h.innerText = `${Math.round(heading)}°`;
+            h.innerText = `${Math.round(effectiveHeading)}°`;
         });
 
         // Toleransi presisi menghadap kiblat (±2.5°)
@@ -299,6 +329,30 @@
         } else {
             lastVibratedState = false;
         }
+
+        // Sinkronkan badge status akurasi dan kalibrasi
+        const accuracyEls = [
+            document.getElementById("app-qibla-accuracy"),
+            document.getElementById("qibla-accuracy-badge")
+        ].filter(Boolean);
+        accuracyEls.forEach(el => {
+            el.innerText = sensorAccuracy;
+        });
+
+        const sensorStatusEls = [
+            document.getElementById("app-qibla-sensor-status")
+        ].filter(Boolean);
+        sensorStatusEls.forEach(el => {
+            if (sensorAccuracy.includes("Perlu Kalibrasi")) {
+                el.className = "text-amber-300 flex items-center gap-1 font-bold animate-pulse";
+                el.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Perlu Kalibrasi Angka 8`;
+            } else {
+                el.className = "text-emerald-300 flex items-center gap-1 font-bold";
+                el.innerHTML = `<i class="fa-solid fa-circle-check text-[10px]"></i> ${sensorAccuracy}`;
+            }
+        });
+
+        updateOffsetUI();
     }
 
     // 7. SIKLUS HIDUP SENSOR LISTENER
@@ -391,6 +445,47 @@
     }
 
     // 8. GEOLOCATION GPS REAL-TIME & REVERSE GEOCODING
+    function startGpsWatch() {
+        if (gpsWatchId !== null || typeof navigator === "undefined" || !navigator.geolocation) return;
+        try {
+            gpsWatchId = navigator.geolocation.watchPosition(
+                handleGpsPosition,
+                err => console.warn("[SDW_KIBLAT] watchPosition:", err),
+                { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+            );
+        } catch (e) {}
+    }
+
+    function handleGpsPosition(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const acc = Math.round(position.coords.accuracy || 10);
+
+        userCoords.lat = lat;
+        userCoords.lng = lng;
+        userCoords.accuracy = acc;
+        userCoords.isGps = true;
+        userCoords.sourceType = "live_gps";
+
+        // Hitung arah kiblat presisi
+        const res = calculateQibla(lat, lng);
+        qiblaBearing = res.bearing;
+        qiblaDistance = res.distanceKm;
+
+        updateQiblaValuesUI();
+        updateCoordsChipUI();
+
+        try {
+            localStorage.setItem("sdw_qibla_lat", lat.toString());
+            localStorage.setItem("sdw_qibla_lng", lng.toString());
+            localStorage.setItem("sdw_qibla_acc", acc.toString());
+        } catch (e) {}
+
+        if (leafletMapInstance && currentMode === "map") {
+            updateSatelliteMapCoordinates();
+        }
+    }
+
     function requestDeviceLocation(forceGps = false) {
         if (isRequestingLocation) return;
         isRequestingLocation = true;
@@ -412,30 +507,9 @@
 
         navigator.geolocation.getCurrentPosition(
             position => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                const acc = position.coords.accuracy || 10;
-
-                userCoords.lat = lat;
-                userCoords.lng = lng;
-                userCoords.accuracy = acc;
-                userCoords.isGps = true;
-                userCoords.sourceType = "live_gps";
-
-                // Hitung arah kiblat presisi
-                const res = calculateQibla(lat, lng);
-                qiblaBearing = res.bearing;
-                qiblaDistance = res.distanceKm;
-
-                updateQiblaValuesUI();
-                reverseGeocodeCoords(lat, lng);
-
-                try {
-                    localStorage.setItem("sdw_qibla_lat", lat.toString());
-                    localStorage.setItem("sdw_qibla_lng", lng.toString());
-                    localStorage.setItem("sdw_qibla_acc", acc.toString());
-                } catch (e) {}
-
+                handleGpsPosition(position);
+                reverseGeocodeCoords(userCoords.lat, userCoords.lng);
+                startGpsWatch();
                 isRequestingLocation = false;
             },
             error => {
@@ -451,8 +525,8 @@
             },
             {
                 enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 60000
+                timeout: 15000,
+                maximumAge: 0
             }
         );
     }
@@ -471,6 +545,7 @@
         qiblaDistance = res.distanceKm;
 
         updateQiblaValuesUI();
+        updateCoordsChipUI();
 
         const locEls = [
             document.getElementById("qibla-current-location"),
@@ -490,6 +565,10 @@
         selects.forEach(sel => {
             sel.value = cityKey;
         });
+
+        if (leafletMapInstance && currentMode === "map") {
+            updateSatelliteMapCoordinates();
+        }
     }
 
     function changeCity(cityKey) {
@@ -515,6 +594,7 @@
         } catch (e) {}
 
         updateQiblaValuesUI();
+        updateCoordsChipUI();
 
         const locEls = [
             document.getElementById("qibla-current-location"),
@@ -537,6 +617,10 @@
 
         if (currentHeading !== null) {
             updateCompassUI(currentHeading);
+        }
+
+        if (leafletMapInstance && currentMode === "map") {
+            updateSatelliteMapCoordinates();
         }
     }
 
@@ -605,6 +689,7 @@
 
     // 9. UPDATE SELURUH INDIKATOR ANGKA DERAJAT & JARAK
     function updateQiblaValuesUI() {
+        if (typeof document === "undefined") return;
         const targetDegEls = [
             document.getElementById("qibla-target-deg"),
             document.getElementById("app-qibla-target-deg")
@@ -645,9 +730,247 @@
                 el.innerText = `Preset Kota`;
             }
         });
+
+        updateOffsetUI();
+        updateCoordsChipUI();
     }
 
-    // 10. POPULASI OPSI KOTA KE SEMUA DROPDOWN SELECT
+    function updateCoordsChipUI() {
+        if (typeof document === "undefined") return;
+        const chipEls = [
+            document.getElementById("app-qibla-coords-chip"),
+            document.getElementById("qibla-coords-chip")
+        ].filter(Boolean);
+
+        const text = userCoords.isGps && userCoords.accuracy
+            ? `(±${Math.round(userCoords.accuracy)}m)`
+            : "";
+
+        chipEls.forEach(el => {
+            el.innerText = text;
+        });
+    }
+
+    // 10. KALIBRASI MANUAL SENSOR (OFFSET STEPPER & RESET)
+    function adjustManualOffset(delta) {
+        manualOffset = Math.round((manualOffset + delta) * 10) / 10;
+        if (manualOffset > 30) manualOffset = 30;
+        if (manualOffset < -30) manualOffset = -30;
+        try {
+            if (typeof localStorage !== "undefined") {
+                localStorage.setItem("sdw_qibla_offset", manualOffset.toString());
+            }
+        } catch (e) {}
+        updateOffsetUI();
+        if (currentHeading !== null) {
+            updateCompassUI(currentHeading);
+        }
+    }
+
+    function resetManualOffset() {
+        manualOffset = 0;
+        try {
+            if (typeof localStorage !== "undefined") {
+                localStorage.removeItem("sdw_qibla_offset");
+            }
+        } catch (e) {}
+        updateOffsetUI();
+        if (currentHeading !== null) {
+            updateCompassUI(currentHeading);
+        }
+    }
+
+    function updateOffsetUI() {
+        if (typeof document === "undefined") return;
+        const offsetEls = [
+            document.getElementById("app-qibla-offset-val"),
+            document.getElementById("qibla-offset-val")
+        ].filter(Boolean);
+        const formatted = manualOffset === 0 ? "0.0°" : (manualOffset > 0 ? `+${manualOffset.toFixed(1)}°` : `${manualOffset.toFixed(1)}°`);
+        offsetEls.forEach(el => {
+            el.innerText = `Offset: ${formatted}`;
+        });
+    }
+
+    // 11. MODAL PANDUAN KALIBRASI ANGKA 8
+    function openCalibrationModal() {
+        if (typeof document === "undefined") return;
+        const modal = document.getElementById("kiblat-calibration-modal");
+        if (modal) modal.classList.remove("hidden");
+    }
+
+    function closeCalibrationModal() {
+        if (typeof document === "undefined") return;
+        const modal = document.getElementById("kiblat-calibration-modal");
+        if (modal) modal.classList.add("hidden");
+    }
+
+    // 12. GOOGLE MAPS ROUTE, SATELLITE & QIBLA FINDER INTEGRATION
+    function openGoogleMapsRoute() {
+        if (typeof window === "undefined") return;
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${userCoords.lat},${userCoords.lng}&destination=${KAABA_COORDS.lat},${KAABA_COORDS.lng}&travelmode=walking`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function openGoogleMapsSatellite() {
+        if (typeof window === "undefined") return;
+        const url = `https://www.google.com/maps/@${userCoords.lat},${userCoords.lng},19z/data=!3m1!1e3`;
+        window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function openGoogleQiblaFinder() {
+        if (typeof window === "undefined") return;
+        window.open("https://qiblafinder.withgoogle.com/", "_blank", "noopener,noreferrer");
+    }
+
+    // 13. MODE SWITCHER & LEAFLET SATELLITE MAP
+    function switchMode(mode) {
+        currentMode = mode;
+        if (typeof document === "undefined") return;
+        const compassPanel = document.getElementById("kiblat-panel-compass");
+        const mapPanel = document.getElementById("kiblat-panel-map");
+        const btnCompass = document.getElementById("btn-kiblat-mode-compass");
+        const btnMap = document.getElementById("btn-kiblat-mode-map");
+
+        if (mode === "map") {
+            if (compassPanel) compassPanel.classList.add("hidden");
+            if (mapPanel) mapPanel.classList.remove("hidden");
+
+            if (btnCompass) {
+                btnCompass.className = "flex-1 py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all text-purple-200 hover:text-white cursor-pointer";
+            }
+            if (btnMap) {
+                btnMap.className = "flex-1 py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs bg-amber-400 text-slate-950 cursor-pointer";
+            }
+
+            setTimeout(() => {
+                initSatelliteMap();
+            }, 100);
+        } else {
+            if (compassPanel) compassPanel.classList.remove("hidden");
+            if (mapPanel) mapPanel.classList.add("hidden");
+
+            if (btnCompass) {
+                btnCompass.className = "flex-1 py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs bg-amber-400 text-slate-950 cursor-pointer";
+            }
+            if (btnMap) {
+                btnMap.className = "flex-1 py-1.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all text-purple-200 hover:text-white cursor-pointer";
+            }
+        }
+    }
+
+    function generateGreatCirclePoints(lat1, lon1, lat2, lon2, numPoints = 60) {
+        const toRad = d => (d * Math.PI) / 180;
+        const toDeg = r => (r * 180) / Math.PI;
+
+        const phi1 = toRad(lat1), lam1 = toRad(lon1);
+        const phi2 = toRad(lat2), lam2 = toRad(lon2);
+
+        const d = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin((phi1 - phi2) / 2), 2) +
+            Math.cos(phi1) * Math.cos(phi2) * Math.pow(Math.sin((lam1 - lam2) / 2), 2)));
+
+        const points = [];
+        for (let i = 0; i <= numPoints; i++) {
+            const f = i / numPoints;
+            const A = Math.sin((1 - f) * d) / Math.sin(d);
+            const B = Math.sin(f * d) / Math.sin(d);
+            const x = A * Math.cos(phi1) * Math.cos(lam1) + B * Math.cos(phi2) * Math.cos(lam2);
+            const y = A * Math.cos(phi1) * Math.sin(lam1) + B * Math.cos(phi2) * Math.sin(lam2);
+            const z = A * Math.sin(phi1) + B * Math.sin(phi2);
+            const phiI = Math.atan2(z, Math.sqrt(x * x + y * y));
+            const lamI = Math.atan2(y, x);
+            points.push([toDeg(phiI), toDeg(lamI)]);
+        }
+        return points;
+    }
+
+    function initSatelliteMap(containerId = "app-qibla-map") {
+        const mapEl = document.getElementById(containerId);
+        if (!mapEl) return;
+        if (typeof L === "undefined") {
+            console.warn("[SDW_KIBLAT] Leaflet library not loaded yet.");
+            return;
+        }
+
+        if (leafletMapInstance) {
+            leafletMapInstance.invalidateSize();
+            updateSatelliteMapCoordinates();
+            return;
+        }
+
+        try {
+            const map = L.map(containerId, {
+                zoomControl: true,
+                attributionControl: false
+            }).setView([userCoords.lat, userCoords.lng], 18);
+
+            // Esri World Imagery (High Resolution Global Satellite Tiles)
+            L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+                maxZoom: 19
+            }).addTo(map);
+
+            // Place & Street Labels Overlay
+            L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}", {
+                maxZoom: 19
+            }).addTo(map);
+
+            // User Location Marker
+            const userIcon = L.divIcon({
+                className: "custom-qibla-user-pin",
+                html: `<div style="position:relative;display:flex;align-items:center;justify-content:center;width:24px;height:24px;">
+                         <div style="position:absolute;width:32px;height:32px;border-radius:50%;background:rgba(245,158,11,0.4);animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></div>
+                         <div style="width:16px;height:16px;border-radius:50%;background:#F59E0B;border:2.5px solid #FFFFFF;box-shadow:0 4px 10px rgba(0,0,0,0.5);"></div>
+                       </div>`,
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+
+            userMarker = L.marker([userCoords.lat, userCoords.lng], { icon: userIcon })
+                .addTo(map)
+                .bindPopup(`<strong>Titik Anda</strong><br>Arah Kiblat: <b>${qiblaBearing.toFixed(2)}°</b><br>Jarak: ${qiblaDistance.toLocaleString('id-ID')} km`);
+
+            // Ka'bah Marker
+            const kaabaIcon = L.divIcon({
+                className: "custom-kaaba-pin",
+                html: `<div style="width:28px;height:28px;border-radius:8px;background:#000;color:#F59E0B;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:1.5px solid #F59E0B;">🕋</div>`,
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+
+            kaabaMarker = L.marker([KAABA_COORDS.lat, KAABA_COORDS.lng], { icon: kaabaIcon })
+                .addTo(map)
+                .bindPopup("<strong>Ka'bah Makkah Al-Mukarramah</strong>");
+
+            // Great Circle Geodesic Polyline
+            const pathCoords = generateGreatCirclePoints(userCoords.lat, userCoords.lng, KAABA_COORDS.lat, KAABA_COORDS.lng, 80);
+
+            qiblaPolyline = L.polyline(pathCoords, {
+                color: "#F59E0B",
+                weight: 4,
+                opacity: 0.95,
+                dashArray: "8, 6"
+            }).addTo(map);
+
+            leafletMapInstance = map;
+        } catch (e) {
+            console.error("[SDW_KIBLAT] Gagal inisialisasi Leaflet map:", e);
+        }
+    }
+
+    function updateSatelliteMapCoordinates() {
+        if (!leafletMapInstance) return;
+        if (userMarker) {
+            userMarker.setLatLng([userCoords.lat, userCoords.lng]);
+            userMarker.setPopupContent(`<strong>Titik Anda</strong><br>Arah Kiblat: <b>${qiblaBearing.toFixed(2)}°</b><br>Jarak: ${qiblaDistance.toLocaleString('id-ID')} km`);
+        }
+        if (qiblaPolyline) {
+            const pathCoords = generateGreatCirclePoints(userCoords.lat, userCoords.lng, KAABA_COORDS.lat, KAABA_COORDS.lng, 80);
+            qiblaPolyline.setLatLngs(pathCoords);
+        }
+        leafletMapInstance.setView([userCoords.lat, userCoords.lng], 18);
+    }
+
+    // 14. POPULASI OPSI KOTA KE SEMUA DROPDOWN SELECT
     function populateCitySelects() {
         const selects = [
             document.getElementById("qibla-city-select"),
@@ -675,7 +998,7 @@
         });
     }
 
-    // 11. INITIALISASI OTOMATIS
+    // 15. INITIALISASI OTOMATIS
     function init() {
         populateCitySelects();
         updateQiblaValuesUI();
@@ -688,6 +1011,7 @@
 
         if (userCoords.isGps && userCoords.locationName) {
             locEls.forEach(el => el.innerText = userCoords.locationName);
+            updateCoordsChipUI();
         } else {
             // Coba ambil lokasi presisi otomatis jika izin sudah ada
             requestDeviceLocation(false);
@@ -725,6 +1049,18 @@
         getQiblaBearing: () => qiblaBearing,
         getQiblaDistance: () => qiblaDistance,
         getCurrentHeading: () => currentHeading,
+        getManualOffset: () => manualOffset,
+        setManualOffset: (val) => { manualOffset = val; updateOffsetUI(); if (currentHeading !== null) updateCompassUI(currentHeading); },
+        adjustManualOffset,
+        resetManualOffset,
+        openGoogleMapsRoute,
+        openGoogleMapsSatellite,
+        openGoogleQiblaFinder,
+        switchMode,
+        initSatelliteMap,
+        openCalibrationModal,
+        closeCalibrationModal,
+        generateGreatCirclePoints,
         init
     };
 }));

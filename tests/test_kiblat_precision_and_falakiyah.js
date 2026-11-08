@@ -69,6 +69,24 @@ const h2 = kiblatEngine.filterHeading(2); // Menyeberangi batas 0°/360°
 assert.ok(!isNaN(h2) && Math.abs(h2 - 358) < 180, 'Filter rotasi sudut terpendek tidak boleh meloncat drastis saat menyeberangi 0°/360°');
 console.log('✔ [PASS] Low-Pass Filter penghilang jitter sensor terverifikasi.');
 
+// F. Uji Kalibrasi Manual Offset Sensor
+kiblatEngine.setManualOffset(0);
+assert.strictEqual(kiblatEngine.getManualOffset(), 0, 'Offset awal harus 0°');
+kiblatEngine.adjustManualOffset(2.5);
+assert.strictEqual(kiblatEngine.getManualOffset(), 2.5, 'Offset setelah ditambah 2.5 harus 2.5°');
+kiblatEngine.adjustManualOffset(-1.0);
+assert.strictEqual(kiblatEngine.getManualOffset(), 1.5, 'Offset setelah dikurangi 1.0 harus 1.5°');
+kiblatEngine.resetManualOffset();
+assert.strictEqual(kiblatEngine.getManualOffset(), 0, 'Reset offset harus mengembalikan ke 0°');
+console.log('✔ [PASS] Fitur Kalibrasi Manual Offset Sensor Kompas terverifikasi.');
+
+// G. Uji Interpolasi Garis Geodesi Great-Circle Ka'bah
+const gcPoints = kiblatEngine.generateGreatCirclePoints(-6.2088, 106.8456, 21.422487, 39.826206, 20);
+assert.strictEqual(gcPoints.length, 21, 'Harus menghasilkan 21 titik interpolasi geodesi');
+assert.strictEqual(Number(gcPoints[0][0].toFixed(4)), -6.2088, 'Titik awal harus lokasi pengguna');
+assert.strictEqual(Number(gcPoints[20][0].toFixed(4)), 21.4225, 'Titik akhir harus Ka\'bah Makkah');
+console.log('✔ [PASS] Formula Interpolasi Garis Geodesi Satelit Ka\'bah terverifikasi.');
+
 // 2. Verifikasi DOM Integrasi di app.html (/app?view=ibadah&tab=kiblat)
 const appHtml = fs.readFileSync(path.join(__dirname, '../app.html'), 'utf8');
 
@@ -83,7 +101,18 @@ assert.ok(appHtml.includes('id="app-qibla-distance"'), 'app.html harus memiliki 
 assert.ok(appHtml.includes('id="btn-app-qibla-ios-sensor"'), 'app.html harus memiliki tombol izin sensor iOS');
 assert.ok(appHtml.includes('QS. Al-Baqarah: 144'), 'app.html harus menyertakan dalil Al-Qur\'an Al-Baqarah 144');
 assert.ok(appHtml.includes('src="js/kiblat.js?v=2.8.0"'), 'app.html harus memuat script js/kiblat.js');
-console.log('✔ [PASS] DOM UI Presisi di app.html terverifikasi 100%!');
+
+// Verifikasi Mode Titik Peta Google Maps & Kalibrasi
+assert.ok(appHtml.includes('id="btn-kiblat-mode-compass"'), 'app.html harus memiliki tab switch Kompas Sensor');
+assert.ok(appHtml.includes('id="btn-kiblat-mode-map"'), 'app.html harus memiliki tab switch Peta Google Maps');
+assert.ok(appHtml.includes('id="kiblat-panel-compass"'), 'app.html harus memiliki panel kompas');
+assert.ok(appHtml.includes('id="kiblat-panel-map"'), 'app.html harus memiliki panel peta Google Maps');
+assert.ok(appHtml.includes('id="app-qibla-map"'), 'app.html harus memiliki kontainer peta satelit Leaflet');
+assert.ok(appHtml.includes('id="app-qibla-offset-val"'), 'app.html harus memiliki display kalibrasi offset');
+assert.ok(appHtml.includes('id="kiblat-calibration-modal"'), 'app.html harus memiliki modal kalibrasi angka 8');
+assert.ok(appHtml.includes('openGoogleMapsRoute()'), 'app.html harus memiliki tombol buka Google Maps');
+assert.ok(appHtml.includes('openGoogleQiblaFinder()'), 'app.html harus memiliki tombol Google Qibla Finder');
+console.log('✔ [PASS] DOM UI Presisi & Peta Google Maps di app.html terverifikasi 100%!');
 
 // 3. Verifikasi DOM Integrasi di kiblat.html
 const kiblatHtml = fs.readFileSync(path.join(__dirname, '../kiblat.html'), 'utf8');
@@ -93,7 +122,7 @@ console.log('✔ [PASS] Integrasi script modular pada kiblat.html terverifikasi!
 // 4. Verifikasi Precache di sw.js
 const swJs = fs.readFileSync(path.join(__dirname, '../sw.js'), 'utf8');
 assert.ok(swJs.includes("'/js/kiblat.js'"), 'sw.js harus melakukan precache pada /js/kiblat.js');
-assert.ok(swJs.includes('sdw-umroh-pwa-v55'), 'sw.js harus dinaikkan versinya ke v55');
+assert.ok(/sdw-umroh-pwa-v(5[5-9]|[6-9][0-9])/.test(swJs), 'sw.js harus dinaikkan versinya ke v55 atau lebih tinggi');
 console.log('✔ [PASS] Precache Service Worker dan Cache Versioning terverifikasi!');
 
 // 5. Verifikasi Lifecycle Controller di js/jamaah.js & js/pwa.js
