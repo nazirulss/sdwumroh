@@ -68,7 +68,7 @@ Dokumen ini mendefinisikan struktur 22 sheet Google Spreadsheet yang berfungsi s
 
 ### `DB_Packages`
 
-* **Columns:** `id`, `name`, `slug`, `package_type`, `duration_days`, `status`, `description`, `published_at`, `created_at`
+* **Columns:** `id`, `name`, `slug`, `package_type`, `duration_days`, `status`, `description`, `hotel_makkah`, `hotel_madinah`, `airline`, `seats_left`, `badge`, `image_url`, `rating`, `starting_price`, `discount_label`, `published_at`, `created_at`, `updated_at`
 
 * **Canonical State:** `DRAFT`, `IN_REVIEW`, `PUBLISHED`, `PAUSED`, `ARCHIVED`
 

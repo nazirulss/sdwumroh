@@ -34,7 +34,7 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Leads": ["id", "customer_id", "source", "sales_owner_id", "status", "urgency", "budget_range", "notes", "created_at", "updated_at"],
   "DB_Sales_Activities": ["id", "lead_id", "actor_id", "activity_type", "summary", "outcome", "timestamp"],
   "DB_Follow_Ups": ["id", "lead_id", "sales_owner_id", "scheduled_at", "channel", "notes", "status", "completed_at"],
-  "DB_Packages": ["id", "name", "slug", "package_type", "duration_days", "status", "description", "published_at", "created_at"],
+  "DB_Packages": ["id", "name", "slug", "package_type", "duration_days", "status", "description", "hotel_makkah", "hotel_madinah", "airline", "seats_left", "badge", "image_url", "rating", "starting_price", "discount_label", "published_at", "created_at", "updated_at"],
   "DB_Package_Prices": ["id", "package_id", "currency", "quad_price", "triple_price", "double_price", "effective_start", "effective_end", "status"],
   "DB_Departures": ["id", "package_id", "departure_date", "return_date", "airline", "origin_airport", "capacity_total", "capacity_booked", "status", "notes"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],

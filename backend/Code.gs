@@ -389,7 +389,7 @@ function setupDatabase() {
     DB_Leads: ['id', 'customer_id', 'source', 'sales_owner_id', 'status', 'urgency', 'budget_range', 'notes', 'created_at', 'updated_at'],
     DB_Sales_Activities: ['id', 'lead_id', 'actor_id', 'activity_type', 'summary', 'outcome', 'timestamp'],
     DB_Follow_Ups: ['id', 'lead_id', 'sales_owner_id', 'scheduled_at', 'channel', 'notes', 'status', 'completed_at'],
-    DB_Packages: ['id', 'name', 'slug', 'package_type', 'duration_days', 'status', 'description', 'published_at', 'created_at'],
+    DB_Packages: ['id', 'name', 'slug', 'package_type', 'duration_days', 'status', 'description', 'hotel_makkah', 'hotel_madinah', 'airline', 'seats_left', 'badge', 'image_url', 'rating', 'starting_price', 'discount_label', 'published_at', 'created_at', 'updated_at'],
     DB_Package_Prices: ['id', 'package_id', 'currency', 'quad_price', 'triple_price', 'double_price', 'effective_start', 'effective_end', 'status'],
     DB_Departures: ['id', 'package_id', 'departure_date', 'return_date', 'airline', 'origin_airport', 'capacity_total', 'capacity_booked', 'status', 'notes'],
     DB_Registrations: ['id', 'customer_id', 'departure_id', 'package_id', 'room_type', 'agreed_price_snapshot', 'discount_snapshot', 'final_price_snapshot', 'status', 'sales_id', 'notes', 'created_at', 'updated_at'],
@@ -489,9 +489,9 @@ function seedInitialData_(ss, nowStr) {
       ['CUS-000004', '3171036811850004', 'Hj. Nurul Hidayah', 'P', '1985-11-28', 'Yogyakarta', '081567891234', 'nurul.hidayah@gmail.com', 'Jl. Malioboro No. 20', 'Yogyakarta', 'DI Yogyakarta', nowStr, nowStr]
     ],
     DB_Packages: [
-      ['PKG-000001', 'Umroh Reguler 9 Hari', 'umroh-reguler-9h', 'REGULAR', 9, 'PUBLISHED', 'Paket favorit ibadah khusyuk. Hotel Retaj Al Rayyan Makkah & Concorde Dar Al Khair Madinah.', nowStr, nowStr],
-      ['PKG-000002', 'Umroh VIP Bintang 5', 'umroh-vip-bintang-5', 'VIP', 9, 'PUBLISHED', 'Akomodasi mewah premium bintang 5 pelataran masjid. Swissotel Makkah & Dar Al Taqwa Madinah.', nowStr, nowStr],
-      ['PKG-000003', 'Umroh Plus Turki 12 Hari', 'umroh-plus-turki-12h', 'PLUS_TURKEY', 12, 'PUBLISHED', 'Ibadah umroh lengkap dengan napak tilas sejarah peradaban Islam di Istanbul & Bursa.', nowStr, nowStr]
+      ['PKG-000001', 'Umroh Reguler Syawal Barakah', 'umroh-reguler-syawal', 'REGULER', 9, 'PUBLISHED', 'Perjalanan ibadah penuh kekhusyukan dengan bimbingan asatidz berpengalaman, hotel bintang 4 dekat pelataran masjid.', 'Retaj Al Rayyan / Setaraf (350m)', 'Concorde Dar Al Khair (200m)', 'Saudia Airlines (Direct SV)', 15, 'Best Seller', 'assets/pkg-reguler-syawal.png', '4.9/5 (182 ulasan)', 29500000, 'Hemat Rp 3 Jt', nowStr, nowStr, nowStr],
+      ['PKG-000002', 'Umroh VIP Khidmat Akhir Tahun', 'umroh-vip-akhir-tahun', 'VIP', 12, 'PUBLISHED', 'Akomodasi bintang 5 di pelataran Ka\'bah (Clock Tower), kereta cepat Haramain High Speed Rail Makkah–Madinah.', 'Swissotel Makkah Clock Tower (0m)', 'Dar Al Taqwa Madinah (50m)', 'Garuda Indonesia (GA980)', 8, 'Hampir Penuh', 'assets/pkg-vip-khidmat.png', '5.0/5 (94 ulasan)', 43500000, 'Hemat Rp 2,5 Jt', nowStr, nowStr, nowStr],
+      ['PKG-000003', 'Umroh Plus Turki Musim Semi', 'umroh-plus-turki-spring', 'PLUS_TOUR', 13, 'PUBLISHED', 'Ziarah jejak peradaban Utsmaniyah di Istanbul, Selat Bosphorus, dilanjutkan manasik intensif dan ibadah di dua Tanah Suci.', 'Anjum Hotel Makkah', 'Rove Al Madinah', 'Turkish Airlines', 18, 'Favorit Keluarga', 'assets/pkg-plus-turki.png', '4.8/5 (65 ulasan)', 38900000, 'Hemat Rp 3 Jt', nowStr, nowStr, nowStr]
     ],
     DB_Package_Prices: [
       ['PRC-000001', 'PKG-000001', 'IDR', 32500000, 34500000, 37500000, '2026-01-01', '2027-12-31', 'ACTIVE'],
@@ -612,13 +612,56 @@ function doGet(e) {
 
     if (action === 'getPackages') {
       const sheet = ss.getSheetByName("DB_Packages");
-      if (!sheet) return createResponse(false, null, "Sheet DB_Packages tidak ditemukan");
+      if (!sheet || sheet.getLastRow() <= 1) return createResponse(true, []);
       const rows = sheet.getDataRange().getValues();
       const headers = rows[0];
+
+      // Ambil snapshot harga jika sheet DB_Package_Prices ada
+      const priceSheet = ss.getSheetByName("DB_Package_Prices");
+      const priceMap = {};
+      if (priceSheet && priceSheet.getLastRow() > 1) {
+        const pRows = priceSheet.getDataRange().getValues();
+        const pHeaders = pRows[0];
+        pRows.slice(1).forEach(function(pRow) {
+          const pObj = {};
+          pHeaders.forEach(function(h, i) { pObj[h] = pRow[i]; });
+          if (pObj.package_id) priceMap[pObj.package_id] = pObj;
+        });
+      }
+
       const items = rows.slice(1).map(function (row) {
         const obj = {};
         headers.forEach(function (h, i) { obj[h] = row[i]; });
-        return obj;
+        const pInfo = priceMap[obj.id] || {};
+        const quadPrice = Number(obj.quad_price || pInfo.quad_price || obj.starting_price || 29500000);
+        const triplePrice = Number(obj.triple_price || pInfo.triple_price || (quadPrice + 2000000));
+        const doublePrice = Number(obj.double_price || pInfo.double_price || (quadPrice + 5000000));
+
+        return {
+          id: obj.id,
+          name: obj.name || 'Paket Umroh',
+          slug: obj.slug || (String(obj.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')),
+          package_type: obj.package_type || 'REGULER',
+          duration_days: Number(obj.duration_days) || 9,
+          status: obj.status || 'PUBLISHED',
+          description: obj.description || '',
+          hotel_makkah: obj.hotel_makkah || 'Hotel Bintang Makkah',
+          hotel_madinah: obj.hotel_madinah || 'Hotel Bintang Madinah',
+          airline: obj.airline || 'Saudia Airlines',
+          seats_left: obj.seats_left !== undefined ? Number(obj.seats_left) : 15,
+          badge: obj.badge || 'Program Pilihan',
+          image: obj.image_url || obj.image || 'assets/hero-haram.png',
+          image_url: obj.image_url || obj.image || 'assets/hero-haram.png',
+          rating: obj.rating || '4.9/5 (100+ ulasan)',
+          starting_price: quadPrice,
+          quad_price: quadPrice,
+          triple_price: triplePrice,
+          double_price: doublePrice,
+          discount_label: obj.discount_label || '',
+          published_at: obj.published_at || '',
+          created_at: obj.created_at || '',
+          updated_at: obj.updated_at || ''
+        };
       });
       return createResponse(true, items);
     }
@@ -1766,6 +1809,178 @@ function processSingleMutation_(ss, action, payload, actor) {
         sheet.deleteRow(i + 1);
         logAudit_(actor, "DELETE_BADAL_CERTIFICATE", "DB_Badal_Certificates", id, null, null, "Piagam badal umroh dihapus");
         return { id: id, deleted: true, entity: "DB_Badal_Certificates" };
+      }
+    }
+    return { id: id, deleted: false, message: "ID tidak ditemukan" };
+  }
+
+  // 14. MANAJEMEN KATALOG PILIHAN PAKET UMROH
+  if (action === 'savePackage') {
+    const sheet = ss.getSheetByName("DB_Packages");
+    if (!sheet) throw new Error("Sheet DB_Packages tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/PKG-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "PKG-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const name = payload.name || payload.title || "Paket Umroh Baru";
+    const slug = payload.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const packageType = payload.package_type || payload.packageType || 'REGULER';
+    const durationDays = Number(payload.duration_days || payload.durationDays || 9);
+    const status = payload.status || 'PUBLISHED';
+    const description = payload.description || '';
+    const hotelMakkah = payload.hotel_makkah || payload.hotelMakkah || 'Hotel Bintang Makkah';
+    const hotelMadinah = payload.hotel_madinah || payload.hotelMadinah || 'Hotel Bintang Madinah';
+    const airline = payload.airline || 'Saudia Airlines';
+    const seatsLeft = Number(payload.seats_left !== undefined ? payload.seats_left : (payload.seatsLeft !== undefined ? payload.seatsLeft : 15));
+    const badge = payload.badge || 'Program Pilihan';
+    const imageUrl = payload.image_url || payload.imageUrl || payload.image || 'assets/hero-haram.png';
+    const rating = payload.rating || '4.9/5 (100+ ulasan)';
+    const startingPrice = Number(payload.starting_price || payload.startingPrice || payload.quad_price || payload.quadPrice || 29500000);
+    const discountLabel = payload.discount_label || payload.discountLabel || '';
+    const publishedAt = payload.published_at || payload.publishedAt || (status === 'PUBLISHED' ? nowStr : '');
+    const createdAt = rowIndex > 0 && rows[rowIndex - 1][17] ? rows[rowIndex - 1][17] : nowStr;
+    const updatedAt = nowStr;
+
+    const rowData = [];
+    headers.forEach(function(h) {
+      switch(h) {
+        case 'id': rowData.push(id); break;
+        case 'name': rowData.push(name); break;
+        case 'slug': rowData.push(slug); break;
+        case 'package_type': rowData.push(packageType); break;
+        case 'duration_days': rowData.push(durationDays); break;
+        case 'status': rowData.push(status); break;
+        case 'description': rowData.push(description); break;
+        case 'hotel_makkah': rowData.push(hotelMakkah); break;
+        case 'hotel_madinah': rowData.push(hotelMadinah); break;
+        case 'airline': rowData.push(airline); break;
+        case 'seats_left': rowData.push(seatsLeft); break;
+        case 'badge': rowData.push(badge); break;
+        case 'image_url': rowData.push(imageUrl); break;
+        case 'rating': rowData.push(rating); break;
+        case 'starting_price': rowData.push(startingPrice); break;
+        case 'discount_label': rowData.push(discountLabel); break;
+        case 'published_at': rowData.push(publishedAt); break;
+        case 'created_at': rowData.push(createdAt); break;
+        case 'updated_at': rowData.push(updatedAt); break;
+        default: rowData.push(payload[h] || ''); break;
+      }
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    const priceSheet = ss.getSheetByName("DB_Package_Prices");
+    if (priceSheet) {
+      const quadPrice = Number(payload.quad_price || payload.quadPrice || startingPrice);
+      const triplePrice = Number(payload.triple_price || payload.triplePrice || (quadPrice + 2000000));
+      const doublePrice = Number(payload.double_price || payload.doublePrice || (quadPrice + 5000000));
+      const pRows = priceSheet.getDataRange().getValues();
+      let pRowIndex = -1;
+      for (let i = 1; i < pRows.length; i++) {
+        if (String(pRows[i][1]).toUpperCase() === String(id).toUpperCase()) {
+          pRowIndex = i + 1;
+          break;
+        }
+      }
+      if (pRowIndex > 0) {
+        priceSheet.getRange(pRowIndex, 4, 1, 3).setValues([[quadPrice, triplePrice, doublePrice]]);
+      } else {
+        const prcId = "PRC-" + String(priceSheet.getLastRow()).padStart(6, '0');
+        priceSheet.appendRow([prcId, id, 'IDR', quadPrice, triplePrice, doublePrice, '2026-01-01', '2027-12-31', 'ACTIVE']);
+      }
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_PACKAGE" : "CREATE_PACKAGE", "DB_Packages", id, null, payload, "Paket umroh '" + name + "' berhasil disimpan");
+    return { id: id, name: name, status: status, entity: "DB_Packages" };
+  }
+
+  if (action === 'setPackageStatus') {
+    const sheet = ss.getSheetByName("DB_Packages");
+    if (!sheet) throw new Error("Sheet DB_Packages tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = payload.status || 'PUBLISHED';
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+    const updatedColIdx = headers.indexOf('updated_at');
+
+    if (statusColIdx === -1) throw new Error("Kolom status tidak ditemukan di DB_Packages");
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        if (updatedColIdx !== -1) {
+          sheet.getRange(i + 1, updatedColIdx + 1).setValue(new Date().toISOString());
+        }
+        logAudit_(actor, "SET_PACKAGE_STATUS", "DB_Packages", id, null, { status: newStatus }, "Status paket diubah menjadi " + newStatus);
+        return { id: id, status: newStatus, entity: "DB_Packages" };
+      }
+    }
+    return { id: id, error: "ID paket tidak ditemukan" };
+  }
+
+  if (action === 'deletePackage') {
+    const sheet = ss.getSheetByName("DB_Packages");
+    if (!sheet) throw new Error("Sheet DB_Packages tidak ditemukan");
+
+    const id = payload.id;
+    const regSheet = ss.getSheetByName("DB_Registrations");
+    if (regSheet && regSheet.getLastRow() > 1) {
+      const regRows = regSheet.getDataRange().getValues();
+      for (let r = 1; r < regRows.length; r++) {
+        if (String(regRows[r][3]).toUpperCase() === String(id).toUpperCase()) {
+          const pRows = sheet.getDataRange().getValues();
+          const pHeaders = pRows[0];
+          const stIdx = pHeaders.indexOf('status');
+          if (stIdx !== -1) {
+            for (let i = 1; i < pRows.length; i++) {
+              if (String(pRows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+                sheet.getRange(i + 1, stIdx + 1).setValue("ARCHIVED");
+                logAudit_(actor, "ARCHIVE_PACKAGE", "DB_Packages", id, null, null, "Paket diarsipkan karena memiliki pendaftaran aktif");
+                return { id: id, archived: true, message: "Paket diarsipkan (tidak dihapus permanen karena ada pendaftaran terkait)" };
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const rows = sheet.getDataRange().getValues();
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.deleteRow(i + 1);
+        logAudit_(actor, "DELETE_PACKAGE", "DB_Packages", id, null, null, "Paket umroh berhasil dihapus");
+        return { id: id, deleted: true, entity: "DB_Packages" };
       }
     }
     return { id: id, deleted: false, message: "ID tidak ditemukan" };

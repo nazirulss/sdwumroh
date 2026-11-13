@@ -35,18 +35,19 @@
         LOGISTICS: 'sdw_admin_logistics',
         MANASIK: 'sdw_admin_manasik',
         CERTS: 'sdw_admin_certificates',
-        BADAL: 'sdw_admin_badal_certificates'
+        BADAL: 'sdw_admin_badal_certificates',
+        PACKAGES: 'sdw_admin_packages'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'SALES': ['tab-dashboard', 'tab-crm', 'tab-registrations'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
-        'OPERATIONS': ['tab-dashboard', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
+        'OPERATIONS': ['tab-dashboard', 'tab-packages', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
         'TOUR_LEADER': ['tab-dashboard', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
     };
 
@@ -56,6 +57,7 @@
         currentRole: 'ADMIN',
         activeFilter: 'ALL',
         crmFilter: { search: '', urgency: 'ALL', status: 'ALL' },
+        packagesFilter: { search: '', category: 'ALL', status: 'ALL' },
         docsFilter: { search: '', type: 'ALL', status: 'ALL' },
         regsFilter: { search: '', package: 'ALL', status: 'ALL' },
         financeFilter: { search: '', status: 'ALL', method: 'ALL' },
@@ -68,6 +70,7 @@
         operationsSubtab: 'manifest',
         // In-memory collections
         leadsData: [],
+        packagesData: [],
         registrationsData: [],
         paymentsData: [],
         tripsData: [],
@@ -633,10 +636,10 @@
 
     // Direct state delegations for transparent backward compatibility
     const stateKeys = [
-        'leadsData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
+        'leadsData', 'packagesData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
-        'activeKloterId', 'operationsSubtab', 'crmFilter', 'docsFilter',
+        'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'docsFilter',
         'regsFilter', 'financeFilter', 'auditFilter', 'manifestFilter',
         'roomingFilter', 'logisticsFilter', 'manasikFilter', 'unmaskedRecords',
         'isScreenLocked', 'inactivityTimer', 'INACTIVITY_TIMEOUT_MS', 'MASTER_PIN'

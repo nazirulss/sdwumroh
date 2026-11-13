@@ -266,6 +266,13 @@
                         </span>
                         <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">4</span>
                     </button>
+                    <button type="button" data-admin-tab="tab-packages" onclick="SDW_ADMIN.switchTab('tab-packages')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-boxes-packing nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>Katalog Pilihan Paket</span>
+                        </span>
+                        <span id="badgePackageCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Katalog</span>
+                    </button>
                 </div>
 
                 <!-- Group 3: Registrasi & Dokumen -->
@@ -1070,6 +1077,155 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: KATALOG PILIHAN PAKET ==================== -->
+                <div id="tab-packages" class="admin-tab-container hidden space-y-5">
+                    <!-- Header Section -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Katalog Pilihan Paket Umroh &amp; Haji Khusus</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-extrabold bg-purple-100 text-sdw-pine border border-purple-200">Katalog Live</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola penawaran paket, varian kamar (Quad/Triple/Double), akomodasi hotel, maskapai, dan status tayang di landing page.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.syncPackagesFromCloud(this)" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Sinkronkan data katalog dari Google Spreadsheet">
+                                <i class="fa-solid fa-arrows-rotate text-purple-700 text-sm"></i>
+                                <span>Sinkron Cloud</span>
+                            </button>
+                            <a href="paket.html" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl border border-amber-300 bg-amber-50 hover:bg-amber-100 text-amber-900 font-bold text-xs transition shadow-2xs cursor-pointer inline-flex items-center gap-1.5" title="Lihat tampilan katalog di website jemaah">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-amber-600 text-xs"></i>
+                                <span>Pratinjau Web</span>
+                            </a>
+                            <button type="button" onclick="SDW_ADMIN.openPackageModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-amber-300 text-xs"></i>
+                                <span>+ Tambah Paket Baru</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Metric Cards Strip -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+                                <span>Total Paket</span>
+                                <i class="fa-solid fa-boxes-packing text-purple-600 text-sm"></i>
+                            </div>
+                            <div id="kpiTotalPackages" class="text-2xl font-black text-slate-900 mt-1">0</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Semua program terdaftar</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+                                <span>Paket Tayang (Live)</span>
+                                <i class="fa-solid fa-circle-check text-emerald-600 text-sm"></i>
+                            </div>
+                            <div id="kpiPublishedPackages" class="text-2xl font-black text-emerald-700 mt-1">0</div>
+                            <div class="text-[11px] text-emerald-600 mt-0.5 font-medium">Tampil di halaman /paket</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+                                <span>Draft / Arsip</span>
+                                <i class="fa-solid fa-file-pen text-amber-600 text-sm"></i>
+                            </div>
+                            <div id="kpiDraftPackages" class="text-2xl font-black text-amber-700 mt-1">0</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Persiapan atau selesai kloter</div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 text-xs font-semibold">
+                                <span>Total Seat Tersedia</span>
+                                <i class="fa-solid fa-chair text-sky-600 text-sm"></i>
+                            </div>
+                            <div id="kpiTotalSeats" class="text-2xl font-black text-slate-900 mt-1">0</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">Akumulasi kuota tersedia</div>
+                        </div>
+                    </div>
+
+                    <!-- Toolbar & Filters -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1 flex flex-wrap items-center gap-2.5">
+                            <!-- Search -->
+                            <div class="relative flex-1 min-w-[200px] max-w-md">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="packageSearchInput" oninput="SDW_ADMIN.onPackageSearch(this.value)" placeholder="Cari nama paket, hotel, maskapai, kode..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:bg-white focus:outline-none focus:border-sdw-pine transition">
+                            </div>
+
+                            <!-- Category Filter -->
+                            <select id="packageCategorySelect" onchange="SDW_ADMIN.onPackageCategoryChange(this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:bg-white focus:outline-none focus:border-sdw-pine transition cursor-pointer">
+                                <option value="ALL">Semua Kategori</option>
+                                <option value="REGULER">⭐ Umroh Reguler</option>
+                                <option value="VIP">👑 VIP Khidmat Clock Tower</option>
+                                <option value="RAMADHAN">🌙 Ramadhan &amp; Lailatul Qadr</option>
+                                <option value="PLUS_TOUR">🛫 Umroh Plus Wisata</option>
+                                <option value="HEMAT">🏷️ Paling Hemat</option>
+                            </select>
+
+                            <!-- Status Filter -->
+                            <select id="packageStatusSelect" onchange="SDW_ADMIN.onPackageStatusChange(this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:bg-white focus:outline-none focus:border-sdw-pine transition cursor-pointer">
+                                <option value="ALL">Semua Status</option>
+                                <option value="PUBLISHED">Tayang (Live)</option>
+                                <option value="DRAFT">Draft</option>
+                                <option value="ARCHIVED">Arsip</option>
+                            </select>
+                        </div>
+
+                        <!-- View Mode Switcher -->
+                        <div class="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl self-start md:self-auto shrink-0 border border-slate-200">
+                            <button type="button" id="btnPackageViewTable" onclick="SDW_ADMIN.switchPackageViewMode('table')" class="px-3 py-1.5 rounded-xl text-xs font-black bg-sdw-pine text-white shadow-xs transition cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-table-list"></i>
+                                <span>Tabel</span>
+                            </button>
+                            <button type="button" id="btnPackageViewCards" onclick="SDW_ADMIN.switchPackageViewMode('cards')" class="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-grip"></i>
+                                <span>Kartu Visual</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Datagrid Table View -->
+                    <div id="packageTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50/90 text-slate-500 font-bold text-[11px] uppercase tracking-wider border-b border-slate-200">
+                                        <th class="px-4 py-3">ID Paket</th>
+                                        <th class="px-4 py-3">Program &amp; Durasi</th>
+                                        <th class="px-4 py-3">Kategori</th>
+                                        <th class="px-4 py-3">Akomodasi Hotel</th>
+                                        <th class="px-4 py-3">Maskapai</th>
+                                        <th class="px-4 py-3">Harga Mulai (Quad)</th>
+                                        <th class="px-4 py-3 text-center">Seat</th>
+                                        <th class="px-4 py-3 text-center">Status</th>
+                                        <th class="px-4 py-3 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-packages-body">
+                                    <!-- Rendered dynamically by js/admin/admin-packages.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Visual Cards View (Default Hidden) -->
+                    <div id="packageCardsView" class="hidden">
+                        <div id="package-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                            <!-- Rendered dynamically by js/admin/admin-packages.js -->
+                        </div>
+                    </div>
+
+                    <!-- Empty State Placeholder -->
+                    <div id="packageEmptyState" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
+                        <div class="w-16 h-16 rounded-full bg-purple-50 text-sdw-pine flex items-center justify-center mx-auto mb-3 text-2xl">
+                            <i class="fa-solid fa-boxes-packing"></i>
+                        </div>
+                        <h3 class="text-base font-extrabold text-slate-800">Tidak ada paket umroh ditemukan</h3>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto mt-1">Ubah kata kunci pencarian atau filter kategori/status, atau klik tombol Tambah Paket Baru untuk membuat program baru.</p>
+                        <button type="button" onclick="SDW_ADMIN.openPackageModal()" class="mt-4 px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition cursor-pointer inline-flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus text-amber-300 text-xs"></i>
+                            <span>Tambah Paket Sekarang</span>
+                        </button>
                     </div>
                 </div>
 
@@ -2453,6 +2609,162 @@
         </div>
     </div>
 
+    <!-- Modal Package Editor (Katalog Pilihan Paket) -->
+    <div id="modalPackageEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-purple-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-purple-900 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalPackageEditorTitle" class="text-base sm:text-lg font-black text-white">Tambah Paket Umroh Baru</h3>
+                        <p class="text-xs text-amber-200/80">Konfigurasi detail paket, akomodasi, maskapai, dan varian harga kamar</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closePackageModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Form -->
+            <form id="formPackageEditor" onsubmit="SDW_ADMIN.savePackageForm(event)" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 text-xs">
+                <input type="hidden" id="pkgId" value="">
+
+                <!-- Section 1: Detail Program & Status -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-sdw-pine"></i>
+                        <span>1. Informasi Program &amp; Kategori</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="sm:col-span-2">
+                            <label class="block font-bold text-slate-700 mb-1">Nama Paket Program *</label>
+                            <input type="text" id="pkgName" required placeholder="Contoh: Umroh Reguler Syawal Barakah" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Slug URL (Otomatis jika kosong)</label>
+                            <input type="text" id="pkgSlug" placeholder="umroh-reguler-syawal" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 font-mono text-slate-800 focus:bg-white focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Kategori Paket *</label>
+                            <select id="pkgType" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-bold text-slate-800 focus:outline-none focus:border-sdw-pine cursor-pointer">
+                                <option value="REGULER">⭐ Umroh Reguler</option>
+                                <option value="VIP">👑 VIP Khidmat Clock Tower</option>
+                                <option value="RAMADHAN">🌙 Ramadhan &amp; Lailatul Qadr</option>
+                                <option value="PLUS_TOUR">🛫 Umroh Plus Wisata</option>
+                                <option value="HEMAT">🏷️ Paling Hemat</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Durasi Hari *</label>
+                            <input type="number" id="pkgDuration" min="7" max="45" value="9" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-bold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Status Publikasi *</label>
+                            <select id="pkgStatus" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-bold text-slate-800 focus:outline-none focus:border-sdw-pine cursor-pointer">
+                                <option value="PUBLISHED">Tayang (Live)</option>
+                                <option value="DRAFT">Draft</option>
+                                <option value="ARCHIVED">Arsip</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Label Badge</label>
+                            <input type="text" id="pkgBadge" placeholder="Contoh: Best Seller / Favorit Keluarga" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Sisa Kursi (Seat) *</label>
+                            <input type="number" id="pkgSeats" min="0" max="100" value="15" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-bold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Rating &amp; Ulasan</label>
+                            <input type="text" id="pkgRating" placeholder="4.9/5 (182 ulasan)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Label Promo / Diskon</label>
+                            <input type="text" id="pkgDiscount" placeholder="Contoh: Hemat Rp 3 Jt" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Akomodasi & Maskapai -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-hotel text-amber-500"></i>
+                        <span>2. Akomodasi Hotel &amp; Penerbangan</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Hotel Makkah (Jarak) *</label>
+                            <input type="text" id="pkgHotelMakkah" required placeholder="Contoh: Retaj Al Rayyan / Setaraf (350m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Hotel Madinah (Jarak) *</label>
+                            <input type="text" id="pkgHotelMadinah" required placeholder="Contoh: Concorde Dar Al Khair (200m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block font-bold text-slate-700 mb-1">Maskapai Penerbangan &amp; Rute *</label>
+                            <input type="text" id="pkgAirline" required placeholder="Contoh: Saudia Airlines (Direct Jakarta - Jeddah)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Varian Harga Kamar -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-tags text-emerald-600"></i>
+                        <span>3. Struktur Harga Kamar (IDR)</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="p-3 bg-purple-50/60 rounded-xl border border-purple-100">
+                            <label class="block font-extrabold text-sdw-pine mb-1">Kamar Quad (Ber-4) *</label>
+                            <span class="text-[10px] text-slate-500 block mb-1">Harga acuan dasar paket</span>
+                            <input type="number" id="pkgQuadPrice" required step="50000" placeholder="29500000" class="w-full px-3 py-2 rounded-lg border border-purple-200 bg-white font-mono font-bold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">Kamar Triple (Ber-3)</label>
+                            <span class="text-[10px] text-slate-500 block mb-1">Biaya per pax</span>
+                            <input type="number" id="pkgTriplePrice" step="50000" placeholder="31500000" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-mono font-bold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+                            <label class="block font-bold text-slate-800 mb-1">Kamar Double (Ber-2)</label>
+                            <span class="text-[10px] text-slate-500 block mb-1">Biaya per pax</span>
+                            <input type="number" id="pkgDoublePrice" step="50000" placeholder="34500000" class="w-full px-3 py-2 rounded-lg border border-slate-300 bg-white font-mono font-bold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Gambar & Deskripsi -->
+                <div class="space-y-3 pt-3 border-t border-slate-200">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-image text-sky-500"></i>
+                        <span>4. Media &amp; Deskripsi Program</span>
+                    </h4>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">URL / Path Gambar Banner</label>
+                        <input type="text" id="pkgImageUrl" placeholder="assets/pkg-reguler-syawal.png" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-mono text-slate-800 focus:outline-none focus:border-sdw-pine">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Deskripsi &amp; Fasilitas Unggulan</label>
+                        <textarea id="pkgDescription" rows="3" placeholder="Jelaskan fasilitas, bimbingan manasik, ziarah, dan benefit paket secara detail..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-normal text-slate-900 focus:outline-none focus:border-sdw-pine leading-relaxed"></textarea>
+                    </div>
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="pt-4 border-t border-slate-200 flex items-center justify-between gap-3 shrink-0">
+                    <button type="button" onclick="SDW_ADMIN.closePackageModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan &amp; Publikasikan Paket</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -2466,6 +2778,7 @@
     <script src="js/admin/admin-state.js?v=2.8.0"></script>
     <script src="js/admin/admin-nav.js?v=2.8.0"></script>
     <script src="js/admin/admin-crm.js?v=2.8.0"></script>
+    <script src="js/admin/admin-packages.js?v=1.0.0"></script>
     <script src="js/admin/admin-docs.js?v=2.8.0"></script>
     <script src="js/admin/admin-registrations.js?v=2.8.0"></script>
     <script src="js/admin/admin-finance.js?v=2.8.0"></script>
