@@ -229,20 +229,20 @@ function setupPackagesCatalogSheet() {
   var headerMap = {};
   currentHeaders.forEach(function(h, idx) { headerMap[String(h).trim()] = idx; });
 
-  // 2. Petakan data default untuk paket
+  // 2. Petakan data default 5 Paket Standar SDW UMROH
   var nowStr = Utilities.formatDate(new Date(), "Asia/Jakarta", "yyyy-MM-dd HH:mm:ss");
   var defaultPackageMetadata = {
     "PKG-000001": {
-      name: "Umroh Reguler 9 Hari",
-      slug: "umroh-reguler-9h",
+      name: "Umroh Reguler Syawal Barakah",
+      slug: "umroh-reguler-syawal",
       package_type: "REGULER",
       duration_days: 9,
       status: "PUBLISHED",
-      description: "Paket favorit ibadah khusyuk. Hotel Retaj Al Rayyan Makkah & Concorde Dar Al Khair Madinah.",
+      description: "Perjalanan ibadah penuh kekhusyukan dengan bimbingan asatidz berpengalaman, hotel bintang 4 dekat pelataran masjid.",
       hotel_makkah: "Retaj Al Rayyan / Setaraf (350m)",
       hotel_madinah: "Concorde Dar Al Khair (200m)",
       airline: "Saudia Airlines (Direct SV)",
-      seats_left: 15,
+      seats_left: 7,
       badge: "Best Seller",
       image_url: "assets/pkg-reguler-syawal.png",
       rating: "4.9/5 (182 ulasan)",
@@ -250,12 +250,12 @@ function setupPackagesCatalogSheet() {
       discount_label: "Hemat Rp 3 Jt"
     },
     "PKG-000002": {
-      name: "Umroh VIP Bintang 5",
-      slug: "umroh-vip-bintang-5",
+      name: "Umroh VIP Khidmat Akhir Tahun",
+      slug: "umroh-vip-akhir-tahun",
       package_type: "VIP",
-      duration_days: 9,
+      duration_days: 12,
       status: "PUBLISHED",
-      description: "Akomodasi mewah premium bintang 5 pelataran masjid. Swissotel Makkah & Dar Al Taqwa Madinah.",
+      description: "Akomodasi bintang 5 di pelataran Ka'bah (Clock Tower), kereta cepat Haramain High Speed Rail Makkah–Madinah.",
       hotel_makkah: "Swissotel Makkah Clock Tower (0m)",
       hotel_madinah: "Dar Al Taqwa Madinah (50m)",
       airline: "Garuda Indonesia (GA980)",
@@ -267,12 +267,12 @@ function setupPackagesCatalogSheet() {
       discount_label: "Hemat Rp 2,5 Jt"
     },
     "PKG-000003": {
-      name: "Umroh Plus Turki 12 Hari",
-      slug: "umroh-plus-turki-12h",
+      name: "Umroh Plus Turki Musim Semi",
+      slug: "umroh-plus-turki-spring",
       package_type: "PLUS_TOUR",
-      duration_days: 12,
+      duration_days: 13,
       status: "PUBLISHED",
-      description: "Ibadah umroh lengkap dengan napak tilas sejarah peradaban Islam di Istanbul & Bursa.",
+      description: "Ziarah jejak peradaban Utsmaniyah di Istanbul, Selat Bosphorus, dilanjutkan manasik intensif dan ibadah di dua Tanah Suci.",
       hotel_makkah: "Anjum Hotel Makkah",
       hotel_madinah: "Rove Al Madinah",
       airline: "Turkish Airlines (TK-57)",
@@ -282,17 +282,61 @@ function setupPackagesCatalogSheet() {
       rating: "4.8/5 (65 ulasan)",
       starting_price: 38900000,
       discount_label: "Hemat Rp 3 Jt"
+    },
+    "PKG-000004": {
+      name: "Umroh Awal Ramadhan 1448H",
+      slug: "umroh-ramadhan-awal",
+      package_type: "RAMADHAN",
+      duration_days: 10,
+      status: "PUBLISHED",
+      description: "Meraih keutamaan pahala haji bersama Rasulullah dengan tarawih di Masjidil Haram pada fase awal bulan suci.",
+      hotel_makkah: "Pullman Zamzam Makkah",
+      hotel_madinah: "Grand Plaza Madinah",
+      airline: "Saudia Airlines",
+      seats_left: 4,
+      badge: "Spesial Ramadhan",
+      image_url: "assets/pkg-ramadhan.png",
+      rating: "4.9/5 (120 ulasan)",
+      starting_price: 36500000,
+      discount_label: "Hemat Rp 3 Jt"
+    },
+    "PKG-000005": {
+      name: "Umroh Syariah Bintang Tiga Hemat",
+      slug: "umroh-hemat-syariah",
+      package_type: "HEMAT",
+      duration_days: 9,
+      status: "PUBLISHED",
+      description: "Program umroh ekonomis mengutamakan kenyamanan esensial, bus full AC dan bimbingan ibadah terstruktur.",
+      hotel_makkah: "Olayan Ajyad (600m Shuttle)",
+      hotel_madinah: "Durrat Al Eiman",
+      airline: "Lion Air Umrah Direct",
+      seats_left: 36,
+      badge: "Paling Hemat",
+      image_url: "assets/pkg-hemat.png",
+      rating: "4.7/5 (210 ulasan)",
+      starting_price: 26800000,
+      discount_label: "Hemat Rp 1,7 Jt"
     }
   };
 
   var migratedRows = [];
+  var existingIds = {};
   if (existingRows.length > 0) {
     existingRows.forEach(function(row) {
-      var id = headerMap["id"] !== undefined ? String(row[headerMap["id"]] || "") : "";
+      var id = headerMap["id"] !== undefined ? String(row[headerMap["id"]] || "").trim() : "";
       var def = defaultPackageMetadata[id] || {};
+      if (id) existingIds[id] = true;
       
       var newRow = canonicalHeaders.map(function(h) {
         var oldIdx = headerMap[h];
+        // Jika nama masih dummy / lama, gunakan nama baru dari def
+        if (h === "name" && def.name) return def.name;
+        if (h === "duration_days" && def.duration_days) return def.duration_days;
+        if (h === "starting_price" && def.starting_price) return def.starting_price;
+        if (h === "hotel_makkah" && def.hotel_makkah && (!row[oldIdx] || row[oldIdx] === "-")) return def.hotel_makkah;
+        if (h === "hotel_madinah" && def.hotel_madinah && (!row[oldIdx] || row[oldIdx] === "-")) return def.hotel_madinah;
+        if (h === "airline" && def.airline && (!row[oldIdx] || row[oldIdx] === "-")) return def.airline;
+
         if (oldIdx !== undefined && row[oldIdx] !== "" && row[oldIdx] !== null && row[oldIdx] !== undefined) {
           // Normalisasi package_type lama
           if (h === "package_type") {
@@ -306,9 +350,11 @@ function setupPackagesCatalogSheet() {
       });
       migratedRows.push(newRow);
     });
-  } else {
-    // Jika sheet kosong, isi dengan 3 paket standar
-    Object.keys(defaultPackageMetadata).forEach(function(id) {
+  }
+
+  // Tambahkan paket yang belum ada dari 5 paket standar
+  Object.keys(defaultPackageMetadata).forEach(function(id) {
+    if (!existingIds[id]) {
       var def = defaultPackageMetadata[id];
       var newRow = canonicalHeaders.map(function(h) {
         if (h === "id") return id;
@@ -316,8 +362,8 @@ function setupPackagesCatalogSheet() {
         return def[h] !== undefined ? def[h] : "";
       });
       migratedRows.push(newRow);
-    });
-  }
+    }
+  });
 
   // 3. Tulis ulang header dan baris baru
   sheet.clear();
