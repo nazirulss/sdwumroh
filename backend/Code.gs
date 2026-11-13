@@ -613,6 +613,10 @@ function doGet(e) {
     if (action === 'getPackages') {
       const sheet = ss.getSheetByName("DB_Packages");
       if (!sheet || sheet.getLastRow() <= 1) return createResponse(true, []);
+
+      // Auto-upgrade kolom sheet DB_Packages jika kolom hotel_makkah / airline belum ada di baris 1
+      autoUpgradePackagesSheet_(sheet, ss);
+
       const rows = sheet.getDataRange().getValues();
       const headers = rows[0];
 
@@ -629,27 +633,89 @@ function doGet(e) {
         });
       }
 
+      // Ambil snapshot maskapai dan kapasitas dari DB_Departures
+      const depSheet = ss.getSheetByName("DB_Departures");
+      const depMap = {};
+      if (depSheet && depSheet.getLastRow() > 1) {
+        const dRows = depSheet.getDataRange().getValues();
+        const dHeaders = dRows[0];
+        dRows.slice(1).forEach(function(dRow) {
+          const dObj = {};
+          dHeaders.forEach(function(h, i) { dObj[h] = dRow[i]; });
+          if (dObj.package_id && !depMap[dObj.package_id]) {
+            depMap[dObj.package_id] = dObj;
+          }
+        });
+      }
+
+      // Default hotel & airline per package ID
+      const defaultMetadata = {
+        "PKG-000001": {
+          hotel_makkah: "Retaj Al Rayyan / Setaraf (350m)",
+          hotel_madinah: "Concorde Dar Al Khair (200m)",
+          airline: "Saudia Airlines (Direct SV)",
+          seats_left: 15,
+          badge: "Best Seller",
+          starting_price: 29500000,
+          discount_label: "Hemat Rp 3 Jt"
+        },
+        "PKG-000002": {
+          hotel_makkah: "Swissotel Makkah Clock Tower (0m)",
+          hotel_madinah: "Dar Al Taqwa Madinah (50m)",
+          airline: "Garuda Indonesia (GA980)",
+          seats_left: 8,
+          badge: "Hampir Penuh",
+          starting_price: 43500000,
+          discount_label: "Hemat Rp 2,5 Jt"
+        },
+        "PKG-000003": {
+          hotel_makkah: "Anjum Hotel Makkah",
+          hotel_madinah: "Rove Al Madinah",
+          airline: "Turkish Airlines (TK-57)",
+          seats_left: 18,
+          badge: "Favorit Keluarga",
+          starting_price: 38900000,
+          discount_label: "Hemat Rp 3 Jt"
+        }
+      };
+
       const items = rows.slice(1).map(function (row) {
         const obj = {};
         headers.forEach(function (h, i) { obj[h] = row[i]; });
+        const def = defaultMetadata[obj.id] || {};
         const pInfo = priceMap[obj.id] || {};
-        const quadPrice = Number(obj.quad_price || pInfo.quad_price || obj.starting_price || 29500000);
+        const dInfo = depMap[obj.id] || {};
+
+        let pkgType = String(obj.package_type || 'REGULER').toUpperCase();
+        if (pkgType === 'REGULAR') pkgType = 'REGULER';
+        if (pkgType === 'PLUS_TURKEY') pkgType = 'PLUS_TOUR';
+
+        const quadPrice = Number(obj.quad_price || pInfo.quad_price || obj.starting_price || def.starting_price || 29500000);
         const triplePrice = Number(obj.triple_price || pInfo.triple_price || (quadPrice + 2000000));
         const doublePrice = Number(obj.double_price || pInfo.double_price || (quadPrice + 5000000));
+
+        let seats = obj.seats_left !== undefined && obj.seats_left !== '' ? Number(obj.seats_left) : null;
+        if (seats === null) {
+          if (dInfo.capacity_total && dInfo.capacity_booked !== undefined) {
+            seats = Math.max(0, Number(dInfo.capacity_total) - Number(dInfo.capacity_booked));
+          } else {
+            seats = def.seats_left || 15;
+          }
+        }
 
         return {
           id: obj.id,
           name: obj.name || 'Paket Umroh',
           slug: obj.slug || (String(obj.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')),
-          package_type: obj.package_type || 'REGULER',
+          package_type: pkgType,
           duration_days: Number(obj.duration_days) || 9,
           status: obj.status || 'PUBLISHED',
           description: obj.description || '',
-          hotel_makkah: obj.hotel_makkah || 'Hotel Bintang Makkah',
-          hotel_madinah: obj.hotel_madinah || 'Hotel Bintang Madinah',
-          airline: obj.airline || 'Saudia Airlines',
-          seats_left: obj.seats_left !== undefined ? Number(obj.seats_left) : 15,
-          badge: obj.badge || 'Program Pilihan',
+          hotel_makkah: obj.hotel_makkah || def.hotel_makkah || 'Hotel Bintang Makkah',
+          hotel_madinah: obj.hotel_madinah || def.hotel_madinah || 'Hotel Bintang Madinah',
+          airline: obj.airline || dInfo.airline || def.airline || 'Saudia Airlines',
+          seats_left: seats,
+          badge: obj.badge || def.badge || 'Program Pilihan',
           image: obj.image_url || obj.image || 'assets/hero-haram.png',
           image_url: obj.image_url || obj.image || 'assets/hero-haram.png',
           rating: obj.rating || '4.9/5 (100+ ulasan)',
@@ -657,13 +723,20 @@ function doGet(e) {
           quad_price: quadPrice,
           triple_price: triplePrice,
           double_price: doublePrice,
-          discount_label: obj.discount_label || '',
+          discount_label: obj.discount_label || def.discount_label || '',
           published_at: obj.published_at || '',
           created_at: obj.created_at || '',
           updated_at: obj.updated_at || ''
         };
       });
       return createResponse(true, items);
+    }
+
+    if (action === 'upgradePackagesSchema') {
+      const sheet = ss.getSheetByName("DB_Packages");
+      if (!sheet) return createResponse(false, null, "Sheet DB_Packages tidak ditemukan");
+      autoUpgradePackagesSheet_(sheet, ss);
+      return createResponse(true, { message: "Skema DB_Packages berhasil diupgrade ke 19 kolom lengkap" });
     }
 
     if (action === 'getDepartures') {
@@ -1819,6 +1892,9 @@ function processSingleMutation_(ss, action, payload, actor) {
     const sheet = ss.getSheetByName("DB_Packages");
     if (!sheet) throw new Error("Sheet DB_Packages tidak ditemukan");
 
+    // Pastikan skema kolom hotel & maskapai sudah terpasang di sheet spreadsheet
+    autoUpgradePackagesSheet_(sheet, ss);
+
     const rows = sheet.getDataRange().getValues();
     const headers = rows[0];
     const nowStr = new Date().toISOString();
@@ -1919,6 +1995,25 @@ function processSingleMutation_(ss, action, payload, actor) {
       }
     }
 
+    // Sinkronkan data maskapai ke DB_Departures
+    const depSheet = ss.getSheetByName("DB_Departures");
+    if (depSheet && airline) {
+      const dRows = depSheet.getDataRange().getValues();
+      let dRowIndex = -1;
+      for (let i = 1; i < dRows.length; i++) {
+        if (String(dRows[i][1]).toUpperCase() === String(id).toUpperCase()) {
+          dRowIndex = i + 1;
+          break;
+        }
+      }
+      if (dRowIndex > 0) {
+        depSheet.getRange(dRowIndex, 5).setValue(airline); // kolom airline
+      } else {
+        const depId = "DEP-" + String(depSheet.getLastRow()).padStart(6, '0');
+        depSheet.appendRow([depId, id, '2027-01-15', '2027-01-24', airline, 'CGK', 45, 0, 'OPEN', name]);
+      }
+    }
+
     logAudit_(actor, rowIndex > 0 ? "UPDATE_PACKAGE" : "CREATE_PACKAGE", "DB_Packages", id, null, payload, "Paket umroh '" + name + "' berhasil disimpan");
     return { id: id, name: name, status: status, entity: "DB_Packages" };
   }
@@ -1986,7 +2081,99 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { id: id, deleted: false, message: "ID tidak ditemukan" };
   }
 
+  if (action === 'upgradePackagesSchema') {
+    const sheet = ss.getSheetByName("DB_Packages");
+    if (!sheet) throw new Error("Sheet DB_Packages tidak ditemukan");
+    autoUpgradePackagesSheet_(sheet, ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Packages", "ALL", null, null, "Skema DB_Packages berhasil diupgrade ke 19 kolom");
+    return { success: true, message: "Skema DB_Packages berhasil diupgrade ke 19 kolom lengkap" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
+}
+
+/**
+ * Otomatis melengkapi kolom header dan data default di sheet DB_Packages jika ada kolom yang kurang
+ */
+function autoUpgradePackagesSheet_(sheet, ss) {
+  if (!sheet) return;
+  try {
+    const canonical = [
+      "id", "name", "slug", "package_type", "duration_days", "status", "description",
+      "hotel_makkah", "hotel_madinah", "airline", "seats_left", "badge", "image_url",
+      "rating", "starting_price", "discount_label", "published_at", "created_at", "updated_at"
+    ];
+    const lastCol = sheet.getLastColumn();
+    if (lastCol <= 0) return;
+    const currentHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); });
+    const missing = canonical.filter(function(c) { return currentHeaders.indexOf(c) === -1; });
+
+    if (missing.length === 0) return;
+
+    // Tambahkan header kolom baru di samping kolom terakhir
+    const startCol = lastCol + 1;
+    sheet.getRange(1, startCol, 1, missing.length).setValues([missing]);
+    sheet.getRange(1, startCol, 1, missing.length)
+         .setBackground("#0F3D2E")
+         .setFontColor("#FFFFFF")
+         .setFontWeight("bold")
+         .setFontFamily("Plus Jakarta Sans");
+
+    // Backfill baris paket default jika ada data
+    const lastRow = sheet.getLastRow();
+    if (lastRow > 1) {
+      const defaultMetadata = {
+        "PKG-000001": {
+          hotel_makkah: "Retaj Al Rayyan / Setaraf (350m)",
+          hotel_madinah: "Concorde Dar Al Khair (200m)",
+          airline: "Saudia Airlines (Direct SV)",
+          seats_left: 15,
+          badge: "Best Seller",
+          image_url: "assets/pkg-reguler-syawal.png",
+          rating: "4.9/5 (182 ulasan)",
+          starting_price: 29500000,
+          discount_label: "Hemat Rp 3 Jt"
+        },
+        "PKG-000002": {
+          hotel_makkah: "Swissotel Makkah Clock Tower (0m)",
+          hotel_madinah: "Dar Al Taqwa Madinah (50m)",
+          airline: "Garuda Indonesia (GA980)",
+          seats_left: 8,
+          badge: "Hampir Penuh",
+          image_url: "assets/pkg-vip-khidmat.png",
+          rating: "5.0/5 (94 ulasan)",
+          starting_price: 43500000,
+          discount_label: "Hemat Rp 2,5 Jt"
+        },
+        "PKG-000003": {
+          hotel_makkah: "Anjum Hotel Makkah",
+          hotel_madinah: "Rove Al Madinah",
+          airline: "Turkish Airlines (TK-57)",
+          seats_left: 18,
+          badge: "Favorit Keluarga",
+          image_url: "assets/pkg-plus-turki.png",
+          rating: "4.8/5 (65 ulasan)",
+          starting_price: 38900000,
+          discount_label: "Hemat Rp 3 Jt"
+        }
+      };
+
+      const rows = sheet.getDataRange().getValues();
+      for (let r = 1; r < rows.length; r++) {
+        const id = String(rows[r][0] || '');
+        const meta = defaultMetadata[id] || {};
+        const newVals = missing.map(function(col) {
+          if (col === 'updated_at') return new Date().toISOString();
+          return meta[col] !== undefined ? meta[col] : '';
+        });
+        sheet.getRange(r + 1, startCol, 1, missing.length).setValues([newVals]);
+      }
+    }
+    sheet.autoResizeColumns(1, sheet.getLastColumn());
+    Logger.log("✓ Auto-upgrade DB_Packages sheet berhasil: " + missing.join(", "));
+  } catch(e) {
+    Logger.log("Catatan: Auto-upgrade sheet gagal: " + e.message);
+  }
 }
 
 /**

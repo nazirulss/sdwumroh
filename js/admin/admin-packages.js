@@ -26,6 +26,108 @@
         status: 'ALL'
     };
 
+    const DEFAULT_PACKAGE_METADATA = {
+        'PKG-000001': {
+            name: 'Umroh Reguler 9 Hari',
+            slug: 'umroh-reguler-9h',
+            package_type: 'REGULER',
+            duration_days: 9,
+            status: 'PUBLISHED',
+            description: 'Paket favorit ibadah khusyuk. Hotel Retaj Al Rayyan Makkah & Concorde Dar Al Khair Madinah.',
+            hotel_makkah: 'Retaj Al Rayyan / Setaraf (350m)',
+            hotel_madinah: 'Concorde Dar Al Khair (200m)',
+            airline: 'Saudia Airlines (Direct SV)',
+            seats_left: 15,
+            badge: 'Best Seller',
+            image_url: 'assets/pkg-reguler-syawal.png',
+            rating: '4.9/5 (182 ulasan)',
+            starting_price: 29500000,
+            quad_price: 29500000,
+            triple_price: 31500000,
+            double_price: 34500000,
+            discount_label: 'Hemat Rp 3 Jt'
+        },
+        'PKG-000002': {
+            name: 'Umroh VIP Bintang 5',
+            slug: 'umroh-vip-bintang-5',
+            package_type: 'VIP',
+            duration_days: 9,
+            status: 'PUBLISHED',
+            description: 'Akomodasi mewah premium bintang 5 pelataran masjid. Swissotel Makkah & Dar Al Taqwa Madinah.',
+            hotel_makkah: 'Swissotel Makkah Clock Tower (0m)',
+            hotel_madinah: 'Dar Al Taqwa Madinah (50m)',
+            airline: 'Garuda Indonesia (GA980)',
+            seats_left: 8,
+            badge: 'Hampir Penuh',
+            image_url: 'assets/pkg-vip-khidmat.png',
+            rating: '5.0/5 (94 ulasan)',
+            starting_price: 43500000,
+            quad_price: 43500000,
+            triple_price: 46500000,
+            double_price: 49500000,
+            discount_label: 'Hemat Rp 2,5 Jt'
+        },
+        'PKG-000003': {
+            name: 'Umroh Plus Turki 12 Hari',
+            slug: 'umroh-plus-turki-12h',
+            package_type: 'PLUS_TOUR',
+            duration_days: 12,
+            status: 'PUBLISHED',
+            description: 'Ibadah umroh lengkap dengan napak tilas sejarah peradaban Islam di Istanbul & Bursa.',
+            hotel_makkah: 'Anjum Hotel Makkah',
+            hotel_madinah: 'Rove Al Madinah',
+            airline: 'Turkish Airlines (TK-57)',
+            seats_left: 18,
+            badge: 'Favorit Keluarga',
+            image_url: 'assets/pkg-plus-turki.png',
+            rating: '4.8/5 (65 ulasan)',
+            starting_price: 38900000,
+            quad_price: 38900000,
+            triple_price: 41900000,
+            double_price: 45900000,
+            discount_label: 'Hemat Rp 3 Jt'
+        }
+    };
+
+    function normalizePackage(pkg) {
+        if (!pkg || typeof pkg !== 'object') return pkg;
+        const id = String(pkg.id || '');
+        const def = DEFAULT_PACKAGE_METADATA[id] || {};
+
+        let pkgType = String(pkg.package_type || def.package_type || 'REGULER').toUpperCase().trim();
+        if (pkgType === 'REGULAR') pkgType = 'REGULER';
+        if (pkgType === 'PLUS_TURKEY' || pkgType === 'PLUS_WISATA') pkgType = 'PLUS_TOUR';
+
+        const quadPrice = Number(pkg.quad_price || pkg.starting_price || def.quad_price || def.starting_price || 29500000);
+        const triplePrice = Number(pkg.triple_price || def.triple_price || (quadPrice + 2000000));
+        const doublePrice = Number(pkg.double_price || def.double_price || (quadPrice + 5000000));
+
+        let seats = pkg.seats_left !== undefined && pkg.seats_left !== '' ? Number(pkg.seats_left) : (def.seats_left || 15);
+
+        return {
+            ...pkg,
+            name: pkg.name || def.name || 'Paket Umroh',
+            slug: pkg.slug || def.slug || (String(pkg.name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')),
+            package_type: pkgType,
+            duration_days: Number(pkg.duration_days) || def.duration_days || 9,
+            status: pkg.status || def.status || 'PUBLISHED',
+            description: pkg.description || def.description || '',
+            hotel_makkah: pkg.hotel_makkah || def.hotel_makkah || 'Hotel Bintang Makkah',
+            hotel_madinah: pkg.hotel_madinah || def.hotel_madinah || 'Hotel Bintang Madinah',
+            airline: pkg.airline || def.airline || 'Saudia Airlines',
+            seats_left: seats,
+            badge: pkg.badge || def.badge || 'Program Pilihan',
+            image_url: pkg.image_url || pkg.image || def.image_url || 'assets/hero-haram.png',
+            image: pkg.image_url || pkg.image || def.image_url || 'assets/hero-haram.png',
+            rating: pkg.rating || def.rating || '4.9/5 (100+ ulasan)',
+            starting_price: quadPrice,
+            quad_price: quadPrice,
+            triple_price: triplePrice,
+            double_price: doublePrice,
+            discount_label: pkg.discount_label || def.discount_label || ''
+        };
+    }
+
     function formatRupiah(amount) {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -37,74 +139,14 @@
     function initPackagesData() {
         if (!admin.packagesData || admin.packagesData.length === 0) {
             if (typeof MOCK_DATA !== 'undefined' && Array.isArray(MOCK_DATA.packages)) {
-                admin.packagesData = JSON.parse(JSON.stringify(MOCK_DATA.packages));
+                admin.packagesData = MOCK_DATA.packages.map(normalizePackage);
             } else {
-                admin.packagesData = [
-                    {
-                        id: 'PKG-000001',
-                        name: 'Umroh Reguler Syawal Barakah',
-                        slug: 'umroh-reguler-syawal',
-                        package_type: 'REGULER',
-                        duration_days: 9,
-                        status: 'PUBLISHED',
-                        description: 'Perjalanan ibadah penuh kekhusyukan dengan bimbingan asatidz berpengalaman, hotel bintang 4 dekat pelataran masjid.',
-                        hotel_makkah: 'Retaj Al Rayyan / Setaraf (350m)',
-                        hotel_madinah: 'Concorde Dar Al Khair (200m)',
-                        airline: 'Saudia Airlines (Direct SV)',
-                        seats_left: 15,
-                        badge: 'Best Seller',
-                        image_url: 'assets/pkg-reguler-syawal.png',
-                        rating: '4.9/5 (182 ulasan)',
-                        starting_price: 29500000,
-                        quad_price: 29500000,
-                        triple_price: 31500000,
-                        double_price: 34500000,
-                        discount_label: 'Hemat Rp 3 Jt'
-                    },
-                    {
-                        id: 'PKG-000002',
-                        name: 'Umroh VIP Khidmat Akhir Tahun',
-                        slug: 'umroh-vip-akhir-tahun',
-                        package_type: 'VIP',
-                        duration_days: 12,
-                        status: 'PUBLISHED',
-                        description: 'Akomodasi bintang 5 di pelataran Ka\'bah (Clock Tower), kereta cepat Haramain High Speed Rail Makkah–Madinah.',
-                        hotel_makkah: 'Swissotel Makkah Clock Tower (0m)',
-                        hotel_madinah: 'Dar Al Taqwa Madinah (50m)',
-                        airline: 'Garuda Indonesia (GA980)',
-                        seats_left: 8,
-                        badge: 'Hampir Penuh',
-                        image_url: 'assets/pkg-vip-khidmat.png',
-                        rating: '5.0/5 (94 ulasan)',
-                        starting_price: 43500000,
-                        quad_price: 43500000,
-                        triple_price: 46500000,
-                        double_price: 49500000,
-                        discount_label: 'Hemat Rp 2,5 Jt'
-                    },
-                    {
-                        id: 'PKG-000003',
-                        name: 'Umroh Plus Turki Musim Semi',
-                        slug: 'umroh-plus-turki-spring',
-                        package_type: 'PLUS_TOUR',
-                        duration_days: 13,
-                        status: 'PUBLISHED',
-                        description: 'Ziarah jejak peradaban Utsmaniyah di Istanbul, Selat Bosphorus, dilanjutkan manasik intensif dan ibadah di dua Tanah Suci.',
-                        hotel_makkah: 'Anjum Hotel Makkah',
-                        hotel_madinah: 'Rove Al Madinah',
-                        airline: 'Turkish Airlines',
-                        seats_left: 18,
-                        badge: 'Favorit Keluarga',
-                        image_url: 'assets/pkg-plus-turki.png',
-                        rating: '4.8/5 (65 ulasan)',
-                        starting_price: 38900000,
-                        quad_price: 38900000,
-                        triple_price: 41900000,
-                        double_price: 45900000,
-                        discount_label: 'Hemat Rp 3 Jt'
-                    }
-                ];
+                admin.packagesData = Object.keys(DEFAULT_PACKAGE_METADATA).map(function(id) {
+                    return JSON.parse(JSON.stringify(DEFAULT_PACKAGE_METADATA[id]));
+                });
             }
+        } else {
+            admin.packagesData = admin.packagesData.map(normalizePackage);
         }
     }
 
@@ -582,8 +624,8 @@
     }
 
     // 9. SINKRONISASI CLOUD DARI GOOGLE SPREADSHEET
-    async function syncPackagesFromCloud() {
-        const btn = document.getElementById('btnSyncPackagesCloud');
+    async function syncPackagesFromCloud(btnEl) {
+        const btn = btnEl || document.getElementById('btnSyncPackagesCloud');
         let origHtml = '';
         if (btn) {
             origHtml = btn.innerHTML;
@@ -593,14 +635,20 @@
 
         if (typeof SDW_API !== 'undefined' && typeof SDW_API.get === 'function') {
             try {
+                // Panggil upgradePackagesSchema di backend agar sheet spreadsheet memiliki 19 kolom lengkap
+                try {
+                    await SDW_API.get('upgradePackagesSchema');
+                } catch (ignoreErr) {}
+
                 const res = await SDW_API.get('getPackages');
                 if (res && res.success && Array.isArray(res.data) && res.data.length > 0) {
-                    admin.packagesData = res.data;
+                    const normalized = res.data.map(normalizePackage);
+                    admin.packagesData = normalized;
                     if (typeof MOCK_DATA !== 'undefined') {
-                        MOCK_DATA.packages = res.data;
+                        MOCK_DATA.packages = normalized;
                     }
                     renderPackages();
-                    if (admin.showToast) admin.showToast('✅ Katalog paket berhasil disinkronkan dari Spreadsheet!');
+                    if (admin.showToast) admin.showToast('✅ Katalog paket & hotel/maskapai berhasil disinkronkan!');
                 } else {
                     if (admin.showToast) admin.showToast('Data Spreadsheet kosong atau belum berubah.');
                 }
@@ -647,3 +695,4 @@
         syncPackagesFromCloud
     };
 });
+

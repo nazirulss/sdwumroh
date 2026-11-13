@@ -66,11 +66,33 @@ Dokumen ini mendefinisikan struktur 22 sheet Google Spreadsheet yang berfungsi s
 
 * **Status:** `PENDING`, `COMPLETED`, `RESCHEDULED`, `CANCELLED`
 
-### `DB_Packages`
+### `DB_Packages` (19 Kolom Lengkap)
 
-* **Columns:** `id`, `name`, `slug`, `package_type`, `duration_days`, `status`, `description`, `hotel_makkah`, `hotel_madinah`, `airline`, `seats_left`, `badge`, `image_url`, `rating`, `starting_price`, `discount_label`, `published_at`, `created_at`, `updated_at`
+* **Columns (Kolom A – S):**
+  1. `id` (A) — Primary Key (contoh: `PKG-000001`)
+  2. `name` (B) — Nama Program Paket (contoh: `Umroh Reguler Syawal Barakah`)
+  3. `slug` (C) — Slug URL (contoh: `umroh-reguler-syawal`)
+  4. `package_type` (D) — Kategori (`REGULER`, `VIP`, `RAMADHAN`, `PLUS_TOUR`, `HEMAT`)
+  5. `duration_days` (E) — Durasi Hari (contoh: `9`, `12`, `13`)
+  6. `status` (F) — Status (`PUBLISHED`, `DRAFT`, `ARCHIVED`)
+  7. `description` (G) — Deskripsi & fasilitas program
+  8. `hotel_makkah` (H) — Hotel Makkah & Jarak (contoh: `Retaj Al Rayyan / Setaraf (350m)`)
+  9. `hotel_madinah` (I) — Hotel Madinah & Jarak (contoh: `Concorde Dar Al Khair (200m)`)
+  10. `airline` (J) — Maskapai Penerbangan (contoh: `Saudia Airlines (Direct SV)`)
+  11. `seats_left` (K) — Sisa Kursi / Seat (contoh: `15`)
+  12. `badge` (L) — Badge visual (contoh: `Best Seller`, `Hampir Penuh`, `Favorit Keluarga`)
+  13. `image_url` (M) — Path / URL banner (contoh: `assets/pkg-reguler-syawal.png`)
+  14. `rating` (N) — Rating ulasan (contoh: `4.9/5 (182 ulasan)`)
+  15. `starting_price` (O) — Harga acuan dasar Quad (contoh: `29500000`)
+  16. `discount_label` (P) — Label potongan/promo (contoh: `Hemat Rp 3 Jt`)
+  17. `published_at` (Q) — Timestamp publikasi
+  18. `created_at` (R) — Timestamp pembuatan
+  19. `updated_at` (S) — Timestamp pembaruan terakhir
 
 * **Canonical State:** `DRAFT`, `IN_REVIEW`, `PUBLISHED`, `PAUSED`, `ARCHIVED`
+
+* **Cara Sinkronisasi Kolom ke Google Spreadsheet:**
+  Buka Apps Script (`Extensions` -> `Apps Script`), pilih fungsi `setupPackagesCatalogSheet` di file `Setup.gs`, lalu klik **Run**. Fungsi ini secara aman akan menambahkan kolom H s/d S (`hotel_makkah`, `hotel_madinah`, `airline`, dst.) dan memigrasikan data paket yang ada tanpa menghapus data yang sudah tersimpan.
 
 ### `DB_Package_Prices`
 

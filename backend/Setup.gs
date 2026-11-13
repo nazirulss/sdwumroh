@@ -206,6 +206,138 @@ function seedBadalCertificates_(ss) {
 }
 
 /**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Packages'
+ * secara langsung sesuai skema kolom resmi (19 kolom lengkap termasuk hotel & maskapai).
+ */
+function setupPackagesCatalogSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = "DB_Packages";
+  var sheet = ss.getSheetByName(sheetName);
+  var canonicalHeaders = AUTHORITATIVE_SCHEMAS_[sheetName];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
+  }
+
+  // 1. Baca data yang ada saat ini
+  var lastRow = sheet.getLastRow();
+  var lastCol = sheet.getLastColumn();
+  var currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0] : [];
+  var existingRows = lastRow > 1 ? sheet.getRange(2, 1, lastRow - 1, lastCol).getValues() : [];
+
+  var headerMap = {};
+  currentHeaders.forEach(function(h, idx) { headerMap[String(h).trim()] = idx; });
+
+  // 2. Petakan data default untuk paket
+  var nowStr = Utilities.formatDate(new Date(), "Asia/Jakarta", "yyyy-MM-dd HH:mm:ss");
+  var defaultPackageMetadata = {
+    "PKG-000001": {
+      name: "Umroh Reguler 9 Hari",
+      slug: "umroh-reguler-9h",
+      package_type: "REGULER",
+      duration_days: 9,
+      status: "PUBLISHED",
+      description: "Paket favorit ibadah khusyuk. Hotel Retaj Al Rayyan Makkah & Concorde Dar Al Khair Madinah.",
+      hotel_makkah: "Retaj Al Rayyan / Setaraf (350m)",
+      hotel_madinah: "Concorde Dar Al Khair (200m)",
+      airline: "Saudia Airlines (Direct SV)",
+      seats_left: 15,
+      badge: "Best Seller",
+      image_url: "assets/pkg-reguler-syawal.png",
+      rating: "4.9/5 (182 ulasan)",
+      starting_price: 29500000,
+      discount_label: "Hemat Rp 3 Jt"
+    },
+    "PKG-000002": {
+      name: "Umroh VIP Bintang 5",
+      slug: "umroh-vip-bintang-5",
+      package_type: "VIP",
+      duration_days: 9,
+      status: "PUBLISHED",
+      description: "Akomodasi mewah premium bintang 5 pelataran masjid. Swissotel Makkah & Dar Al Taqwa Madinah.",
+      hotel_makkah: "Swissotel Makkah Clock Tower (0m)",
+      hotel_madinah: "Dar Al Taqwa Madinah (50m)",
+      airline: "Garuda Indonesia (GA980)",
+      seats_left: 8,
+      badge: "Hampir Penuh",
+      image_url: "assets/pkg-vip-khidmat.png",
+      rating: "5.0/5 (94 ulasan)",
+      starting_price: 43500000,
+      discount_label: "Hemat Rp 2,5 Jt"
+    },
+    "PKG-000003": {
+      name: "Umroh Plus Turki 12 Hari",
+      slug: "umroh-plus-turki-12h",
+      package_type: "PLUS_TOUR",
+      duration_days: 12,
+      status: "PUBLISHED",
+      description: "Ibadah umroh lengkap dengan napak tilas sejarah peradaban Islam di Istanbul & Bursa.",
+      hotel_makkah: "Anjum Hotel Makkah",
+      hotel_madinah: "Rove Al Madinah",
+      airline: "Turkish Airlines (TK-57)",
+      seats_left: 18,
+      badge: "Favorit Keluarga",
+      image_url: "assets/pkg-plus-turki.png",
+      rating: "4.8/5 (65 ulasan)",
+      starting_price: 38900000,
+      discount_label: "Hemat Rp 3 Jt"
+    }
+  };
+
+  var migratedRows = [];
+  if (existingRows.length > 0) {
+    existingRows.forEach(function(row) {
+      var id = headerMap["id"] !== undefined ? String(row[headerMap["id"]] || "") : "";
+      var def = defaultPackageMetadata[id] || {};
+      
+      var newRow = canonicalHeaders.map(function(h) {
+        var oldIdx = headerMap[h];
+        if (oldIdx !== undefined && row[oldIdx] !== "" && row[oldIdx] !== null && row[oldIdx] !== undefined) {
+          // Normalisasi package_type lama
+          if (h === "package_type") {
+            var val = String(row[oldIdx]).toUpperCase();
+            if (val === "REGULAR") return "REGULER";
+            if (val === "PLUS_TURKEY") return "PLUS_TOUR";
+          }
+          return row[oldIdx];
+        }
+        return def[h] !== undefined ? def[h] : "";
+      });
+      migratedRows.push(newRow);
+    });
+  } else {
+    // Jika sheet kosong, isi dengan 3 paket standar
+    Object.keys(defaultPackageMetadata).forEach(function(id) {
+      var def = defaultPackageMetadata[id];
+      var newRow = canonicalHeaders.map(function(h) {
+        if (h === "id") return id;
+        if (h === "created_at" || h === "updated_at" || h === "published_at") return nowStr;
+        return def[h] !== undefined ? def[h] : "";
+      });
+      migratedRows.push(newRow);
+    });
+  }
+
+  // 3. Tulis ulang header dan baris baru
+  sheet.clear();
+  sheet.getRange(1, 1, 1, canonicalHeaders.length).setValues([canonicalHeaders]);
+  sheet.getRange(1, 1, 1, canonicalHeaders.length)
+       .setBackground("#0F3D2E")
+       .setFontColor("#FFFFFF")
+       .setFontWeight("bold")
+       .setFontFamily("Plus Jakarta Sans");
+  sheet.setFrozenRows(1);
+
+  if (migratedRows.length > 0) {
+    sheet.getRange(2, 1, migratedRows.length, canonicalHeaders.length).setValues(migratedRows);
+  }
+  sheet.autoResizeColumns(1, canonicalHeaders.length);
+  Logger.log("✓ Sheet DB_Packages berhasil dimutasi ke skema 19 kolom lengkap (" + migratedRows.length + " paket).");
+  Logger.log("=== SETUP SHEET DB_Packages SELESAI ===");
+}
+
+/**
  * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Badal_Certificates'
  * secara langsung sesuai skema kolom terbaru.
  */
@@ -243,8 +375,12 @@ function initializeSdwUmrohInfrastructure() {
   if (preflight.missingCount > 0) {
     executeInitialization_(ss, preflight);
   } else {
-    Logger.log("Semua 22 master sheet sudah lengkap! Tidak ada mutasi yang diperlukan.");
+    Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
+
+  // Pastikan skema kolom paket dan piagam badal selalu ter-update ke standar resmi terbaru
+  setupPackagesCatalogSheet();
+  setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");
   return {

@@ -104,11 +104,19 @@ assert.ok(
     setupGs.includes('hotel_makkah') && setupGs.includes('hotel_madinah') && setupGs.includes('airline') && setupGs.includes('seats_left'),
     'backend/Setup.gs must contain expanded DB_Packages columns'
 );
+assert.ok(
+    setupGs.includes('function setupPackagesCatalogSheet()'),
+    'backend/Setup.gs must contain setupPackagesCatalogSheet migration helper'
+);
 
 const codeGs = fs.readFileSync(path.join(__dirname, '../backend/Code.gs'), 'utf8');
 assert.ok(
     codeGs.includes("action === 'savePackage'") && codeGs.includes("action === 'setPackageStatus'") && codeGs.includes("action === 'deletePackage'"),
     'backend/Code.gs must handle savePackage, setPackageStatus, and deletePackage'
+);
+assert.ok(
+    codeGs.includes("function autoUpgradePackagesSheet_"),
+    'backend/Code.gs must contain autoUpgradePackagesSheet_ helper'
 );
 console.log('✔ backend/Setup.gs & backend/Code.gs checks passed');
 
@@ -128,3 +136,4 @@ console.log('✔ admin-packages.js controller exports passed');
 console.log('\n======================================================');
 console.log('🎉 ALL ADMIN PACKAGES CATALOG TESTS PASSED SUCCESSFULLY!');
 console.log('======================================================\n');
+
