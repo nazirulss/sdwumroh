@@ -14,11 +14,21 @@
         const admin = require('./admin/admin-state.js');
         require('./admin/admin-nav.js');
         require('./admin/admin-crm.js');
+        require('./admin/admin-packages.js');
+        require('./admin/admin-departures.js');
+        require('./admin/admin-hotels.js');
+        require('./admin/admin-airlines.js');
+        require('./admin/admin-gallery.js');
+        require('./admin/admin-articles.js');
+        require('./admin/admin-faq.js');
+        require('./admin/admin-users.js');
+        require('./admin/admin-roles.js');
         require('./admin/admin-docs.js');
         require('./admin/admin-registrations.js');
         require('./admin/admin-finance.js');
         require('./admin/admin-operations.js');
         require('./admin/admin-certificates.js');
+        require('./admin/admin-badal.js');
         require('./admin/admin-security.js');
         require('./admin/admin-sync.js');
         require('./admin/admin-export.js');
@@ -59,7 +69,10 @@
             }
         }
 
-        // 4. Terapkan RBAC pada Sidebar
+        // 4. Terapkan RBAC pada Sidebar & Header Profile UI
+        if (typeof admin.updateHeaderProfileUI === 'function') {
+            admin.updateHeaderProfileUI(admin.currentRole);
+        }
         if (typeof admin.applyRolePermissions === 'function') {
             admin.applyRolePermissions(admin.currentRole);
         }

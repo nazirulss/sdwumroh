@@ -134,6 +134,35 @@
         assert.ok(/sdw-umroh-pwa-v(6[7-9]|[7-9]\d)/.test(swCode), 'Cache version di sw.js harus minimal v67');
     });
 
+    // 8. Verifikasi Kapsul Profil Sesi Asnawiyyah di Top Header Bar & Logout Controller
+    test('admin.html dan admin-nav.js harus mengintegrasikan Kapsul Profil Sesi Asnawiyyah dan Logout', () => {
+        const adminHtml = fs.readFileSync(path.join(root, 'admin.html'), 'utf8');
+        assert.ok(adminHtml.includes('id="userProfileDropdownContainer"'), 'Container kapsul profil sesi tidak ditemukan');
+        assert.ok(adminHtml.includes('id="headerUserAvatar"'), 'Header avatar tidak ditemukan');
+        assert.ok(adminHtml.includes('id="headerUserName"'), 'Header username tidak ditemukan');
+        assert.ok(adminHtml.includes('id="headerUserRoleShort"'), 'Header user role short tidak ditemukan');
+        assert.ok(adminHtml.includes('id="headerUserRoleDesc"'), 'Header user role desc tidak ditemukan');
+        assert.ok(adminHtml.includes('id="userProfileDropdownMenu"'), 'Dropdown menu profil tidak ditemukan');
+        assert.ok(adminHtml.includes('id="dropdownUserAvatar"'), 'Dropdown avatar tidak ditemukan');
+        assert.ok(adminHtml.includes('id="dropdownUserName"'), 'Dropdown username tidak ditemukan');
+        assert.ok(adminHtml.includes('id="dropdownUserEmail"'), 'Dropdown email tidak ditemukan');
+        assert.ok(adminHtml.includes('id="dropdownRoleBadge"'), 'Dropdown role badge tidak ditemukan');
+        assert.ok(adminHtml.includes('id="adminRoleSelector"'), 'adminRoleSelector tidak ditemukan di dropdown');
+        assert.ok(adminHtml.includes('SDW_ADMIN.logout()'), 'Panggilan SDW_ADMIN.logout() tidak ditemukan di dropdown');
+
+        const navCode = fs.readFileSync(path.join(root, 'js', 'admin', 'admin-nav.js'), 'utf8');
+        assert.ok(navCode.includes('USER_ROLE_PROFILES'), 'USER_ROLE_PROFILES tidak ditemukan di admin-nav.js');
+        assert.ok(navCode.includes('updateHeaderProfileUI'), 'updateHeaderProfileUI tidak ditemukan di admin-nav.js');
+        assert.ok(navCode.includes('toggleUserProfileDropdown'), 'toggleUserProfileDropdown tidak ditemukan di admin-nav.js');
+        assert.ok(navCode.includes('logout'), 'logout tidak ditemukan di admin-nav.js');
+        assert.ok(navCode.includes('admin.updateHeaderProfileUI = updateHeaderProfileUI'), 'admin.updateHeaderProfileUI tidak diekspor');
+        assert.ok(navCode.includes('admin.toggleUserProfileDropdown = toggleUserProfileDropdown'), 'admin.toggleUserProfileDropdown tidak diekspor');
+        assert.ok(navCode.includes('admin.logout = logout'), 'admin.logout tidak diekspor');
+
+        const coreCode = fs.readFileSync(path.join(root, 'js', 'admin-core.js'), 'utf8');
+        assert.ok(coreCode.includes('admin.updateHeaderProfileUI(admin.currentRole)'), 'Panggilan updateHeaderProfileUI di admin-core.js tidak ditemukan');
+    });
+
     console.log(`\n======================================================`);
     console.log(`Pengujian Selesai: ${passedTests} / ${totalTests} Berhasil (${Math.round(passedTests / totalTests * 100)}%)`);
     console.log(`======================================================\n`);
@@ -142,3 +171,4 @@
         process.exit(1);
     }
 })();
+

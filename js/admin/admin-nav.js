@@ -19,6 +19,113 @@
 
     admin = admin || {};
 
+    // 0. User Profiles for Asnawiyyah Session Capsule
+    const USER_ROLE_PROFILES = {
+        'SUPER_ADMIN': { name: 'Super Admin', shortRole: '(Super Admin)', desc: 'Super Administrator', initial: 'SU', email: 'admin@sdwumroh.com', bg: 'bg-teal-700 text-white' },
+        'ADMIN': { name: 'H. Ahmad Fauzi', shortRole: '(Admin)', desc: 'Administrator Backoffice', initial: 'AF', email: 'ops@sdwumroh.com', bg: 'bg-emerald-700 text-white' },
+        'DIRECTOR': { name: 'H. M. Syarif', shortRole: '(Direktur)', desc: 'Direktur Utama', initial: 'MS', email: 'syarif@sdwumroh.com', bg: 'bg-orange-700 text-white' },
+        'FINANCE': { name: 'Hj. Fatimah Zahra', shortRole: '(Finance)', desc: 'Keuangan & Kasir', initial: 'FZ', email: 'finance@sdwumroh.com', bg: 'bg-purple-700 text-white' },
+        'OPERATIONS': { name: 'Agus Pratama', shortRole: '(Operasional)', desc: 'Staf Operasional', initial: 'AP', email: 'operasional@sdwumroh.com', bg: 'bg-sky-700 text-white' },
+        'SALES': { name: 'Budi Santoso', shortRole: '(Sales)', desc: 'Sales Consultant', initial: 'BS', email: 'sales@sdwumroh.com', bg: 'bg-teal-700 text-white' },
+        'MUTHAWWIF': { name: 'Ust. Dr. Abdullah', shortRole: '(Muthawwif)', desc: 'Muthawwif & TL', initial: 'AB', email: 'muthawwif@sdwumroh.com', bg: 'bg-indigo-700 text-white' },
+        'PILGRIM': { name: 'Siti Aisyah', shortRole: '(Jamaah)', desc: 'Akun Jamaah Umroh', initial: 'SA', email: 'aisyah@gmail.com', bg: 'bg-slate-700 text-white' }
+    };
+
+    function updateHeaderProfileUI(role) {
+        if (typeof document === 'undefined') return;
+        const r = (role || admin.currentRole || 'SUPER_ADMIN').toUpperCase();
+        const profile = USER_ROLE_PROFILES[r] || USER_ROLE_PROFILES['ADMIN'];
+
+        // Header Elements
+        const headerAvatar = document.getElementById('headerUserAvatar');
+        const headerName = document.getElementById('headerUserName');
+        const headerRoleShort = document.getElementById('headerUserRoleShort');
+        const headerRoleDesc = document.getElementById('headerUserRoleDesc');
+
+        if (headerAvatar) {
+            headerAvatar.innerText = profile.initial;
+            headerAvatar.className = `w-9 h-9 rounded-xl ${profile.bg} font-black text-xs flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform`;
+        }
+        if (headerName) headerName.innerText = profile.name;
+        if (headerRoleShort) headerRoleShort.innerText = profile.shortRole;
+        if (headerRoleDesc) headerRoleDesc.innerText = profile.desc;
+
+        // Dropdown Elements
+        const dropAvatar = document.getElementById('dropdownUserAvatar');
+        const dropName = document.getElementById('dropdownUserName');
+        const dropEmail = document.getElementById('dropdownUserEmail');
+        const dropRoleBadge = document.getElementById('dropdownRoleBadge');
+
+        if (dropAvatar) {
+            dropAvatar.innerText = profile.initial;
+            dropAvatar.className = `w-10 h-10 rounded-xl ${profile.bg} font-black text-sm flex items-center justify-center shadow-2xs`;
+        }
+        if (dropName) dropName.innerText = profile.name;
+        if (dropEmail) dropEmail.innerText = profile.email;
+        if (dropRoleBadge) dropRoleBadge.innerText = r.replace('_', ' ');
+
+        // Update all select with ID adminRoleSelector
+        const roleSelectors = document.querySelectorAll('#adminRoleSelector');
+        roleSelectors.forEach(sel => {
+            if (sel.value !== r) sel.value = r;
+        });
+    }
+
+    function toggleUserProfileDropdown(forceState) {
+        if (typeof document === 'undefined') return;
+        const menu = document.getElementById('userProfileDropdownMenu');
+        if (!menu) return;
+
+        if (typeof forceState === 'boolean') {
+            if (forceState) {
+                menu.classList.remove('hidden');
+            } else {
+                menu.classList.add('hidden');
+            }
+        } else {
+            menu.classList.toggle('hidden');
+        }
+    }
+
+    function logout() {
+        if (typeof window !== 'undefined' && typeof confirm === 'function') {
+            if (!confirm('Apakah Anda yakin ingin keluar dari Portal Administrasi SDW UMROH?')) {
+                return;
+            }
+        }
+
+        try {
+            if (typeof sessionStorage !== 'undefined') {
+                sessionStorage.removeItem('sdw_admin_session');
+                sessionStorage.removeItem('sdw_admin_role');
+                sessionStorage.removeItem('sdw_auth_token');
+            }
+            if (typeof localStorage !== 'undefined') {
+                localStorage.removeItem('sdw_admin_session');
+            }
+        } catch (_) {}
+
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('Anda telah berhasil keluar dari sistem.', 'info');
+        }
+
+        setTimeout(() => {
+            if (typeof window !== 'undefined') {
+                window.location.href = 'index.html';
+            }
+        }, 600);
+    }
+
+    // Close dropdown on outside click
+    if (typeof document !== 'undefined') {
+        document.addEventListener('click', function(e) {
+            const container = document.getElementById('userProfileDropdownContainer');
+            if (container && !container.contains(e.target)) {
+                toggleUserProfileDropdown(false);
+            }
+        });
+    }
+
     // 1. Role Switcher & RBAC
     function setRole(newRole) {
         if (!admin.ADMIN_PERMISSIONS[newRole]) return;
@@ -36,6 +143,7 @@
             }
         }
 
+        updateHeaderProfileUI(newRole);
         applyRolePermissions(newRole);
         admin.showToast(`Peran dialihkan ke: ${newRole.replace('_', ' ')}`);
 
@@ -450,6 +558,10 @@
     admin.handleSearchInput = handleSearchInput;
     admin.updateClocks = updateClocks;
     admin.renderDashboard = renderDashboard;
+    admin.USER_ROLE_PROFILES = USER_ROLE_PROFILES;
+    admin.updateHeaderProfileUI = updateHeaderProfileUI;
+    admin.toggleUserProfileDropdown = toggleUserProfileDropdown;
+    admin.logout = logout;
 
     return admin;
 });

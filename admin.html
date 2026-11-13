@@ -429,10 +429,10 @@
                     </button>
                 </div>
 
-                <!-- Right Action Bar & Dual Clocks -->
-                <div class="flex items-center gap-4">
+                <!-- Right Action Bar, Clocks, Quick Tools, & Asnawiyyah Session Profile Capsule -->
+                <div class="flex items-center gap-2.5 sm:gap-3.5">
                     <!-- Dual Time Clocks -->
-                    <div class="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono">
+                    <div class="hidden xl:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono">
                         <div class="text-right">
                             <span class="text-[9.5px] font-bold text-amber-700 block">🇸🇦 Makkah (AST)</span>
                             <span id="adminMakkahClock" class="font-bold text-slate-800">--:--:--</span>
@@ -450,12 +450,18 @@
                         <span id="adminSyncText">Live DB Synced</span>
                     </button>
 
-                    <!-- Quick Actions -->
-                    <button type="button" onclick="SDW_ADMIN.openModal('modalCreateLead')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
+                    <!-- Quick Actions: + Prospek Baru -->
+                    <button type="button" onclick="SDW_ADMIN.openModal('modalCreateLead')" class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
                         <i class="fa-solid fa-user-plus text-[11px]"></i>
                         <span>+ Prospek Baru</span>
                     </button>
 
+                    <!-- Quick Tool: Public Portal Web Link (Asnawiyyah Style) -->
+                    <a href="index.html" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" title="Buka Portal Publik SDW UMROH (Tab Baru)">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+
+                    <!-- Notification Bell -->
                     <div class="relative">
                         <button type="button" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm transition relative cursor-pointer" title="Pemberitahuan Sistem">
                             <i class="fa-regular fa-bell"></i>
@@ -463,10 +469,87 @@
                         </button>
                     </div>
 
-                    <!-- Lock Screen Button (Fase 6: Security & Session Auto-Lock) -->
-                    <button type="button" id="btnScreenLock" onclick="SDW_ADMIN.lockScreen()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 flex items-center justify-center text-sm transition cursor-pointer" title="Kunci Layar Portal Admin (Security Lock)">
-                        <i class="fa-solid fa-lock"></i>
-                    </button>
+                    <!-- Subtle Vertical Divider -->
+                    <div class="h-7 w-px bg-slate-200 hidden sm:block"></div>
+
+                    <!-- Asnawiyyah Session Profile Capsule & Dropdown Menu -->
+                    <div id="userProfileDropdownContainer" class="relative">
+                        <!-- Profile Trigger Capsule -->
+                        <button type="button" id="btnUserProfileDropdown" onclick="SDW_ADMIN.toggleUserProfileDropdown()" class="flex items-center gap-2.5 pl-1.5 pr-2.5 py-1 rounded-2xl hover:bg-slate-100/90 border border-transparent hover:border-slate-200 transition-all cursor-pointer group text-left" title="Menu Akun & Profil Sesi">
+                            <!-- Avatar Initial Circle -->
+                            <div id="headerUserAvatar" class="w-9 h-9 rounded-xl bg-teal-700 text-white font-black text-xs flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                                SU
+                            </div>
+                            <!-- User Label (Nama & Role) -->
+                            <div class="hidden sm:block leading-tight">
+                                <div class="flex items-center gap-1">
+                                    <span id="headerUserName" class="text-xs font-bold text-slate-800">Super Admin</span>
+                                    <span id="headerUserRoleShort" class="text-[10px] font-bold text-teal-700">(Super Admin)</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-slate-600 transition-transform"></i>
+                                </div>
+                                <div id="headerUserRoleDesc" class="text-[10px] text-slate-400 font-medium truncate max-w-[130px]">Super Administrator</div>
+                            </div>
+                        </button>
+
+                        <!-- Dropdown Menu Card -->
+                        <div id="userProfileDropdownMenu" class="hidden absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white shadow-2xl border border-slate-200/90 p-3 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-3">
+                            <!-- Profile Identity Card -->
+                            <div class="p-3 rounded-xl bg-linear-to-br from-slate-50 to-teal-50/40 border border-slate-100 flex items-center gap-3">
+                                <div id="dropdownUserAvatar" class="w-10 h-10 rounded-xl bg-teal-700 text-white font-black text-sm flex items-center justify-center shadow-2xs shrink-0">
+                                    SU
+                                </div>
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex items-center justify-between gap-1">
+                                        <div id="dropdownUserName" class="text-xs font-black text-slate-800 truncate">Super Admin</div>
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100 shrink-0" title="Sesi Aktif Online"></span>
+                                    </div>
+                                    <div id="dropdownUserEmail" class="text-[10.5px] text-slate-400 truncate">admin@sdwumroh.com</div>
+                                    <div class="mt-1 flex items-center gap-1.5">
+                                        <span id="dropdownRoleBadge" class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-100 text-teal-800">SUPER ADMIN</span>
+                                        <span class="text-[9.5px] text-emerald-600 font-bold flex items-center gap-0.5"><i class="fa-solid fa-circle-check text-[8px]"></i> Aktif</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Role Simulator Switcher -->
+                            <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+                                <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                    <span><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-1"></i> Simulasi Peran RBAC</span>
+                                    <span class="text-[9px] text-slate-400">Testing</span>
+                                </div>
+                                <select id="adminRoleSelector" onchange="SDW_ADMIN.setRole(this.value)" class="w-full text-xs font-bold py-1.5 px-2 rounded-lg bg-white border border-slate-200 text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-500 cursor-pointer">
+                                    <option value="SUPER_ADMIN">👑 Super Admin (Full Otoritas)</option>
+                                    <option value="ADMIN">🛡️ Admin (Backoffice)</option>
+                                    <option value="DIRECTOR">👔 Direktur (Monitoring &amp; Restu)</option>
+                                    <option value="FINANCE">💰 Finance (Kasir &amp; Rekonsiliasi)</option>
+                                    <option value="OPERATIONS">✈️ Operasional (Manifest &amp; Hotel)</option>
+                                    <option value="SALES">💼 Sales (CRM &amp; Prospek)</option>
+                                    <option value="MUTHAWWIF">🕋 Muthawwif (Absensi Lapangan)</option>
+                                    <option value="PILGRIM">👤 Jamaah (Portal PWA Jamaah)</option>
+                                </select>
+                            </div>
+
+                            <!-- Quick Navigation Shortcuts -->
+                            <div class="space-y-0.5 pt-1 text-xs">
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-users text-slate-400 w-4 text-center"></i> Manajemen Pengguna
+                                </button>
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.switchTab('tab-roles')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-shield-halved text-slate-400 w-4 text-center"></i> Matriks Peran &amp; Hak Akses
+                                </button>
+                                <button type="button" id="btnScreenLock" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.lockScreen()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-amber-50 hover:text-amber-800 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-lock text-slate-400 w-4 text-center"></i> Kunci Layar (Security Lock)
+                                </button>
+                            </div>
+
+                            <!-- Logout Button -->
+                            <div class="pt-2 border-t border-slate-100">
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.logout()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar (Logout)
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </header>
 
