@@ -98,6 +98,7 @@
         if (tabId === 'tab-crm' && typeof admin.renderCRM === 'function') admin.renderCRM();
         if (tabId === 'tab-packages' && typeof admin.renderPackages === 'function') admin.renderPackages();
         if (tabId === 'tab-departures' && typeof admin.renderDepartures === 'function') admin.renderDepartures();
+        if (tabId === 'tab-hotels' && typeof admin.renderHotels === 'function') admin.renderHotels();
         if (tabId === 'tab-docs' && typeof admin.renderDocuments === 'function') admin.renderDocuments();
         if (tabId === 'tab-registrations' && typeof admin.renderRegistrations === 'function') admin.renderRegistrations();
         if (tabId === 'tab-finance' && typeof admin.renderFinance === 'function') admin.renderFinance();

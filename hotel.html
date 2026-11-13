@@ -722,6 +722,110 @@
                 }
             });
         }
+
+        // ==================== DYNAMIC LIVE SYNC FROM CLOUD / LOCAL STORAGE ====================
+        async function initDynamicHotels() {
+            let hotels = [];
+            if (typeof localStorage !== 'undefined') {
+                try {
+                    const cached = localStorage.getItem('sdw_admin_hotels');
+                    if (cached) hotels = JSON.parse(cached);
+                } catch (e) {}
+            }
+
+            try {
+                const endpoint = (window.SDW_CONFIG && window.SDW_CONFIG.APPS_SCRIPT_URL) ? window.SDW_CONFIG.APPS_SCRIPT_URL :
+                    'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec';
+                const res = await fetch(`${endpoint}?action=getHotels&_t=${Date.now()}`);
+                const json = await res.json();
+                if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+                    hotels = json.data;
+                    localStorage.setItem('sdw_admin_hotels', JSON.stringify(hotels));
+                }
+            } catch (err) {
+                // Gunakan cache atau markup statis
+            }
+
+            if (Array.isArray(hotels) && hotels.length > 0) {
+                renderDynamicHotelCards(hotels);
+            }
+        }
+
+        function renderDynamicHotelCards(hotels) {
+            const grid = document.getElementById('hotel-cards-grid');
+            if (!grid) return;
+
+            const makkahCount = hotels.filter(h => String(h.city).toUpperCase() === 'MAKKAH').length;
+            const madinahCount = hotels.filter(h => String(h.city).toUpperCase() === 'MADINAH').length;
+
+            const btnMakkah = document.querySelector("button[onclick*='MAKKAH']");
+            const btnMadinah = document.querySelector("button[onclick*='MADINAH']");
+            if (btnMakkah) btnMakkah.innerHTML = `<i class="fa-solid fa-kaaba text-amber-500 mr-1.5"></i> Makkah (${makkahCount} Hotel)`;
+            if (btnMadinah) btnMadinah.innerHTML = `<i class="fa-solid fa-mosque text-emerald-600 mr-1.5"></i> Madinah (${madinahCount} Hotel)`;
+
+            grid.innerHTML = hotels.map(h => {
+                const isMakkah = String(h.city).toUpperCase() === 'MAKKAH';
+                const cityBadge = isMakkah ?
+                    `<span class="px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[10px] tracking-wide"><i class="fa-solid fa-kaaba mr-1"></i> Makkah</span>` :
+                    `<span class="px-2.5 py-0.5 rounded-full bg-emerald-600 text-white font-black text-[10px] tracking-wide"><i class="fa-solid fa-mosque mr-1"></i> Madinah</span>`;
+                const zoneBadge = (h.location_zone === 'RING_1') ? 'Ring 1 Pelataran' : ((h.location_zone === 'WALKING_DISTANCE') ? 'Jalan Kaki' : 'Shuttle Bus 24 Jam');
+                const imgSrc = h.image_url || (isMakkah ? 'assets/hero-haram.png' : 'assets/pkg-vip-khidmat.png');
+
+                return `
+                <div class="hotel-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="${h.city}" data-name="${(h.name || '').toLowerCase()} ${h.city.toLowerCase()} ${(h.gate_info || '').toLowerCase()}">
+                    <div class="relative h-52 bg-slate-900 overflow-hidden">
+                        <img src="${imgSrc}" alt="${h.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='assets/hero-haram.png'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <div class="absolute top-3 left-3 flex items-center gap-2">
+                            ${cityBadge}
+                            <span class="px-2.5 py-0.5 rounded-full bg-black/50 backdrop-blur-md text-amber-300 border border-amber-300/30 text-[10px] font-bold">
+                                ⭐ Bintang ${h.star_rating}
+                            </span>
+                        </div>
+                        <div class="absolute bottom-3 left-4 right-4">
+                            <span class="inline-block px-2 py-0.5 rounded-md bg-purple-950/80 backdrop-blur-xs text-[10.5px] font-extrabold text-amber-300 border border-amber-300/30 mb-1">
+                                <i class="fa-solid fa-person-walking text-amber-400 mr-1"></i> ${h.distance_text || (h.distance_meters + ' Meter')}
+                            </span>
+                            <h3 class="text-lg font-black text-white leading-tight drop-shadow-sm">
+                                ${h.name}
+                            </h3>
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-1.5 text-xs text-sdw-pine font-bold mb-2">
+                                <i class="fa-solid fa-door-open text-purple-700"></i>
+                                <span>${h.gate_info || 'Akses Gerbang Utama'}</span>
+                                <span class="text-slate-300">•</span>
+                                <span class="text-slate-500 font-medium">${zoneBadge}</span>
+                            </div>
+                            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+                                ${h.description || h.facilities || ''}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <span class="text-[11px] font-bold text-slate-400">
+                                <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Mitra Resmi
+                            </span>
+                            ${h.maps_url ? `
+                            <a href="${h.maps_url}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-sdw-gold"></i>
+                                <span>Buka di Maps</span>
+                            </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            applyHotelFilter();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initDynamicHotels();
+        });
     </script>
 
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->

@@ -315,6 +315,13 @@
                         </span>
                         <span id="badgeDepartureCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Live</span>
                     </button>
+                    <button type="button" data-admin-tab="tab-hotels" onclick="SDW_ADMIN.switchTab('tab-hotels')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-hotel nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>Master Data Hotel</span>
+                        </span>
+                        <span id="badgeHotelCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Haramain</span>
+                    </button>
                     <button type="button" data-admin-tab="tab-operations" onclick="SDW_ADMIN.switchTab('tab-operations')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
                         <span class="flex items-center gap-2.5">
                             <i class="fa-solid fa-kaaba nav-icon text-slate-400 w-5 text-center text-sm"></i>
@@ -965,6 +972,170 @@
                         <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter status untuk menemukan jadwal yang dicari.</p>
                         <button type="button" onclick="SDW_ADMIN.openDepartureModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
                             + Tambah Kloter Baru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MASTER DATA HOTEL HARAMAIN ==================== -->
+                <div id="tab-hotels" class="admin-tab-container hidden space-y-5">
+                    <!-- Header Section -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Master Data Hotel Haramain</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-purple-100 text-purple-900">Makkah &amp; Madinah</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola direktori akomodasi resmi, estimasi jarak jalan kaki ke Ka'bah/Nabawi, nomor gerbang, dan fasilitas kamar.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.syncHotelsFromCloud()" class="px-3.5 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 shadow-2xs transition flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-arrows-rotate text-purple-700"></i>
+                                <span>Sinkron Cloud</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.previewHotelWeb()" class="px-3.5 py-2 rounded-xl text-xs font-bold border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-900 shadow-2xs transition flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-amber-600"></i>
+                                <span>Pratinjau Web</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openHotelModal()" class="px-4 py-2 rounded-xl text-xs font-extrabold bg-gradient-to-r from-sdw-pine to-purple-800 text-white shadow-sm hover:opacity-95 transition flex items-center gap-1.5 cursor-pointer">
+                                <i class="fa-solid fa-plus text-amber-300"></i>
+                                <span>Tambah Hotel Baru</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stat KPI Cards -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 mb-2">
+                                <span class="text-[11px] font-bold">Total Hotel</span>
+                                <div class="w-7 h-7 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-hotel"></i>
+                                </div>
+                            </div>
+                            <div id="statTotalHotels" class="text-2xl font-black text-slate-900 tracking-tight">9</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Akomodasi mitra resmi</div>
+                        </div>
+                        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 mb-2">
+                                <span class="text-[11px] font-bold">Hotel Makkah</span>
+                                <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-kaaba"></i>
+                                </div>
+                            </div>
+                            <div id="statHotelsMakkah" class="text-2xl font-black text-amber-800 tracking-tight">5</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Sektor Masjidil Haram</div>
+                        </div>
+                        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 mb-2">
+                                <span class="text-[11px] font-bold">Hotel Madinah</span>
+                                <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-mosque"></i>
+                                </div>
+                            </div>
+                            <div id="statHotelsMadinah" class="text-2xl font-black text-emerald-700 tracking-tight">4</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Sektor Masjid Nabawi</div>
+                        </div>
+                        <div class="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs">
+                            <div class="flex items-center justify-between text-slate-500 mb-2">
+                                <span class="text-[11px] font-bold">Bintang 5 (Luxury)</span>
+                                <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-star"></i>
+                                </div>
+                            </div>
+                            <div id="statHotelsStar5" class="text-2xl font-black text-slate-900 tracking-tight">5</div>
+                            <div class="text-[10px] text-slate-400 mt-1">Pelataran &amp; Clock Tower</div>
+                        </div>
+                    </div>
+
+                    <!-- Filter & Toolbar -->
+                    <div class="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div class="flex-1 flex flex-wrap items-center gap-2">
+                            <!-- Search -->
+                            <div class="relative flex-1 min-w-[200px]">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="searchHotelsInput" oninput="SDW_ADMIN.switchHotelFilter('search', this.value)" placeholder="Cari nama hotel, gerbang, fasilitas..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine focus:ring-1 focus:ring-sdw-pine">
+                            </div>
+
+                            <!-- Filter Kota -->
+                            <select id="filterHotelCitySelect" onchange="SDW_ADMIN.switchHotelFilter('city', this.value)" class="px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-slate-700 font-medium">
+                                <option value="ALL">Semua Kota</option>
+                                <option value="MAKKAH">🕋 Makkah Al-Mukarramah</option>
+                                <option value="MADINAH">🕌 Madinah Al-Munawwarah</option>
+                            </select>
+
+                            <!-- Filter Kelas Bintang -->
+                            <select id="filterHotelStarSelect" onchange="SDW_ADMIN.switchHotelFilter('star', this.value)" class="px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-slate-700 font-medium">
+                                <option value="ALL">Semua Bintang</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Bintang 5</option>
+                                <option value="4">⭐⭐⭐⭐ Bintang 4</option>
+                                <option value="3">⭐⭐⭐ Bintang 3</option>
+                            </select>
+
+                            <!-- Filter Zona Lokasi -->
+                            <select id="filterHotelZoneSelect" onchange="SDW_ADMIN.switchHotelFilter('zone', this.value)" class="px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-slate-700 font-medium">
+                                <option value="ALL">Semua Zona</option>
+                                <option value="RING_1">Ring 1 Pelataran</option>
+                                <option value="WALKING_DISTANCE">Jalan Kaki</option>
+                                <option value="SHUTTLE">Shuttle Bus 24 Jam</option>
+                            </select>
+
+                            <!-- Filter Status -->
+                            <select id="filterHotelStatusSelect" onchange="SDW_ADMIN.switchHotelFilter('status', this.value)" class="px-3 py-1.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-slate-700 font-medium">
+                                <option value="ALL">Semua Status</option>
+                                <option value="ACTIVE">Aktif</option>
+                                <option value="INACTIVE">Nonaktif</option>
+                                <option value="ARCHIVED">Diarsipkan</option>
+                            </select>
+                        </div>
+
+                        <!-- View Switcher -->
+                        <div class="flex items-center gap-1 border border-slate-200 rounded-xl p-0.5 bg-slate-50 self-end md:self-auto shrink-0">
+                            <button type="button" id="btnViewTableHotels" onclick="SDW_ADMIN.switchHotelView('table')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-sdw-pine text-white shadow-2xs transition cursor-pointer">
+                                <i class="fa-solid fa-table-list mr-1"></i> Tabel
+                            </button>
+                            <button type="button" id="btnViewCardsHotels" onclick="SDW_ADMIN.switchHotelView('cards')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 transition cursor-pointer">
+                                <i class="fa-solid fa-table-cells-large mr-1"></i> Kartu Visual
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table View Container -->
+                    <div id="hotelTableView" class="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden">
+                        <div class="w-full">
+                            <table class="w-full text-left border-collapse table-auto">
+                                <thead>
+                                    <tr class="bg-slate-50/80 border-b border-slate-200/80 text-[10.5px] font-black text-slate-500 uppercase tracking-wider">
+                                        <th class="py-3 px-3.5">Hotel &amp; Foto</th>
+                                        <th class="py-3 px-3.5">Kota &amp; Zona</th>
+                                        <th class="py-3 px-3.5">Jarak &amp; Gerbang</th>
+                                        <th class="py-3 px-3.5">Fasilitas Unggulan</th>
+                                        <th class="py-3 px-3.5">Status</th>
+                                        <th class="py-3 px-3.5 text-right">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-hotels-body">
+                                    <!-- Rendered dynamically by js/admin/admin-hotels.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Cards View Grid -->
+                    <div id="hotelCardsView" class="hidden">
+                        <div id="hotel-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <!-- Rendered dynamically by js/admin/admin-hotels.js -->
+                        </div>
+                    </div>
+
+                    <!-- Empty State Placeholder -->
+                    <div id="hotelEmptyState" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+                        <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                            <i class="fa-solid fa-hotel"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada Data Hotel Ditemukan</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter kota untuk menemukan data yang dicari.</p>
+                        <button type="button" onclick="SDW_ADMIN.openHotelModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                            + Tambah Hotel Baru
                         </button>
                     </div>
                 </div>
@@ -2854,12 +3025,24 @@
                     </h4>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Hotel Makkah (Jarak) *</label>
-                            <input type="text" id="pkgHotelMakkah" required placeholder="Contoh: Retaj Al Rayyan / Setaraf (350m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-bold text-slate-700">Hotel Makkah (Jarak) *</label>
+                                <span class="text-[10px] text-purple-700 font-extrabold cursor-pointer hover:underline" onclick="SDW_ADMIN.switchTab('tab-hotels')">+ Master Hotel</span>
+                            </div>
+                            <select id="pkgHotelMakkahSelect" onchange="if(this.value) document.getElementById('pkgHotelMakkah').value = this.value" class="w-full px-3 py-1.5 mb-1.5 rounded-xl border border-purple-200 bg-purple-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                <option value="">-- Pilih dari Master Hotel Makkah --</option>
+                            </select>
+                            <input type="text" id="pkgHotelMakkah" required placeholder="Contoh: Retaj Al Rayyan / Setaraf (350m)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Hotel Madinah (Jarak) *</label>
-                            <input type="text" id="pkgHotelMadinah" required placeholder="Contoh: Concorde Dar Al Khair (200m)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-bold text-slate-700">Hotel Madinah (Jarak) *</label>
+                                <span class="text-[10px] text-purple-700 font-extrabold cursor-pointer hover:underline" onclick="SDW_ADMIN.switchTab('tab-hotels')">+ Master Hotel</span>
+                            </div>
+                            <select id="pkgHotelMadinahSelect" onchange="if(this.value) document.getElementById('pkgHotelMadinah').value = this.value" class="w-full px-3 py-1.5 mb-1.5 rounded-xl border border-purple-200 bg-purple-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                <option value="">-- Pilih dari Master Hotel Madinah --</option>
+                            </select>
+                            <input type="text" id="pkgHotelMadinah" required placeholder="Contoh: Concorde Dar Al Khair (200m)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                         <div class="sm:col-span-2">
                             <label class="block font-bold text-slate-700 mb-1">Maskapai Penerbangan &amp; Rute *</label>
@@ -3079,6 +3262,144 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: FORM EDITOR MASTER HOTEL HARAMAIN ==================== -->
+    <div id="modalHotelEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-2xl w-full shadow-2xl border border-purple-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-purple-900 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-hotel"></i>
+                    </div>
+                    <div>
+                        <h3 id="hotelModalTitle" class="text-base sm:text-lg font-black text-white">Tambah Master Hotel Baru</h3>
+                        <p class="text-xs text-amber-200/80">Konfigurasi nama hotel, estimasi jarak jalan kaki, zona, nomor gerbang, dan fasilitas</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeHotelModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body Form -->
+            <form id="formHotelEditor" onsubmit="SDW_ADMIN.saveHotelForm(event)" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 text-xs">
+                <input type="hidden" id="htlModalId" value="">
+
+                <!-- Section 1: Identitas Hotel & Lokasi -->
+                <div class="space-y-3">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-sdw-pine"></i>
+                        <span>1. Identitas &amp; Lokasi Hotel</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="sm:col-span-2">
+                            <label class="block font-bold text-slate-700 mb-1">Nama Resmi Hotel *</label>
+                            <input type="text" id="htlModalName" required placeholder="Contoh: Swissotel Al Maqam Makkah" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Kota Haramain *</label>
+                            <select id="htlModalCity" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-xs">
+                                <option value="MAKKAH">🕋 Makkah Al-Mukarramah</option>
+                                <option value="MADINAH">🕌 Madinah Al-Munawwarah</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Kelas Bintang, Jarak & Zona -->
+                <div class="space-y-3 pt-2 border-t border-slate-100">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-amber-500"></i>
+                        <span>2. Jarak ke Masjid &amp; Akses Gerbang</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Kelas Bintang *</label>
+                            <select id="htlModalStar" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-xs">
+                                <option value="5">⭐⭐⭐⭐⭐ Bintang 5</option>
+                                <option value="4">⭐⭐⭐⭐ Bintang 4</option>
+                                <option value="3">⭐⭐⭐ Bintang 3</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Estimasi Jarak (Meter) *</label>
+                            <input type="number" id="htlModalDistanceMeters" min="0" max="5000" value="0" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Zona Lokasi *</label>
+                            <select id="htlModalZone" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-xs">
+                                <option value="RING_1">Ring 1 Pelataran (0-100m)</option>
+                                <option value="WALKING_DISTANCE">Jalan Kaki (100-400m)</option>
+                                <option value="SHUTTLE">Shuttle Bus 24 Jam (&gt;400m)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Label Keterangan Jarak</label>
+                            <input type="text" id="htlModalDistanceText" placeholder="Contoh: 0 Meter (Pelataran Ka'bah)" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Pintu Gerbang Masjid Terdekat</label>
+                            <input type="text" id="htlModalGate" placeholder="Contoh: Gate 1 (King Abdulaziz) / Gate 21-22" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Media, Fasilitas & Deskripsi -->
+                <div class="space-y-3 pt-2 border-t border-slate-100">
+                    <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-images text-purple-700"></i>
+                        <span>3. Media Foto, Fasilitas &amp; Peta</span>
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">URL / Path Foto Banner</label>
+                            <input type="text" id="htlModalImage" value="assets/hero-haram.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                            <div class="mt-1 flex items-center gap-1.5 text-[10px] text-slate-500">
+                                <span>Pilihan preset:</span>
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-vip-khidmat.png'" class="text-purple-700 hover:underline">VIP Clock Tower</button> •
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/hero-haram.png'" class="text-purple-700 hover:underline">Haramain</button> •
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-reguler-syawal.png'" class="text-purple-700 hover:underline">Reguler</button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">Tautan Google Maps</label>
+                            <input type="url" id="htlModalMaps" placeholder="https://maps.google.com/?q=..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Daftar Fasilitas Unggulan (Pisahkan Koma)</label>
+                        <input type="text" id="htlModalFacilities" placeholder="Restoran Nusantara, Akses Kursi Roda, Free WiFi, Ruang Shalat" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Deskripsi Singkat Hotel</label>
+                        <textarea id="htlModalDescription" rows="2" placeholder="Ulasan kenyamanan kamar, akses lift, dan fasilitas pendukung ibadah jamaah..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Status Hotel</label>
+                        <select id="htlModalStatus" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine bg-white text-xs">
+                            <option value="ACTIVE">ACTIVE (Aktif / Digunakan)</option>
+                            <option value="INACTIVE">INACTIVE (Nonaktif / Sementara)</option>
+                            <option value="ARCHIVED">ARCHIVED (Diarsipkan)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeHotelModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan Data Hotel</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -3094,6 +3415,7 @@
     <script src="js/admin/admin-crm.js?v=2.8.0"></script>
     <script src="js/admin/admin-packages.js?v=1.0.0"></script>
     <script src="js/admin/admin-departures.js?v=1.0.0"></script>
+    <script src="js/admin/admin-hotels.js?v=1.0.0"></script>
     <script src="js/admin/admin-docs.js?v=2.8.0"></script>
     <script src="js/admin/admin-registrations.js?v=2.8.0"></script>
     <script src="js/admin/admin-finance.js?v=2.8.0"></script>

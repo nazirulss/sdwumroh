@@ -37,6 +37,7 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Packages": ["id", "name", "slug", "package_type", "duration_days", "status", "description", "hotel_makkah", "hotel_madinah", "airline", "seats_left", "badge", "image_url", "rating", "starting_price", "discount_label", "published_at", "created_at", "updated_at"],
   "DB_Package_Prices": ["id", "package_id", "currency", "quad_price", "triple_price", "double_price", "effective_start", "effective_end", "status"],
   "DB_Departures": ["id", "package_id", "departure_date", "return_date", "airline", "origin_airport", "capacity_total", "capacity_booked", "status", "notes"],
+  "DB_Hotels": ["id", "name", "city", "star_rating", "distance_meters", "distance_text", "location_zone", "gate_info", "image_url", "description", "maps_url", "facilities", "status", "created_at", "updated_at"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],
   "DB_Document_Requirements": ["id", "code", "title", "description", "is_mandatory", "applies_to_gender", "max_expiry_months"],
   "DB_Pilgrim_Documents": ["id", "registration_id", "requirement_id", "file_name", "file_ref_mock", "status", "review_notes", "verified_by", "verified_at", "updated_at"],
@@ -448,6 +449,56 @@ function setupDeparturesCatalogSheet() {
   Logger.log("=== SETUP SHEET DB_Departures SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Hotels'
+ * secara langsung sesuai skema canonical 15 kolom dan seeding 9 hotel resmi Makkah & Madinah.
+ */
+function setupHotelsSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = "DB_Hotels";
+  var sheet = ss.getSheetByName(sheetName);
+  var canonical = AUTHORITATIVE_SCHEMAS_[sheetName];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
+  }
+
+  var lastCol = sheet.getLastColumn();
+  var currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (currentHeaders.length === 0) {
+    sheet.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+    sheet.getRange(1, 1, 1, canonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+  }
+
+  // Jika baris data masih kosong, seed 9 hotel resmi
+  if (sheet.getLastRow() <= 1) {
+    var nowStr = new Date().toISOString();
+    var seedHotels = [
+      ['HTL-000001', 'Swissotel Al Maqam Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/pkg-vip-khidmat.png', 'Hotel mewah bintang 5 di dalam kompleks Abraj Al Bait Clock Tower dengan akses lift langsung menuju pelataran Masjidil Haram.', 'https://maps.google.com/?q=Swissotel+Al+Maqam+Makkah', 'Restoran Nusantara, Akses Kursi Roda, Free WiFi, Ruang Shalat View Ka\'bah, Layanan Medis', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000002', 'Mövenpick Hotel Hajar Tower Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/hero-haram.png', 'Bagian dari kompleks Abraj Al Bait Clock Tower menghadap pelataran King Abdulaziz Gate. Fasilitas buffet masakan Indonesia dan lift berkecepatan tinggi.', 'https://maps.google.com/?q=Movenpick+Hajar+Tower+Makkah', 'Buffet Menu Indonesia, Akses Lift Cepat, Free WiFi, Concierge 24 Jam, Penukaran Uang', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000003', 'Pullman Zamzam Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/hero-twilight.jpg', 'Hotel ikonik berjarak 0 meter dari pelataran. Sangat diminati jamaah keluarga dan lansia karena akses terdekat ke tempat sa\'i dan thawaf.', 'https://maps.google.com/?q=Pullman+Zamzam+Makkah', 'Audio Shalat Ka\'bah di Kamar, Restoran Al Yasmine, Akses Kursi Roda, Resepsionis Bahasa Indonesia', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000004', 'Retaj Al Rayyan Makkah', 'MAKKAH', 4, 350, '350 Meter (Jalan Kaki Santai)', 'WALKING_DISTANCE', 'Gate 1-5 (Ajyad)', 'assets/pkg-reguler-syawal.png', 'Hotel bintang 4 favorit paket reguler di kawasan Ajyad. Hanya 4-5 menit jalan kaki santai di jalan datar tanpa tanjakan menuju pelataran.', 'https://maps.google.com/?q=Retaj+Al+Rayyan+Makkah', 'Katering Cita Rasa Nusantara, Kamar Bersih Luas, Toko Oleh-oleh di Lobi, Free WiFi', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000005', 'Olayan Ajyad Hotel Makkah', 'MAKKAH', 3, 600, '600 Meter (Shuttle Bus Gratis 24 Jam)', 'SHUTTLE', 'Terminal Ajyad', 'assets/pkg-hemat.webp', 'Pilihan utama paket hemat dan syariah. Dilengkapi armada shuttle bus ber-AC non-stop 24 jam langsung ke terminal bawah pelataran Haram.', 'https://maps.google.com/?q=Olayan+Ajyad+Hotel+Makkah', 'Shuttle Bus 24 Jam Non-stop, Kamar Quad Hemat, Menu Katering Indonesia, Pembimbing Ibadah Standby', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000006', 'Dar Al Taqwa Hotel Madinah', 'MADINAH', 5, 50, '50 Meter (Pelataran Masjid Nabawi)', 'RING_1', 'Gate 21-22 (King Fahd / Raudhah)', 'assets/pkg-vip-khidmat.png', 'Hotel bintang 5 tepat di depan pelataran utama Masjid Nabawi. Pintu masuk khusus jamaah wanita ke Raudhah hanya beberapa langkah dari lobi hotel.', 'https://maps.google.com/?q=Dar+Al+Taqwa+Hotel+Madinah', 'Akses Terdekat Pintu Raudhah Wanita, Restoran Fine Dining, Butler Service, View Kubah Hijau', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000007', 'Frontel Al Harithia Madinah', 'MADINAH', 5, 100, '100 Meter (Markaziyah Utara)', 'RING_1', 'Gate 20-22 (King Fahd)', 'assets/hero-haram.png', 'Hotel bintang 5 di sektor Markaziyah Utara. Terkenal dengan hidangan sarapan dan makan malam menu Nusantara yang lengkap dan kamar yang luas.', 'https://maps.google.com/?q=Frontel+Al+Harithia+Hotel+Madinah', 'Chef Menu Masakan Indonesia, Pusat Kebugaran, Free WiFi High-Speed, Fasilitas Ramah Lansia', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000008', 'Concorde Dar Al Khair Madinah', 'MADINAH', 4, 200, '200 Meter (Markaziyah Barat)', 'WALKING_DISTANCE', 'Gate 8 (Bab As-Salam)', 'assets/pkg-reguler-syawal.png', 'Hotel bintang 4 sangat strategis di area Markaziyah Barat. Sekitar 2-3 menit jalan kaki ke pelataran Bab As-Salam, dekat dengan pusat pertokoan kurma.', 'https://maps.google.com/?q=Concorde+Dar+Al+Khair+Madinah', 'Dekat Pusat Belanja Kurma & Souvenir, Masakan Nusantara 3x Sehari, Ruang Koper Luas, Free WiFi', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000009', 'Rove Al Madinah Hotel', 'MADINAH', 4, 150, '150 Meter (Markaziyah Utara)', 'WALKING_DISTANCE', 'Gate 17-18 (Abu Bakar As-Siddiq)', 'assets/pkg-plus-turki.webp', 'Hotel bintang 4 modern dengan desain kontemporer di Markaziyah Utara. Suasana lobi megah dan nyaman untuk tempat berkumpul rombongan kloter.', 'https://maps.google.com/?q=Rove+Al+Madinah+Hotel', 'Lobi Megah & Coffee Shop, Restoran Internasional & Nusantara, Smart TV Kamar, Akses Ramah Kursi Roda', 'ACTIVE', nowStr, nowStr]
+    ];
+    sheet.getRange(2, 1, seedHotels.length, canonical.length).setValues(seedHotels);
+  }
+
+  sheet.autoResizeColumns(1, canonical.length);
+  Logger.log("✓ Sheet DB_Hotels berhasil disinkronkan sesuai skema 15 kolom.");
+  Logger.log("=== SETUP SHEET DB_Hotels SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -469,9 +520,10 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
+  setupHotelsSheet();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

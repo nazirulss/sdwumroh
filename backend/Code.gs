@@ -839,6 +839,31 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'upgradeHotelsSchema') {
+      const sheet = ss.getSheetByName("DB_Hotels");
+      autoUpgradeHotelsSheet_(sheet, ss);
+      return createResponse(true, { message: "Skema DB_Hotels berhasil diupgrade dan disinkronkan" });
+    }
+
+    if (action === 'getHotels') {
+      let sheet = ss.getSheetByName("DB_Hotels");
+      if (!sheet) {
+        autoUpgradeHotelsSheet_(sheet, ss);
+        sheet = ss.getSheetByName("DB_Hotels");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Hotels tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.star_rating = Number(obj.star_rating) || 5;
+        obj.distance_meters = Number(obj.distance_meters) || 0;
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -2314,7 +2339,205 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Departures berhasil diupgrade dan disinkronkan" };
   }
 
+  if (action === 'saveHotel') {
+    const sheet = ss.getSheetByName("DB_Hotels");
+    if (!sheet) throw new Error("Sheet DB_Hotels tidak ditemukan");
+
+    autoUpgradeHotelsSheet_(sheet, ss);
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/HTL-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "HTL-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const name = String(payload.name || '').trim();
+    const city = String(payload.city || 'MAKKAH').trim().toUpperCase();
+    const star_rating = Number(payload.star_rating) || 5;
+    const distance_meters = Number(payload.distance_meters) || 0;
+    const distance_text = String(payload.distance_text || '').trim();
+    const location_zone = String(payload.location_zone || 'RING_1').trim();
+    const gate_info = String(payload.gate_info || '').trim();
+    const image_url = String(payload.image_url || 'assets/hero-haram.png').trim();
+    const description = String(payload.description || '').trim();
+    const maps_url = String(payload.maps_url || '').trim();
+    const facilities = String(payload.facilities || '').trim();
+    const status = String(payload.status || 'ACTIVE').trim().toUpperCase();
+
+    const rowObj = {
+      id: id,
+      name: name,
+      city: city,
+      star_rating: star_rating,
+      distance_meters: distance_meters,
+      distance_text: distance_text,
+      location_zone: location_zone,
+      gate_info: gate_info,
+      image_url: image_url,
+      description: description,
+      maps_url: maps_url,
+      facilities: facilities,
+      status: status,
+      created_at: rowIndex > 0 ? (rows[rowIndex - 1][headers.indexOf('created_at')] || nowStr) : nowStr,
+      updated_at: nowStr
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_HOTEL" : "CREATE_HOTEL", "DB_Hotels", id, null, payload, "Hotel '" + name + "' (" + city + ") berhasil disimpan");
+    return { id: id, name: name, city: city, status: status, entity: "DB_Hotels" };
+  }
+
+  if (action === 'setHotelStatus') {
+    const sheet = ss.getSheetByName("DB_Hotels");
+    if (!sheet) throw new Error("Sheet DB_Hotels tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = String(payload.status || 'ACTIVE').toUpperCase();
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+    const updatedColIdx = headers.indexOf('updated_at');
+
+    if (statusColIdx === -1) throw new Error("Kolom status tidak ditemukan di DB_Hotels");
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        if (updatedColIdx !== -1) {
+          sheet.getRange(i + 1, updatedColIdx + 1).setValue(new Date().toISOString());
+        }
+        logAudit_(actor, "SET_HOTEL_STATUS", "DB_Hotels", id, null, { status: newStatus }, "Status hotel diubah menjadi " + newStatus);
+        return { id: id, status: newStatus, entity: "DB_Hotels" };
+      }
+    }
+    return { id: id, error: "ID hotel tidak ditemukan" };
+  }
+
+  if (action === 'deleteHotel') {
+    const sheet = ss.getSheetByName("DB_Hotels");
+    if (!sheet) throw new Error("Sheet DB_Hotels tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+    const updatedColIdx = headers.indexOf('updated_at');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        // Soft delete ke ARCHIVED demi integritas data paket / rooming lama
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+          if (updatedColIdx !== -1) {
+            sheet.getRange(i + 1, updatedColIdx + 1).setValue(new Date().toISOString());
+          }
+        }
+        logAudit_(actor, "ARCHIVE_HOTEL", "DB_Hotels", id, null, null, "Hotel diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Hotel berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID hotel tidak ditemukan" };
+  }
+
+  if (action === 'upgradeHotelsSchema') {
+    const sheet = ss.getSheetByName("DB_Hotels");
+    autoUpgradeHotelsSheet_(sheet, ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Hotels", "ALL", null, null, "Skema DB_Hotels berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Hotels berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
+}
+
+/**
+ * Otomatis melengkapi skema 15 kolom canonical dan seeding 9 hotel resmi Makkah & Madinah jika sheet kosong/belum lengkap
+ */
+function autoUpgradeHotelsSheet_(sheet, ss) {
+  if (!sheet) {
+    sheet = ss.insertSheet("DB_Hotels");
+  }
+  const canonical = [
+    'id', 'name', 'city', 'star_rating', 'distance_meters', 'distance_text',
+    'location_zone', 'gate_info', 'image_url', 'description', 'maps_url',
+    'facilities', 'status', 'created_at', 'updated_at'
+  ];
+
+  let lastCol = sheet.getLastColumn();
+  let currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (currentHeaders.length === 0) {
+    sheet.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+    sheet.getRange(1, 1, 1, canonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+    currentHeaders = canonical;
+    lastCol = canonical.length;
+  }
+
+  const missing = canonical.filter(function(c) { return currentHeaders.indexOf(c) === -1; });
+  if (missing.length > 0) {
+    const startCol = lastCol + 1;
+    sheet.getRange(1, startCol, 1, missing.length).setValues([missing]);
+    sheet.getRange(1, startCol, 1, missing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    lastCol = sheet.getLastColumn();
+    currentHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); });
+  }
+
+  // Jika data hanya 1 baris (header saja), sinkronkan 9 hotel resmi
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) {
+    const nowStr = new Date().toISOString();
+    const seedHotels = [
+      ['HTL-000001', 'Swissotel Al Maqam Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/pkg-vip-khidmat.png', 'Hotel mewah bintang 5 di dalam kompleks Abraj Al Bait Clock Tower dengan akses lift langsung menuju pelataran Masjidil Haram.', 'https://maps.google.com/?q=Swissotel+Al+Maqam+Makkah', 'Restoran Nusantara, Akses Kursi Roda, Free WiFi, Ruang Shalat View Ka\'bah, Layanan Medis', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000002', 'Mövenpick Hotel Hajar Tower Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/hero-haram.png', 'Bagian dari kompleks Abraj Al Bait Clock Tower menghadap pelataran King Abdulaziz Gate. Fasilitas buffet masakan Indonesia dan lift berkecepatan tinggi.', 'https://maps.google.com/?q=Movenpick+Hajar+Tower+Makkah', 'Buffet Menu Indonesia, Akses Lift Cepat, Free WiFi, Concierge 24 Jam, Penukaran Uang', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000003', 'Pullman Zamzam Makkah', 'MAKKAH', 5, 0, '0 Meter (Pelataran Masjidil Haram)', 'RING_1', 'Gate 1 (King Abdulaziz)', 'assets/hero-twilight.jpg', 'Hotel ikonik berjarak 0 meter dari pelataran. Sangat diminati jamaah keluarga dan lansia karena akses terdekat ke tempat sa\'i dan thawaf.', 'https://maps.google.com/?q=Pullman+Zamzam+Makkah', 'Audio Shalat Ka\'bah di Kamar, Restoran Al Yasmine, Akses Kursi Roda, Resepsionis Bahasa Indonesia', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000004', 'Retaj Al Rayyan Makkah', 'MAKKAH', 4, 350, '350 Meter (Jalan Kaki Santai)', 'WALKING_DISTANCE', 'Gate 1-5 (Ajyad)', 'assets/pkg-reguler-syawal.png', 'Hotel bintang 4 favorit paket reguler di kawasan Ajyad. Hanya 4-5 menit jalan kaki santai di jalan datar tanpa tanjakan menuju pelataran.', 'https://maps.google.com/?q=Retaj+Al+Rayyan+Makkah', 'Katering Cita Rasa Nusantara, Kamar Bersih Luas, Toko Oleh-oleh di Lobi, Free WiFi', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000005', 'Olayan Ajyad Hotel Makkah', 'MAKKAH', 3, 600, '600 Meter (Shuttle Bus Gratis 24 Jam)', 'SHUTTLE', 'Terminal Ajyad', 'assets/pkg-hemat.webp', 'Pilihan utama paket hemat dan syariah. Dilengkapi armada shuttle bus ber-AC non-stop 24 jam langsung ke terminal bawah pelataran Haram.', 'https://maps.google.com/?q=Olayan+Ajyad+Hotel+Makkah', 'Shuttle Bus 24 Jam Non-stop, Kamar Quad Hemat, Menu Katering Indonesia, Pembimbing Ibadah Standby', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000006', 'Dar Al Taqwa Hotel Madinah', 'MADINAH', 5, 50, '50 Meter (Pelataran Masjid Nabawi)', 'RING_1', 'Gate 21-22 (King Fahd / Raudhah)', 'assets/pkg-vip-khidmat.png', 'Hotel bintang 5 tepat di depan pelataran utama Masjid Nabawi. Pintu masuk khusus jamaah wanita ke Raudhah hanya beberapa langkah dari lobi hotel.', 'https://maps.google.com/?q=Dar+Al+Taqwa+Hotel+Madinah', 'Akses Terdekat Pintu Raudhah Wanita, Restoran Fine Dining, Butler Service, View Kubah Hijau', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000007', 'Frontel Al Harithia Madinah', 'MADINAH', 5, 100, '100 Meter (Markaziyah Utara)', 'RING_1', 'Gate 20-22 (King Fahd)', 'assets/hero-haram.png', 'Hotel bintang 5 di sektor Markaziyah Utara. Terkenal dengan hidangan sarapan dan makan malam menu Nusantara yang lengkap dan kamar yang luas.', 'https://maps.google.com/?q=Frontel+Al+Harithia+Hotel+Madinah', 'Chef Menu Masakan Indonesia, Pusat Kebugaran, Free WiFi High-Speed, Fasilitas Ramah Lansia', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000008', 'Concorde Dar Al Khair Madinah', 'MADINAH', 4, 200, '200 Meter (Markaziyah Barat)', 'WALKING_DISTANCE', 'Gate 8 (Bab As-Salam)', 'assets/pkg-reguler-syawal.png', 'Hotel bintang 4 sangat strategis di area Markaziyah Barat. Sekitar 2-3 menit jalan kaki ke pelataran Bab As-Salam, dekat dengan pusat pertokoan kurma.', 'https://maps.google.com/?q=Concorde+Dar+Al+Khair+Madinah', 'Dekat Pusat Belanja Kurma & Souvenir, Masakan Nusantara 3x Sehari, Ruang Koper Luas, Free WiFi', 'ACTIVE', nowStr, nowStr],
+      ['HTL-000009', 'Rove Al Madinah Hotel', 'MADINAH', 4, 150, '150 Meter (Markaziyah Utara)', 'WALKING_DISTANCE', 'Gate 17-18 (Abu Bakar As-Siddiq)', 'assets/pkg-plus-turki.webp', 'Hotel bintang 4 modern dengan desain kontemporer di Markaziyah Utara. Suasana lobi megah dan nyaman untuk tempat berkumpul rombongan kloter.', 'https://maps.google.com/?q=Rove+Al+Madinah+Hotel', 'Lobi Megah & Coffee Shop, Restoran Internasional & Nusantara, Smart TV Kamar, Akses Ramah Kursi Roda', 'ACTIVE', nowStr, nowStr]
+    ];
+    sheet.getRange(2, 1, seedHotels.length, canonical.length).setValues(seedHotels);
+  }
 }
 
 /**

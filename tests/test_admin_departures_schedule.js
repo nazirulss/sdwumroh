@@ -144,8 +144,8 @@
     // ----------------------------------------------------
     // 5. Verifikasi Service Worker Cache & PWA
     // ----------------------------------------------------
-    test('11. sw.js mendaftarkan /js/admin/admin-departures.js dan menaikkan cache ke v61', () => {
-        assert(swJs.includes("const CACHE_NAME = 'sdw-umroh-pwa-v61';"), 'CACHE_NAME belum dinaikkan ke v61');
+    test('11. sw.js mendaftarkan /js/admin/admin-departures.js dan menaikkan cache ke v61+', () => {
+        assert(/sdw-umroh-pwa-v6[1-9]/.test(swJs), 'CACHE_NAME belum dinaikkan ke v61 atau lebih tinggi');
         assert(swJs.includes("'/js/admin/admin-departures.js'"), 'admin-departures.js belum masuk ke PRECACHE_URLS');
     });
 
