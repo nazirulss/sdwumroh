@@ -276,69 +276,75 @@
 
                 return `
                     <tr class="hover:bg-slate-50/80 transition border-b border-slate-100 text-xs">
-                        <td class="px-4 py-3 font-mono font-bold text-slate-600">${pkg.id}</td>
-                        <td class="px-3 py-3 text-center">
-                            <div class="relative w-16 h-11 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-2xs mx-auto group cursor-pointer" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" title="Klik untuk edit / ganti banner ${pkg.name}">
-                                <img src="${bannerSrc}" 
-                                     alt="${pkg.name}" 
-                                     onerror="this.onerror=null;this.src='assets/hero-haram.png';" 
-                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
-                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                    <i class="fa-solid fa-pen text-white text-[10px]"></i>
+                        <td class="px-3.5 py-2.5">
+                            <div class="flex items-center gap-3">
+                                <div class="relative w-14 h-10 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-2xs shrink-0 group cursor-pointer" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" title="Klik untuk edit paket / ganti banner">
+                                    <img src="${bannerSrc}" 
+                                         alt="${pkg.name}" 
+                                         onerror="this.onerror=null;this.src='assets/hero-haram.png';" 
+                                         class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                        <i class="fa-solid fa-pen text-white text-[9px]"></i>
+                                    </div>
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-1.5 flex-wrap">
+                                        <span class="font-mono text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded border border-slate-200">${pkg.id}</span>
+                                        <span class="px-1.5 py-0.2 rounded text-[10px] font-bold border ${typeBadgeClass}">
+                                            ${pkg.package_type}
+                                        </span>
+                                    </div>
+                                    <div class="font-extrabold text-slate-900 leading-snug truncate max-w-[210px] text-xs hover:text-sdw-pine cursor-pointer" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" title="${pkg.name}">
+                                        ${pkg.name}
+                                    </div>
+                                    <div class="text-[10.5px] text-slate-400 flex items-center gap-1.5 mt-0.5">
+                                        <span><i class="fa-regular fa-clock text-amber-500 mr-1"></i>${pkg.duration_days} Hari</span>
+                                        <span>•</span>
+                                        <span class="text-sdw-pine font-semibold truncate max-w-[120px]">${pkg.badge || 'Program Pilihan'}</span>
+                                    </div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-4 py-3">
-                            <div class="font-extrabold text-slate-900 leading-snug">${pkg.name}</div>
-                            <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
-                                <span><i class="fa-regular fa-clock text-amber-500 mr-1"></i>${pkg.duration_days} Hari</span>
-                                <span>•</span>
-                                <span class="text-sdw-pine font-semibold">${pkg.badge || 'Program Pilihan'}</span>
+                        <td class="px-3 py-2.5 text-slate-700">
+                            <div class="truncate max-w-[180px]" title="Makkah: ${pkg.hotel_makkah || '-'}">
+                                <i class="fa-solid fa-hotel text-sdw-gold mr-1 text-[10px]"></i>
+                                <span class="font-medium text-slate-800">${pkg.hotel_makkah || '-'}</span>
+                            </div>
+                            <div class="truncate max-w-[180px] text-slate-500 text-[11px] mt-0.5" title="Madinah: ${pkg.hotel_madinah || '-'}">
+                                <i class="fa-solid fa-hotel text-purple-400 mr-1 text-[10px]"></i>
+                                <span>${pkg.hotel_madinah || '-'}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-3">
-                            <span class="px-2 py-0.5 rounded-md text-[10.5px] font-bold border ${typeBadgeClass}">
-                                ${pkg.package_type}
-                            </span>
-                        </td>
-                        <td class="px-4 py-3 text-slate-700">
-                            <div class="truncate max-w-[200px]" title="Makkah: ${pkg.hotel_makkah || '-'}">
-                                <i class="fa-solid fa-hotel text-sdw-gold mr-1 text-[10px]"></i> ${pkg.hotel_makkah || '-'}
-                            </div>
-                            <div class="truncate max-w-[200px] text-slate-500 text-[11px] mt-0.5" title="Madinah: ${pkg.hotel_madinah || '-'}">
-                                <i class="fa-solid fa-hotel text-purple-400 mr-1 text-[10px]"></i> ${pkg.hotel_madinah || '-'}
+                        <td class="px-3 py-2.5 text-slate-700">
+                            <div class="flex items-center gap-1.5 font-semibold">
+                                <i class="fa-solid fa-plane text-sky-500 text-[11px] shrink-0"></i>
+                                <span class="truncate max-w-[130px]" title="${pkg.airline || 'Saudia Airlines'}">${pkg.airline || 'Saudia Airlines'}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-slate-700">
-                            <div class="flex items-center gap-1 font-semibold">
-                                <i class="fa-solid fa-plane text-sky-500 text-[11px]"></i>
-                                <span class="truncate max-w-[150px]">${pkg.airline || 'Saudia Airlines'}</span>
-                            </div>
+                        <td class="px-3 py-2.5 font-mono font-bold text-sdw-pine">
+                            <div class="whitespace-nowrap">${formatRupiah(pkg.quad_price || pkg.starting_price)}</div>
+                            ${pkg.discount_label ? `<span class="text-[10px] text-emerald-600 font-semibold block leading-tight whitespace-nowrap">${pkg.discount_label}</span>` : ''}
                         </td>
-                        <td class="px-4 py-3 font-mono font-bold text-sdw-pine">
-                            <div>${formatRupiah(pkg.quad_price || pkg.starting_price)}</div>
-                            ${pkg.discount_label ? `<span class="text-[10px] text-emerald-600 font-semibold">${pkg.discount_label}</span>` : ''}
-                        </td>
-                        <td class="px-4 py-3 text-center">
+                        <td class="px-2 py-2.5 text-center">
                             <span class="font-extrabold ${(Number(pkg.seats_left) || 0) > 5 ? 'text-emerald-700' : 'text-rose-700'}">
                                 ${pkg.seats_left !== undefined ? pkg.seats_left : 15}
                             </span>
                         </td>
-                        <td class="px-4 py-3 text-center">
+                        <td class="px-2 py-2.5 text-center">
                             <button type="button" onclick="SDW_ADMIN.togglePackageStatus('${pkg.id}')" title="Klik untuk beralih status tayang" class="cursor-pointer transition active:scale-95">
                                 ${statusBadge}
                             </button>
                         </td>
-                        <td class="px-4 py-3 text-right">
+                        <td class="px-3 py-2.5 text-right whitespace-nowrap">
                             <div class="inline-flex items-center gap-1">
-                                <button type="button" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" class="w-8 h-8 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine flex items-center justify-center transition cursor-pointer" title="Edit Paket">
-                                    <i class="fa-solid fa-pen-to-square text-xs"></i>
+                                <button type="button" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" class="w-7 h-7 rounded-lg bg-purple-50 hover:bg-purple-100 text-sdw-pine flex items-center justify-center transition cursor-pointer" title="Edit Paket">
+                                    <i class="fa-solid fa-pen-to-square text-[11px]"></i>
                                 </button>
-                                <button type="button" onclick="SDW_ADMIN.previewPackageWeb('${pkg.id}')" class="w-8 h-8 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition cursor-pointer" title="Pratinjau di Website">
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                                <button type="button" onclick="SDW_ADMIN.previewPackageWeb('${pkg.id}')" class="w-7 h-7 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 flex items-center justify-center transition cursor-pointer" title="Pratinjau di Website">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
                                 </button>
-                                <button type="button" onclick="SDW_ADMIN.deletePackage('${pkg.id}')" class="w-8 h-8 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition cursor-pointer" title="Hapus / Arsipkan">
-                                    <i class="fa-solid fa-trash-can text-xs"></i>
+                                <button type="button" onclick="SDW_ADMIN.deletePackage('${pkg.id}')" class="w-7 h-7 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 flex items-center justify-center transition cursor-pointer" title="Hapus / Arsipkan">
+                                    <i class="fa-solid fa-trash-can text-[11px]"></i>
                                 </button>
                             </div>
                         </td>
