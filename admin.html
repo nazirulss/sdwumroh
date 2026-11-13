@@ -372,12 +372,26 @@
                     </button>
                 </div>
 
-                <!-- Group 6: Kepatuhan & Audit -->
+                <!-- Group 6: Sistem & Hak Akses -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Sistem &amp; Audit</div>
-                    <button type="button" data-admin-tab="tab-audit" onclick="SDW_ADMIN.switchTab('tab-audit')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Sistem &amp; Hak Akses</div>
+                    <button type="button" data-admin-tab="tab-users" onclick="SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-users-gear nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>Manajemen Pengguna</span>
+                        </span>
+                        <span id="badgeUsersCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Akun</span>
+                    </button>
+                    <button type="button" data-admin-tab="tab-roles" onclick="SDW_ADMIN.switchTab('tab-roles')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
                         <span class="flex items-center gap-2.5">
                             <i class="fa-solid fa-shield-halved nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>Manajemen Peran &amp; RBAC</span>
+                        </span>
+                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Matrix</span>
+                    </button>
+                    <button type="button" data-admin-tab="tab-audit" onclick="SDW_ADMIN.switchTab('tab-audit')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-shield-virus nav-icon text-slate-400 w-5 text-center text-sm"></i>
                             <span>Jejak Audit Log</span>
                         </span>
                     </button>
@@ -2625,6 +2639,282 @@
                             <i class="fa-solid fa-plus text-amber-300 text-xs"></i>
                             <span>Tambah Paket Sekarang</span>
                         </button>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MANAJEMEN PENGGUNA TERPADU ==================== -->
+                <div id="tab-users" class="admin-tab-container hidden space-y-5">
+                    <!-- Top Action & Title Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-100 text-purple-950">Dashboard Admin</span>
+                                <span class="text-xs text-slate-400 font-semibold">• Direktori Akun</span>
+                            </div>
+                            <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Manajemen Pengguna Terpadu</h1>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola akun staf internal backoffice, pembimbing ibadah, serta akun jamaah aplikasi mobile (PWA).</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.syncUsersFromCloud()" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-arrows-rotate text-sdw-pine"></i>
+                                <span>Refresh</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.openUserModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-plus text-amber-300"></i>
+                                <span>+ Tambah Pengguna</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Stats Strip (4 Cards) -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <!-- Card 1: Total Pengguna -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-indigo-900 to-slate-900 text-white shadow-xs relative overflow-hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-indigo-200">Total Pengguna</span>
+                                <i class="fa-solid fa-users text-indigo-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiTotalUsers" class="text-2xl font-black text-white mt-1">7 Akun</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-indigo-200/80">Seluruh user terdaftar</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Semua Akun</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Akun Jamaah PWA -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-900 text-white shadow-xs relative overflow-hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-200">Jamaah Umroh</span>
+                                <i class="fa-solid fa-user text-emerald-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiPilgrimUsers" class="text-2xl font-black text-white mt-1">1 Jamaah</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-emerald-200/80">Akses PWA Jamaah</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Portal Jamaah</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Pimpinan / Direksi -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-700 to-orange-900 text-white shadow-xs relative overflow-hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-200">Pimpinan &amp; Direksi</span>
+                                <i class="fa-solid fa-user-tie text-amber-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiLeadershipUsers" class="text-2xl font-black text-white mt-1">2 Pimpinan</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-amber-200/80">Monitoring &amp; Restu</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Eksekutif</span>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Staf Backoffice & Muthawwif -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-purple-800 to-slate-900 text-white shadow-xs relative overflow-hidden">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-200">Administrator &amp; Staf</span>
+                                <i class="fa-solid fa-users-gear text-purple-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiStaffUsers" class="text-2xl font-black text-white mt-1">4 Staf</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-purple-200/80">Otoritas sistem &amp; kloter</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Staf Backoffice</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filter Tabs Horizontal & Search Toolbar -->
+                    <div class="p-3 bg-white rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+                        <!-- Horizontal Role Tabs -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                            <button type="button" id="tabUsersAll" onclick="SDW_ADMIN.switchUserRoleTab('ALL')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-sdw-pine text-white shadow-xs whitespace-nowrap">
+                                <span>Semua</span> (<span id="cntUsersAll">7</span>)
+                            </button>
+                            <button type="button" id="tabUsersOnline" onclick="SDW_ADMIN.switchUserRoleTab('ONLINE')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                <span>Online</span> (<span id="cntUsersOnline">7</span>)
+                            </button>
+                            <button type="button" id="tabUsersPilgrim" onclick="SDW_ADMIN.switchUserRoleTab('PILGRIM')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                                <span>Jamaah</span> (<span id="cntUsersPilgrim">1</span>)
+                            </button>
+                            <button type="button" id="tabUsersMuthawwif" onclick="SDW_ADMIN.switchUserRoleTab('MUTHAWWIF')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                                <span>Muthawwif &amp; TL</span> (<span id="cntUsersMuthawwif">1</span>)
+                            </button>
+                            <button type="button" id="tabUsersStaff" onclick="SDW_ADMIN.switchUserRoleTab('STAFF')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                                <span>Staf Backoffice</span> (<span id="cntUsersStaff">3</span>)
+                            </button>
+                            <button type="button" id="tabUsersSales" onclick="SDW_ADMIN.switchUserRoleTab('SALES')" class="px-3.5 py-1.5 rounded-full text-xs font-bold transition cursor-pointer bg-slate-100 text-slate-600 hover:bg-slate-200 whitespace-nowrap">
+                                <span>Sales Consultant</span> (<span id="cntUsersSales">1</span>)
+                            </button>
+                        </div>
+
+                        <!-- Search Bar & Dropdown Filter -->
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-2.5 pt-2 border-t border-slate-100">
+                            <div class="relative w-full sm:w-80">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="usersSearchInput" oninput="SDW_ADMIN.applyUsersFilter()" placeholder="Cari nama, email, no WhatsApp, ID..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:border-sdw-pine">
+                            </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto">
+                                <select id="usersStatusFilter" onchange="SDW_ADMIN.applyUsersFilter()" class="w-full sm:w-auto px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 font-semibold focus:outline-hidden focus:border-sdw-pine">
+                                    <option value="ALL">Semua Status Akun</option>
+                                    <option value="ACTIVE">ACTIVE (🟢 Aktif)</option>
+                                    <option value="INACTIVE">INACTIVE (🔴 Kunci/Nonaktif)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Datagrid Tabel Pengguna -->
+                    <div id="usersTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs text-slate-600">
+                                <thead class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                    <tr>
+                                        <th class="py-3 px-3.5">Pengguna</th>
+                                        <th class="py-3 px-3.5 w-44">WhatsApp / HP</th>
+                                        <th class="py-3 px-3.5 w-44">Peran</th>
+                                        <th class="py-3 px-3.5 w-52">Data Terhubung / Relasi</th>
+                                        <th class="py-3 px-3.5 w-32 text-center">Status</th>
+                                        <th class="py-3 px-3.5 w-32 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody" class="divide-y divide-slate-100">
+                                    <!-- Rendered by js/admin/admin-users.js -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Empty State -->
+                    <div id="usersEmptyState" class="hidden p-8 text-center bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                        <div class="w-12 h-12 rounded-full bg-purple-50 text-purple-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada Akun Pengguna Ditemukan</h4>
+                        <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter kategori peran untuk menemukan akun pengguna.</p>
+                        <button type="button" onclick="SDW_ADMIN.openUserModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                            + Tambah Pengguna Baru
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MANAJEMEN PERAN & RBAC ==================== -->
+                <div id="tab-roles" class="admin-tab-container hidden space-y-5">
+                    <!-- Top Action & Title Header -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-100 text-amber-950">Keamanan &amp; Otoritas</span>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-100 text-emerald-950">RBAC Active</span>
+                            </div>
+                            <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Manajemen Peran &amp; Hak Akses</h1>
+                            <p class="text-xs text-slate-500 mt-0.5">Konfigurasi dinamis 5 tingkat otoritas wewenang per modul sistem lewat matriks interaktif.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.openRbacGuideModal()" class="px-3.5 py-2 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-900 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-book-open text-purple-600"></i>
+                                <span>Panduan RBAC</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.switchTab('tab-users')" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-users text-sdw-pine"></i>
+                                <span>Kelola Akun</span>
+                            </button>
+                            <button type="button" onclick="SDW_ADMIN.syncRolesFromCloud()" class="px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm">
+                                <i class="fa-solid fa-arrows-rotate text-amber-300"></i>
+                                <span>Refresh</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- KPI Stats Strip (4 Cards) -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-purple-900 to-indigo-950 text-white shadow-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-200">Total Peran Sistem</span>
+                                <i class="fa-solid fa-shield text-purple-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiTotalRoles" class="text-2xl font-black text-white mt-1">8 Role ↑</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-purple-200/80">Hierarki wewenang</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Hierarki RBAC</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-900 text-white shadow-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-200">Total Akun Terdata</span>
+                                <i class="fa-solid fa-user-check text-emerald-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiTotalRoleUsers" class="text-2xl font-black text-white mt-1">7 Pengguna</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-emerald-200/80">User terpetakan</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Pengguna Aktif</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-sky-800 to-blue-950 text-white shadow-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-sky-200">Modul Terproteksi</span>
+                                <i class="fa-solid fa-lock text-sky-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiTotalModules" class="text-2xl font-black text-white mt-1">18 Modul</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-sky-200/80">Matriks izin &amp; fitur</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Matriks Izin</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br from-amber-600 to-orange-800 text-white shadow-xs">
+                            <div class="flex items-center justify-between">
+                                <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-200">Peran Anda Saat Ini</span>
+                                <i class="fa-solid fa-crown text-amber-300/40 text-lg"></i>
+                            </div>
+                            <div id="kpiCurrentRoleName" class="text-2xl font-black text-white mt-1">SUPER ADMIN</div>
+                            <div class="flex items-center justify-between mt-1 text-[10px]">
+                                <span class="text-amber-200/80">Otoritas akun aktif</span>
+                                <span class="px-1.5 py-0.5 rounded font-bold bg-white/20 text-white">Sesi Aktif</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Header Section Matriks & Legenda -->
+                    <div class="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-sm font-black text-slate-900">Matriks Hak Akses per Modul Sistem (RBAC Table)</h3>
+                                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">18 Modul Terproteksi</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Konfigurasi dinamis 5 tingkat otoritas: ubah langsung lewat tombol dropdown di tiap sel.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-[11px] font-bold">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Penuh (CRUD)
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 border border-sky-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span> Lihat Saja
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span> Entri &amp; Input
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-50 text-teal-800 border border-teal-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span> Milik Sendiri
+                            </span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
+                                <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Tutup
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Tabel Matriks RBAC Table -->
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead id="rbacTableHead">
+                                    <!-- Rendered by js/admin/admin-roles.js -->
+                                </thead>
+                                <tbody id="rbacTableBody" class="divide-y divide-slate-100">
+                                    <!-- Rendered by js/admin/admin-roles.js -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -5245,6 +5535,180 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: FORM EDITOR PENGGUNA TERPADU ==================== -->
+    <div id="modalUserEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-purple-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-purple-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalUserTitle" class="text-base sm:text-lg font-black text-white">Tambah Pengguna Baru</h3>
+                        <p class="text-xs text-purple-200/80">Kelola akun staf internal atau akun jamaah mobile</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeUserModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form Body -->
+            <form onsubmit="SDW_ADMIN.saveUser(event)" class="p-4 sm:p-5 space-y-3.5 text-xs overflow-y-auto">
+                <input type="hidden" id="userModalId">
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Lengkap Pengguna <span class="text-rose-500">*</span></label>
+                    <input type="text" id="userModalName" required placeholder="Contoh: H. Ahmad Fauzi / Siti Aisyah" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-hidden focus:border-sdw-pine text-xs">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Alamat Email <span class="text-rose-500">*</span></label>
+                        <input type="email" id="userModalEmail" required placeholder="nama@sdwumroh.com / gmail.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp / HP</label>
+                        <input type="text" id="userModalPhone" placeholder="6281234567890" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono font-bold focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Peran (Role Sistem) <span class="text-rose-500">*</span></label>
+                        <select id="userModalRole" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="SUPER_ADMIN">👑 Super Admin (Full Root)</option>
+                            <option value="ADMIN">🛡️ Administrator Backoffice</option>
+                            <option value="DIRECTOR">👔 Pimpinan / Direksi</option>
+                            <option value="FINANCE">💼 Keuangan &amp; Kasir</option>
+                            <option value="OPERATIONS">🚚 Staf Operasional &amp; Bus</option>
+                            <option value="SALES">📞 Sales &amp; Konsultan</option>
+                            <option value="MUTHAWWIF">🧭 Muthawwif &amp; TL Kloter</option>
+                            <option value="PILGRIM" selected>👤 Akun Jamaah (PWA Mobile)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Status Akun</label>
+                        <select id="userModalStatus" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="ACTIVE">ACTIVE (🟢 Aktif / Dapat Login)</option>
+                            <option value="INACTIVE">INACTIVE (🔴 Kunci / Dinonaktifkan)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Data Terhubung / Scope Wilayah</label>
+                    <input type="text" id="userModalConnectedEntity" placeholder="Contoh: Kloter Syawal VIP (#KLT-01) / Booking #BK-8821 / Wilayah Jabodetabek" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    <span class="text-[10px] text-slate-400 mt-1 block">Tentukan relasi kloter bimbingan, nomor booking jamaah, atau deskripsi penugasan.</span>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeUserModal()" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan Pengguna</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: PANDUAN MATRIKS RBAC ==================== -->
+    <div id="modalRbacGuide" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-indigo-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-indigo-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base sm:text-lg font-black text-white">Panduan Matriks Hak Akses (RBAC)</h3>
+                        <p class="text-xs text-indigo-200/80">Penjelasan 5 tingkat wewenang dan hierarki peran</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeRbacGuideModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Content Body -->
+            <div class="p-4 sm:p-6 space-y-4 text-xs overflow-y-auto">
+                <p class="text-slate-600 leading-relaxed">
+                    Sistem <strong>Role-Based Access Control (RBAC)</strong> SDW UMROH memungkinkan administrator mengonfigurasi wewenang setiap peran terhadap 18 modul sistem secara presisi. Terdapat 5 tingkat wewenang:
+                </p>
+
+                <div class="space-y-3">
+                    <div class="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-emerald-950 text-xs">1. Penuh (CRUD - Create, Read, Update, Delete)</h4>
+                            <p class="text-emerald-900/80 text-[11px] leading-relaxed mt-0.5">Pengguna berhak membuat data baru, melihat seluruh data, mengedit data, dan menghapus record pada modul tersebut.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-sky-50 border border-sky-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                            <i class="fa-solid fa-eye"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-sky-950 text-xs">2. Lihat Saja (Read-Only)</h4>
+                            <p class="text-sky-900/80 text-[11px] leading-relaxed mt-0.5">Pengguna hanya dapat melihat rekapitulasi data, detail informasi, dan mencetak dokumen tanpa wewenang mengubah atau menghapus data.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-amber-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-amber-950 text-xs">3. Entri &amp; Input (Create &amp; Draft Only)</h4>
+                            <p class="text-amber-900/80 text-[11px] leading-relaxed mt-0.5">Pengguna berhak menginput atau memasukkan data baru (misal registrasi jamaah/prospek) tanpa wewenang menghapus atau mengonfirmasi approval.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-teal-50 border border-teal-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-teal-600 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                            <i class="fa-solid fa-user-check"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-teal-950 text-xs">4. Milik Sendiri (Assigned / Self Scope)</h4>
+                            <p class="text-teal-900/80 text-[11px] leading-relaxed mt-0.5">Pengguna hanya dapat mengakses dan mengelola data yang ditugaskan secara khusus ke dirinya (misal Sales hanya melihat leads miliknya, Muthawwif hanya melihat kloter bimbingannya).</p>
+                        </div>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-slate-100 border border-slate-200 flex items-start gap-3">
+                        <div class="w-7 h-7 rounded-lg bg-slate-400 text-white flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-xs">5. Tutup (No Access)</h4>
+                            <p class="text-slate-600 text-[11px] leading-relaxed mt-0.5">Modul disembunyikan sepenuhnya dari navigasi sidebar dan akses URL langsung akan diblokir otomatis oleh sistem keamanan.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-[11px] font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation text-amber-600 text-sm"></i>
+                    <span>Catatan: Kolom <strong>Super Admin</strong> dikunci secara permanen pada level <strong>Penuh</strong> untuk mencegah penguncian sistem tidak disengaja (*lockout prevention*).</span>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-slate-100 flex items-center justify-end bg-slate-50">
+                <button type="button" onclick="SDW_ADMIN.closeRbacGuideModal()" class="px-5 py-2.5 rounded-xl bg-sdw-pine text-white font-bold text-xs hover:bg-purple-900 transition cursor-pointer">
+                    Mengerti &amp; Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -5265,6 +5729,8 @@
     <script src="js/admin/admin-gallery.js?v=1.0.0"></script>
     <script src="js/admin/admin-articles.js?v=1.0.0"></script>
     <script src="js/admin/admin-faq.js?v=1.0.0"></script>
+    <script src="js/admin/admin-users.js?v=1.0.0"></script>
+    <script src="js/admin/admin-roles.js?v=1.0.0"></script>
     <script src="js/admin/admin-docs.js?v=2.8.0"></script>
     <script src="js/admin/admin-registrations.js?v=2.8.0"></script>
     <script src="js/admin/admin-finance.js?v=2.8.0"></script>

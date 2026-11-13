@@ -29,7 +29,8 @@
  */
 
 var AUTHORITATIVE_SCHEMAS_ = {
-  "DB_Users": ["id", "name", "email", "role", "status", "phone", "created_at", "updated_at"],
+  "DB_Users": ["id", "name", "email", "phone", "role", "status", "connected_entity", "last_active", "created_at", "updated_at"],
+  "DB_Role_Permissions": ["id", "role_key", "role_name", "module_key", "access_level", "updated_at"],
   "DB_Customers": ["id", "nik", "full_name", "gender", "birth_date", "birth_place", "phone", "email", "address", "city", "province", "created_at", "updated_at"],
   "DB_Leads": ["id", "customer_id", "source", "sales_owner_id", "status", "urgency", "budget_range", "notes", "created_at", "updated_at"],
   "DB_Sales_Activities": ["id", "lead_id", "actor_id", "activity_type", "summary", "outcome", "timestamp"],
@@ -844,6 +845,125 @@ function setupFaqAndHelpdeskSheets() {
   Logger.log("=== SETUP SHEET DB_Faq & DB_Helpdesk_Contacts SELESAI ===");
 }
 
+/**
+ * Setup dan standardisasi skema DB_Users dan DB_Role_Permissions
+ */
+function setupUsersAndRbacSheets() {
+  Logger.log("=== MEMULAI SETUP SHEET DB_Users & DB_Role_Permissions ===");
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) return;
+
+  var nowStr = new Date().toISOString();
+
+  // 1. Setup DB_Users
+  var uCanonical = AUTHORITATIVE_SCHEMAS_["DB_Users"];
+  var uSheet = ss.getSheetByName("DB_Users");
+  if (!uSheet) {
+    uSheet = ss.insertSheet("DB_Users");
+    uSheet.getRange(1, 1, 1, uCanonical.length).setValues([uCanonical]);
+    uSheet.setFrozenRows(1);
+  } else {
+    ensureHeadersMatch_(uSheet, uCanonical);
+  }
+
+  // Seeding 7 pengguna representatif jika kosong
+  if (uSheet.getLastRow() <= 1) {
+    var seedUsers = [
+      ['USR-000001', 'Super Administrator (IT & Owner)', 'admin@sdwumroh.com', '6281234567890', 'SUPER_ADMIN', 'ACTIVE', 'Semua Sistem', 'Aktif Sekarang', nowStr, nowStr],
+      ['USR-000002', 'H. Ahmad Fauzi (Admin Operasional)', 'ops@sdwumroh.com', '6281122334455', 'ADMIN', 'ACTIVE', 'Kloter Reguler & VIP', '1 jam lalu', nowStr, nowStr],
+      ['USR-000003', 'H. Muhammad Syarif (Direktur Utama)', 'syarif@sdwumroh.com', '6281299887766', 'DIRECTOR', 'ACTIVE', 'Dewan Direksi', '2 jam lalu', nowStr, nowStr],
+      ['USR-000004', 'Hj. Fatimah Zahra (Finance & Kasir)', 'finance@sdwumroh.com', '6281355667788', 'FINANCE', 'ACTIVE', 'Escrow BSI & Muamalat', '5 jam lalu', nowStr, nowStr],
+      ['USR-000005', 'Ustadz Dr. Abdullah (Muthawwif Senior)', 'muthawwif@sdwumroh.com', '6281788990011', 'MUTHAWWIF', 'ACTIVE', 'Kloter Syawal VIP', '1 hari lalu', nowStr, nowStr],
+      ['USR-000006', 'Budi Santoso (Senior Sales Consultant)', 'sales@sdwumroh.com', '6281566778899', 'SALES', 'ACTIVE', 'Regional Jabodetabek', '3 hari lalu', nowStr, nowStr],
+      ['USR-000007', 'Siti Aisyah (Akun Jamaah Umroh)', 'aisyah@gmail.com', '6281233445566', 'PILGRIM', 'ACTIVE', 'SDW-2025-01 (#BK-8821)', '14 hari lalu', nowStr, nowStr]
+    ];
+    uSheet.getRange(2, 1, seedUsers.length, uCanonical.length).setValues(seedUsers);
+  }
+  uSheet.autoResizeColumns(1, uCanonical.length);
+
+  // 2. Setup DB_Role_Permissions (Matriks RBAC)
+  var rCanonical = AUTHORITATIVE_SCHEMAS_["DB_Role_Permissions"];
+  var rSheet = ss.getSheetByName("DB_Role_Permissions");
+  if (!rSheet) {
+    rSheet = ss.insertSheet("DB_Role_Permissions");
+    rSheet.getRange(1, 1, 1, rCanonical.length).setValues([rCanonical]);
+    rSheet.setFrozenRows(1);
+  } else {
+    ensureHeadersMatch_(rSheet, rCanonical);
+  }
+
+  // Seeding default matriks RBAC jika kosong
+  if (rSheet.getLastRow() <= 1) {
+    var modules = [
+      'tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures',
+      'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles',
+      'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance',
+      'tab-operations', 'tab-certificates', 'tab-badal-certificates',
+      'tab-users', 'tab-roles', 'tab-audit'
+    ];
+
+    var roles = [
+      { key: 'SUPER_ADMIN', name: 'Super Admin' },
+      { key: 'ADMIN', name: 'Admin Backoffice' },
+      { key: 'DIRECTOR', name: 'Pimpinan / Direksi' },
+      { key: 'FINANCE', name: 'Keuangan & Kasir' },
+      { key: 'OPERATIONS', name: 'Staf Operasional' },
+      { key: 'SALES', name: 'Sales & Konsultan' },
+      { key: 'MUTHAWWIF', name: 'Muthawwif & TL' },
+      { key: 'PILGRIM', name: 'Akun Jamaah' }
+    ];
+
+    var defaultRules = {
+      'SUPER_ADMIN': function() { return 'FULL'; },
+      'ADMIN': function(m) { return m === 'tab-roles' ? 'VIEW' : 'FULL'; },
+      'DIRECTOR': function() { return 'VIEW'; },
+      'FINANCE': function(m) {
+        if (m === 'tab-finance') return 'FULL';
+        if (['tab-dashboard', 'tab-registrations', 'tab-packages', 'tab-departures'].indexOf(m) !== -1) return 'VIEW';
+        return 'NONE';
+      },
+      'OPERATIONS': function(m) {
+        if (['tab-operations', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-certificates', 'tab-badal-certificates'].indexOf(m) !== -1) return 'FULL';
+        if (['tab-dashboard', 'tab-packages', 'tab-registrations'].indexOf(m) !== -1) return 'VIEW';
+        return 'NONE';
+      },
+      'SALES': function(m) {
+        if (m === 'tab-crm') return 'OWN';
+        if (['tab-dashboard', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-faq'].indexOf(m) !== -1) return 'VIEW';
+        if (m === 'tab-registrations') return 'INPUT';
+        return 'NONE';
+      },
+      'MUTHAWWIF': function(m) {
+        if (m === 'tab-operations') return 'OWN';
+        if (['tab-dashboard', 'tab-articles', 'tab-faq', 'tab-certificates'].indexOf(m) !== -1) return 'VIEW';
+        return 'NONE';
+      },
+      'PILGRIM': function() { return 'NONE'; }
+    };
+
+    var seedRows = [];
+    roles.forEach(function(r) {
+      modules.forEach(function(m) {
+        var level = defaultRules[r.key] ? defaultRules[r.key](m) : 'NONE';
+        seedRows.push([
+          'RBAC-' + r.key + '-' + m.replace('tab-', '').toUpperCase(),
+          r.key,
+          r.name,
+          m,
+          level,
+          nowStr
+        ]);
+      });
+    });
+
+    rSheet.getRange(2, 1, seedRows.length, rCanonical.length).setValues(seedRows);
+  }
+  rSheet.autoResizeColumns(1, rCanonical.length);
+
+  Logger.log("✓ Sheet DB_Users dan DB_Role_Permissions berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET DB_Users & DB_Role_Permissions SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -865,7 +985,7 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, faq, kontak, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, faq, kontak, piagam badal, pengguna, dan RBAC selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
@@ -874,6 +994,7 @@ function initializeSdwUmrohInfrastructure() {
   setupAirlinesAndAirportsSheets();
   setupFaqAndHelpdeskSheets();
   setupBadalCertificatesSheet();
+  setupUsersAndRbacSheets();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");
   return {

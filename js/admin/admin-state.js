@@ -46,14 +46,18 @@
         AIRLINES: 'sdw_admin_airlines',
         AIRPORTS: 'sdw_admin_airports',
         FAQ: 'sdw_admin_faq',
-        CONTACTS: 'sdw_admin_contacts'
+        CONTACTS: 'sdw_admin_contacts',
+        USERS: 'sdw_admin_users',
+        ROLES: 'sdw_admin_roles',
+        RBAC_MATRIX: 'sdw_admin_rbac_matrix'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'SUPER_ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
         'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
@@ -90,6 +94,7 @@
         faqSubtab: 'faq',
         faqViewMode: 'table',
         helpdeskViewMode: 'table',
+        usersFilter: { role: 'ALL', search: '', status: 'ALL' },
         docsFilter: { search: '', type: 'ALL', status: 'ALL' },
         regsFilter: { search: '', package: 'ALL', status: 'ALL' },
         financeFilter: { search: '', status: 'ALL', method: 'ALL' },
@@ -113,6 +118,9 @@
         airportsData: [],
         faqData: [],
         contactsData: [],
+        usersData: [],
+        rolesData: [],
+        rbacMatrix: null,
         registrationsData: [],
         paymentsData: [],
         tripsData: [],
@@ -678,11 +686,11 @@
 
     // Direct state delegations for transparent backward compatibility
     const stateKeys = [
-        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'airlinesData', 'airportsData', 'faqData', 'contactsData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
+        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'airlinesData', 'airportsData', 'faqData', 'contactsData', 'usersData', 'rolesData', 'rbacMatrix', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
         'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'galleryFilter', 'testimonialsFilter', 'gallerySubtab', 'galleryViewMode', 'testimonialsViewMode',
-        'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'airlinesFilter', 'airportsFilter', 'airlinesSubtab', 'airlinesViewMode', 'airportsViewMode', 'faqFilter', 'helpdeskFilter', 'faqSubtab', 'faqViewMode', 'helpdeskViewMode', 'docsFilter',
+        'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'airlinesFilter', 'airportsFilter', 'airlinesSubtab', 'airlinesViewMode', 'airportsViewMode', 'faqFilter', 'helpdeskFilter', 'faqSubtab', 'faqViewMode', 'helpdeskViewMode', 'usersFilter', 'docsFilter',
         'regsFilter', 'financeFilter', 'auditFilter', 'manifestFilter',
         'roomingFilter', 'logisticsFilter', 'manasikFilter', 'unmaskedRecords',
         'isScreenLocked', 'inactivityTimer', 'INACTIVITY_TIMEOUT_MS', 'MASTER_PIN'

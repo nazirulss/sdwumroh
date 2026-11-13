@@ -47,12 +47,19 @@
 
     function applyRolePermissions(role) {
         if (typeof document === 'undefined') return;
-        const allowed = admin.ADMIN_PERMISSIONS[role] || ['tab-dashboard'];
         const navItems = document.querySelectorAll('[data-admin-tab]');
 
         navItems.forEach(el => {
             const target = el.getAttribute('data-admin-tab');
-            if (allowed.includes(target)) {
+            let hasAccess = false;
+            if (typeof admin.canAccessTab === 'function') {
+                hasAccess = admin.canAccessTab(role, target);
+            } else {
+                const allowed = admin.ADMIN_PERMISSIONS[role] || ['tab-dashboard'];
+                hasAccess = allowed.includes(target);
+            }
+
+            if (hasAccess) {
                 el.classList.remove('hidden');
             } else {
                 el.classList.add('hidden');
@@ -109,6 +116,8 @@
         if (tabId === 'tab-operations' && typeof admin.renderOperations === 'function') admin.renderOperations();
         if (tabId === 'tab-certificates' && typeof admin.renderCertificates === 'function') admin.renderCertificates();
         if (tabId === 'tab-badal-certificates' && typeof admin.renderBadalCertificates === 'function') admin.renderBadalCertificates();
+        if (tabId === 'tab-users' && typeof admin.renderUsers === 'function') admin.renderUsers();
+        if (tabId === 'tab-roles' && typeof admin.renderRoles === 'function') admin.renderRoles();
         if (tabId === 'tab-audit' && typeof admin.renderAuditLogs === 'function') admin.renderAuditLogs();
 
         // Di layar mobile, tutup sidebar otomatis

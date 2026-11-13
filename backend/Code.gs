@@ -1029,6 +1029,40 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'getUsers') {
+      let sheet = ss.getSheetByName("DB_Users");
+      if (!sheet) {
+        autoUpgradeUsersSheets_(ss);
+        sheet = ss.getSheetByName("DB_Users");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Users tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
+    if (action === 'getRolePermissions') {
+      let sheet = ss.getSheetByName("DB_Role_Permissions");
+      if (!sheet) {
+        autoUpgradeUsersSheets_(ss);
+        sheet = ss.getSheetByName("DB_Role_Permissions");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Role_Permissions tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -3406,6 +3440,166 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Faq dan DB_Helpdesk_Contacts berhasil diupgrade dan disinkronkan" };
   }
 
+  // --- MUTASI MANAJEMEN PENGGUNA (DB_Users) ---
+  if (action === 'saveUser') {
+    let sheet = ss.getSheetByName("DB_Users");
+    if (!sheet) {
+      autoUpgradeUsersSheets_(ss);
+      sheet = ss.getSheetByName("DB_Users");
+    }
+    if (!sheet) throw new Error("Sheet DB_Users tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id || rowIndex === -1) {
+      id = "USR-" + Utilities.formatString("%06d", rows.length);
+    }
+
+    const name = String(payload.name || '').trim();
+    const email = String(payload.email || '').toLowerCase().trim();
+    const phone = String(payload.phone || '').trim().replace(/[^0-9]/g, '');
+    const role = String(payload.role || 'PILGRIM').toUpperCase().trim();
+    const status = String(payload.status || 'ACTIVE').toUpperCase().trim();
+    const connected_entity = String(payload.connected_entity || '-').trim();
+    const last_active = String(payload.last_active || 'Baru saja').trim();
+    const created_at = (rowIndex > 0 && rows[rowIndex - 1][headers.indexOf('created_at')]) ? rows[rowIndex - 1][headers.indexOf('created_at')] : nowStr;
+    const updated_at = nowStr;
+
+    const rowData = [
+      id, name, email, phone, role, status, connected_entity, last_active, created_at, updated_at
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_USER" : "CREATE_USER", "DB_Users", id, null, payload, "Pengguna '" + name + "' (" + role + ") berhasil disimpan");
+    return { id: id, name: name, email: email, role: role, status: status, entity: "DB_Users" };
+  }
+
+  if (action === 'deleteUser') {
+    const sheet = ss.getSheetByName("DB_Users");
+    if (!sheet) throw new Error("Sheet DB_Users tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('INACTIVE');
+        }
+        logAudit_(actor, "DEACTIVATE_USER", "DB_Users", id, null, null, "Pengguna dinonaktifkan");
+        return { id: id, action: 'INACTIVE', message: 'Pengguna berhasil dinonaktifkan' };
+      }
+    }
+    return { id: id, error: "ID pengguna tidak ditemukan" };
+  }
+
+  if (action === 'toggleUserStatus') {
+    const sheet = ss.getSheetByName("DB_Users");
+    if (!sheet) throw new Error("Sheet DB_Users tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = String(payload.status || 'ACTIVE').toUpperCase().trim();
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        }
+        logAudit_(actor, "TOGGLE_USER_STATUS", "DB_Users", id, null, { status: newStatus }, "Status pengguna diubah ke " + newStatus);
+        return { id: id, status: newStatus, message: 'Status pengguna berhasil diperbarui' };
+      }
+    }
+    return { id: id, error: "ID pengguna tidak ditemukan" };
+  }
+
+  // --- MUTASI MATRIKS RBAC (DB_Role_Permissions) ---
+  if (action === 'saveRoleMatrixPermission') {
+    let sheet = ss.getSheetByName("DB_Role_Permissions");
+    if (!sheet) {
+      autoUpgradeUsersSheets_(ss);
+      sheet = ss.getSheetByName("DB_Role_Permissions");
+    }
+    if (!sheet) throw new Error("Sheet DB_Role_Permissions tidak ditemukan");
+
+    const role_key = String(payload.role_key || '').toUpperCase().trim();
+    const role_name = String(payload.role_name || role_key).trim();
+    const module_key = String(payload.module_key || '').trim();
+    const access_level = String(payload.access_level || 'NONE').toUpperCase().trim();
+    const relId = 'RBAC-' + role_key + '-' + module_key.replace('tab-', '').toUpperCase();
+
+    const rows = sheet.getDataRange().getValues();
+    let rowIndex = -1;
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][1]).toUpperCase() === role_key && String(rows[i][3]) === module_key) {
+        rowIndex = i + 1;
+        break;
+      }
+    }
+
+    const rowData = [relId, role_key, role_name, module_key, access_level, nowStr];
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, "UPDATE_RBAC_PERMISSION", "DB_Role_Permissions", relId, null, payload, "Izin " + role_key + " untuk " + module_key + " diset ke " + access_level);
+    return { id: relId, role_key: role_key, module_key: module_key, access_level: access_level, entity: "DB_Role_Permissions" };
+  }
+
+  if (action === 'batchUpdateRolePermissions') {
+    let sheet = ss.getSheetByName("DB_Role_Permissions");
+    if (!sheet) {
+      autoUpgradeUsersSheets_(ss);
+      sheet = ss.getSheetByName("DB_Role_Permissions");
+    }
+    if (!sheet) throw new Error("Sheet DB_Role_Permissions tidak ditemukan");
+
+    const role_key = String(payload.role_key || '').toUpperCase().trim();
+    const access_level = String(payload.access_level || 'VIEW').toUpperCase().trim();
+    const rows = sheet.getDataRange().getValues();
+    let updatedCount = 0;
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][1]).toUpperCase() === role_key) {
+        sheet.getRange(i + 1, 5).setValue(access_level);
+        sheet.getRange(i + 1, 6).setValue(nowStr);
+        updatedCount++;
+      }
+    }
+
+    logAudit_(actor, "BATCH_UPDATE_RBAC", "DB_Role_Permissions", role_key, null, payload, "Seluruh modul peran " + role_key + " diset ke " + access_level);
+    return { role_key: role_key, access_level: access_level, updatedCount: updatedCount, entity: "DB_Role_Permissions" };
+  }
+
+  if (action === 'upgradeUsersSchema') {
+    autoUpgradeUsersSheets_(ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Users", "ALL", null, null, "Skema DB_Users dan DB_Role_Permissions berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Users dan DB_Role_Permissions berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
 }
 
@@ -3415,6 +3609,15 @@ function processSingleMutation_(ss, action, payload, actor) {
 function autoUpgradeFaqSheets_(ss) {
   if (typeof setupFaqAndHelpdeskSheets === 'function') {
     setupFaqAndHelpdeskSheets();
+  }
+}
+
+/**
+ * Otomatis melengkapi skema dan data awal DB_Users dan DB_Role_Permissions
+ */
+function autoUpgradeUsersSheets_(ss) {
+  if (typeof setupUsersAndRbacSheets === 'function') {
+    setupUsersAndRbacSheets();
   }
 }
 
