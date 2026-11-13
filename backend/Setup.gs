@@ -40,6 +40,8 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Hotels": ["id", "name", "city", "star_rating", "distance_meters", "distance_text", "location_zone", "gate_info", "image_url", "description", "maps_url", "facilities", "status", "created_at", "updated_at"],
   "DB_Gallery": ["id", "title", "category", "media_type", "media_url", "thumbnail_url", "caption", "kloter_tag", "activity_date", "status", "is_featured", "created_at"],
   "DB_Testimonials": ["id", "customer_name", "customer_city", "customer_photo", "package_name", "rating", "review_text", "video_url", "departure_year", "status", "is_featured", "created_at"],
+  "DB_Articles": ["id", "title", "slug", "category", "author", "image_url", "summary", "content", "read_time_minutes", "is_featured", "status", "published_at", "created_at"],
+  "DB_Ziarah_Places": ["id", "name", "city", "location_tag", "distance_text", "historical_summary", "sunnah_tips", "image_url", "maps_url", "order_index", "status", "created_at"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],
   "DB_Document_Requirements": ["id", "code", "title", "description", "is_mandatory", "applies_to_gender", "max_expiry_months"],
   "DB_Pilgrim_Documents": ["id", "registration_id", "requirement_id", "file_name", "file_ref_mock", "status", "review_notes", "verified_by", "verified_at", "updated_at"],
@@ -576,6 +578,85 @@ function setupGalleryAndTestimonialsSheets() {
   Logger.log("=== SETUP SHEET DB_Gallery & DB_Testimonials SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Articles' dan 'DB_Ziarah_Places'
+ * secara langsung sesuai skema kolom canonical dan data seeding resmi.
+ */
+function setupArticlesAndZiarahSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var nowStr = new Date().toISOString();
+
+  // 1. Setup DB_Articles
+  var aSheetName = "DB_Articles";
+  var aSheet = ss.getSheetByName(aSheetName);
+  var aCanonical = AUTHORITATIVE_SCHEMAS_[aSheetName];
+  if (!aSheet) {
+    aSheet = ss.insertSheet(aSheetName);
+    Logger.log("✓ Sheet " + aSheetName + " berhasil dibuat.");
+  }
+  var aLastCol = aSheet.getLastColumn();
+  var aHeaders = aLastCol > 0 ? aSheet.getRange(1, 1, 1, aLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (aHeaders.length === 0) {
+    aSheet.getRange(1, 1, 1, aCanonical.length).setValues([aCanonical]);
+    aSheet.getRange(1, 1, 1, aCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    aSheet.setFrozenRows(1);
+  }
+  if (aSheet.getLastRow() <= 1) {
+    var seedArticles = [
+      ['ART-000001', 'Panduan Lengkap Manasik Umroh Sesuai Sunnah Rasulullah ﷺ', 'panduan-manasik-umroh-sunnah', 'PANDUAN_MANASIK', 'Ust. DR. H. Muhammad Salman, Lc.', 'assets/hero-twilight.jpg', 'Tata cara pelaksanaan rukun umroh mulai dari niat ihram di miqat, thawaf 7 putaran, sa\'i Safa-Marwah, hingga tahallul.', 'Umroh adalah ibadah yang mulia. Rukun umroh terdiri dari 4 hal: Ihram dari miqat, Thawaf mengitari Ka\'bah 7 putaran, Sa\'i antara bukit Safa dan Marwah, serta Tahallul dengan mencukur atau memotong rambut.', 7, true, 'PUBLISHED', '2026-10-15', nowStr],
+      ['ART-000002', 'Jadwal Manasik Akbar & Simulasi Thawaf Sa\'i Musim 1448H', 'jadwal-manasik-akbar-1448h', 'BERITA_RESMI', 'Tim Operasional SDW Umroh', 'assets/pkg-vip-khidmat.png', 'Pelaksanaan manasik akbar ruang dan lapangan di Grand Ballroom Menara 165 Jakarta Selatan beserta pembagian koper bagasi.', 'Seluruh calon jamaah kloter keberangkatan musim 1448H diundang hadir pada kegiatan Manasik Akbar. Disediakan replika miniatur Ka\'bah untuk simulasi thawaf dan sa\'i serta pengenalan muthawwif pembimbing.', 4, true, 'PUBLISHED', '2026-10-20', nowStr],
+      ['ART-000003', 'Tips Menjaga Kebugaran Fisik & Pola Minum Air Zamzam di Tanah Suci', 'tips-kebugaran-jamaah-umroh', 'TIPS_KESEHATAN', 'dr. Hendra Wijaya, Sp.A', 'assets/hero-haram.png', 'Panduan medis menjaga hidrasi tubuh, menghadapi perbedaan suhu ekstrem di Makkah & Madinah, serta tips bagi jamaah lansia.', 'Perbedaan cuaca antara tanah air dan Arab Saudi memerlukan adaptasi fisik yang baik. Jamaah dianjurkan minum air Zamzam minimal 2-3 liter per hari dan tidak menahan buang air kecil.', 5, false, 'PUBLISHED', '2026-10-25', nowStr],
+      ['ART-000004', 'Tata Cara Pemesanan Tasreh Masuk Raudhah Nabawi via Aplikasi Nusuk', 'panduan-tasreh-raudhah-nusuk', 'REGULASI_VISA', 'Ust. Ahmad Fauzi Ridwan, Lc.', 'assets/hero-twilight.jpg', 'Panduan teknis pendaftaran izin masuk taman surga Raudhah bagi jamaah pria dan wanita sesuai regulasi Kementerian Haji Saudi.', 'Kementerian Haji dan Umrah Arab Saudi mewajibkan izin tasreh resmi melalui aplikasi Nusuk. Tim SDW Umroh membantu proses pendaftaran grup agar seluruh jamaah mendapatkan jadwal ziarah Raudhah yang nyaman.', 6, false, 'PUBLISHED', '2026-11-01', nowStr],
+      ['ART-000005', 'Panduan Ketentuan Bagasi & Air Zamzam Penerbangan Saudia Airlines', 'ketentuan-bagasi-saudia-airlines', 'BERITA_RESMI', 'Tim Handling Bandara SDW', 'assets/pkg-reguler-syawal.png', 'Aturan berat koper bagasi maks 2x23 kg, tas kabin 7 kg, dan mekanisme resmi pembagian galon 5 liter air Zamzam di bandara.', 'Jamaah SDW Umroh yang terbang bersama Saudia Airlines dan Garuda Indonesia berhak atas fasilitas bagasi cuma-cuma 2 koper (masing-masing 23 kg) dan air Zamzam 5 liter resmi dari pengelola Haramain.', 4, false, 'PUBLISHED', '2026-11-05', nowStr]
+    ];
+    aSheet.getRange(2, 1, seedArticles.length, aCanonical.length).setValues(seedArticles);
+  }
+  aSheet.autoResizeColumns(1, aCanonical.length);
+
+  // 2. Setup DB_Ziarah_Places
+  var zSheetName = "DB_Ziarah_Places";
+  var zSheet = ss.getSheetByName(zSheetName);
+  var zCanonical = AUTHORITATIVE_SCHEMAS_[zSheetName];
+  if (!zSheet) {
+    zSheet = ss.insertSheet(zSheetName);
+    Logger.log("✓ Sheet " + zSheetName + " berhasil dibuat.");
+  }
+  var zLastCol = zSheet.getLastColumn();
+  var zHeaders = zLastCol > 0 ? zSheet.getRange(1, 1, 1, zLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (zHeaders.length === 0) {
+    zSheet.getRange(1, 1, 1, zCanonical.length).setValues([zCanonical]);
+    zSheet.getRange(1, 1, 1, zCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    zSheet.setFrozenRows(1);
+  }
+  if (zSheet.getLastRow() <= 1) {
+    var seedZiarah = [
+      ['ZRH-000001', 'Jabal Rahmah & Padang Arafah', 'MAKKAH', 'Tempat Wukuf Haji', '± 21 Km Timur Masjidil Haram', 'Bukit batu bersejarah di tengah Padang Arafah tempat bertemunya Nabi Adam AS dan Hawa setelah berpisah ratusan tahun, serta lokasi khutbah wada Rasulullah ﷺ.', 'Disunnahkan berdoa menghadap kiblat (bukan menghadap tugu), tidak mencoret-coret bebatuan, dan memperbanyak istighfar.', 'assets/pkg-vip-khidmat.png', 'https://maps.google.com/?q=Jabal+al-Rahmah+Makkah', 1, 'ACTIVE', nowStr],
+      ['ZRH-000002', 'Gua Hira (Jabal Nur)', 'MAKKAH', 'Tempat Turun Wahyu Pertama', '± 6 Km Timur Laut Masjidil Haram', 'Tempat Rasulullah ﷺ bertahannuth hingga menerima wahyu pertama surat Al-Alaq 1-5 melalui malaikat Jibril AS.', 'Mengingat awal mula risalah Islam, merenungi perjuangan Sayyidah Khadijah radhiyallahu \'anha membawakan bekal ke puncak bukit.', 'assets/hero-haram.png', 'https://maps.google.com/?q=Hira+Cave+Makkah', 2, 'ACTIVE', nowStr],
+      ['ZRH-000003', 'Gua Tsur (Jabal Tsur)', 'MAKKAH', 'Benteng Hijrah Rasulullah', '± 5 Km Selatan Masjidil Haram', 'Gua di puncak Jabal Tsur tempat Rasulullah ﷺ dan Abu Bakar Ash-Shiddiq radhiyallahu \'anhu bersembunyi selama 3 malam saat hijrah ke Madinah (QS. At-Taubah: 40).', 'Mengambil pelajaran tawakkal sempurna kepada Allah dan kesetiaan sahabat sejati.', 'assets/hero-twilight.jpg', 'https://maps.google.com/?q=Thawr+Cave+Makkah', 3, 'ACTIVE', nowStr],
+      ['ZRH-000004', 'Mina & Tugu Jamarat', 'MAKKAH', 'Lokasi Mabit & Lempar Jumrah', '± 7 Km Timur Masjidil Haram', 'Lembah tenda tempat jamaah haji mabit dan melontar tiga jamarat (Ula, Wustha, Aqabah) meneladani keteguhan Nabi Ibrahim AS menolak godaan setan.', 'Mempelajari manasik haji tamattu\' dan tapak tilas peristiwa ketaatan Nabi Ibrahim & Ismail AS.', 'assets/pkg-ramadhan.webp', 'https://maps.google.com/?q=Jamarat+Mina+Makkah', 4, 'ACTIVE', nowStr],
+      ['ZRH-000005', 'Muzdalifah & Masy\'aril Haram', 'MAKKAH', 'Tempat Mabit & Ambil Kerikil', '± 10 Km Tenggara Masjidil Haram', 'Area terbuka antara Arafah dan Mina tempat jamaah haji bermalam sejenak (mabit) usai wukuf dan mengumpulkan batu kerikil.', 'Mengingat firman Allah dalam QS. Al-Baqarah: 198 untuk berdzikir di Masy\'aril Haram.', 'assets/pkg-reguler-syawal.png', 'https://maps.google.com/?q=Muzdalifah+Makkah', 5, 'ACTIVE', nowStr],
+      ['ZRH-000006', 'Masjid Quba & Kebun Kurma', 'MADINAH', 'Masjid Pertama Sejarah Islam', '± 3.5 Km Selatan Masjid Nabawi', 'Masjid pertama yang dibangun Rasulullah ﷺ setibanya di Madinah. Shalat 2 rakaat di sini bernilai pahala setara 1 kali ibadah umroh (HR. Tirmidzi & Ibnu Majah).', 'Disunnahkan bersuci (wudhu) dari hotel/rumah lalu mendirikan shalat sunnah minimal 2 rakaat di dalam masjid.', 'assets/pkg-plus-turki.webp', 'https://maps.google.com/?q=Quba+Mosque+Medina', 6, 'ACTIVE', nowStr],
+      ['ZRH-000007', 'Jabal Uhud & Makam Syuhada', 'MADINAH', 'Bukit Cinta Surga', '± 5 Km Utara Masjid Nabawi', 'Bukit yang mencintai kaum mukmin dan dicintai Nabi (HR. Bukhari). Saksi Perang Uhud, bukit pemanah (Jabal Rumat), dan makam 70 syuhada termasuk Sayyidina Hamzah AS.', 'Mendoakan para syuhada Uhud, menaiki bukit pemanah dengan tertib, dan tidak meminta berkah kepada batu/tanah kuburan.', 'assets/hero-twilight.jpg', 'https://maps.google.com/?q=Mount+Uhud+Medina', 7, 'ACTIVE', nowStr],
+      ['ZRH-000008', 'Masjid Al-Qiblatain (Dua Kiblat)', 'MADINAH', 'Dua Arah Kiblat', '± 4 Km Barat Laut Masjid Nabawi', 'Saksi sejarah perintah memalingkan arah kiblat dari Baitul Maqdis di Yerusalem ke Ka\'bah di Makkah saat shalat berjamaah sedang berlangsung (QS. Al-Baqarah: 144).', 'Mendirikan shalat sunnah tahiyyatul masjid dan tadabbur ayat-ayat ketaatan mutlak kepada perintah wahyu.', 'assets/hero-haram.png', 'https://maps.google.com/?q=Masjid+al-Qiblatayn+Medina', 8, 'ACTIVE', nowStr],
+      ['ZRH-000009', 'Kebun Kurma & Pasar Kurma Madinah', 'MADINAH', 'Wisata Agrowisata Nabawi', '± 6 Km Selatan Masjid Nabawi', 'Perkebunan kurma produktif dengan berbagai jenis kurma unggulan seperti Ajwa (Kurma Nabi), Sukari, Medjool, dan Amber.', 'Mencicipi kurma Ajwa yang memiliki keutamaan penangkal racun dan sihir sesuai sabda Rasulullah ﷺ.', 'assets/pkg-reguler-syawal.png', 'https://maps.google.com/?q=Date+Market+Medina', 9, 'ACTIVE', nowStr],
+      ['ZRH-000010', 'Masjid Sab\'ah & Medan Perang Khandaq', 'MADINAH', 'Saksi Perang Parit 5 Hijriyah', '± 2.5 Km Barat Laut Masjid Nabawi', 'Kompleks tujuh masjid kecil di lereng Gunung Sila\' tempat pos pertahanan dan tenda para sahabat saat menggali parit pertahanan Kota Madinah.', 'Tadabbur sejarah ketabahan Rasulullah ﷺ dan para sahabat menghadapi kepungan 10.000 pasukan sekutu Quraisy.', 'assets/pkg-vip-khidmat.png', 'https://maps.google.com/?q=The+Seven+Mosques+Medina', 10, 'ACTIVE', nowStr]
+    ];
+    zSheet.getRange(2, 1, seedZiarah.length, zCanonical.length).setValues(seedZiarah);
+  }
+  zSheet.autoResizeColumns(1, zCanonical.length);
+
+  Logger.log("✓ Sheet DB_Articles dan DB_Ziarah_Places berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET DB_Articles & DB_Ziarah_Places SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -597,11 +678,12 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, galeri, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
   setupGalleryAndTestimonialsSheets();
+  setupArticlesAndZiarahSheets();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

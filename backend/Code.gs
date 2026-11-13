@@ -906,6 +906,49 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'upgradeArticlesSchema') {
+      autoUpgradeArticlesSheets_(ss);
+      return createResponse(true, { message: "Skema DB_Articles dan DB_Ziarah_Places berhasil diupgrade dan disinkronkan" });
+    }
+
+    if (action === 'getArticles') {
+      let sheet = ss.getSheetByName("DB_Articles");
+      if (!sheet) {
+        autoUpgradeArticlesSheets_(ss);
+        sheet = ss.getSheetByName("DB_Articles");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Articles tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.read_time_minutes = Number(obj.read_time_minutes) || 5;
+        obj.is_featured = (obj.is_featured === true || String(obj.is_featured).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
+    if (action === 'getZiarahPlaces') {
+      let sheet = ss.getSheetByName("DB_Ziarah_Places");
+      if (!sheet) {
+        autoUpgradeArticlesSheets_(ss);
+        sheet = ss.getSheetByName("DB_Ziarah_Places");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Ziarah_Places tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.order_index = Number(obj.order_index) || 99;
+        return obj;
+      });
+      items.sort(function (a, b) { return a.order_index - b.order_index; });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -2765,6 +2808,210 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Gallery dan DB_Testimonials berhasil diupgrade dan disinkronkan" };
   }
 
+  // --- MUTASI WARTA & ARTIKEL EDUKASI (DB_Articles) ---
+  if (action === 'saveArticle') {
+    let sheet = ss.getSheetByName("DB_Articles");
+    if (!sheet) {
+      autoUpgradeArticlesSheets_(ss);
+      sheet = ss.getSheetByName("DB_Articles");
+    }
+    if (!sheet) throw new Error("Sheet DB_Articles tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/ART-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "ART-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const title = String(payload.title || '').trim();
+    const slug = String(payload.slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')).trim();
+    const category = String(payload.category || 'PANDUAN_MANASIK').trim().toUpperCase();
+    const author = String(payload.author || 'Tim SDW Umroh').trim();
+    const image_url = String(payload.image_url || 'assets/hero-twilight.jpg').trim();
+    const summary = String(payload.summary || '').trim();
+    const content = String(payload.content || '').trim();
+    const read_time_minutes = Number(payload.read_time_minutes) || 5;
+    const is_featured = (payload.is_featured === true || String(payload.is_featured).toUpperCase() === 'TRUE');
+    const status = String(payload.status || 'PUBLISHED').trim().toUpperCase();
+    const published_at = String(payload.published_at || nowStr.slice(0, 10)).trim();
+
+    const rowObj = {
+      id: id,
+      title: title,
+      slug: slug,
+      category: category,
+      author: author,
+      image_url: image_url,
+      summary: summary,
+      content: content,
+      read_time_minutes: read_time_minutes,
+      is_featured: is_featured,
+      status: status,
+      published_at: published_at,
+      created_at: rowIndex > 0 ? (rows[rowIndex - 1][headers.indexOf('created_at')] || nowStr) : nowStr
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_ARTICLE" : "CREATE_ARTICLE", "DB_Articles", id, null, payload, "Artikel '" + title + "' berhasil disimpan");
+    return { id: id, title: title, category: category, status: status, entity: "DB_Articles" };
+  }
+
+  if (action === 'deleteArticle') {
+    const sheet = ss.getSheetByName("DB_Articles");
+    if (!sheet) throw new Error("Sheet DB_Articles tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+        }
+        logAudit_(actor, "ARCHIVE_ARTICLE", "DB_Articles", id, null, null, "Artikel diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Artikel berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID artikel tidak ditemukan" };
+  }
+
+  // --- MUTASI TITIK ZIARAH HARAMAIN (DB_Ziarah_Places) ---
+  if (action === 'saveZiarahPlace') {
+    let sheet = ss.getSheetByName("DB_Ziarah_Places");
+    if (!sheet) {
+      autoUpgradeArticlesSheets_(ss);
+      sheet = ss.getSheetByName("DB_Ziarah_Places");
+    }
+    if (!sheet) throw new Error("Sheet DB_Ziarah_Places tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/ZRH-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "ZRH-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const name = String(payload.name || '').trim();
+    const city = String(payload.city || 'MAKKAH').trim().toUpperCase();
+    const location_tag = String(payload.location_tag || '').trim();
+    const distance_text = String(payload.distance_text || '').trim();
+    const historical_summary = String(payload.historical_summary || '').trim();
+    const sunnah_tips = String(payload.sunnah_tips || '').trim();
+    const image_url = String(payload.image_url || 'assets/hero-twilight.jpg').trim();
+    const maps_url = String(payload.maps_url || '').trim();
+    const order_index = Number(payload.order_index) || (rows.length);
+    const status = String(payload.status || 'ACTIVE').trim().toUpperCase();
+
+    const rowObj = {
+      id: id,
+      name: name,
+      city: city,
+      location_tag: location_tag,
+      distance_text: distance_text,
+      historical_summary: historical_summary,
+      sunnah_tips: sunnah_tips,
+      image_url: image_url,
+      maps_url: maps_url,
+      order_index: order_index,
+      status: status,
+      created_at: rowIndex > 0 ? (rows[rowIndex - 1][headers.indexOf('created_at')] || nowStr) : nowStr
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_ZIARAH" : "CREATE_ZIARAH", "DB_Ziarah_Places", id, null, payload, "Titik ziarah '" + name + "' berhasil disimpan");
+    return { id: id, name: name, city: city, status: status, entity: "DB_Ziarah_Places" };
+  }
+
+  if (action === 'deleteZiarahPlace') {
+    const sheet = ss.getSheetByName("DB_Ziarah_Places");
+    if (!sheet) throw new Error("Sheet DB_Ziarah_Places tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+        }
+        logAudit_(actor, "ARCHIVE_ZIARAH", "DB_Ziarah_Places", id, null, null, "Titik ziarah diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Titik ziarah berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID titik ziarah tidak ditemukan" };
+  }
+
+  if (action === 'upgradeArticlesSchema') {
+    autoUpgradeArticlesSheets_(ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Articles", "ALL", null, null, "Skema DB_Articles dan DB_Ziarah_Places berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Articles dan DB_Ziarah_Places berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
 }
 
@@ -2927,6 +3174,113 @@ function autoUpgradeGallerySheets_(ss) {
       ['TSM-000004', 'Ust. Syarifuddin Malik', 'Medan', 'assets/hero-twilight.jpg', 'Umroh Plus Turki Musim Semi', 5, 'Penerbangan direct tanpa kendala dan hotel di Istanbul maupun Madinah sangat dekat. Tim TL sigap membantu saat bagasi jamaah mendarat. Bintang 5 untuk profesionalitas SDW Umroh.', '', 'Musim 1446H', 'PUBLISHED', false, nowStr]
     ];
     tSheet.getRange(2, 1, seedTestimonials.length, tCanonical.length).setValues(seedTestimonials);
+  }
+}
+
+/**
+ * Otomatis melengkapi skema kolom canonical dan seeding data awal untuk DB_Articles & DB_Ziarah_Places
+ */
+function autoUpgradeArticlesSheets_(ss) {
+  if (!ss) ss = getSpreadsheet();
+  if (!ss) return;
+
+  const nowStr = new Date().toISOString();
+
+  // 1. Upgrade DB_Articles
+  let aSheet = ss.getSheetByName("DB_Articles");
+  if (!aSheet) {
+    aSheet = ss.insertSheet("DB_Articles");
+  }
+  const aCanonical = [
+    'id', 'title', 'slug', 'category', 'author', 'image_url', 'summary',
+    'content', 'read_time_minutes', 'is_featured', 'status', 'published_at', 'created_at'
+  ];
+  let aLastCol = aSheet.getLastColumn();
+  let aHeaders = aLastCol > 0 ? aSheet.getRange(1, 1, 1, aLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (aHeaders.length === 0) {
+    aSheet.getRange(1, 1, 1, aCanonical.length).setValues([aCanonical]);
+    aSheet.getRange(1, 1, 1, aCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    aSheet.setFrozenRows(1);
+    aHeaders = aCanonical;
+    aLastCol = aCanonical.length;
+  }
+
+  const aMissing = aCanonical.filter(function(c) { return aHeaders.indexOf(c) === -1; });
+  if (aMissing.length > 0) {
+    const startCol = aLastCol + 1;
+    aSheet.getRange(1, startCol, 1, aMissing.length).setValues([aMissing]);
+    aSheet.getRange(1, startCol, 1, aMissing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+  }
+
+  if (aSheet.getLastRow() <= 1) {
+    const seedArticles = [
+      ['ART-000001', 'Panduan Lengkap Manasik Umroh Sesuai Sunnah Rasulullah ﷺ', 'panduan-manasik-umroh-sunnah', 'PANDUAN_MANASIK', 'Ust. DR. H. Muhammad Salman, Lc.', 'assets/hero-twilight.jpg', 'Tata cara pelaksanaan rukun umroh mulai dari niat ihram di miqat, thawaf 7 putaran, sa\'i Safa-Marwah, hingga tahallul.', 'Umroh adalah ibadah yang mulia. Rukun umroh terdiri dari 4 hal: Ihram dari miqat, Thawaf mengitari Ka\'bah 7 putaran, Sa\'i antara bukit Safa dan Marwah, serta Tahallul dengan mencukur atau memotong rambut.', 7, true, 'PUBLISHED', '2026-10-15', nowStr],
+      ['ART-000002', 'Jadwal Manasik Akbar & Simulasi Thawaf Sa\'i Musim 1448H', 'jadwal-manasik-akbar-1448h', 'BERITA_RESMI', 'Tim Operasional SDW Umroh', 'assets/pkg-vip-khidmat.png', 'Pelaksanaan manasik akbar ruang dan lapangan di Grand Ballroom Menara 165 Jakarta Selatan beserta pembagian koper bagasi.', 'Seluruh calon jamaah kloter keberangkatan musim 1448H diundang hadir pada kegiatan Manasik Akbar. Disediakan replika miniatur Ka\'bah untuk simulasi thawaf dan sa\'i serta pengenalan muthawwif pembimbing.', 4, true, 'PUBLISHED', '2026-10-20', nowStr],
+      ['ART-000003', 'Tips Menjaga Kebugaran Fisik & Pola Minum Air Zamzam di Tanah Suci', 'tips-kebugaran-jamaah-umroh', 'TIPS_KESEHATAN', 'dr. Hendra Wijaya, Sp.A', 'assets/hero-haram.png', 'Panduan medis menjaga hidrasi tubuh, menghadapi perbedaan suhu ekstrem di Makkah & Madinah, serta tips bagi jamaah lansia.', 'Perbedaan cuaca antara tanah air dan Arab Saudi memerlukan adaptasi fisik yang baik. Jamaah dianjurkan minum air Zamzam minimal 2-3 liter per hari dan tidak menahan buang air kecil.', 5, false, 'PUBLISHED', '2026-10-25', nowStr],
+      ['ART-000004', 'Tata Cara Pemesanan Tasreh Masuk Raudhah Nabawi via Aplikasi Nusuk', 'panduan-tasreh-raudhah-nusuk', 'REGULASI_VISA', 'Ust. Ahmad Fauzi Ridwan, Lc.', 'assets/hero-twilight.jpg', 'Panduan teknis pendaftaran izin masuk taman surga Raudhah bagi jamaah pria dan wanita sesuai regulasi Kementerian Haji Saudi.', 'Kementerian Haji dan Umrah Arab Saudi mewajibkan izin tasreh resmi melalui aplikasi Nusuk. Tim SDW Umroh membantu proses pendaftaran grup agar seluruh jamaah mendapatkan jadwal ziarah Raudhah yang nyaman.', 6, false, 'PUBLISHED', '2026-11-01', nowStr],
+      ['ART-000005', 'Panduan Ketentuan Bagasi & Air Zamzam Penerbangan Saudia Airlines', 'ketentuan-bagasi-saudia-airlines', 'BERITA_RESMI', 'Tim Handling Bandara SDW', 'assets/pkg-reguler-syawal.png', 'Aturan berat koper bagasi maks 2x23 kg, tas kabin 7 kg, dan mekanisme resmi pembagian galon 5 liter air Zamzam di bandara.', 'Jamaah SDW Umroh yang terbang bersama Saudia Airlines dan Garuda Indonesia berhak atas fasilitas bagasi cuma-cuma 2 koper (masing-masing 23 kg) dan air Zamzam 5 liter resmi dari pengelola Haramain.', 4, false, 'PUBLISHED', '2026-11-05', nowStr]
+    ];
+    aSheet.getRange(2, 1, seedArticles.length, aCanonical.length).setValues(seedArticles);
+  }
+
+  // 2. Upgrade DB_Ziarah_Places
+  let zSheet = ss.getSheetByName("DB_Ziarah_Places");
+  if (!zSheet) {
+    zSheet = ss.insertSheet("DB_Ziarah_Places");
+  }
+  const zCanonical = [
+    'id', 'name', 'city', 'location_tag', 'distance_text', 'historical_summary',
+    'sunnah_tips', 'image_url', 'maps_url', 'order_index', 'status', 'created_at'
+  ];
+  let zLastCol = zSheet.getLastColumn();
+  let zHeaders = zLastCol > 0 ? zSheet.getRange(1, 1, 1, zLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (zHeaders.length === 0) {
+    zSheet.getRange(1, 1, 1, zCanonical.length).setValues([zCanonical]);
+    zSheet.getRange(1, 1, 1, zCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    zSheet.setFrozenRows(1);
+    zHeaders = zCanonical;
+    zLastCol = zCanonical.length;
+  }
+
+  const zMissing = zCanonical.filter(function(c) { return zHeaders.indexOf(c) === -1; });
+  if (zMissing.length > 0) {
+    const startCol = zLastCol + 1;
+    zSheet.getRange(1, startCol, 1, zMissing.length).setValues([zMissing]);
+    zSheet.getRange(1, startCol, 1, zMissing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+  }
+
+  if (zSheet.getLastRow() <= 1) {
+    const seedZiarah = [
+      ['ZRH-000001', 'Jabal Rahmah & Padang Arafah', 'MAKKAH', 'Tempat Wukuf Haji', '± 21 Km Timur Masjidil Haram', 'Bukit batu bersejarah di tengah Padang Arafah tempat bertemunya Nabi Adam AS dan Hawa setelah berpisah ratusan tahun, serta lokasi khutbah wada Rasulullah ﷺ.', 'Disunnahkan berdoa menghadap kiblat (bukan menghadap tugu), tidak mencoret-coret bebatuan, dan memperbanyak istighfar.', 'assets/pkg-vip-khidmat.png', 'https://maps.google.com/?q=Jabal+al-Rahmah+Makkah', 1, 'ACTIVE', nowStr],
+      ['ZRH-000002', 'Gua Hira (Jabal Nur)', 'MAKKAH', 'Tempat Turun Wahyu Pertama', '± 6 Km Timur Laut Masjidil Haram', 'Tempat Rasulullah ﷺ bertahannuth hingga menerima wahyu pertama surat Al-Alaq 1-5 melalui malaikat Jibril AS.', 'Mengingat awal mula risalah Islam, merenungi perjuangan Sayyidah Khadijah radhiyallahu \'anha membawakan bekal ke puncak bukit.', 'assets/hero-haram.png', 'https://maps.google.com/?q=Hira+Cave+Makkah', 2, 'ACTIVE', nowStr],
+      ['ZRH-000003', 'Gua Tsur (Jabal Tsur)', 'MAKKAH', 'Benteng Hijrah Rasulullah', '± 5 Km Selatan Masjidil Haram', 'Gua di puncak Jabal Tsur tempat Rasulullah ﷺ dan Abu Bakar Ash-Shiddiq radhiyallahu \'anhu bersembunyi selama 3 malam saat hijrah ke Madinah (QS. At-Taubah: 40).', 'Mengambil pelajaran tawakkal sempurna kepada Allah dan kesetiaan sahabat sejati.', 'assets/hero-twilight.jpg', 'https://maps.google.com/?q=Thawr+Cave+Makkah', 3, 'ACTIVE', nowStr],
+      ['ZRH-000004', 'Mina & Tugu Jamarat', 'MAKKAH', 'Lokasi Mabit & Lempar Jumrah', '± 7 Km Timur Masjidil Haram', 'Lembah tenda tempat jamaah haji mabit dan melontar tiga jamarat (Ula, Wustha, Aqabah) meneladani keteguhan Nabi Ibrahim AS menolak godaan setan.', 'Mempelajari manasik haji tamattu\' dan tapak tilas peristiwa ketaatan Nabi Ibrahim & Ismail AS.', 'assets/pkg-ramadhan.webp', 'https://maps.google.com/?q=Jamarat+Mina+Makkah', 4, 'ACTIVE', nowStr],
+      ['ZRH-000005', 'Muzdalifah & Masy\'aril Haram', 'MAKKAH', 'Tempat Mabit & Ambil Kerikil', '± 10 Km Tenggara Masjidil Haram', 'Area terbuka antara Arafah dan Mina tempat jamaah haji bermalam sejenak (mabit) usai wukuf dan mengumpulkan batu kerikil.', 'Mengingat firman Allah dalam QS. Al-Baqarah: 198 untuk berdzikir di Masy\'aril Haram.', 'assets/pkg-reguler-syawal.png', 'https://maps.google.com/?q=Muzdalifah+Makkah', 5, 'ACTIVE', nowStr],
+      ['ZRH-000006', 'Masjid Quba & Kebun Kurma', 'MADINAH', 'Masjid Pertama Sejarah Islam', '± 3.5 Km Selatan Masjid Nabawi', 'Masjid pertama yang dibangun Rasulullah ﷺ setibanya di Madinah. Shalat 2 rakaat di sini bernilai pahala setara 1 kali ibadah umroh (HR. Tirmidzi & Ibnu Majah).', 'Disunnahkan bersuci (wudhu) dari hotel/rumah lalu mendirikan shalat sunnah minimal 2 rakaat di dalam masjid.', 'assets/pkg-plus-turki.webp', 'https://maps.google.com/?q=Quba+Mosque+Medina', 6, 'ACTIVE', nowStr],
+      ['ZRH-000007', 'Jabal Uhud & Makam Syuhada', 'MADINAH', 'Bukit Cinta Surga', '± 5 Km Utara Masjid Nabawi', 'Bukit yang mencintai kaum mukmin dan dicintai Nabi (HR. Bukhari). Saksi Perang Uhud, bukit pemanah (Jabal Rumat), dan makam 70 syuhada termasuk Sayyidina Hamzah AS.', 'Mendoakan para syuhada Uhud, menaiki bukit pemanah dengan tertib, dan tidak meminta berkah kepada batu/tanah kuburan.', 'assets/hero-twilight.jpg', 'https://maps.google.com/?q=Mount+Uhud+Medina', 7, 'ACTIVE', nowStr],
+      ['ZRH-000008', 'Masjid Al-Qiblatain (Dua Kiblat)', 'MADINAH', 'Dua Arah Kiblat', '± 4 Km Barat Laut Masjid Nabawi', 'Saksi sejarah perintah memalingkan arah kiblat dari Baitul Maqdis di Yerusalem ke Ka\'bah di Makkah saat shalat berjamaah sedang berlangsung (QS. Al-Baqarah: 144).', 'Mendirikan shalat sunnah tahiyyatul masjid dan tadabbur ayat-ayat ketaatan mutlak kepada perintah wahyu.', 'assets/hero-haram.png', 'https://maps.google.com/?q=Masjid+al-Qiblatayn+Medina', 8, 'ACTIVE', nowStr],
+      ['ZRH-000009', 'Kebun Kurma & Pasar Kurma Madinah', 'MADINAH', 'Wisata Agrowisata Nabawi', '± 6 Km Selatan Masjid Nabawi', 'Perkebunan kurma produktif dengan berbagai jenis kurma unggulan seperti Ajwa (Kurma Nabi), Sukari, Medjool, dan Amber.', 'Mencicipi kurma Ajwa yang memiliki keutamaan penangkal racun dan sihir sesuai sabda Rasulullah ﷺ.', 'assets/pkg-reguler-syawal.png', 'https://maps.google.com/?q=Date+Market+Medina', 9, 'ACTIVE', nowStr],
+      ['ZRH-000010', 'Masjid Sab\'ah & Medan Perang Khandaq', 'MADINAH', 'Saksi Perang Parit 5 Hijriyah', '± 2.5 Km Barat Laut Masjid Nabawi', 'Kompleks tujuh masjid kecil di lereng Gunung Sila\' tempat pos pertahanan dan tenda para sahabat saat menggali parit pertahanan Kota Madinah.', 'Tadabbur sejarah ketabahan Rasulullah ﷺ dan para sahabat menghadapi kepungan 10.000 pasukan sekutu Quraisy.', 'assets/pkg-vip-khidmat.png', 'https://maps.google.com/?q=The+Seven+Mosques+Medina', 10, 'ACTIVE', nowStr]
+    ];
+    zSheet.getRange(2, 1, seedZiarah.length, zCanonical.length).setValues(seedZiarah);
   }
 }
 

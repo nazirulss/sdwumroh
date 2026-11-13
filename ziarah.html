@@ -674,6 +674,84 @@
                 }
             });
         }
+
+        // ==================== DYNAMIC ZIARAH PLACES CLOUD SYNC ====================
+        function renderDynamicZiarah(items) {
+            const grid = document.getElementById('ziarah-cards-grid');
+            if (!grid || !Array.isArray(items) || items.length === 0) return;
+            const activeItems = items.filter(it => it.isActive !== false && it.isActive !== 'FALSE');
+            if (activeItems.length === 0) return;
+            activeItems.sort((a, b) => (Number(a.sortOrder) || 99) - (Number(b.sortOrder) || 99));
+
+            grid.innerHTML = activeItems.map(item => {
+                const isMadinah = (item.city || '').toUpperCase() === 'MADINAH';
+                const cityBadgeClass = isMadinah ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-slate-950';
+                const cityIcon = isMadinah ? 'fa-mosque' : 'fa-kaaba';
+                const cityName = isMadinah ? 'Madinah' : 'Makkah';
+                const searchTags = `${item.name || ''} ${item.city || ''} ${item.subTitle || ''} ${item.significance || ''} ${item.locationNote || ''}`.toLowerCase();
+                const fallbackImg = isMadinah ? 'assets/hero-madinah.png' : 'assets/hero-haram.png';
+                const img = item.imageUrl || fallbackImg;
+                const mapsLink = item.mapsUrl || `https://maps.google.com/?q=${encodeURIComponent((item.name || '') + ' ' + cityName)}`;
+
+                return `
+                <div class="ziarah-card rounded-3xl overflow-hidden bg-white border border-purple-100 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group" data-city="${item.city || 'MAKKAH'}" data-name="${searchTags}">
+                    <div class="relative h-48 bg-slate-900 overflow-hidden">
+                        <img src="${img}" alt="${item.name || ''}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.onerror=null; this.src='${fallbackImg}';">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                        <span class="absolute top-3 left-3 px-3 py-1 rounded-full ${cityBadgeClass} text-[10px] font-black uppercase tracking-wider shadow-sm">
+                            <i class="fa-solid ${cityIcon} mr-1"></i> ${cityName}
+                        </span>
+                        <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white">
+                            <span class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-amber-400"></i> ${item.locationNote || 'Tanah Haram'}</span>
+                            <span class="px-2 py-0.5 rounded-md bg-white/20 backdrop-blur-md text-[10px] font-bold">${item.significance || 'Ziarah Bersejarah'}</span>
+                        </div>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div>
+                            <h3 class="font-extrabold text-slate-900 text-base group-hover:text-sdw-pine transition">
+                                ${item.name || ''}
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                ${item.description || ''}
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <span class="text-[11px] text-slate-400 font-semibold">${item.subTitle || 'Ziarah Ibadah'}</span>
+                            <a href="${mapsLink}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-sdw-pine hover:text-white text-sdw-pine font-bold text-xs border border-purple-200 transition flex items-center gap-1.5 cursor-pointer active:scale-95">
+                                <i class="fa-solid fa-diamond-turn-right text-amber-500"></i>
+                                <span>Buka di Maps</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            applyZiarahFilter();
+        }
+
+        async function initDynamicZiarah() {
+            try {
+                const cached = localStorage.getItem('sdw_admin_ziarah');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        renderDynamicZiarah(parsed);
+                    }
+                }
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec';
+                const res = await fetch(`${GAS_URL}?action=getZiarahPlaces`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.success && Array.isArray(data.ziarahPlaces) && data.ziarahPlaces.length > 0) {
+                        localStorage.setItem('sdw_admin_ziarah', JSON.stringify(data.ziarahPlaces));
+                        renderDynamicZiarah(data.ziarahPlaces);
+                    }
+                }
+            } catch (e) {
+                console.warn('Dynamic ziarah fallback active:', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initDynamicZiarah);
     </script>
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
     <div id="app-bottom-bar" data-active="ziarah"></div>

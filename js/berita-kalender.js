@@ -471,6 +471,51 @@
     let currentNewsCategory = 'Semua';
     let currentNewsSearch = '';
 
+    // Sinkronisasi Dinamis Artikel dari Backoffice Admin & Cloud DB_Articles
+    function getActiveNewsArticles() {
+        try {
+            const stored = localStorage.getItem('sdw_admin_articles');
+            if (stored) {
+                const list = JSON.parse(stored);
+                if (Array.isArray(list) && list.length > 0) {
+                    const published = list.filter(a => a.status === 'PUBLISHED' || a.status === 'Tayang');
+                    if (published.length > 0) {
+                        return published.map(a => ({
+                            id: a.id || a.slug,
+                            title: a.title,
+                            category: a.category || 'Warta Haramain',
+                            date: a.publishedAt || 'Terbaru',
+                            readTime: a.readTime || '5 menit baca',
+                            views: Number(a.viewsCount) || 100,
+                            image: a.imageUrl || 'assets/hero-twilight.jpg',
+                            summary: a.summary || '',
+                            content: a.content || `<p>${a.summary || ''}</p>`
+                        }));
+                    }
+                }
+            }
+        } catch (e) {
+            console.warn('Gagal membaca sdw_admin_articles:', e);
+        }
+        return SDW_NEWS_ARTICLES;
+    }
+
+    async function syncArticlesFromCloud() {
+        try {
+            const GAS_URL = 'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec';
+            const res = await fetch(`${GAS_URL}?action=getArticles`);
+            if (res.ok) {
+                const data = await res.json();
+                if (data && data.success && Array.isArray(data.articles) && data.articles.length > 0) {
+                    localStorage.setItem('sdw_admin_articles', JSON.stringify(data.articles));
+                    renderSdwNews();
+                }
+            }
+        } catch (e) {
+            console.warn('Sync artikel dari cloud dilewati:', e);
+        }
+    }
+
     // Render Editorial News (Tri-Column Layout)
     function renderSdwNews() {
         const centerCol = document.getElementById('sdw-news-hero-center');
@@ -481,11 +526,12 @@
 
         if (!centerCol || !gridCol) return;
 
-        let filtered = SDW_NEWS_ARTICLES.filter(item => {
-            const matchCat = (currentNewsCategory === 'Semua' || item.category.toLowerCase() === currentNewsCategory.toLowerCase());
+        const articlesList = getActiveNewsArticles();
+        let filtered = articlesList.filter(item => {
+            const matchCat = (currentNewsCategory === 'Semua' || (item.category || '').toLowerCase() === currentNewsCategory.toLowerCase());
             const matchSearch = (!currentNewsSearch || 
-                item.title.toLowerCase().includes(currentNewsSearch.toLowerCase()) || 
-                item.summary.toLowerCase().includes(currentNewsSearch.toLowerCase())
+                (item.title || '').toLowerCase().includes(currentNewsSearch.toLowerCase()) || 
+                (item.summary || '').toLowerCase().includes(currentNewsSearch.toLowerCase())
             );
             return matchCat && matchSearch;
         });
@@ -618,7 +664,8 @@
 
     // Modal Pembaca Berita Lengkap
     function openSdwNewsDetail(articleId) {
-        const article = SDW_NEWS_ARTICLES.find(a => a.id === articleId);
+        const articles = getActiveNewsArticles();
+        const article = articles.find(a => a.id === articleId) || SDW_NEWS_ARTICLES.find(a => a.id === articleId);
         if (!article) return;
 
         let modal = document.getElementById('modalSdwNewsDetail');
@@ -705,6 +752,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         renderSdwCalendar();
         renderSdwNews();
+        syncArticlesFromCloud();
     });
 
 })();
