@@ -403,6 +403,51 @@ function setupBadalCertificatesSheet() {
   Logger.log("=== SETUP SHEET DB_Badal_Certificates SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Departures'
+ * secara langsung sesuai skema kolom canonical 10 kolom dan seeding jadwal kloter resmi.
+ */
+function setupDeparturesCatalogSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheetName = "DB_Departures";
+  var sheet = ss.getSheetByName(sheetName);
+  var canonical = AUTHORITATIVE_SCHEMAS_[sheetName];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
+  }
+
+  var lastCol = sheet.getLastColumn();
+  var currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (currentHeaders.length === 0) {
+    sheet.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+    sheet.getRange(1, 1, 1, canonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+  }
+
+  // Jika baris data masih kosong, seed 5 kloter resmi
+  if (sheet.getLastRow() <= 1) {
+    var seedDepartures = [
+      ['DEP-000001', 'PKG-000001', '2027-01-15', '2027-01-23', 'Saudia Airlines (SV-819)', 'CGK', 45, 38, 'OPEN', 'Kloter Utama Syawal Barakah'],
+      ['DEP-000002', 'PKG-000002', '2026-12-20', '2026-12-31', 'Garuda Indonesia (GA-980)', 'CGK', 40, 32, 'OPEN', 'Kloter VIP Khidmat Akhir Tahun'],
+      ['DEP-000003', 'PKG-000003', '2027-04-10', '2027-04-22', 'Turkish Airlines (TK-57)', 'CGK', 45, 27, 'OPEN', 'Kloter Plus Turki Musim Semi'],
+      ['DEP-000004', 'PKG-000004', '2027-02-12', '2027-02-21', 'Saudia Airlines (SV-819)', 'CGK', 45, 41, 'LIMITED', 'Kloter Awal Ramadhan 1448H'],
+      ['DEP-000005', 'PKG-000005', '2027-03-05', '2027-03-13', 'Lion Air Umrah Direct (JT-106)', 'SUB', 45, 9, 'OPEN', 'Kloter Bintang Tiga Hemat']
+    ];
+    sheet.getRange(2, 1, seedDepartures.length, canonical.length).setValues(seedDepartures);
+  }
+
+  sheet.autoResizeColumns(1, canonical.length);
+  Logger.log("✓ Sheet DB_Departures berhasil disinkronkan sesuai skema 10 kolom.");
+  Logger.log("=== SETUP SHEET DB_Departures SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -424,8 +469,9 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
+  setupDeparturesCatalogSheet();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

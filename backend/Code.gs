@@ -787,14 +787,53 @@ function doGet(e) {
       return createResponse(true, { message: "Skema DB_Packages berhasil diupgrade ke 19 kolom lengkap" });
     }
 
+    if (action === 'upgradeDeparturesSchema') {
+      const sheet = ss.getSheetByName("DB_Departures");
+      autoUpgradeDeparturesSheet_(sheet, ss);
+      return createResponse(true, { message: "Skema DB_Departures berhasil diupgrade dan disinkronkan" });
+    }
+
     if (action === 'getDepartures') {
       const sheet = ss.getSheetByName("DB_Departures");
       if (!sheet) return createResponse(false, null, "Sheet DB_Departures tidak ditemukan");
       const rows = sheet.getDataRange().getValues();
       const headers = rows[0];
+
+      // Ambil DB_Packages untuk pengayaan data relasional kloter
+      const pkgSheet = ss.getSheetByName("DB_Packages");
+      const pkgMap = {};
+      if (pkgSheet && pkgSheet.getLastRow() > 1) {
+        const pRows = pkgSheet.getDataRange().getValues();
+        const pHeaders = pRows[0];
+        pRows.slice(1).forEach(function(pRow) {
+          const pObj = {};
+          pHeaders.forEach(function(h, idx) { pObj[h] = pRow[idx]; });
+          if (pObj.id) pkgMap[String(pObj.id).toUpperCase()] = pObj;
+        });
+      }
+
       const items = rows.slice(1).map(function (row) {
         const obj = {};
         headers.forEach(function (h, i) { obj[h] = row[i]; });
+
+        const pkgIdUpper = String(obj.package_id || '').toUpperCase();
+        const pkg = pkgMap[pkgIdUpper] || {};
+
+        obj.package_name = pkg.name || obj.notes || obj.package_id || 'Paket Umroh';
+        obj.package_type = pkg.package_type || 'REGULAR';
+        obj.duration_days = Number(pkg.duration_days) || 9;
+        obj.badge = pkg.badge || '';
+        obj.image_url = pkg.image_url || '';
+        obj.hotel_makkah = pkg.hotel_makkah || '-';
+        obj.hotel_madinah = pkg.hotel_madinah || '-';
+        obj.starting_price = Number(pkg.starting_price) || 0;
+
+        const capTotal = Number(obj.capacity_total) || 45;
+        const capBooked = Number(obj.capacity_booked) || 0;
+        obj.capacity_total = capTotal;
+        obj.capacity_booked = capBooked;
+        obj.seats_left = Math.max(0, capTotal - capBooked);
+
         return obj;
       });
       return createResponse(true, items);
@@ -2137,7 +2176,199 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Packages berhasil diupgrade ke 19 kolom lengkap" };
   }
 
+  if (action === 'saveDeparture') {
+    const sheet = ss.getSheetByName("DB_Departures");
+    if (!sheet) throw new Error("Sheet DB_Departures tidak ditemukan");
+
+    autoUpgradeDeparturesSheet_(sheet, ss);
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/DEP-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "DEP-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const package_id = String(payload.package_id || '').trim();
+    const departure_date = String(payload.departure_date || '').trim();
+    const return_date = String(payload.return_date || '').trim();
+    const airline = String(payload.airline || '').trim();
+    const origin_airport = String(payload.origin_airport || 'CGK').trim();
+    const capacity_total = Number(payload.capacity_total) || 45;
+    const capacity_booked = Number(payload.capacity_booked) || 0;
+    const status = String(payload.status || 'OPEN').trim();
+    const notes = String(payload.notes || '').trim();
+
+    const rowObj = {
+      id: id,
+      package_id: package_id,
+      departure_date: departure_date,
+      return_date: return_date,
+      airline: airline,
+      origin_airport: origin_airport,
+      capacity_total: capacity_total,
+      capacity_booked: capacity_booked,
+      status: status,
+      notes: notes
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_DEPARTURE" : "CREATE_DEPARTURE", "DB_Departures", id, null, payload, "Jadwal kloter '" + id + "' (" + airline + " - " + departure_date + ") berhasil disimpan");
+    return { id: id, package_id: package_id, departure_date: departure_date, status: status, entity: "DB_Departures" };
+  }
+
+  if (action === 'setDepartureStatus') {
+    const sheet = ss.getSheetByName("DB_Departures");
+    if (!sheet) throw new Error("Sheet DB_Departures tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = payload.status || 'OPEN';
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    if (statusColIdx === -1) throw new Error("Kolom status tidak ditemukan di DB_Departures");
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        logAudit_(actor, "SET_DEPARTURE_STATUS", "DB_Departures", id, null, { status: newStatus }, "Status kloter diubah menjadi " + newStatus);
+        return { id: id, status: newStatus, entity: "DB_Departures" };
+      }
+    }
+    return { id: id, error: "ID kloter tidak ditemukan" };
+  }
+
+  if (action === 'deleteDeparture') {
+    const sheet = ss.getSheetByName("DB_Departures");
+    if (!sheet) throw new Error("Sheet DB_Departures tidak ditemukan");
+
+    const id = payload.id;
+    const regSheet = ss.getSheetByName("DB_Registrations");
+    let hasActiveReg = false;
+    if (regSheet && regSheet.getLastRow() > 1) {
+      const regRows = regSheet.getDataRange().getValues();
+      for (let r = 1; r < regRows.length; r++) {
+        if (String(regRows[r][2]).toUpperCase() === String(id).toUpperCase()) {
+          hasActiveReg = true;
+          break;
+        }
+      }
+    }
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (hasActiveReg) {
+          if (statusColIdx !== -1) {
+            sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+          }
+          logAudit_(actor, "ARCHIVE_DEPARTURE", "DB_Departures", id, null, null, "Kloter diarsipkan karena memiliki jamaah terdaftar");
+          return { id: id, action: 'ARCHIVED', message: 'Kloter memiliki pendaftar terdaftar, status dialihkan ke ARCHIVED' };
+        } else {
+          sheet.deleteRow(i + 1);
+          logAudit_(actor, "DELETE_DEPARTURE", "DB_Departures", id, null, null, "Kloter berhasil dihapus permanen");
+          return { id: id, action: 'DELETED', message: 'Kloter berhasil dihapus permanen' };
+        }
+      }
+    }
+    return { id: id, error: "ID kloter tidak ditemukan" };
+  }
+
+  if (action === 'upgradeDeparturesSchema') {
+    const sheet = ss.getSheetByName("DB_Departures");
+    autoUpgradeDeparturesSheet_(sheet, ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Departures", "ALL", null, null, "Skema DB_Departures berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Departures berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
+}
+
+/**
+ * Otomatis melengkapi skema 10 kolom canonical dan seeding jadwal kloter resmi jika sheet kosong/belum lengkap
+ */
+function autoUpgradeDeparturesSheet_(sheet, ss) {
+  if (!sheet) {
+    sheet = ss.insertSheet("DB_Departures");
+  }
+  const canonical = [
+    'id', 'package_id', 'departure_date', 'return_date', 'airline',
+    'origin_airport', 'capacity_total', 'capacity_booked', 'status', 'notes'
+  ];
+
+  let lastCol = sheet.getLastColumn();
+  let currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (currentHeaders.length === 0) {
+    sheet.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+    sheet.getRange(1, 1, 1, canonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+    currentHeaders = canonical;
+    lastCol = canonical.length;
+  }
+
+  const missing = canonical.filter(function(c) { return currentHeaders.indexOf(c) === -1; });
+  if (missing.length > 0) {
+    const startCol = lastCol + 1;
+    sheet.getRange(1, startCol, 1, missing.length).setValues([missing]);
+    sheet.getRange(1, startCol, 1, missing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    lastCol = sheet.getLastColumn();
+    currentHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); });
+  }
+
+  // Jika data hanya 1 baris (header saja) atau belum ada 5 kloter resmi, sinkronkan 5 kloter canonical
+  const lastRow = sheet.getLastRow();
+  if (lastRow <= 1) {
+    const seedDepartures = [
+      ['DEP-000001', 'PKG-000001', '2027-01-15', '2027-01-23', 'Saudia Airlines (SV-819)', 'CGK', 45, 38, 'OPEN', 'Kloter Utama Syawal Barakah'],
+      ['DEP-000002', 'PKG-000002', '2026-12-20', '2026-12-31', 'Garuda Indonesia (GA-980)', 'CGK', 40, 32, 'OPEN', 'Kloter VIP Khidmat Akhir Tahun'],
+      ['DEP-000003', 'PKG-000003', '2027-04-10', '2027-04-22', 'Turkish Airlines (TK-57)', 'CGK', 45, 27, 'OPEN', 'Kloter Plus Turki Musim Semi'],
+      ['DEP-000004', 'PKG-000004', '2027-02-12', '2027-02-21', 'Saudia Airlines (SV-819)', 'CGK', 45, 41, 'LIMITED', 'Kloter Awal Ramadhan 1448H'],
+      ['DEP-000005', 'PKG-000005', '2027-03-05', '2027-03-13', 'Lion Air Umrah Direct (JT-106)', 'SUB', 45, 9, 'OPEN', 'Kloter Bintang Tiga Hemat']
+    ];
+    sheet.getRange(2, 1, seedDepartures.length, canonical.length).setValues(seedDepartures);
+  }
 }
 
 /**

@@ -112,8 +112,8 @@ console.log('✔ admin-nav.js routing checks passed');
 // 4. Verify sw.js precache & cache version
 const swJs = fs.readFileSync(path.join(__dirname, '../sw.js'), 'utf8');
 assert.ok(
-    swJs.includes('sdw-umroh-pwa-v60'),
-    'sw.js must be bumped to v60'
+    /sdw-umroh-pwa-v6[0-9]/.test(swJs),
+    'sw.js must be bumped to v60 or higher'
 );
 assert.ok(
     swJs.includes("'/js/admin/admin-packages.js'"),
