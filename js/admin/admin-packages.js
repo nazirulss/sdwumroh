@@ -465,6 +465,10 @@
         const modalTitle = document.getElementById('modalPackageEditorTitle');
         if (!modal) return;
 
+        if (typeof admin.populateAirlinesDropdownInPackageEditor === 'function') {
+            admin.populateAirlinesDropdownInPackageEditor();
+        }
+
         if (packageId) {
             const pkg = (admin.packagesData || []).find(p => p.id === packageId);
             if (pkg) {

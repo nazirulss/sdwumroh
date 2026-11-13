@@ -42,19 +42,21 @@
         GALLERY: 'sdw_admin_gallery',
         TESTIMONIALS: 'sdw_admin_testimonials',
         ARTICLES: 'sdw_admin_articles',
-        ZIARAH: 'sdw_admin_ziarah'
+        ZIARAH: 'sdw_admin_ziarah',
+        AIRLINES: 'sdw_admin_airlines',
+        AIRPORTS: 'sdw_admin_airports'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-registrations'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
-        'OPERATIONS': ['tab-dashboard', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
-        'TOUR_LEADER': ['tab-dashboard', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-articles', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
+        'OPERATIONS': ['tab-dashboard', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
+        'TOUR_LEADER': ['tab-dashboard', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
     };
 
     // 3. Central Reactive State Container
@@ -70,12 +72,17 @@
         testimonialsFilter: { search: '', rating: 'ALL', status: 'ALL' },
         articlesFilter: { search: '', category: 'ALL', status: 'ALL' },
         ziarahFilter: { search: '', city: 'ALL', status: 'ALL' },
+        airlinesFilter: { search: '', flightType: 'ALL', status: 'ALL' },
+        airportsFilter: { search: '', role: 'ALL', country: 'ALL', status: 'ALL' },
         gallerySubtab: 'photos',
         galleryViewMode: 'table',
         testimonialsViewMode: 'table',
         articlesSubtab: 'articles',
         articlesViewMode: 'table',
         ziarahViewMode: 'table',
+        airlinesSubtab: 'airlines',
+        airlinesViewMode: 'table',
+        airportsViewMode: 'table',
         docsFilter: { search: '', type: 'ALL', status: 'ALL' },
         regsFilter: { search: '', package: 'ALL', status: 'ALL' },
         financeFilter: { search: '', status: 'ALL', method: 'ALL' },
@@ -95,6 +102,8 @@
         testimonialsData: [],
         articlesData: [],
         ziarahData: [],
+        airlinesData: [],
+        airportsData: [],
         registrationsData: [],
         paymentsData: [],
         tripsData: [],
@@ -660,11 +669,11 @@
 
     // Direct state delegations for transparent backward compatibility
     const stateKeys = [
-        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
+        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'airlinesData', 'airportsData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
         'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'galleryFilter', 'testimonialsFilter', 'gallerySubtab', 'galleryViewMode', 'testimonialsViewMode',
-        'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'docsFilter',
+        'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'airlinesFilter', 'airportsFilter', 'airlinesSubtab', 'airlinesViewMode', 'airportsViewMode', 'docsFilter',
         'regsFilter', 'financeFilter', 'auditFilter', 'manifestFilter',
         'roomingFilter', 'logisticsFilter', 'manasikFilter', 'unmaskedRecords',
         'isScreenLocked', 'inactivityTimer', 'INACTIVITY_TIMEOUT_MS', 'MASTER_PIN'

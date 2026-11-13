@@ -578,6 +578,9 @@
 
         const all = getDeparturesList();
         populateFilterDropdowns(all);
+        if (typeof admin.populateFlightDropdownsInDepartureEditor === 'function') {
+            admin.populateFlightDropdownsInDepartureEditor();
+        }
 
         if (depId) {
             const item = all.find(d => String(d.id).toUpperCase() === String(depId).toUpperCase());

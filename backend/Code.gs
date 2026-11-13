@@ -949,6 +949,46 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'getAirlines') {
+      let sheet = ss.getSheetByName("DB_Airlines");
+      if (!sheet) {
+        autoUpgradeAirlinesSheets_(ss);
+        sheet = ss.getSheetByName("DB_Airlines");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Airlines tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.sort_order = Number(obj.sort_order) || 99;
+        obj.is_active = (obj.is_active === true || String(obj.is_active).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      items.sort(function (a, b) { return a.sort_order - b.sort_order; });
+      return createResponse(true, items);
+    }
+
+    if (action === 'getAirports') {
+      let sheet = ss.getSheetByName("DB_Airports");
+      if (!sheet) {
+        autoUpgradeAirlinesSheets_(ss);
+        sheet = ss.getSheetByName("DB_Airports");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Airports tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.sort_order = Number(obj.sort_order) || 99;
+        obj.is_active = (obj.is_active === true || String(obj.is_active).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      items.sort(function (a, b) { return a.sort_order - b.sort_order; });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -3012,7 +3052,169 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Articles dan DB_Ziarah_Places berhasil diupgrade dan disinkronkan" };
   }
 
+  // --- MUTASI MASTER MASKAPAI (DB_Airlines) ---
+  if (action === 'saveAirline') {
+    let sheet = ss.getSheetByName("DB_Airlines");
+    if (!sheet) {
+      autoUpgradeAirlinesSheets_(ss);
+      sheet = ss.getSheetByName("DB_Airlines");
+    }
+    if (!sheet) throw new Error("Sheet DB_Airlines tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id || rowIndex === -1) {
+      id = "AIR-" + Utilities.formatString("%06d", rows.length);
+    }
+
+    const code = String(payload.code || 'SV').toUpperCase().trim();
+    const name = String(payload.name || 'Maskapai Penerbangan').trim();
+    const flight_type = String(payload.flight_type || 'DIRECT').toUpperCase().trim();
+    const transit_hub = String(payload.transit_hub || 'None / Direct Flight').trim();
+    const baggage_allowance = String(payload.baggage_allowance || '2x 23kg + 5L Air Zamzam').trim();
+    const cabin_classes = String(payload.cabin_classes || 'Ekonomi, Bisnis').trim();
+    const logo_url = String(payload.logo_url || 'assets/hero-haram.png').trim();
+    const sort_order = Number(payload.sort_order) || rows.length;
+    const is_active = (payload.is_active !== false && String(payload.is_active).toUpperCase() !== 'FALSE');
+    const notes = String(payload.notes || '').trim();
+
+    const rowData = [
+      id, code, name, flight_type, transit_hub, baggage_allowance, cabin_classes,
+      logo_url, sort_order, is_active, notes, nowStr
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_AIRLINE" : "CREATE_AIRLINE", "DB_Airlines", id, null, payload, "Maskapai '" + name + " (" + code + ")' berhasil disimpan");
+    return { id: id, code: code, name: name, flight_type: flight_type, is_active: is_active, entity: "DB_Airlines" };
+  }
+
+  if (action === 'deleteAirline') {
+    const sheet = ss.getSheetByName("DB_Airlines");
+    if (!sheet) throw new Error("Sheet DB_Airlines tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const activeColIdx = headers.indexOf('is_active');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (activeColIdx !== -1) {
+          sheet.getRange(i + 1, activeColIdx + 1).setValue(false);
+        }
+        logAudit_(actor, "DEACTIVATE_AIRLINE", "DB_Airlines", id, null, null, "Maskapai dinonaktifkan");
+        return { id: id, action: 'DEACTIVATED', message: 'Maskapai berhasil dinonaktifkan' };
+      }
+    }
+    return { id: id, error: "ID maskapai tidak ditemukan" };
+  }
+
+  // --- MUTASI MASTER BANDARA (DB_Airports) ---
+  if (action === 'saveAirport') {
+    let sheet = ss.getSheetByName("DB_Airports");
+    if (!sheet) {
+      autoUpgradeAirlinesSheets_(ss);
+      sheet = ss.getSheetByName("DB_Airports");
+    }
+    if (!sheet) throw new Error("Sheet DB_Airports tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id || rowIndex === -1) {
+      id = "APT-" + Utilities.formatString("%06d", rows.length);
+    }
+
+    const code = String(payload.code || 'CGK').toUpperCase().trim();
+    const name = String(payload.name || 'Bandara Internasional').trim();
+    const city = String(payload.city || 'Kota').trim();
+    const country = String(payload.country || 'Indonesia').trim();
+    const role = String(payload.role || 'ORIGIN').toUpperCase().trim();
+    const terminal_info = String(payload.terminal_info || 'Terminal Keberangkatan').trim();
+    const sort_order = Number(payload.sort_order) || rows.length;
+    const is_active = (payload.is_active !== false && String(payload.is_active).toUpperCase() !== 'FALSE');
+
+    const rowData = [
+      id, code, name, city, country, role, terminal_info, sort_order, is_active, nowStr
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_AIRPORT" : "CREATE_AIRPORT", "DB_Airports", id, null, payload, "Bandara '" + name + " (" + code + ")' berhasil disimpan");
+    return { id: id, code: code, name: name, role: role, is_active: is_active, entity: "DB_Airports" };
+  }
+
+  if (action === 'deleteAirport') {
+    const sheet = ss.getSheetByName("DB_Airports");
+    if (!sheet) throw new Error("Sheet DB_Airports tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const activeColIdx = headers.indexOf('is_active');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (activeColIdx !== -1) {
+          sheet.getRange(i + 1, activeColIdx + 1).setValue(false);
+        }
+        logAudit_(actor, "DEACTIVATE_AIRPORT", "DB_Airports", id, null, null, "Bandara dinonaktifkan");
+        return { id: id, action: 'DEACTIVATED', message: 'Bandara berhasil dinonaktifkan' };
+      }
+    }
+    return { id: id, error: "ID bandara tidak ditemukan" };
+  }
+
+  if (action === 'upgradeAirlinesSchema') {
+    autoUpgradeAirlinesSheets_(ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Airlines", "ALL", null, null, "Skema DB_Airlines dan DB_Airports berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Airlines dan DB_Airports berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
+}
+
+/**
+ * Otomatis melengkapi skema dan data awal DB_Airlines dan DB_Airports
+ */
+function autoUpgradeAirlinesSheets_(ss) {
+  if (typeof setupAirlinesAndAirportsSheets === 'function') {
+    setupAirlinesAndAirportsSheets();
+  }
 }
 
 /**

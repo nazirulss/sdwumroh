@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-const CACHE_NAME = 'sdw-umroh-pwa-v64';
-const RUNTIME_CACHE = 'sdw-runtime-v64';
+const CACHE_NAME = 'sdw-umroh-pwa-v65';
+const RUNTIME_CACHE = 'sdw-runtime-v65';
 
 const PRECACHE_URLS = [
   '/',
@@ -49,6 +49,7 @@ const PRECACHE_URLS = [
   '/js/admin/admin-packages.js',
   '/js/admin/admin-departures.js',
   '/js/admin/admin-hotels.js',
+  '/js/admin/admin-airlines.js',
   '/js/admin/admin-gallery.js',
   '/js/admin/admin-articles.js',
   '/js/admin/admin-docs.js',

@@ -42,6 +42,8 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Testimonials": ["id", "customer_name", "customer_city", "customer_photo", "package_name", "rating", "review_text", "video_url", "departure_year", "status", "is_featured", "created_at"],
   "DB_Articles": ["id", "title", "slug", "category", "author", "image_url", "summary", "content", "read_time_minutes", "is_featured", "status", "published_at", "created_at"],
   "DB_Ziarah_Places": ["id", "name", "city", "location_tag", "distance_text", "historical_summary", "sunnah_tips", "image_url", "maps_url", "order_index", "status", "created_at"],
+  "DB_Airlines": ["id", "code", "name", "flight_type", "transit_hub", "baggage_allowance", "cabin_classes", "logo_url", "sort_order", "is_active", "notes", "created_at"],
+  "DB_Airports": ["id", "code", "name", "city", "country", "role", "terminal_info", "sort_order", "is_active", "created_at"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],
   "DB_Document_Requirements": ["id", "code", "title", "description", "is_mandatory", "applies_to_gender", "max_expiry_months"],
   "DB_Pilgrim_Documents": ["id", "registration_id", "requirement_id", "file_name", "file_ref_mock", "status", "review_notes", "verified_by", "verified_at", "updated_at"],
@@ -657,6 +659,100 @@ function setupArticlesAndZiarahSheets() {
   Logger.log("=== SETUP SHEET DB_Articles & DB_Ziarah_Places SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Airlines' dan 'DB_Airports'
+ * secara langsung sesuai skema kolom canonical dan data seeding resmi.
+ */
+function setupAirlinesAndAirportsSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var nowStr = new Date().toISOString();
+
+  // 1. Setup DB_Airlines
+  var alSheetName = "DB_Airlines";
+  var alSheet = ss.getSheetByName(alSheetName);
+  var alCanonical = AUTHORITATIVE_SCHEMAS_[alSheetName];
+  if (!alSheet) {
+    alSheet = ss.insertSheet(alSheetName);
+    Logger.log("✓ Sheet " + alSheetName + " berhasil dibuat.");
+  }
+  var alLastCol = alSheet.getLastColumn();
+  var alHeaders = alLastCol > 0 ? alSheet.getRange(1, 1, 1, alLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (alHeaders.length === 0) {
+    alSheet.getRange(1, 1, 1, alCanonical.length).setValues([alCanonical]);
+    alHeaders = alCanonical.slice();
+  } else {
+    var alMissing = [];
+    for (var i = 0; i < alCanonical.length; i++) {
+      if (alHeaders.indexOf(alCanonical[i]) === -1) {
+        alMissing.push(alCanonical[i]);
+      }
+    }
+    if (alMissing.length > 0) {
+      alSheet.getRange(1, alLastCol + 1, 1, alMissing.length).setValues([alMissing]);
+      alHeaders = alHeaders.concat(alMissing);
+    }
+  }
+
+  // Seeding 6 maskapai umroh utama
+  if (alSheet.getLastRow() <= 1) {
+    var seedAirlines = [
+      ['AIR-000001', 'SV', 'Saudia Airlines', 'DIRECT', 'None / Direct Flight', '2x 23kg + 5L Air Zamzam', 'Ekonomi, Bisnis', 'assets/hero-haram.png', 1, true, 'Maskapai resmi flag carrier Kerajaan Arab Saudi, direct CGK/SUB ke JED/MED', nowStr],
+      ['AIR-000002', 'GA', 'Garuda Indonesia', 'DIRECT', 'None / Direct Flight', '30kg + 5L Air Zamzam', 'Ekonomi, Bisnis', 'assets/hero-twilight.jpg', 2, true, 'Maskapai nasional Indonesia bintang 5, penerbangan langsung tanpa transit ke Jeddah & Madinah', nowStr],
+      ['AIR-000003', 'TK', 'Turkish Airlines', 'TRANSIT', 'Istanbul Airport (IST)', '30kg + 5L Air Zamzam', 'Ekonomi, Bisnis', 'assets/pkg-plus-turki.webp', 3, true, 'Maskapai terbaik Eropa, rute program Umroh Plus Turki dengan transit city tour Istanbul', nowStr],
+      ['AIR-000004', 'QR', 'Qatar Airways', 'TRANSIT', 'Hamad Int Airport Doha (DOH)', '25kg + 5L Air Zamzam', 'Ekonomi, Bisnis', 'assets/hero-madinah.png', 4, true, 'Layanan bintang 5 dunia dengan armada modern A350/B787 via Doha', nowStr],
+      ['AIR-000005', 'JT', 'Lion Air Umrah', 'DIRECT', 'None / Direct Flight', '25kg + 5L Air Zamzam', 'Ekonomi', 'assets/pkg-hemat.webp', 5, true, 'Penerbangan charter langsung armada berbadan lebar Airbus A330-900NEO harga terjangkau', nowStr],
+      ['AIR-000006', 'WY', 'Oman Air', 'TRANSIT', 'Muscat Int Airport (MCT)', '30kg + 5L Air Zamzam', 'Ekonomi, Bisnis', 'assets/pkg-reguler-syawal.webp', 6, true, 'Opsi transit Timur Tengah dengan harga bersahabat dan layanan ramah', nowStr]
+    ];
+    alSheet.getRange(2, 1, seedAirlines.length, alCanonical.length).setValues(seedAirlines);
+  }
+  alSheet.autoResizeColumns(1, alCanonical.length);
+
+  // 2. Setup DB_Airports
+  var apSheetName = "DB_Airports";
+  var apSheet = ss.getSheetByName(apSheetName);
+  var apCanonical = AUTHORITATIVE_SCHEMAS_[apSheetName];
+  if (!apSheet) {
+    apSheet = ss.insertSheet(apSheetName);
+    Logger.log("✓ Sheet " + apSheetName + " berhasil dibuat.");
+  }
+  var apLastCol = apSheet.getLastColumn();
+  var apHeaders = apLastCol > 0 ? apSheet.getRange(1, 1, 1, apLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (apHeaders.length === 0) {
+    apSheet.getRange(1, 1, 1, apCanonical.length).setValues([apCanonical]);
+    apHeaders = apCanonical.slice();
+  } else {
+    var apMissing = [];
+    for (var j = 0; j < apCanonical.length; j++) {
+      if (apHeaders.indexOf(apCanonical[j]) === -1) {
+        apMissing.push(apCanonical[j]);
+      }
+    }
+    if (apMissing.length > 0) {
+      apSheet.getRange(1, apLastCol + 1, 1, apMissing.length).setValues([apMissing]);
+      apHeaders = apHeaders.concat(apMissing);
+    }
+  }
+
+  // Seeding 8 bandara utama (Embarkasi RI, Kedatangan Haramain, Hub Transit)
+  if (apSheet.getLastRow() <= 1) {
+    var seedAirports = [
+      ['APT-000001', 'CGK', 'Bandara Internasional Soekarno-Hatta', 'Jakarta / Tangerang', 'Indonesia', 'ORIGIN', 'Terminal 3 Ultimate (Penerbangan Umroh & Internasional)', 1, true, nowStr],
+      ['APT-000002', 'SUB', 'Bandara Internasional Juanda', 'Surabaya / Sidoarjo', 'Indonesia', 'ORIGIN', 'Terminal 2 Internasional', 2, true, nowStr],
+      ['APT-000003', 'KNO', 'Bandara Internasional Kualanamu', 'Medan / Deli Serdang', 'Indonesia', 'ORIGIN', 'Terminal Keberangkatan Internasional', 3, true, nowStr],
+      ['APT-000004', 'SOC', 'Bandara Internasional Adi Soemarmo', 'Solo / Boyolali', 'Indonesia', 'ORIGIN', 'Terminal Haji & Umroh Jawa Tengah', 4, true, nowStr],
+      ['APT-000005', 'JED', 'Bandara Internasional King Abdulaziz', 'Jeddah', 'Arab Saudi', 'DESTINATION', 'Terminal 1 Modern & Terminal Haji Barat', 1, true, nowStr],
+      ['APT-000006', 'MED', 'Bandara Internasional Prince Mohammad bin Abdulaziz', 'Madinah', 'Arab Saudi', 'DESTINATION', 'Main International Passenger Terminal', 2, true, nowStr],
+      ['APT-000007', 'IST', 'Istanbul International Airport', 'Istanbul', 'Turki', 'TRANSIT', 'International Transit Concourse A/B', 1, true, nowStr],
+      ['APT-000008', 'DOH', 'Hamad International Airport', 'Doha', 'Qatar', 'TRANSIT', 'Central Transit Terminal & Orchard Hub', 2, true, nowStr]
+    ];
+    apSheet.getRange(2, 1, seedAirports.length, apCanonical.length).setValues(seedAirports);
+  }
+  apSheet.autoResizeColumns(1, apCanonical.length);
+
+  Logger.log("✓ Sheet DB_Airlines dan DB_Airports berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET DB_Airlines & DB_Airports SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -678,12 +774,13 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
   setupGalleryAndTestimonialsSheets();
   setupArticlesAndZiarahSheets();
+  setupAirlinesAndAirportsSheets();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

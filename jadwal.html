@@ -237,7 +237,7 @@
                 if (monthVal !== 'ALL' && !dep.departure_date.includes(monthVal) && !pkg.name?.includes(monthVal)) {
                     return false;
                 }
-                if (airlineVal !== 'ALL' && !pkg.airline?.includes(airlineVal)) {
+                if (airlineVal !== 'ALL' && !pkg.airline?.includes(airlineVal) && !dep.airline?.includes(airlineVal)) {
                     return false;
                 }
                 if (seatVal === 'available' && seatsLeft <= 0) {
@@ -315,8 +315,47 @@
             }).join('');
         }
 
+        async function initDynamicAirlineFilter() {
+            const select = document.getElementById('filterAirline');
+            if (!select) return;
+
+            function populate(airlines) {
+                if (!Array.isArray(airlines) || airlines.length === 0) return;
+                const currentVal = select.value;
+                const activeAirlines = airlines.filter(a => a.is_active !== false && String(a.is_active).toUpperCase() !== 'FALSE');
+                if (activeAirlines.length === 0) return;
+
+                select.innerHTML = '<option value="ALL">Semua Maskapai</option>' +
+                    activeAirlines.map(a => {
+                        const searchVal = a.code || a.name;
+                        return `<option value="${searchVal}">${a.name} (${a.code})</option>`;
+                    }).join('');
+                if (currentVal) select.value = currentVal;
+            }
+
+            try {
+                const cached = localStorage.getItem('sdw_admin_airlines');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) populate(parsed);
+                }
+                const GAS_URL = 'https://script.google.com/macros/s/AKfycbycph086osLGD4eQKFhrIki9ZRwXdJhCLeDbzRXVvMEc7pMDCHvf42nZIAn32LqIfBY/exec';
+                const res = await fetch(`${GAS_URL}?action=getAirlines`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+                        localStorage.setItem('sdw_admin_airlines', JSON.stringify(data.data));
+                        populate(data.data);
+                    }
+                }
+            } catch (e) {
+                console.warn('Dynamic airline filter fallback:', e);
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             renderDepartures();
+            initDynamicAirlineFilter();
             if (typeof SDW_DEPARTURES !== 'undefined' && typeof SDW_DEPARTURES.loadDeparturesAsync === 'function') {
                 SDW_DEPARTURES.loadDeparturesAsync().then(() => {
                     renderDepartures();

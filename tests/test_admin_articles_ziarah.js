@@ -113,9 +113,9 @@
     });
 
     // 8. Verifikasi Service Worker Caching
-    test('sw.js harus menyertakan admin-articles.js dan versi cache terbaru v64', () => {
+    test('sw.js harus menyertakan admin-articles.js dan versi cache terbaru v64+', () => {
         const swCode = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-        assert.ok(swCode.includes('sdw-umroh-pwa-v64'), 'Cache version v64 tidak ditemukan di sw.js');
+        assert.ok(/sdw-umroh-pwa-v(6[4-9]|[7-9]\d)/.test(swCode), 'Cache version v64+ tidak ditemukan di sw.js');
         assert.ok(swCode.includes('/js/admin/admin-articles.js'), 'admin-articles.js tidak di-precache di sw.js');
     });
 

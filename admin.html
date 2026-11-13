@@ -336,6 +336,13 @@
                         </span>
                         <span id="badgeHotelCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Haramain</span>
                     </button>
+                    <button type="button" data-admin-tab="tab-airlines" onclick="SDW_ADMIN.switchTab('tab-airlines')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-plane-departure nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>Maskapai &amp; Bandara</span>
+                        </span>
+                        <span id="badgeAirlineCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-sky-50 text-sky-700">Flight Hub</span>
+                    </button>
                     <button type="button" data-admin-tab="tab-operations" onclick="SDW_ADMIN.switchTab('tab-operations')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
                         <span class="flex items-center gap-2.5">
                             <i class="fa-solid fa-kaaba nav-icon text-slate-400 w-5 text-center text-sm"></i>
@@ -1151,6 +1158,243 @@
                         <button type="button" onclick="SDW_ADMIN.openHotelModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
                             + Tambah Hotel Baru
                         </button>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MASTER DATA MASKAPAI & BANDARA ==================== -->
+                <div id="tab-airlines" class="admin-tab-container hidden space-y-5">
+                    <!-- Header Section -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Master Data Maskapai &amp; Bandara Penerbangan</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-sky-100 text-sky-900">Flight Hub</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola maskapai umroh (Direct &amp; Transit), jatah bagasi, rute embarkasi Indonesia, dan bandara kedatangan Haramain.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.syncAirlinesFromCloud()" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-arrows-rotate text-sdw-pine"></i>
+                                <span>Sinkron Cloud</span>
+                            </button>
+                            <button type="button" id="btnAddNewAirline" onclick="SDW_ADMIN.openAirlineModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-amber-300"></i>
+                                <span>+ Tambah Maskapai Baru</span>
+                            </button>
+                            <button type="button" id="btnAddNewAirport" onclick="SDW_ADMIN.openAirportModal()" class="hidden px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-amber-300"></i>
+                                <span>+ Tambah Bandara Baru</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subtab Navigation Switcher -->
+                    <div class="flex items-center gap-2 p-1.5 bg-slate-100/80 rounded-2xl w-fit border border-slate-200/60">
+                        <button type="button" id="btnSubtabAirlines" onclick="SDW_ADMIN.switchAirlinesSubtab('airlines')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-xs transition cursor-pointer">
+                            <i class="fa-solid fa-plane mr-1.5"></i>
+                            <span>Daftar Maskapai Penerbangan</span>
+                        </button>
+                        <button type="button" id="btnSubtabAirports" onclick="SDW_ADMIN.switchAirlinesSubtab('airports')" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+                            <i class="fa-solid fa-plane-departure mr-1.5"></i>
+                            <span>Bandara &amp; Transit Hub</span>
+                        </button>
+                    </div>
+
+                    <!-- Subtab 1: Maskapai Penerbangan -->
+                    <div id="secAirlinesList" class="space-y-4">
+                        <!-- KPI Strip -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Maskapai</div>
+                                <div id="kpiTotalAirlines" class="text-2xl font-black text-slate-900 mt-1">6</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Semua armada rekanan</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Direct Flight</div>
+                                <div id="kpiDirectAirlines" class="text-2xl font-black text-emerald-700 mt-1">3</div>
+                                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">Penerbangan langsung</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Transit Flight</div>
+                                <div id="kpiTransitAirlines" class="text-2xl font-black text-sky-700 mt-1">3</div>
+                                <div class="text-[10px] text-sky-600 font-medium mt-0.5">Opsi plus wisata halal</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Maskapai Aktif</div>
+                                <div id="kpiActiveAirlines" class="text-2xl font-black text-sdw-pine mt-1">6</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Siap digunakan di paket</div>
+                            </div>
+                        </div>
+
+                        <!-- Toolbar Filter & Search -->
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2.5">
+                                <div class="relative flex-1">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <input type="text" id="searchAirlineInput" oninput="SDW_ADMIN.applyAirlineFilter('search', this.value)" placeholder="Cari nama maskapai, kode IATA, hub transit, bagasi..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine focus:bg-white transition">
+                                </div>
+                                <select id="filterAirlineFlightType" onchange="SDW_ADMIN.applyAirlineFilter('flightType', this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                    <option value="ALL">Semua Tipe Penerbangan</option>
+                                    <option value="DIRECT">Direct Flight (Langsung)</option>
+                                    <option value="TRANSIT">Transit Flight</option>
+                                </select>
+                                <select id="filterAirlineStatus" onchange="SDW_ADMIN.applyAirlineFilter('status', this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="ACTIVE">Aktif</option>
+                                    <option value="INACTIVE">Non-Aktif</option>
+                                </select>
+                            </div>
+                            <!-- Toggle View Mode -->
+                            <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl shrink-0">
+                                <button type="button" id="btnAirlineViewTable" onclick="SDW_ADMIN.setAirlinesViewMode('table')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-sdw-pine text-white shadow-xs transition" title="Tampilan Tabel">
+                                    <i class="fa-solid fa-table-list mr-1"></i> Tabel
+                                </button>
+                                <button type="button" id="btnAirlineViewCards" onclick="SDW_ADMIN.setAirlinesViewMode('cards')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition" title="Tampilan Kartu">
+                                    <i class="fa-solid fa-border-all mr-1"></i> Kartu
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table View Container -->
+                        <div id="airlinesTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                            <th class="py-3 px-4">KODE</th>
+                                            <th class="py-3 px-4">MASKAPAI</th>
+                                            <th class="py-3 px-4">TIPE PENERBANGAN</th>
+                                            <th class="py-3 px-4">HUB TRANSIT</th>
+                                            <th class="py-3 px-4">BAGASI &amp; KELAS</th>
+                                            <th class="py-3 px-4">STATUS</th>
+                                            <th class="py-3 px-4 text-right">AKSI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="airlinesTableBody">
+                                        <!-- Rendered dynamically by js/admin/admin-airlines.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Cards View Grid -->
+                        <div id="airlinesCardsView" class="hidden">
+                            <div id="airlinesCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Rendered dynamically by js/admin/admin-airlines.js -->
+                            </div>
+                        </div>
+
+                        <!-- Empty State Placeholder -->
+                        <div id="airlineEmptyState" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-sky-50 text-sky-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                                <i class="fa-solid fa-plane"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada Data Maskapai Ditemukan</h4>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter tipe penerbangan.</p>
+                            <button type="button" onclick="SDW_ADMIN.openAirlineModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                                + Tambah Maskapai Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subtab 2: Bandara & Transit Hub -->
+                    <div id="secAirportsList" class="hidden space-y-4">
+                        <!-- KPI Strip -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Bandara</div>
+                                <div id="kpiTotalAirports" class="text-2xl font-black text-slate-900 mt-1">8</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Jaringan penerbangan</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Embarkasi RI</div>
+                                <div id="kpiOriginAirports" class="text-2xl font-black text-blue-700 mt-1">4</div>
+                                <div class="text-[10px] text-blue-600 font-medium mt-0.5">CGK, SUB, KNO, SOC</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Bandara Haramain</div>
+                                <div id="kpiDestinationAirports" class="text-2xl font-black text-amber-700 mt-1">2</div>
+                                <div class="text-[10px] text-amber-600 font-medium mt-0.5">Jeddah (JED) &amp; Madinah (MED)</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Hub Transit</div>
+                                <div id="kpiTransitAirports" class="text-2xl font-black text-purple-700 mt-1">2</div>
+                                <div class="text-[10px] text-purple-600 font-medium mt-0.5">Istanbul (IST) &amp; Doha (DOH)</div>
+                            </div>
+                        </div>
+
+                        <!-- Toolbar Filter & Search -->
+                        <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex-1 flex flex-col sm:flex-row sm:items-center gap-2.5">
+                                <div class="relative flex-1">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <input type="text" id="searchAirportInput" oninput="SDW_ADMIN.applyAirportFilter('search', this.value)" placeholder="Cari nama bandara, kode IATA, kota, terminal..." class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine focus:bg-white transition">
+                                </div>
+                                <select id="filterAirportRole" onchange="SDW_ADMIN.applyAirportFilter('role', this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                    <option value="ALL">Semua Peran Bandara</option>
+                                    <option value="ORIGIN">Embarkasi Indonesia (Asal)</option>
+                                    <option value="DESTINATION">Kedatangan Haramain (Tujuan)</option>
+                                    <option value="TRANSIT">Hub Transit Internasional</option>
+                                </select>
+                                <select id="filterAirportCountry" onchange="SDW_ADMIN.applyAirportFilter('country', this.value)" class="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                    <option value="ALL">Semua Negara</option>
+                                    <option value="Indonesia">Indonesia</option>
+                                    <option value="Arab Saudi">Arab Saudi</option>
+                                    <option value="Turki">Turki</option>
+                                    <option value="Qatar">Qatar</option>
+                                </select>
+                            </div>
+                            <!-- Toggle View Mode -->
+                            <div class="flex items-center gap-1 p-1 bg-slate-100 rounded-xl shrink-0">
+                                <button type="button" id="btnAirportViewTable" onclick="SDW_ADMIN.setAirportsViewMode('table')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-sdw-pine text-white shadow-xs transition" title="Tampilan Tabel">
+                                    <i class="fa-solid fa-table-list mr-1"></i> Tabel
+                                </button>
+                                <button type="button" id="btnAirportViewCards" onclick="SDW_ADMIN.setAirportsViewMode('cards')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition" title="Tampilan Kartu">
+                                    <i class="fa-solid fa-border-all mr-1"></i> Kartu
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Table View Container -->
+                        <div id="airportsTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-50/80 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                            <th class="py-3 px-4">KODE IATA</th>
+                                            <th class="py-3 px-4">NAMA BANDARA</th>
+                                            <th class="py-3 px-4">KOTA &amp; NEGARA</th>
+                                            <th class="py-3 px-4">PERAN</th>
+                                            <th class="py-3 px-4">INFO TERMINAL</th>
+                                            <th class="py-3 px-4">STATUS</th>
+                                            <th class="py-3 px-4 text-right">AKSI</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="airportsTableBody">
+                                        <!-- Rendered dynamically by js/admin/admin-airlines.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Cards View Grid -->
+                        <div id="airportsCardsView" class="hidden">
+                            <div id="airportsCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Rendered dynamically by js/admin/admin-airlines.js -->
+                            </div>
+                        </div>
+
+                        <!-- Empty State Placeholder -->
+                        <div id="airportEmptyState" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+                            <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                                <i class="fa-solid fa-plane-departure"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada Data Bandara Ditemukan</h4>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter peran bandara.</p>
+                            <button type="button" onclick="SDW_ADMIN.openAirportModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                                + Tambah Bandara Baru
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -3612,8 +3856,14 @@
                             <input type="text" id="pkgHotelMadinah" required placeholder="Contoh: Concorde Dar Al Khair (200m)" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                         <div class="sm:col-span-2">
-                            <label class="block font-bold text-slate-700 mb-1">Maskapai Penerbangan &amp; Rute *</label>
-                            <input type="text" id="pkgAirline" required placeholder="Contoh: Saudia Airlines (Direct Jakarta - Jeddah)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-bold text-slate-700">Maskapai Penerbangan &amp; Rute *</label>
+                                <span class="text-[10px] text-sky-700 font-extrabold cursor-pointer hover:underline" onclick="SDW_ADMIN.switchTab('tab-airlines')">+ Master Maskapai</span>
+                            </div>
+                            <select id="pkgAirlineSelect" onchange="if(this.value) document.getElementById('pkgAirline').value = this.value" class="w-full px-3 py-1.5 mb-1.5 rounded-xl border border-sky-200 bg-sky-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                <option value="">-- Pilih dari Master Maskapai --</option>
+                            </select>
+                            <input type="text" id="pkgAirline" required placeholder="Contoh: Saudia Airlines (Direct Jakarta - Jeddah)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-semibold text-slate-900 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                     </div>
                 </div>
@@ -3753,11 +4003,23 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Maskapai &amp; No Penerbangan *</label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-bold text-slate-700">Maskapai &amp; No Penerbangan *</label>
+                                <span class="text-[10px] text-sky-700 font-extrabold cursor-pointer hover:underline" onclick="SDW_ADMIN.switchTab('tab-airlines')">+ Master Maskapai</span>
+                            </div>
+                            <select id="depModalAirlineSelect" onchange="if(this.value) document.getElementById('depModalAirline').value = this.value" class="w-full px-3 py-1.5 mb-1.5 rounded-xl border border-sky-200 bg-sky-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                <option value="">-- Pilih dari Master Maskapai --</option>
+                            </select>
                             <input type="text" id="depModalAirline" required placeholder="Contoh: Saudia Airlines (SV-819)" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                         <div>
-                            <label class="block font-bold text-slate-700 mb-1">Bandara Asal (Origin) *</label>
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="font-bold text-slate-700">Bandara Asal (Origin) *</label>
+                                <span class="text-[10px] text-blue-700 font-extrabold cursor-pointer hover:underline" onclick="SDW_ADMIN.switchTab('tab-airlines')">+ Master Bandara</span>
+                            </div>
+                            <select id="depModalOriginAirportSelect" onchange="if(this.value) document.getElementById('depModalOriginAirport').value = this.value" class="w-full px-3 py-1.5 mb-1.5 rounded-xl border border-blue-200 bg-blue-50/50 text-xs font-semibold text-slate-800 focus:outline-none focus:border-sdw-pine">
+                                <option value="">-- Pilih dari Master Bandara Asal --</option>
+                            </select>
                             <input type="text" id="depModalOriginAirport" required placeholder="CGK (Soekarno-Hatta)" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
                         </div>
                     </div>
@@ -4367,6 +4629,188 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: FORM EDITOR MASKAPAI PENERBANGAN ==================== -->
+    <div id="modalAirlineEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-sky-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-sky-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-plane"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalAirlineTitle" class="text-base sm:text-lg font-black text-white">Tambah Maskapai Baru</h3>
+                        <p class="text-xs text-sky-200/80">Master maskapai resmi, jatah bagasi &amp; rute penerbangan</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalAirlineEditor')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form Body -->
+            <form id="formAirlineEditor" onsubmit="SDW_ADMIN.saveAirline(event)" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+                <input type="hidden" id="airlineModalId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kode IATA <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airlineModalCode" required maxlength="4" placeholder="SV / GA / TK" class="w-full px-3 py-2 rounded-xl border border-slate-200 uppercase font-mono font-bold focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block font-bold text-slate-700 mb-1">Nama Maskapai <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airlineModalName" required placeholder="Contoh: Saudia Airlines" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Tipe Penerbangan <span class="text-rose-500">*</span></label>
+                        <select id="airlineModalFlightType" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="DIRECT">DIRECT (Penerbangan Langsung)</option>
+                            <option value="TRANSIT">TRANSIT (Transit Luar Negeri)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Hub Transit / Rute</label>
+                        <input type="text" id="airlineModalTransitHub" placeholder="Contoh: Istanbul Airport (IST)" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Jatah Bagasi &amp; Zamzam</label>
+                        <input type="text" id="airlineModalBaggage" placeholder="Contoh: 2x 23kg + 5L Air Zamzam" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Pilihan Kelas Kabin</label>
+                        <input type="text" id="airlineModalCabinClasses" placeholder="Ekonomi, Bisnis" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">URL Logo / Foto Pesawat</label>
+                        <input type="text" id="airlineModalLogoUrl" placeholder="assets/hero-haram.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor Urutan Prioritas</label>
+                        <input type="number" id="airlineModalSortOrder" min="1" max="99" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Catatan Operasional</label>
+                    <textarea id="airlineModalNotes" rows="2" placeholder="Catatan fasilitas, ketentuan tiket group, atau aturan bagasi..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs"></textarea>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="airlineModalIsActive" class="w-4 h-4 rounded text-sdw-pine focus:ring-sdw-pine border-slate-300 cursor-pointer" checked>
+                    <label for="airlineModalIsActive" class="font-bold text-slate-700 text-xs cursor-pointer">
+                        Status Aktif (Ditampilkan dalam pilihan paket umroh &amp; kloter)
+                    </label>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalAirlineEditor')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan Maskapai</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: FORM EDITOR BANDARA & TRANSIT HUB ==================== -->
+    <div id="modalAirportEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-xl w-full shadow-2xl border border-blue-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-blue-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalAirportTitle" class="text-base sm:text-lg font-black text-white">Tambah Bandara Baru</h3>
+                        <p class="text-xs text-blue-200/80">Embarkasi tanah air, kedatangan Haramain, dan hub transit</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalAirportEditor')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Modal Form Body -->
+            <form id="formAirportEditor" onsubmit="SDW_ADMIN.saveAirport(event)" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+                <input type="hidden" id="airportModalId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kode IATA <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airportModalCode" required maxlength="4" placeholder="CGK / JED" class="w-full px-3 py-2 rounded-xl border border-slate-200 uppercase font-mono font-black focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div class="sm:col-span-2">
+                        <label class="block font-bold text-slate-700 mb-1">Nama Bandara <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airportModalName" required placeholder="Contoh: Soekarno-Hatta International" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Kota <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airportModalCity" required placeholder="Contoh: Jakarta / Tangerang" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Negara <span class="text-rose-500">*</span></label>
+                        <input type="text" id="airportModalCountry" required placeholder="Indonesia / Arab Saudi / Turki" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Peran Bandara (Role) <span class="text-rose-500">*</span></label>
+                        <select id="airportModalRole" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="ORIGIN">ORIGIN (Embarkasi Asal Indonesia)</option>
+                            <option value="DESTINATION">DESTINATION (Kedatangan Haramain)</option>
+                            <option value="TRANSIT">TRANSIT (Hub Transit Internasional)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor Urutan Prioritas</label>
+                        <input type="number" id="airportModalSortOrder" min="1" max="99" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Info Terminal Umroh</label>
+                    <input type="text" id="airportModalTerminalInfo" placeholder="Contoh: Terminal 3 Ultimate / Terminal Haji" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="airportModalIsActive" class="w-4 h-4 rounded text-sdw-pine focus:ring-sdw-pine border-slate-300 cursor-pointer" checked>
+                    <label for="airportModalIsActive" class="font-bold text-slate-700 text-xs cursor-pointer">
+                        Status Aktif (Tersedia untuk pilihan rute kloter)
+                    </label>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalAirportEditor')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan Bandara</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -4383,6 +4827,7 @@
     <script src="js/admin/admin-packages.js?v=1.0.0"></script>
     <script src="js/admin/admin-departures.js?v=1.0.0"></script>
     <script src="js/admin/admin-hotels.js?v=1.0.0"></script>
+    <script src="js/admin/admin-airlines.js?v=1.0.0"></script>
     <script src="js/admin/admin-gallery.js?v=1.0.0"></script>
     <script src="js/admin/admin-articles.js?v=1.0.0"></script>
     <script src="js/admin/admin-docs.js?v=2.8.0"></script>
