@@ -287,6 +287,13 @@
                         </span>
                         <span id="badgeArticlesCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-emerald-50 text-emerald-700">Edukasi</span>
                     </button>
+                    <button type="button" data-admin-tab="tab-faq" onclick="SDW_ADMIN.switchTab('tab-faq')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-circle-question nav-icon text-slate-400 w-5 text-center text-sm"></i>
+                            <span>FAQ &amp; Bantuan CS</span>
+                        </span>
+                        <span id="badgeFaqCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-teal-50 text-teal-700">Helpdesk</span>
+                    </button>
                 </div>
 
                 <!-- Group 3: Registrasi & Dokumen -->
@@ -1946,6 +1953,258 @@
                             <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter kota untuk menemukan lokasi yang dicari.</p>
                             <button type="button" onclick="SDW_ADMIN.openZiarahModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
                                 + Tambah Titik Ziarah Baru
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MASTER FAQ & LAYANAN BANTUAN CS ==================== -->
+                <div id="tab-faq" class="admin-tab-container hidden space-y-5">
+                    <!-- Header Section -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Master FAQ &amp; Layanan Bantuan CS</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-teal-100 text-teal-900">Helpdesk Hub</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola tanya-jawab seputar pendaftaran umroh, dokumen, biaya, serta nomor hotline CS dan floating WhatsApp resmi.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button type="button" onclick="SDW_ADMIN.syncFaqFromCloud()" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-arrows-rotate text-sdw-pine"></i>
+                                <span>Sinkron Cloud</span>
+                            </button>
+                            <button type="button" id="btnAddNewFaq" onclick="SDW_ADMIN.openFaqModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-amber-300"></i>
+                                <span>+ Tambah Pertanyaan FAQ</span>
+                            </button>
+                            <button type="button" id="btnAddNewContact" onclick="SDW_ADMIN.openHelpdeskModal()" class="hidden px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus text-amber-300"></i>
+                                <span>+ Tambah Channel CS</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subtab Navigation Switcher -->
+                    <div class="flex items-center gap-2 p-1.5 bg-slate-100/80 rounded-2xl w-fit border border-slate-200/60">
+                        <button type="button" id="btnSubtabFaq" onclick="SDW_ADMIN.switchFaqSubtab('faq')" class="px-4 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-xs transition cursor-pointer">
+                            <i class="fa-solid fa-circle-question mr-1.5"></i>
+                            <span>Tanya Jawab FAQ</span>
+                        </button>
+                        <button type="button" id="btnSubtabHelpdesk" onclick="SDW_ADMIN.switchFaqSubtab('helpdesk')" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+                            <i class="fa-solid fa-headset mr-1.5"></i>
+                            <span>Channel Layanan CS &amp; Hotline</span>
+                        </button>
+                    </div>
+
+                    <!-- Subtab 1: Tanya Jawab FAQ -->
+                    <div id="secFaqList" class="space-y-4">
+                        <!-- KPI Strip -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total FAQ</div>
+                                <div id="kpiTotalFaq" class="text-2xl font-black text-slate-900 mt-1">6</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Semua entri tanya-jawab</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Dokumen &amp; Paspor</div>
+                                <div id="kpiDocFaq" class="text-2xl font-black text-teal-700 mt-1">1</div>
+                                <div class="text-[10px] text-teal-600 font-medium mt-0.5">Syarat imigrasi &amp; visa</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Biaya &amp; Refund</div>
+                                <div id="kpiFinanceFaq" class="text-2xl font-black text-amber-700 mt-1">2</div>
+                                <div class="text-[10px] text-amber-600 font-medium mt-0.5">Sistem bayar &amp; batal</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">FAQ Tayang</div>
+                                <div id="kpiPublishedFaq" class="text-2xl font-black text-emerald-700 mt-1">6</div>
+                                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">Live di halaman publik</div>
+                            </div>
+                        </div>
+
+                        <!-- Toolbar & Filters -->
+                        <div class="p-3 bg-white rounded-2xl border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3 shadow-2xs">
+                            <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto flex-1">
+                                <div class="relative flex-1 sm:w-64">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <input type="text" id="faqSearchInput" oninput="SDW_ADMIN.applyFaqFilter()" placeholder="Cari pertanyaan / jawaban..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:border-sdw-pine">
+                                </div>
+                                <select id="faqCategoryFilter" onchange="SDW_ADMIN.applyFaqFilter()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 font-semibold focus:outline-hidden focus:border-sdw-pine">
+                                    <option value="ALL">Semua Kategori</option>
+                                    <option value="DOKUMEN_PASPOR">Dokumen &amp; Paspor</option>
+                                    <option value="PEMBAYARAN_BIAYA">Biaya &amp; Rekening Escrow</option>
+                                    <option value="LANSIA_KESEHATAN">Lansia &amp; Kursi Roda</option>
+                                    <option value="HOTEL_AKOMODASI">Hotel &amp; Jarak Masjid</option>
+                                    <option value="JADWAL_BATAL">Ketentuan Batal &amp; Reschedule</option>
+                                    <option value="MANASIK_IBADAH">Manasik &amp; Muthawwif</option>
+                                    <option value="UMUM">Informasi Umum</option>
+                                </select>
+                                <select id="faqStatusFilter" onchange="SDW_ADMIN.applyFaqFilter()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 font-semibold focus:outline-hidden focus:border-sdw-pine">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="PUBLISHED">PUBLISHED (Tayang)</option>
+                                    <option value="DRAFT">DRAFT (Disimpan)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-1.5 self-end md:self-auto">
+                                <button type="button" id="btnFaqViewTable" onclick="SDW_ADMIN.setFaqViewMode('table')" class="p-2 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-2xs transition cursor-pointer" title="Tampilan Tabel Kompak">
+                                    <i class="fa-solid fa-table-list"></i>
+                                </button>
+                                <button type="button" id="btnFaqViewCards" onclick="SDW_ADMIN.setFaqViewMode('cards')" class="p-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer" title="Tampilan Kartu">
+                                    <i class="fa-solid fa-border-all"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Content View Containers -->
+                        <div id="faqTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-slate-600">
+                                    <thead class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                        <tr>
+                                            <th class="py-3 px-3.5 w-14 text-center">Urutan</th>
+                                            <th class="py-3 px-3.5 w-32">Kategori</th>
+                                            <th class="py-3 px-3.5">Pertanyaan &amp; Jawaban</th>
+                                            <th class="py-3 px-3.5 w-24 text-center">Sorotan</th>
+                                            <th class="py-3 px-3.5 w-24 text-center">Status</th>
+                                            <th class="py-3 px-3.5 w-28 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="faqTableBody" class="divide-y divide-slate-100">
+                                        <!-- Rendered by js/admin/admin-faq.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="faqCardsView" class="hidden">
+                            <div id="faqCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Rendered by js/admin/admin-faq.js -->
+                            </div>
+                        </div>
+
+                        <div id="faqEmptyState" class="hidden p-8 text-center bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="w-12 h-12 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                                <i class="fa-solid fa-circle-question"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada FAQ Ditemukan</h4>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter kategori untuk menemukan pertanyaan yang dicari.</p>
+                            <button type="button" onclick="SDW_ADMIN.openFaqModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                                + Tambah Pertanyaan Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subtab 2: Channel Layanan CS & Hotline -->
+                    <div id="secHelpdeskList" class="hidden space-y-4">
+                        <!-- Primary Active Hotline Banner -->
+                        <div class="p-4 rounded-2xl bg-gradient-to-r from-emerald-900 to-teal-900 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-md">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-amber-300 text-lg shrink-0">
+                                    <i class="fa-solid fa-headset"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[10px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2 py-0.5 rounded-full">Hotline Utama Terpilih</span>
+                                        <span class="text-xs text-emerald-200">• Sinkron Floating WA</span>
+                                    </div>
+                                    <h3 id="primaryContactTitle" class="text-sm sm:text-base font-bold text-white mt-0.5">Hotline Konsultasi Umroh 24 Jam</h3>
+                                    <p class="text-xs text-emerald-100/90 font-mono" id="primaryContactDisplay">+62 812-3456-7890 (Aktif di web publik &amp; PWA)</p>
+                                </div>
+                            </div>
+                            <button type="button" onclick="SDW_ADMIN.openHelpdeskModal()" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs transition shadow-sm cursor-pointer whitespace-nowrap">
+                                <i class="fa-solid fa-plus mr-1"></i> Tambah Hotline Baru
+                            </button>
+                        </div>
+
+                        <!-- KPI Strip -->
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Channel CS</div>
+                                <div id="kpiTotalContacts" class="text-2xl font-black text-slate-900 mt-1">3</div>
+                                <div class="text-[10px] text-slate-500 font-medium mt-0.5">Hotline, dokumen &amp; darurat</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Saluran WhatsApp</div>
+                                <div id="kpiWaContacts" class="text-2xl font-black text-emerald-700 mt-1">2</div>
+                                <div class="text-[10px] text-emerald-600 font-medium mt-0.5">Direct chat live</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Layanan 24 Jam</div>
+                                <div id="kpi24hContacts" class="text-2xl font-black text-teal-700 mt-1">2</div>
+                                <div class="text-[10px] text-teal-600 font-medium mt-0.5">Siaga non-stop</div>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white border border-slate-200 shadow-2xs">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Nomor Utama</div>
+                                <div id="kpiPrimaryContactNumber" class="text-base font-black text-amber-700 mt-2 truncate">6281234567890</div>
+                                <div class="text-[10px] text-amber-600 font-medium mt-0.5">Primary floating widget</div>
+                            </div>
+                        </div>
+
+                        <!-- Toolbar & Filters -->
+                        <div class="p-3 bg-white rounded-2xl border border-slate-200 flex flex-col md:flex-row items-center justify-between gap-3 shadow-2xs">
+                            <div class="flex flex-wrap items-center gap-2.5 w-full md:w-auto flex-1">
+                                <div class="relative flex-1 sm:w-64">
+                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                    <input type="text" id="helpdeskSearchInput" oninput="SDW_ADMIN.applyContactFilter()" placeholder="Cari nama layanan / nomor..." class="w-full pl-8 pr-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-hidden focus:border-sdw-pine">
+                                </div>
+                                <select id="helpdeskChannelFilter" onchange="SDW_ADMIN.applyContactFilter()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 font-semibold focus:outline-hidden focus:border-sdw-pine">
+                                    <option value="ALL">Semua Channel</option>
+                                    <option value="WHATSAPP">WhatsApp</option>
+                                    <option value="PHONE">Telepon Hotline</option>
+                                    <option value="EMAIL">Email Resmi</option>
+                                </select>
+                                <select id="helpdeskStatusFilter" onchange="SDW_ADMIN.applyContactFilter()" class="px-3 py-1.5 rounded-xl border border-slate-200 text-xs bg-white text-slate-700 font-semibold focus:outline-hidden focus:border-sdw-pine">
+                                    <option value="ALL">Semua Status</option>
+                                    <option value="ACTIVE">ACTIVE (Aktif)</option>
+                                    <option value="INACTIVE">INACTIVE (Nonaktif)</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-1.5 self-end md:self-auto">
+                                <button type="button" id="btnContactViewTable" onclick="SDW_ADMIN.setHelpdeskViewMode('table')" class="p-2 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-2xs transition cursor-pointer" title="Tampilan Tabel Kompak">
+                                    <i class="fa-solid fa-table-list"></i>
+                                </button>
+                                <button type="button" id="btnContactViewCards" onclick="SDW_ADMIN.setHelpdeskViewMode('cards')" class="p-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer" title="Tampilan Kartu">
+                                    <i class="fa-solid fa-border-all"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contacts View Containers -->
+                        <div id="helpdeskTableView" class="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-xs text-slate-600">
+                                    <thead class="bg-slate-50 border-b border-slate-200 text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">
+                                        <tr>
+                                            <th class="py-3 px-3.5 w-14 text-center">Urutan</th>
+                                            <th class="py-3 px-3.5">Nama Layanan &amp; Hotline</th>
+                                            <th class="py-3 px-3.5 w-28 text-center">Channel</th>
+                                            <th class="py-3 px-3.5 w-40">Jam Layanan</th>
+                                            <th class="py-3 px-3.5 w-24 text-center">Status</th>
+                                            <th class="py-3 px-3.5 w-36 text-center">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="helpdeskTableBody" class="divide-y divide-slate-100">
+                                        <!-- Rendered by js/admin/admin-faq.js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="helpdeskCardsView" class="hidden">
+                            <div id="helpdeskCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Rendered by js/admin/admin-faq.js -->
+                            </div>
+                        </div>
+
+                        <div id="helpdeskEmptyState" class="hidden p-8 text-center bg-white rounded-2xl border border-slate-200 shadow-2xs">
+                            <div class="w-12 h-12 rounded-full bg-teal-50 text-teal-700 flex items-center justify-center mx-auto mb-3 text-lg">
+                                <i class="fa-solid fa-headset"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm mb-1">Tidak Ada Saluran Kontak Ditemukan</h4>
+                            <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">Coba sesuaikan kata kunci pencarian atau filter status untuk menemukan nomor kontak yang dicari.</p>
+                            <button type="button" onclick="SDW_ADMIN.openHelpdeskModal()" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white hover:opacity-90 transition cursor-pointer">
+                                + Tambah Channel Baru
                             </button>
                         </div>
                     </div>
@@ -4811,6 +5070,181 @@
         </div>
     </div>
 
+    <!-- ==================== MODAL: FAQ EDITOR ==================== -->
+    <div id="modalFaqEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-teal-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-teal-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalFaqTitle" class="text-base sm:text-lg font-black text-white">Tambah Pertanyaan FAQ</h3>
+                        <p class="text-xs text-teal-200/80">Pertanyaan dan jawaban resmi untuk calon jamaah umroh</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalFaqEditor')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <form onsubmit="SDW_ADMIN.saveFaq(event)" class="p-4 sm:p-5 space-y-3.5 text-xs overflow-y-auto">
+                <input type="hidden" id="faqModalId">
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Kategori Pertanyaan <span class="text-rose-500">*</span></label>
+                    <select id="faqModalCategory" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                        <option value="DOKUMEN_PASPOR">Dokumen &amp; Paspor (Visa, Imigrasi, Syarat)</option>
+                        <option value="PEMBAYARAN_BIAYA">Biaya &amp; Rekening Escrow (DP, Pelunasan, Bank)</option>
+                        <option value="LANSIA_KESEHATAN">Lansia &amp; Kursi Roda (Kesehatan, Tawaf Pribadi)</option>
+                        <option value="HOTEL_AKOMODASI">Hotel &amp; Akomodasi (Jarak Masjid, Fasilitas)</option>
+                        <option value="JADWAL_BATAL">Jadwal &amp; Ketentuan Batal (Reschedule, Refund)</option>
+                        <option value="MANASIK_IBADAH">Manasik &amp; Ibadah (Muthawwif, Miqat, Bimbingan)</option>
+                        <option value="UMUM">Informasi Umum</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pertanyaan (FAQ Question) <span class="text-rose-500">*</span></label>
+                    <input type="text" id="faqModalQuestion" required placeholder="Contoh: Apa saja syarat dokumen paspor dan visa untuk mendaftar umroh?" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-hidden focus:border-sdw-pine text-xs">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Jawaban Lengkap (FAQ Answer) <span class="text-rose-500">*</span></label>
+                    <textarea id="faqModalAnswer" required rows="4" placeholder="Jelaskan secara rinci, santun, dan mudah dipahami jamaah..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs leading-relaxed"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Ikon FontAwesome</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-mono text-xs">fa-</span>
+                            <input type="text" id="faqModalIcon" placeholder="passport / hotel / money-check-dollar" class="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 font-mono focus:outline-hidden focus:border-sdw-pine text-xs">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor Urutan Tampil</label>
+                        <input type="number" id="faqModalSortOrder" min="1" max="99" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="faqModalIsFeatured" class="w-4 h-4 rounded text-sdw-pine focus:ring-sdw-pine border-slate-300 cursor-pointer">
+                        <label for="faqModalIsFeatured" class="font-bold text-slate-700 text-xs cursor-pointer">
+                            Sorotan Beranda (Featured)
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Status Publikasi</label>
+                        <select id="faqModalStatus" class="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="PUBLISHED">PUBLISHED (Tayang Langsung)</option>
+                            <option value="DRAFT">DRAFT (Disimpan Internal)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalFaqEditor')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan FAQ</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: HELPDESK & CONTACT EDITOR ==================== -->
+    <div id="modalHelpdeskEditor" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" style="z-index: 9998;">
+        <div class="bg-white rounded-3xl max-w-lg w-full shadow-2xl border border-emerald-100 flex flex-col max-h-[92vh] overflow-hidden animate-scale-up">
+            <div class="p-4 sm:p-5 bg-gradient-to-r from-sdw-pine via-emerald-950 to-sdw-pine text-white flex items-center justify-between shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-base border border-amber-400/30">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h3 id="modalHelpdeskTitle" class="text-base sm:lg font-black text-white">Tambah Channel Layanan CS</h3>
+                        <p class="text-xs text-emerald-200/80">Kelola nomor WhatsApp, telepon hotline, atau email resmi</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeModal('modalHelpdeskEditor')" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition cursor-pointer">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <form onsubmit="SDW_ADMIN.saveHelpdeskContact(event)" class="p-4 sm:p-5 space-y-3.5 text-xs overflow-y-auto">
+                <input type="hidden" id="contactModalId">
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Nama Layanan / Divisi CS <span class="text-rose-500">*</span></label>
+                    <input type="text" id="contactModalTitle" required placeholder="Contoh: Hotline Konsultasi Umroh 24 Jam" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-hidden focus:border-sdw-pine text-xs">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Channel Komunikasi <span class="text-rose-500">*</span></label>
+                        <select id="contactModalChannel" required class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="WHATSAPP">WhatsApp Official</option>
+                            <option value="PHONE">Telepon Kantor / Hotline</option>
+                            <option value="EMAIL">Email Resmi Support</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor / Alamat Email <span class="text-rose-500">*</span></label>
+                        <input type="text" id="contactModalNumber" required placeholder="6281234567890 / 021-xxx / info@sdw.com" class="w-full px-3 py-2 rounded-xl border border-slate-200 font-mono font-bold focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Pesan Pembuka Otomatis (Greeting WA)</label>
+                    <textarea id="contactModalGreeting" rows="2" placeholder="Contoh: Assalamualaikum CS SDW UMROH, saya ingin konsultasi paket umroh..." class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Jam Operasional</label>
+                        <input type="text" id="contactModalHours" placeholder="24 Jam Non-Stop / 08.00 - 17.00 WIB" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Nomor Urut Tampil</label>
+                        <input type="number" id="contactModalSortOrder" min="1" max="99" value="1" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                    <div class="flex items-center gap-2">
+                        <input type="checkbox" id="contactModalIsPrimary" class="w-4 h-4 rounded text-sdw-pine focus:ring-sdw-pine border-slate-300 cursor-pointer">
+                        <label for="contactModalIsPrimary" class="font-bold text-slate-700 text-xs cursor-pointer">
+                            Jadikan Nomor Utama (Floating WA)
+                        </label>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Status Saluran</label>
+                        <select id="contactModalStatus" class="w-full px-3 py-1.5 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine bg-white text-xs font-semibold">
+                            <option value="ACTIVE">ACTIVE (Tersedia / Aktif)</option>
+                            <option value="INACTIVE">INACTIVE (Nonaktif / Pemeliharaan)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Modal Footer Actions -->
+                <div class="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                    <button type="button" onclick="SDW_ADMIN.closeModal('modalHelpdeskEditor')" class="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 font-bold text-xs transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer inline-flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                        <span>Simpan Channel CS</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Toast Notification Element -->
     <div id="adminToast" class="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-bold shadow-2xl border border-slate-800 transform translate-y-2 opacity-0 pointer-events-none transition-all duration-300">
         Pemberitahuan
@@ -4830,6 +5264,7 @@
     <script src="js/admin/admin-airlines.js?v=1.0.0"></script>
     <script src="js/admin/admin-gallery.js?v=1.0.0"></script>
     <script src="js/admin/admin-articles.js?v=1.0.0"></script>
+    <script src="js/admin/admin-faq.js?v=1.0.0"></script>
     <script src="js/admin/admin-docs.js?v=2.8.0"></script>
     <script src="js/admin/admin-registrations.js?v=2.8.0"></script>
     <script src="js/admin/admin-finance.js?v=2.8.0"></script>

@@ -989,6 +989,46 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'getFaq') {
+      let sheet = ss.getSheetByName("DB_Faq");
+      if (!sheet) {
+        autoUpgradeFaqSheets_(ss);
+        sheet = ss.getSheetByName("DB_Faq");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Faq tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.sort_order = Number(obj.sort_order) || 99;
+        obj.is_featured = (obj.is_featured === true || String(obj.is_featured).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      items.sort(function (a, b) { return a.sort_order - b.sort_order; });
+      return createResponse(true, items);
+    }
+
+    if (action === 'getHelpdeskContacts') {
+      let sheet = ss.getSheetByName("DB_Helpdesk_Contacts");
+      if (!sheet) {
+        autoUpgradeFaqSheets_(ss);
+        sheet = ss.getSheetByName("DB_Helpdesk_Contacts");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Helpdesk_Contacts tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.sort_order = Number(obj.sort_order) || 99;
+        obj.is_primary = (obj.is_primary === true || String(obj.is_primary).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      items.sort(function (a, b) { return a.sort_order - b.sort_order; });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -3205,7 +3245,177 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Airlines dan DB_Airports berhasil diupgrade dan disinkronkan" };
   }
 
+  // --- MUTASI TANYA JAWAB (DB_Faq) ---
+  if (action === 'saveFaq') {
+    let sheet = ss.getSheetByName("DB_Faq");
+    if (!sheet) {
+      autoUpgradeFaqSheets_(ss);
+      sheet = ss.getSheetByName("DB_Faq");
+    }
+    if (!sheet) throw new Error("Sheet DB_Faq tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id || rowIndex === -1) {
+      id = "FAQ-" + Utilities.formatString("%06d", rows.length);
+    }
+
+    const category = String(payload.category || 'DOKUMEN_PASPOR').trim();
+    const question = String(payload.question || '').trim();
+    const answer = String(payload.answer || '').trim();
+    const icon = String(payload.icon || 'fa-circle-question').trim();
+    const sort_order = Number(payload.sort_order) || rows.length;
+    const is_featured = (payload.is_featured === true || String(payload.is_featured).toUpperCase() === 'TRUE');
+    const status = String(payload.status || 'PUBLISHED').toUpperCase().trim();
+
+    const rowData = [
+      id, category, question, answer, icon, sort_order, is_featured, status, nowStr
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_FAQ" : "CREATE_FAQ", "DB_Faq", id, null, payload, "FAQ '" + question.substring(0, 35) + "...' berhasil disimpan");
+    return { id: id, category: category, question: question, status: status, entity: "DB_Faq" };
+  }
+
+  if (action === 'deleteFaq') {
+    const sheet = ss.getSheetByName("DB_Faq");
+    if (!sheet) throw new Error("Sheet DB_Faq tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+        }
+        logAudit_(actor, "ARCHIVE_FAQ", "DB_Faq", id, null, null, "FAQ diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Pertanyaan FAQ berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID FAQ tidak ditemukan" };
+  }
+
+  // --- MUTASI HELPDESK & CS HOTLINE (DB_Helpdesk_Contacts) ---
+  if (action === 'saveHelpdeskContact') {
+    let sheet = ss.getSheetByName("DB_Helpdesk_Contacts");
+    if (!sheet) {
+      autoUpgradeFaqSheets_(ss);
+      sheet = ss.getSheetByName("DB_Helpdesk_Contacts");
+    }
+    if (!sheet) throw new Error("Sheet DB_Helpdesk_Contacts tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id || rowIndex === -1) {
+      id = "CS-" + Utilities.formatString("%06d", rows.length);
+    }
+
+    const title = String(payload.title || 'Layanan Customer Care').trim();
+    const channel = String(payload.channel || 'WHATSAPP').toUpperCase().trim();
+    const contact_number = String(payload.contact_number || '').trim();
+    const greeting_message = String(payload.greeting_message || 'Assalamualaikum CS SDW UMROH.').trim();
+    const operating_hours = String(payload.operating_hours || '24 Jam').trim();
+    const is_primary = (payload.is_primary === true || String(payload.is_primary).toUpperCase() === 'TRUE');
+    const sort_order = Number(payload.sort_order) || rows.length;
+    const status = String(payload.status || 'ACTIVE').toUpperCase().trim();
+
+    // Jika dijadikan primary, reset primary yang lain
+    if (is_primary) {
+      const primaryColIdx = headers.indexOf('is_primary');
+      if (primaryColIdx !== -1) {
+        for (let j = 1; j < rows.length; j++) {
+          if (rowIndex <= 0 || j !== (rowIndex - 1)) {
+            sheet.getRange(j + 1, primaryColIdx + 1).setValue(false);
+          }
+        }
+      }
+    }
+
+    const rowData = [
+      id, title, channel, contact_number, greeting_message, operating_hours, is_primary, sort_order, status, nowStr
+    ];
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_CONTACT" : "CREATE_CONTACT", "DB_Helpdesk_Contacts", id, null, payload, "Kontak CS '" + title + "' berhasil disimpan");
+    return { id: id, title: title, contact_number: contact_number, is_primary: is_primary, status: status, entity: "DB_Helpdesk_Contacts" };
+  }
+
+  if (action === 'deleteHelpdeskContact') {
+    const sheet = ss.getSheetByName("DB_Helpdesk_Contacts");
+    if (!sheet) throw new Error("Sheet DB_Helpdesk_Contacts tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('INACTIVE');
+        }
+        logAudit_(actor, "DEACTIVATE_CONTACT", "DB_Helpdesk_Contacts", id, null, null, "Kontak CS dinonaktifkan");
+        return { id: id, action: 'INACTIVE', message: 'Kontak CS berhasil dinonaktifkan' };
+      }
+    }
+    return { id: id, error: "ID kontak CS tidak ditemukan" };
+  }
+
+  if (action === 'upgradeFaqSchema') {
+    autoUpgradeFaqSheets_(ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Faq", "ALL", null, null, "Skema DB_Faq dan DB_Helpdesk_Contacts berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Faq dan DB_Helpdesk_Contacts berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
+}
+
+/**
+ * Otomatis melengkapi skema dan data awal DB_Faq dan DB_Helpdesk_Contacts
+ */
+function autoUpgradeFaqSheets_(ss) {
+  if (typeof setupFaqAndHelpdeskSheets === 'function') {
+    setupFaqAndHelpdeskSheets();
+  }
 }
 
 /**

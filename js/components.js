@@ -45,10 +45,38 @@
     }
 
     /**
+     * Resolves the primary WhatsApp contact link dynamically from local cache (sdw_admin_contacts)
+     * fallback to canonical default WhatsApp if not set.
+     */
+    function getPrimaryWhatsAppLink() {
+        const defaultNum = '6281234567890';
+        const defaultMsg = 'Assalamualaikum CS SDW UMROH, saya ingin konsultasi paket umroh.';
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const raw = localStorage.getItem('sdw_admin_contacts');
+                if (raw) {
+                    const list = JSON.parse(raw);
+                    if (Array.isArray(list) && list.length > 0) {
+                        const activeList = list.filter(c => (c.status || 'ACTIVE').toUpperCase() === 'ACTIVE');
+                        const primary = activeList.find(c => c.is_primary === true || String(c.is_primary).toUpperCase() === 'TRUE') || activeList[0];
+                        if (primary && primary.contact_number) {
+                            const cleanNum = String(primary.contact_number).replace(/[^0-9]/g, '');
+                            const greeting = primary.greeting_message || defaultMsg;
+                            return `https://wa.me/${cleanNum}?text=${encodeURIComponent(greeting)}`;
+                        }
+                    }
+                }
+            }
+        } catch (_) {}
+        return `https://wa.me/${defaultNum}?text=${encodeURIComponent(defaultMsg)}`;
+    }
+
+    /**
      * Renders the canonical Desktop & Mobile Top Navbar
      */
     function getNavbarHTML(activeKey) {
         const key = getActivePageKey(activeKey);
+        const waLink = getPrimaryWhatsAppLink();
 
         const isBeranda = key === 'beranda';
         const isPaket = key === 'paket';
@@ -243,7 +271,7 @@
                 </div>
 
                 <!-- Hotline WhatsApp Button -->
-                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
+                <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="nav-hotline-pill inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full border text-xs font-bold transition shadow-xs cursor-pointer hover:scale-105">
                     <i class="fa-brands fa-whatsapp text-emerald-400 text-sm"></i>
                     <span class="hidden sm:inline">Hotline 24 Jam</span>
                     <span class="inline sm:hidden">CS</span>
@@ -573,9 +601,10 @@
      * Renders the canonical Floating WhatsApp Widget (Universal Mobile & Desktop)
      */
     function getFloatingContactHTML() {
+        const waLink = getPrimaryWhatsAppLink();
         return `
     <aside id="floatingContact">
-        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20paket%20umroh." target="_blank" rel="noopener noreferrer" class="flex fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white items-center justify-center shadow-2xl shadow-emerald-950/40 hover:scale-110 active:scale-95 transition-all cursor-pointer group" aria-label="Tanya Kami di WhatsApp">
+        <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="flex fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-emerald-600 hover:bg-emerald-500 text-white items-center justify-center shadow-2xl shadow-emerald-950/40 hover:scale-110 active:scale-95 transition-all cursor-pointer group" aria-label="Tanya Kami di WhatsApp">
             <i class="fa-brands fa-whatsapp text-2xl sm:text-2xl"></i>
             <span class="hidden sm:inline-block absolute right-16 top-1/2 -translate-y-1/2 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-xs font-bold whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-xl border border-white/10">
                 Tanya Kami di WhatsApp

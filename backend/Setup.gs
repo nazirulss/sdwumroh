@@ -44,6 +44,8 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Ziarah_Places": ["id", "name", "city", "location_tag", "distance_text", "historical_summary", "sunnah_tips", "image_url", "maps_url", "order_index", "status", "created_at"],
   "DB_Airlines": ["id", "code", "name", "flight_type", "transit_hub", "baggage_allowance", "cabin_classes", "logo_url", "sort_order", "is_active", "notes", "created_at"],
   "DB_Airports": ["id", "code", "name", "city", "country", "role", "terminal_info", "sort_order", "is_active", "created_at"],
+  "DB_Faq": ["id", "category", "question", "answer", "icon", "sort_order", "is_featured", "status", "created_at"],
+  "DB_Helpdesk_Contacts": ["id", "title", "channel", "contact_number", "greeting_message", "operating_hours", "is_primary", "sort_order", "status", "created_at"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],
   "DB_Document_Requirements": ["id", "code", "title", "description", "is_mandatory", "applies_to_gender", "max_expiry_months"],
   "DB_Pilgrim_Documents": ["id", "registration_id", "requirement_id", "file_name", "file_ref_mock", "status", "review_notes", "verified_by", "verified_at", "updated_at"],
@@ -753,6 +755,95 @@ function setupAirlinesAndAirportsSheets() {
   Logger.log("=== SETUP SHEET DB_Airlines & DB_Airports SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Faq' dan 'DB_Helpdesk_Contacts'
+ * secara langsung sesuai skema kolom canonical dan data seeding resmi.
+ */
+function setupFaqAndHelpdeskSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var nowStr = new Date().toISOString();
+
+  // 1. Setup DB_Faq
+  var fSheetName = "DB_Faq";
+  var fSheet = ss.getSheetByName(fSheetName);
+  var fCanonical = AUTHORITATIVE_SCHEMAS_[fSheetName];
+  if (!fSheet) {
+    fSheet = ss.insertSheet(fSheetName);
+    Logger.log("✓ Sheet " + fSheetName + " berhasil dibuat.");
+  }
+  var fLastCol = fSheet.getLastColumn();
+  var fHeaders = fLastCol > 0 ? fSheet.getRange(1, 1, 1, fLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (fHeaders.length === 0) {
+    fSheet.getRange(1, 1, 1, fCanonical.length).setValues([fCanonical]);
+    fHeaders = fCanonical.slice();
+  } else {
+    var fMissing = [];
+    for (var i = 0; i < fCanonical.length; i++) {
+      if (fHeaders.indexOf(fCanonical[i]) === -1) {
+        fMissing.push(fCanonical[i]);
+      }
+    }
+    if (fMissing.length > 0) {
+      fSheet.getRange(1, fLastCol + 1, 1, fMissing.length).setValues([fMissing]);
+      fHeaders = fHeaders.concat(fMissing);
+    }
+  }
+
+  // Seeding 6 FAQ resmi
+  if (fSheet.getLastRow() <= 1) {
+    var seedFaq = [
+      ['FAQ-000001', 'DOKUMEN_PASPOR', 'Apa saja syarat dokumen paspor dan visa untuk mendaftar umroh?', 'Syarat utama: 1) Paspor RI asli dengan masa berlaku minimal 7 bulan sebelum tanggal kepulangan dan nama minimal 2 suku kata. 2) Scan KTP & Kartu Keluarga asli. 3) Buku Nikah asli bagi suami-istri atau Akta Lahir anak. 4) Rekam biometrik melalui aplikasi resmi Saudi Visa Bio didampingi tim SDW.', 'fa-passport', 1, true, 'PUBLISHED', nowStr],
+      ['FAQ-000002', 'PEMBAYARAN_BIAYA', 'Bagaimana sistem pembayaran dan keamanan dana jamaah?', 'Pembayaran uang muka (DP) hanya sebesar Rp 5.000.000 / jamaah untuk mengunci seat maskapai dan kamar hotel. Seluruh transaksi wajib disalurkan melalui rekening escrow bank syariah atas nama PT Sahabat Dhuha Wisata (BSI & Bank Muamalat), bukan rekening perorangan. Pelunasan dapat dilakukan maksimal 30 hari sebelum keberangkatan.', 'fa-money-check-dollar', 2, true, 'PUBLISHED', nowStr],
+      ['FAQ-000003', 'LANSIA_KESEHATAN', 'Apakah tersedia fasilitas kursi roda dan pendampingan khusus lansia?', 'Ya, SDW UMROH menyediakan layanan prioritas bagi jamaah lansia. Kami menyediakan kursi roda lipat, pendampingan muthawwif khusus saat thawaf dan sa\'i di pelataran berbayar resmi Masjidil Haram, serta penataan kamar hotel yang dekat dengan lift.', 'fa-wheelchair', 3, true, 'PUBLISHED', nowStr],
+      ['FAQ-000004', 'HOTEL_AKOMODASI', 'Berapa jarak hotel penginapan ke Masjidil Haram dan Masjid Nabawi?', 'Untuk Paket VIP Khidmat, hotel Makkah berada langsung di pelataran Clock Tower (0 - 50 meter) seperti Swissotel / Pullman Zamzam. Untuk Paket Reguler, jarak hotel Makkah berkisar 250 - 350 meter. Di Madinah, seluruh paket menggunakan hotel di ring satu Masjid Nabawi (kurang dari 200 meter dari gerbang utama wanita dan pria).', 'fa-hotel', 4, true, 'PUBLISHED', nowStr],
+      ['FAQ-000005', 'JADWAL_BATAL', 'Bagaimana ketentuan jika jamaah terpaksa reschedule atau membatalkan?', 'SDW UMROH memiliki kebijakan reschedule fleksibel jika terdapat kendala medis (disertai surat dokter RS). Pemindahan kloter bebas biaya administrasi jika dilakukan minimal 35 hari sebelum tanggal terbang. Untuk pembatalan sepihak, pengembalian dana diatur transparan sesuai regulasi PPIU Kemenag RI.', 'fa-calendar-xmark', 5, true, 'PUBLISHED', nowStr],
+      ['FAQ-000006', 'MANASIK_IBADAH', 'Berapa kali bimbingan manasik diadakan sebelum keberangkatan?', 'Manasik diadakan 2 kali secara intensif: 1) Manasik Fiqih Ibadah & Teori di hotel berbintang, 2) Manasik Praktik Simulasi Tawaf & Sa\'i di asrama haji. Selain itu, ada sesi pemantapan briefing H-3 di Jakarta dan pemantapan kembali sebelum miqat di Tanah Suci.', 'fa-kaaba', 6, true, 'PUBLISHED', nowStr]
+    ];
+    fSheet.getRange(2, 1, seedFaq.length, fCanonical.length).setValues(seedFaq);
+  }
+  fSheet.autoResizeColumns(1, fCanonical.length);
+
+  // 2. Setup DB_Helpdesk_Contacts
+  var cSheetName = "DB_Helpdesk_Contacts";
+  var cSheet = ss.getSheetByName(cSheetName);
+  var cCanonical = AUTHORITATIVE_SCHEMAS_[cSheetName];
+  if (!cSheet) {
+    cSheet = ss.insertSheet(cSheetName);
+    Logger.log("✓ Sheet " + cSheetName + " berhasil dibuat.");
+  }
+  var cLastCol = cSheet.getLastColumn();
+  var cHeaders = cLastCol > 0 ? cSheet.getRange(1, 1, 1, cLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (cHeaders.length === 0) {
+    cSheet.getRange(1, 1, 1, cCanonical.length).setValues([cCanonical]);
+    cHeaders = cCanonical.slice();
+  } else {
+    var cMissing = [];
+    for (var j = 0; j < cCanonical.length; j++) {
+      if (cHeaders.indexOf(cCanonical[j]) === -1) {
+        cMissing.push(cCanonical[j]);
+      }
+    }
+    if (cMissing.length > 0) {
+      cSheet.getRange(1, cLastCol + 1, 1, cMissing.length).setValues([cMissing]);
+      cHeaders = cHeaders.concat(cMissing);
+    }
+  }
+
+  // Seeding 3 kontak customer care
+  if (cSheet.getLastRow() <= 1) {
+    var seedContacts = [
+      ['CS-000001', 'Hotline Konsultasi Umroh & Pendaftaran', 'WHATSAPP', '6281234567890', 'Assalamualaikum CS SDW UMROH, saya ingin konsultasi paket umroh.', '24 Jam Non-Stop', true, 1, 'ACTIVE', nowStr],
+      ['CS-000002', 'Layanan Paspor & Verifikasi Visa Bio', 'WHATSAPP', '6281234567891', 'Assalamualaikum Admin Dokumen, mohon info verifikasi paspor & visa saya.', 'Senin - Jumat 08.00 - 17.00 WIB', false, 2, 'ACTIVE', nowStr],
+      ['CS-000003', 'Customer Care Kantor Pusat Jakarta', 'PHONE', '02178901234', 'Customer Service Telepon Kantor Pusat SDW UMROH', 'Senin - Sabtu 08.30 - 17.00 WIB', false, 3, 'ACTIVE', nowStr]
+    ];
+    cSheet.getRange(2, 1, seedContacts.length, cCanonical.length).setValues(seedContacts);
+  }
+  cSheet.autoResizeColumns(1, cCanonical.length);
+
+  Logger.log("✓ Sheet DB_Faq dan DB_Helpdesk_Contacts berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET DB_Faq & DB_Helpdesk_Contacts SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -774,13 +865,14 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, faq, kontak, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
   setupGalleryAndTestimonialsSheets();
   setupArticlesAndZiarahSheets();
   setupAirlinesAndAirportsSheets();
+  setupFaqAndHelpdeskSheets();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

@@ -102,6 +102,7 @@
         if (tabId === 'tab-airlines' && typeof admin.renderAirlines === 'function') admin.renderAirlines();
         if (tabId === 'tab-gallery' && typeof admin.renderGallery === 'function') admin.renderGallery();
         if (tabId === 'tab-articles' && typeof admin.renderArticles === 'function') admin.renderArticles();
+        if (tabId === 'tab-faq' && typeof admin.renderFaq === 'function') admin.renderFaq();
         if (tabId === 'tab-docs' && typeof admin.renderDocuments === 'function') admin.renderDocuments();
         if (tabId === 'tab-registrations' && typeof admin.renderRegistrations === 'function') admin.renderRegistrations();
         if (tabId === 'tab-finance' && typeof admin.renderFinance === 'function') admin.renderFinance();

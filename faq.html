@@ -237,6 +237,85 @@
                 }
             });
         }
+
+        function renderFaqItem(faq) {
+            const icon = faq.icon ? (faq.icon.startsWith('fa-') ? faq.icon : 'fa-' + faq.icon) : 'fa-circle-question';
+            return `
+            <div class="faq-item rounded-2xl bg-white border border-purple-100 overflow-hidden shadow-xs" data-category="${faq.category || ''}">
+                <button type="button" onclick="toggleFaq(this)" class="w-full p-5 text-left flex items-center justify-between font-extrabold text-sm text-slate-900 hover:text-sdw-pine transition">
+                    <span class="flex items-center gap-2.5">
+                        <i class="fa-solid ${icon} text-sdw-gold"></i>
+                        <span>${faq.question || ''}</span>
+                    </span>
+                    <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform"></i>
+                </button>
+                <div class="faq-body hidden px-5 pb-5 text-xs text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                    ${faq.answer || ''}
+                </div>
+            </div>`;
+        }
+
+        async function initDynamicFaq() {
+            const container = document.getElementById('faqAccordionContainer');
+            if (!container) return;
+
+            // 1. Sync WhatsApp CTAs with primary contact
+            try {
+                const rawContacts = localStorage.getItem('sdw_admin_contacts');
+                if (rawContacts) {
+                    const contacts = JSON.parse(rawContacts);
+                    if (Array.isArray(contacts) && contacts.length > 0) {
+                        const activeList = contacts.filter(c => (c.status || 'ACTIVE').toUpperCase() === 'ACTIVE');
+                        const primary = activeList.find(c => c.is_primary === true || String(c.is_primary).toUpperCase() === 'TRUE') || activeList[0];
+                        if (primary && primary.contact_number) {
+                            const cleanNum = String(primary.contact_number).replace(/[^0-9]/g, '');
+                            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                                const currentUrl = new URL(a.href);
+                                const currentText = currentUrl.searchParams.get('text') || primary.greeting_message || 'Assalamualaikum CS SDW UMROH';
+                                a.href = `https://wa.me/${cleanNum}?text=${encodeURIComponent(currentText)}`;
+                            });
+                        }
+                    }
+                }
+            } catch (_) {}
+
+            // 2. Dynamic FAQ Rehydration
+            let faqs = null;
+            try {
+                const rawFaq = localStorage.getItem('sdw_admin_faq');
+                if (rawFaq) {
+                    const parsed = JSON.parse(rawFaq);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        faqs = parsed;
+                    }
+                }
+            } catch (_) {}
+
+            if (!faqs) {
+                try {
+                    const res = await fetch('https://script.google.com/macros/s/AKfycby_fIi0G6ebEUfHvdn8mM24d2hnELe-nU495Cm3JUrYjMSHpIzchMcP2elJzQjlCEs-/exec?action=getFaq');
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+                            faqs = json.data;
+                            localStorage.setItem('sdw_admin_faq', JSON.stringify(faqs));
+                        }
+                    }
+                } catch (_) {}
+            }
+
+            if (Array.isArray(faqs) && faqs.length > 0) {
+                const published = faqs
+                    .filter(f => (f.status || 'PUBLISHED').toUpperCase() === 'PUBLISHED')
+                    .sort((a, b) => (parseInt(a.sort_order, 10) || 0) - (parseInt(b.sort_order, 10) || 0));
+
+                if (published.length > 0) {
+                    container.innerHTML = published.map(renderFaqItem).join('');
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initDynamicFaq);
     </script>
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
     <div id="app-bottom-bar" data-active="faq"></div>

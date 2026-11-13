@@ -115,9 +115,9 @@
     });
 
     // 8. Verifikasi Service Worker Caching
-    test('sw.js harus menyertakan admin-airlines.js dan versi cache terbaru v65', () => {
+    test('sw.js harus menyertakan admin-airlines.js dan versi cache terbaru v65+', () => {
         const swCode = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
-        assert.ok(swCode.includes('sdw-umroh-pwa-v65'), 'Cache version v65 tidak ditemukan di sw.js');
+        assert.ok(/sdw-umroh-pwa-v(6[5-9]|[7-9]\d)/.test(swCode), 'Cache version minimal v65 tidak ditemukan di sw.js');
         assert.ok(swCode.includes('/js/admin/admin-airlines.js'), 'admin-airlines.js tidak di-precache di sw.js');
     });
 
@@ -130,3 +130,4 @@
         process.exit(1);
     }
 })();
+
