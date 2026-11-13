@@ -224,9 +224,22 @@
                     'HEMAT': 'bg-rose-50 text-rose-700 border-rose-200'
                 }[pkg.package_type] || 'bg-slate-50 text-slate-700 border-slate-200';
 
+                const bannerSrc = pkg.image_url || pkg.image || 'assets/hero-haram.png';
+
                 return `
                     <tr class="hover:bg-slate-50/80 transition border-b border-slate-100 text-xs">
                         <td class="px-4 py-3 font-mono font-bold text-slate-600">${pkg.id}</td>
+                        <td class="px-3 py-3 text-center">
+                            <div class="relative w-16 h-11 rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-2xs mx-auto group cursor-pointer" onclick="SDW_ADMIN.openPackageModal('${pkg.id}')" title="Klik untuk edit / ganti banner ${pkg.name}">
+                                <img src="${bannerSrc}" 
+                                     alt="${pkg.name}" 
+                                     onerror="this.onerror=null;this.src='assets/hero-haram.png';" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                    <i class="fa-solid fa-pen text-white text-[10px]"></i>
+                                </div>
+                            </div>
+                        </td>
                         <td class="px-4 py-3">
                             <div class="font-extrabold text-slate-900 leading-snug">${pkg.name}</div>
                             <div class="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">

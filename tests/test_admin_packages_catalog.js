@@ -69,6 +69,10 @@ assert.ok(
     'admin.html must have input id="pkgQuadPrice"'
 );
 assert.ok(
+    adminHtml.includes('Foto Banner'),
+    'admin.html table header must contain "Foto Banner" column'
+);
+assert.ok(
     adminHtml.includes('src="js/admin/admin-packages.js'),
     'admin.html must include script js/admin/admin-packages.js'
 );
@@ -137,6 +141,12 @@ assert.ok(
 console.log('✔ backend/Setup.gs & backend/Code.gs checks passed');
 
 // 6. Verify admin-packages.js functionality
+const adminPackagesJs = fs.readFileSync(path.join(__dirname, '../js/admin/admin-packages.js'), 'utf8');
+assert.ok(
+    adminPackagesJs.includes('bannerSrc') && adminPackagesJs.includes('hero-haram.png'),
+    'admin-packages.js must render thumbnail with fallback banner image'
+);
+
 const adminPackages = require('../js/admin/admin-packages.js');
 assert.strictEqual(typeof adminPackages.renderPackages, 'function', 'renderPackages must be exported');
 assert.strictEqual(typeof adminPackages.openPackageModal, 'function', 'openPackageModal must be exported');

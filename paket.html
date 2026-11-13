@@ -275,7 +275,7 @@
             grid.innerHTML = list.map(pkg => `
                 <div class="bg-white rounded-3xl overflow-hidden border border-purple-100/70 shadow-lg shadow-purple-950/5 hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col group">
                     <div class="relative h-52 overflow-hidden bg-slate-900">
-                        <img src="${pkg.image || 'assets/hero-haram.png'}" alt="${pkg.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <img src="${pkg.image_url || pkg.image || 'assets/hero-haram.png'}" alt="${pkg.name}" onerror="this.onerror=null;this.src='assets/hero-haram.png';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-sdw-pine/90 backdrop-blur-md text-sdw-gold text-[11px] font-extrabold border border-sdw-gold/30">
                             ${pkg.badge || 'Program Pilihan'}
@@ -342,7 +342,7 @@
             const modal = document.getElementById('package-detail-modal');
             if (!modal) return;
 
-            document.getElementById('modal-pkg-image').src = pkg.image || 'assets/hero-haram.png';
+            document.getElementById('modal-pkg-image').src = pkg.image_url || pkg.image || 'assets/hero-haram.png';
             document.getElementById('modal-pkg-badge').textContent = pkg.badge || 'Program Pilihan';
             document.getElementById('modal-pkg-type').textContent = pkg.package_type || 'UMROH';
             document.getElementById('modal-pkg-seat').textContent = pkg.seats_left > 0 ? `Sisa ${pkg.seats_left} Seat` : 'Seat Penuh';
