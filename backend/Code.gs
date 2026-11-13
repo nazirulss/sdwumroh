@@ -864,6 +864,48 @@ function doGet(e) {
       return createResponse(true, items);
     }
 
+    if (action === 'upgradeGallerySchema') {
+      autoUpgradeGallerySheets_(ss);
+      return createResponse(true, { message: "Skema DB_Gallery dan DB_Testimonials berhasil diupgrade dan disinkronkan" });
+    }
+
+    if (action === 'getGallery') {
+      let sheet = ss.getSheetByName("DB_Gallery");
+      if (!sheet) {
+        autoUpgradeGallerySheets_(ss);
+        sheet = ss.getSheetByName("DB_Gallery");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Gallery tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.is_featured = (obj.is_featured === true || String(obj.is_featured).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
+    if (action === 'getTestimonials') {
+      let sheet = ss.getSheetByName("DB_Testimonials");
+      if (!sheet) {
+        autoUpgradeGallerySheets_(ss);
+        sheet = ss.getSheetByName("DB_Testimonials");
+      }
+      if (!sheet) return createResponse(false, null, "Sheet DB_Testimonials tidak ditemukan");
+      const rows = sheet.getDataRange().getValues();
+      const headers = rows[0];
+      const items = rows.slice(1).map(function (row) {
+        const obj = {};
+        headers.forEach(function (h, i) { obj[h] = row[i]; });
+        obj.rating = Number(obj.rating) || 5;
+        obj.is_featured = (obj.is_featured === true || String(obj.is_featured).toUpperCase() === 'TRUE');
+        return obj;
+      });
+      return createResponse(true, items);
+    }
+
     if (action === 'checkRegistration') {
       const regId = e.parameter.regId;
       if (!regId) return createResponse(false, null, "Parameter regId wajib disertakan");
@@ -2477,6 +2519,252 @@ function processSingleMutation_(ss, action, payload, actor) {
     return { success: true, message: "Skema DB_Hotels berhasil diupgrade dan disinkronkan" };
   }
 
+  // --- MUTASI GALERI DOKUMENTASI (DB_Gallery) ---
+  if (action === 'saveGalleryItem') {
+    let sheet = ss.getSheetByName("DB_Gallery");
+    if (!sheet) {
+      autoUpgradeGallerySheets_(ss);
+      sheet = ss.getSheetByName("DB_Gallery");
+    }
+    if (!sheet) throw new Error("Sheet DB_Gallery tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/GAL-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "GAL-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const title = String(payload.title || '').trim();
+    const category = String(payload.category || 'MAKKAH').trim().toUpperCase();
+    const media_type = String(payload.media_type || 'IMAGE').trim().toUpperCase();
+    const media_url = String(payload.media_url || 'assets/hero-haram.png').trim();
+    const thumbnail_url = String(payload.thumbnail_url || payload.media_url || 'assets/hero-haram.png').trim();
+    const caption = String(payload.caption || '').trim();
+    const kloter_tag = String(payload.kloter_tag || '').trim();
+    const activity_date = String(payload.activity_date || '').trim();
+    const status = String(payload.status || 'PUBLISHED').trim().toUpperCase();
+    const is_featured = (payload.is_featured === true || String(payload.is_featured).toUpperCase() === 'TRUE');
+
+    const rowObj = {
+      id: id,
+      title: title,
+      category: category,
+      media_type: media_type,
+      media_url: media_url,
+      thumbnail_url: thumbnail_url,
+      caption: caption,
+      kloter_tag: kloter_tag,
+      activity_date: activity_date,
+      status: status,
+      is_featured: is_featured,
+      created_at: rowIndex > 0 ? (rows[rowIndex - 1][headers.indexOf('created_at')] || nowStr) : nowStr
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_GALLERY" : "CREATE_GALLERY", "DB_Gallery", id, null, payload, "Item galeri '" + title + "' berhasil disimpan");
+    return { id: id, title: title, category: category, status: status, entity: "DB_Gallery" };
+  }
+
+  if (action === 'setGalleryStatus') {
+    const sheet = ss.getSheetByName("DB_Gallery");
+    if (!sheet) throw new Error("Sheet DB_Gallery tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = String(payload.status || 'PUBLISHED').toUpperCase();
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    if (statusColIdx === -1) throw new Error("Kolom status tidak ditemukan di DB_Gallery");
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        logAudit_(actor, "SET_GALLERY_STATUS", "DB_Gallery", id, null, { status: newStatus }, "Status galeri diubah menjadi " + newStatus);
+        return { id: id, status: newStatus, entity: "DB_Gallery" };
+      }
+    }
+    return { id: id, error: "ID galeri tidak ditemukan" };
+  }
+
+  if (action === 'deleteGalleryItem') {
+    const sheet = ss.getSheetByName("DB_Gallery");
+    if (!sheet) throw new Error("Sheet DB_Gallery tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+        }
+        logAudit_(actor, "ARCHIVE_GALLERY", "DB_Gallery", id, null, null, "Item galeri diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Item galeri berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID galeri tidak ditemukan" };
+  }
+
+  // --- MUTASI TESTIMONI JAMAAH (DB_Testimonials) ---
+  if (action === 'saveTestimonial') {
+    let sheet = ss.getSheetByName("DB_Testimonials");
+    if (!sheet) {
+      autoUpgradeGallerySheets_(ss);
+      sheet = ss.getSheetByName("DB_Testimonials");
+    }
+    if (!sheet) throw new Error("Sheet DB_Testimonials tidak ditemukan");
+
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const nowStr = new Date().toISOString();
+    let id = payload.id;
+    let rowIndex = -1;
+
+    if (id) {
+      for (let i = 1; i < rows.length; i++) {
+        if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+          rowIndex = i + 1;
+          break;
+        }
+      }
+    }
+
+    if (!id) {
+      let maxNum = 0;
+      for (let i = 1; i < rows.length; i++) {
+        const rowId = String(rows[i][0] || '');
+        const match = rowId.match(/TSM-(\d+)/i);
+        if (match) {
+          const num = parseInt(match[1], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      }
+      id = "TSM-" + String(maxNum + 1).padStart(6, '0');
+    }
+
+    const customer_name = String(payload.customer_name || '').trim();
+    const customer_city = String(payload.customer_city || '').trim();
+    const customer_photo = String(payload.customer_photo || 'assets/pkg-vip-khidmat.png').trim();
+    const package_name = String(payload.package_name || '').trim();
+    const rating = Math.min(5, Math.max(1, Number(payload.rating) || 5));
+    const review_text = String(payload.review_text || '').trim();
+    const video_url = String(payload.video_url || '').trim();
+    const departure_year = String(payload.departure_year || 'Musim 1447H').trim();
+    const status = String(payload.status || 'PUBLISHED').trim().toUpperCase();
+    const is_featured = (payload.is_featured === true || String(payload.is_featured).toUpperCase() === 'TRUE');
+
+    const rowObj = {
+      id: id,
+      customer_name: customer_name,
+      customer_city: customer_city,
+      customer_photo: customer_photo,
+      package_name: package_name,
+      rating: rating,
+      review_text: review_text,
+      video_url: video_url,
+      departure_year: departure_year,
+      status: status,
+      is_featured: is_featured,
+      created_at: rowIndex > 0 ? (rows[rowIndex - 1][headers.indexOf('created_at')] || nowStr) : nowStr
+    };
+
+    const rowData = headers.map(function (h) {
+      return rowObj[h] !== undefined ? rowObj[h] : '';
+    });
+
+    if (rowIndex > 0) {
+      sheet.getRange(rowIndex, 1, 1, headers.length).setValues([rowData]);
+    } else {
+      sheet.appendRow(rowData);
+    }
+
+    logAudit_(actor, rowIndex > 0 ? "UPDATE_TESTIMONIAL" : "CREATE_TESTIMONIAL", "DB_Testimonials", id, null, payload, "Testimoni dari '" + customer_name + "' berhasil disimpan");
+    return { id: id, customer_name: customer_name, rating: rating, status: status, entity: "DB_Testimonials" };
+  }
+
+  if (action === 'setTestimonialStatus') {
+    const sheet = ss.getSheetByName("DB_Testimonials");
+    if (!sheet) throw new Error("Sheet DB_Testimonials tidak ditemukan");
+
+    const id = payload.id;
+    const newStatus = String(payload.status || 'PUBLISHED').toUpperCase();
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    if (statusColIdx === -1) throw new Error("Kolom status tidak ditemukan di DB_Testimonials");
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        sheet.getRange(i + 1, statusColIdx + 1).setValue(newStatus);
+        logAudit_(actor, "SET_TESTIMONIAL_STATUS", "DB_Testimonials", id, null, { status: newStatus }, "Status testimoni diubah menjadi " + newStatus);
+        return { id: id, status: newStatus, entity: "DB_Testimonials" };
+      }
+    }
+    return { id: id, error: "ID testimoni tidak ditemukan" };
+  }
+
+  if (action === 'deleteTestimonial') {
+    const sheet = ss.getSheetByName("DB_Testimonials");
+    if (!sheet) throw new Error("Sheet DB_Testimonials tidak ditemukan");
+
+    const id = payload.id;
+    const rows = sheet.getDataRange().getValues();
+    const headers = rows[0];
+    const statusColIdx = headers.indexOf('status');
+
+    for (let i = 1; i < rows.length; i++) {
+      if (String(rows[i][0]).toUpperCase() === String(id).toUpperCase()) {
+        if (statusColIdx !== -1) {
+          sheet.getRange(i + 1, statusColIdx + 1).setValue('ARCHIVED');
+        }
+        logAudit_(actor, "ARCHIVE_TESTIMONIAL", "DB_Testimonials", id, null, null, "Testimoni diarsipkan");
+        return { id: id, action: 'ARCHIVED', message: 'Testimoni berhasil diarsipkan' };
+      }
+    }
+    return { id: id, error: "ID testimoni tidak ditemukan" };
+  }
+
+  if (action === 'upgradeGallerySchema') {
+    autoUpgradeGallerySheets_(ss);
+    logAudit_(actor, "UPGRADE_SCHEMA", "DB_Gallery", "ALL", null, null, "Skema DB_Gallery dan DB_Testimonials berhasil diupgrade dan disinkronkan");
+    return { success: true, message: "Skema DB_Gallery dan DB_Testimonials berhasil diupgrade dan disinkronkan" };
+  }
+
   throw new Error("Aksi tidak didukung: " + action);
 }
 
@@ -2537,6 +2825,108 @@ function autoUpgradeHotelsSheet_(sheet, ss) {
       ['HTL-000009', 'Rove Al Madinah Hotel', 'MADINAH', 4, 150, '150 Meter (Markaziyah Utara)', 'WALKING_DISTANCE', 'Gate 17-18 (Abu Bakar As-Siddiq)', 'assets/pkg-plus-turki.webp', 'Hotel bintang 4 modern dengan desain kontemporer di Markaziyah Utara. Suasana lobi megah dan nyaman untuk tempat berkumpul rombongan kloter.', 'https://maps.google.com/?q=Rove+Al+Madinah+Hotel', 'Lobi Megah & Coffee Shop, Restoran Internasional & Nusantara, Smart TV Kamar, Akses Ramah Kursi Roda', 'ACTIVE', nowStr, nowStr]
     ];
     sheet.getRange(2, 1, seedHotels.length, canonical.length).setValues(seedHotels);
+  }
+}
+
+/**
+ * Otomatis melengkapi skema kolom canonical dan seeding data awal untuk DB_Gallery & DB_Testimonials
+ */
+function autoUpgradeGallerySheets_(ss) {
+  if (!ss) ss = getSpreadsheet();
+  if (!ss) return;
+
+  const nowStr = new Date().toISOString();
+
+  // 1. Upgrade DB_Gallery
+  let gSheet = ss.getSheetByName("DB_Gallery");
+  if (!gSheet) {
+    gSheet = ss.insertSheet("DB_Gallery");
+  }
+  const gCanonical = [
+    'id', 'title', 'category', 'media_type', 'media_url', 'thumbnail_url',
+    'caption', 'kloter_tag', 'activity_date', 'status', 'is_featured', 'created_at'
+  ];
+  let gLastCol = gSheet.getLastColumn();
+  let gHeaders = gLastCol > 0 ? gSheet.getRange(1, 1, 1, gLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (gHeaders.length === 0) {
+    gSheet.getRange(1, 1, 1, gCanonical.length).setValues([gCanonical]);
+    gSheet.getRange(1, 1, 1, gCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    gSheet.setFrozenRows(1);
+    gHeaders = gCanonical;
+    gLastCol = gCanonical.length;
+  }
+
+  const gMissing = gCanonical.filter(function(c) { return gHeaders.indexOf(c) === -1; });
+  if (gMissing.length > 0) {
+    const startCol = gLastCol + 1;
+    gSheet.getRange(1, startCol, 1, gMissing.length).setValues([gMissing]);
+    gSheet.getRange(1, startCol, 1, gMissing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+  }
+
+  if (gSheet.getLastRow() <= 1) {
+    const seedGallery = [
+      ['GAL-000001', 'Thawaf Wada Kloter Syawal di Depan Ka\'bah', 'MAKKAH', 'IMAGE', 'assets/hero-haram.png', 'assets/hero-haram.png', 'Momen haru penuh kekhusyukan jamaah mengitari Ka\'bah menjelang kepulangan ke tanah air.', 'Kloter Syawal Bintang 5', '28 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000002', 'Kekhidmatan Ziarah & Doa di Raudhah Syarifah', 'MADINAH', 'IMAGE', 'assets/hero-twilight.jpg', 'assets/hero-twilight.jpg', 'Rombongan jamaah didampingi pembimbing ibadah saat sholat sunnah di taman surga Raudhah Nabawi.', 'Kloter Syawal Bintang 5', '26 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000003', 'Sa\'i Safa-Marwah & Suasana Tahallul', 'MAKKAH', 'IMAGE', 'assets/pkg-vip-khidmat.png', 'assets/pkg-vip-khidmat.png', 'Kebahagiaan jamaah usai menyelesaikan 7 putaran Sa\'i dan memotong rambut.', 'Kloter VIP Khidmat', '22 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000004', 'Napak Tilas Jabal Uhud & Syuhada Uhud', 'ZIARAH', 'IMAGE', 'assets/pkg-ramadhan.webp', 'assets/pkg-ramadhan.webp', 'Tausiyah sirah nabawiyah di kaki bukit pemanah Jabal Rumah.', 'Kloter Ramadhan I\'tikaf', '18 Oktober 2026', 'PUBLISHED', false, nowStr],
+      ['GAL-000005', 'Pelepasan Jamaah di Bandara Soekarno-Hatta', 'BANDARA', 'IMAGE', 'assets/pkg-reguler-syawal.png', 'assets/pkg-reguler-syawal.png', 'Doa bersama dan pembagian paspor sebelum penerbangan Saudia Airlines.', 'Kloter Reguler Awal Musim', '14 Oktober 2026', 'PUBLISHED', false, nowStr],
+      ['GAL-000006', 'Sholat Sunnah di Masjid Quba & Kebun Kurma', 'ZIARAH', 'IMAGE', 'assets/pkg-plus-turki.webp', 'assets/pkg-plus-turki.webp', 'Mengejar pahala setara ibadah umroh di masjid pertama dalam sejarah Islam.', 'Kloter Syawal Bintang 5', '27 Oktober 2026', 'PUBLISHED', true, nowStr]
+    ];
+    gSheet.getRange(2, 1, seedGallery.length, gCanonical.length).setValues(seedGallery);
+  }
+
+  // 2. Upgrade DB_Testimonials
+  let tSheet = ss.getSheetByName("DB_Testimonials");
+  if (!tSheet) {
+    tSheet = ss.insertSheet("DB_Testimonials");
+  }
+  const tCanonical = [
+    'id', 'customer_name', 'customer_city', 'customer_photo', 'package_name',
+    'rating', 'review_text', 'video_url', 'departure_year', 'status', 'is_featured', 'created_at'
+  ];
+  let tLastCol = tSheet.getLastColumn();
+  let tHeaders = tLastCol > 0 ? tSheet.getRange(1, 1, 1, tLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+
+  if (tHeaders.length === 0) {
+    tSheet.getRange(1, 1, 1, tCanonical.length).setValues([tCanonical]);
+    tSheet.getRange(1, 1, 1, tCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    tSheet.setFrozenRows(1);
+    tHeaders = tCanonical;
+    tLastCol = tCanonical.length;
+  }
+
+  const tMissing = tCanonical.filter(function(c) { return tHeaders.indexOf(c) === -1; });
+  if (tMissing.length > 0) {
+    const startCol = tLastCol + 1;
+    tSheet.getRange(1, startCol, 1, tMissing.length).setValues([tMissing]);
+    tSheet.getRange(1, startCol, 1, tMissing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+  }
+
+  if (tSheet.getLastRow() <= 1) {
+    const seedTestimonials = [
+      ['TSM-000001', 'H. Bambang Soeprapto & Hj. Nuraini', 'Surabaya', 'assets/pkg-vip-khidmat.png', 'Umroh VIP Khidmat Bintang 5', 5, 'Alhamdulillah perjalanan ibadah bersama SDW Umroh sangat berkesan. Hotel Clock Tower persis di depan pelataran Ka\'bah, lift langsung ke masjid sehingga orang tua kami tidak kelelahan. Bimbingan Muthawwif sangat sabar dan sesuai sunnah.', '', 'Musim 1447H', 'PUBLISHED', true, nowStr],
+      ['TSM-000002', 'dr. Hendra Wijaya, Sp.A', 'Jakarta Selatan', 'assets/hero-haram.png', 'Umroh Reguler Syawal Barakah', 5, 'Pelayanan dari awal pendaftaran hingga kepulangan sangat transparan dan amanah. Katering makanannya benar-benar masakan Nusantara yang lezat. Sangat direkomendasikan untuk keluarga!', '', 'Musim 1447H', 'PUBLISHED', true, nowStr],
+      ['TSM-000003', 'Ibu Siti Rahmah & Putri', 'Bandung', 'assets/pkg-reguler-syawal.png', 'Umroh Awal Ramadhan 1448H', 5, 'Suasana tarawih di Masjidil Haram dan ziarah Raudhah dibimbing dengan sangat baik. Jadwal terorganisir rapi tanpa tergesa-gesa. Terima kasih SDW Umroh atas pelayanan sepenuh hati.', '', 'Musim 1447H', 'PUBLISHED', true, nowStr],
+      ['TSM-000004', 'Ust. Syarifuddin Malik', 'Medan', 'assets/hero-twilight.jpg', 'Umroh Plus Turki Musim Semi', 5, 'Penerbangan direct tanpa kendala dan hotel di Istanbul maupun Madinah sangat dekat. Tim TL sigap membantu saat bagasi jamaah mendarat. Bintang 5 untuk profesionalitas SDW Umroh.', '', 'Musim 1446H', 'PUBLISHED', false, nowStr]
+    ];
+    tSheet.getRange(2, 1, seedTestimonials.length, tCanonical.length).setValues(seedTestimonials);
   }
 }
 

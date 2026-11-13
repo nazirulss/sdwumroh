@@ -594,10 +594,54 @@
             }
         }
 
+        // DYNAMIC CLOUD SYNC FOR GALLERY
+        async function initDynamicGallery() {
+            try {
+                // Check local cache first
+                const cached = localStorage.getItem('sdw_admin_gallery');
+                if (cached) {
+                    const parsed = JSON.parse(cached);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        applyCloudGallery(parsed);
+                    }
+                }
+                // Fetch latest from Google Apps Script endpoint
+                const url = 'https://script.google.com/macros/s/AKfycbyDWzKupH-vZ4FCmdknuloM7cSFPvJQXZgdHZExE6j6EUNZrx7A6ndkPrBvB5-ItKVs/exec?action=getGallery';
+                const res = await fetch(url);
+                const json = await res.json();
+                if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+                    localStorage.setItem('sdw_admin_gallery', JSON.stringify(json.data));
+                    applyCloudGallery(json.data);
+                }
+            } catch (e) {
+                console.log('[GALERI] Menggunakan galeri statis / offline cache:', e);
+            }
+        }
+
+        function applyCloudGallery(cloudItems) {
+            const published = cloudItems.filter(i => (i.status || 'PUBLISHED').toUpperCase() === 'PUBLISHED');
+            if (published.length > 0) {
+                GALLERY_ITEMS = published.map(i => ({
+                    id: i.id,
+                    kloter: (i.kloter_tag && i.kloter_tag.toUpperCase().includes('SYAWAL')) ? 'KLOTER_1447_SYAWAL' : (i.kloter_tag && i.kloter_tag.toUpperCase().includes('RAMADHAN')) ? 'KLOTER_1447_RAMADHAN' : (i.kloter_tag && i.kloter_tag.toUpperCase().includes('VIP')) ? 'KLOTER_1447_VIP' : 'KLOTER_1447_REGULER',
+                    kloterName: i.kloter_tag || 'Kloter Resmi SDW Umroh',
+                    category: (i.category || 'MAKKAH').toUpperCase(),
+                    categoryName: i.category === 'MAKKAH' ? 'Makkah Al-Mukarramah' : i.category === 'MADINAH' ? 'Madinah Al-Munawwarah' : i.category === 'ZIARAH' ? 'Ziarah & Wisata Sejarah' : 'Bandara & Manasik',
+                    title: i.title,
+                    desc: i.caption || '',
+                    date: i.activity_date || '',
+                    image: i.media_url || 'assets/hero-haram.png',
+                    tag: i.kloter_tag || i.category || 'Tanah Suci'
+                }));
+                renderGalleryGrid();
+            }
+        }
+
         // INITIALIZE ON LOAD
         document.addEventListener('DOMContentLoaded', () => {
             renderGalleryGrid();
             updateCertificatePreview();
+            initDynamicGallery();
         });
     </script>
     <script src="js/components.js?v=2.7.0"></script>

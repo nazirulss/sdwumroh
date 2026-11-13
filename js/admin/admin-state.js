@@ -38,19 +38,21 @@
         BADAL: 'sdw_admin_badal_certificates',
         PACKAGES: 'sdw_admin_packages',
         DEPARTURES: 'sdw_admin_departures',
-        HOTELS: 'sdw_admin_hotels'
+        HOTELS: 'sdw_admin_hotels',
+        GALLERY: 'sdw_admin_gallery',
+        TESTIMONIALS: 'sdw_admin_testimonials'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
-        'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-registrations'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-audit'],
+        'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
-        'OPERATIONS': ['tab-dashboard', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
-        'TOUR_LEADER': ['tab-dashboard', 'tab-departures', 'tab-hotels', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
+        'OPERATIONS': ['tab-dashboard', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-registrations', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-docs'],
+        'TOUR_LEADER': ['tab-dashboard', 'tab-departures', 'tab-hotels', 'tab-gallery', 'tab-operations', 'tab-certificates', 'tab-badal-certificates']
     };
 
     // 3. Central Reactive State Container
@@ -62,6 +64,11 @@
         packagesFilter: { search: '', category: 'ALL', status: 'ALL' },
         departuresFilter: { search: '', packageId: 'ALL', airline: 'ALL', status: 'ALL' },
         hotelsFilter: { search: '', city: 'ALL', star: 'ALL', zone: 'ALL', status: 'ALL' },
+        galleryFilter: { search: '', category: 'ALL', status: 'ALL' },
+        testimonialsFilter: { search: '', rating: 'ALL', status: 'ALL' },
+        gallerySubtab: 'photos',
+        galleryViewMode: 'table',
+        testimonialsViewMode: 'table',
         docsFilter: { search: '', type: 'ALL', status: 'ALL' },
         regsFilter: { search: '', package: 'ALL', status: 'ALL' },
         financeFilter: { search: '', status: 'ALL', method: 'ALL' },
@@ -77,6 +84,8 @@
         packagesData: [],
         departuresData: [],
         hotelsData: [],
+        galleryData: [],
+        testimonialsData: [],
         registrationsData: [],
         paymentsData: [],
         tripsData: [],
@@ -642,10 +651,10 @@
 
     // Direct state delegations for transparent backward compatibility
     const stateKeys = [
-        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
+        'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
-        'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'docsFilter',
+        'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'galleryFilter', 'testimonialsFilter', 'gallerySubtab', 'galleryViewMode', 'testimonialsViewMode', 'docsFilter',
         'regsFilter', 'financeFilter', 'auditFilter', 'manifestFilter',
         'roomingFilter', 'logisticsFilter', 'manasikFilter', 'unmaskedRecords',
         'isScreenLocked', 'inactivityTimer', 'INACTIVITY_TIMEOUT_MS', 'MASTER_PIN'

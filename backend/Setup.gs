@@ -38,6 +38,8 @@ var AUTHORITATIVE_SCHEMAS_ = {
   "DB_Package_Prices": ["id", "package_id", "currency", "quad_price", "triple_price", "double_price", "effective_start", "effective_end", "status"],
   "DB_Departures": ["id", "package_id", "departure_date", "return_date", "airline", "origin_airport", "capacity_total", "capacity_booked", "status", "notes"],
   "DB_Hotels": ["id", "name", "city", "star_rating", "distance_meters", "distance_text", "location_zone", "gate_info", "image_url", "description", "maps_url", "facilities", "status", "created_at", "updated_at"],
+  "DB_Gallery": ["id", "title", "category", "media_type", "media_url", "thumbnail_url", "caption", "kloter_tag", "activity_date", "status", "is_featured", "created_at"],
+  "DB_Testimonials": ["id", "customer_name", "customer_city", "customer_photo", "package_name", "rating", "review_text", "video_url", "departure_year", "status", "is_featured", "created_at"],
   "DB_Registrations": ["id", "customer_id", "departure_id", "package_id", "room_type", "agreed_price_snapshot", "discount_snapshot", "final_price_snapshot", "status", "sales_id", "notes", "created_at", "updated_at"],
   "DB_Document_Requirements": ["id", "code", "title", "description", "is_mandatory", "applies_to_gender", "max_expiry_months"],
   "DB_Pilgrim_Documents": ["id", "registration_id", "requirement_id", "file_name", "file_ref_mock", "status", "review_notes", "verified_by", "verified_at", "updated_at"],
@@ -499,6 +501,81 @@ function setupHotelsSheet() {
   Logger.log("=== SETUP SHEET DB_Hotels SELESAI ===");
 }
 
+/**
+ * Helper Mandiri: Jalankan fungsi ini untuk membuat atau memperbarui sheet 'DB_Gallery' dan 'DB_Testimonials'
+ * secara langsung sesuai skema kolom canonical dan data seeding resmi.
+ */
+function setupGalleryAndTestimonialsSheets() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  // 1. Setup DB_Gallery
+  var gSheetName = "DB_Gallery";
+  var gSheet = ss.getSheetByName(gSheetName);
+  var gCanonical = AUTHORITATIVE_SCHEMAS_[gSheetName];
+  if (!gSheet) {
+    gSheet = ss.insertSheet(gSheetName);
+    Logger.log("✓ Sheet " + gSheetName + " berhasil dibuat.");
+  }
+  var gLastCol = gSheet.getLastColumn();
+  var gHeaders = gLastCol > 0 ? gSheet.getRange(1, 1, 1, gLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (gHeaders.length === 0) {
+    gSheet.getRange(1, 1, 1, gCanonical.length).setValues([gCanonical]);
+    gSheet.getRange(1, 1, 1, gCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    gSheet.setFrozenRows(1);
+  }
+  if (gSheet.getLastRow() <= 1) {
+    var nowStr = new Date().toISOString();
+    var seedGallery = [
+      ['GAL-000001', 'Thawaf Qudum Berjamaah di Mataf Ka\'bah', 'MAKKAH', 'IMAGE', 'assets/hero-haram.png', 'assets/hero-haram.png', 'Pelaksanaan rukun thawaf dipandu langsung oleh Muthawwif Bersanad.', 'Kloter Syawal Bintang 5', '24 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000002', 'Ziarah Raudhah Asy-Syarifah & Maqam Nabi', 'MADINAH', 'IMAGE', 'assets/hero-twilight.jpg', 'assets/hero-twilight.jpg', 'Khusyuk berdoa dan sholat sunnah di taman surga Raudhah Nabawi.', 'Kloter Syawal Bintang 5', '26 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000003', 'Sa\'i Safa-Marwah & Suasana Tahallul', 'MAKKAH', 'IMAGE', 'assets/pkg-vip-khidmat.png', 'assets/pkg-vip-khidmat.png', 'Kebahagiaan jamaah usai menyelesaikan 7 putaran Sa\'i dan memotong rambut.', 'Kloter VIP Khidmat', '22 Oktober 2026', 'PUBLISHED', true, nowStr],
+      ['GAL-000004', 'Napak Tilas Jabal Uhud & Syuhada Uhud', 'ZIARAH', 'IMAGE', 'assets/pkg-ramadhan.webp', 'assets/pkg-ramadhan.webp', 'Tausiyah sirah nabawiyah di kaki bukit pemanah Jabal Rumah.', 'Kloter Ramadhan I\'tikaf', '18 Oktober 2026', 'PUBLISHED', false, nowStr],
+      ['GAL-000005', 'Pelepasan Jamaah di Bandara Soekarno-Hatta', 'BANDARA', 'IMAGE', 'assets/pkg-reguler-syawal.png', 'assets/pkg-reguler-syawal.png', 'Doa bersama dan pembagian paspor sebelum penerbangan Saudia Airlines.', 'Kloter Reguler Awal Musim', '14 Oktober 2026', 'PUBLISHED', false, nowStr],
+      ['GAL-000006', 'Sholat Sunnah di Masjid Quba & Kebun Kurma', 'ZIARAH', 'IMAGE', 'assets/pkg-plus-turki.webp', 'assets/pkg-plus-turki.webp', 'Mengejar pahala setara ibadah umroh di masjid pertama dalam sejarah Islam.', 'Kloter Syawal Bintang 5', '27 Oktober 2026', 'PUBLISHED', true, nowStr]
+    ];
+    gSheet.getRange(2, 1, seedGallery.length, gCanonical.length).setValues(seedGallery);
+  }
+  gSheet.autoResizeColumns(1, gCanonical.length);
+
+  // 2. Setup DB_Testimonials
+  var tSheetName = "DB_Testimonials";
+  var tSheet = ss.getSheetByName(tSheetName);
+  var tCanonical = AUTHORITATIVE_SCHEMAS_[tSheetName];
+  if (!tSheet) {
+    tSheet = ss.insertSheet(tSheetName);
+    Logger.log("✓ Sheet " + tSheetName + " berhasil dibuat.");
+  }
+  var tLastCol = tSheet.getLastColumn();
+  var tHeaders = tLastCol > 0 ? tSheet.getRange(1, 1, 1, tLastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (tHeaders.length === 0) {
+    tSheet.getRange(1, 1, 1, tCanonical.length).setValues([tCanonical]);
+    tSheet.getRange(1, 1, 1, tCanonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    tSheet.setFrozenRows(1);
+  }
+  if (tSheet.getLastRow() <= 1) {
+    var nowStr2 = new Date().toISOString();
+    var seedTestimonials = [
+      ['TSM-000001', 'H. Bambang Soeprapto & Hj. Nuraini', 'Surabaya', 'assets/pkg-vip-khidmat.png', 'Umroh VIP Khidmat Bintang 5', 5, 'Alhamdulillah perjalanan ibadah bersama SDW Umroh sangat berkesan. Hotel Clock Tower persis di depan pelataran Ka\'bah, lift langsung ke masjid sehingga orang tua kami tidak kelelahan. Bimbingan Muthawwif sangat sabar dan sesuai sunnah.', '', 'Musim 1447H', 'PUBLISHED', true, nowStr2],
+      ['TSM-000002', 'dr. Hendra Wijaya, Sp.A', 'Jakarta Selatan', 'assets/hero-haram.png', 'Umroh Reguler Syawal Barakah', 5, 'Pelayanan dari awal pendaftaran hingga kepulangan sangat transparan dan amanah. Katering makanannya benar-benar masakan Nusantara yang lezat. Sangat direkomendasikan untuk keluarga!', '', 'Musim 1447H', 'PUBLISHED', true, nowStr2],
+      ['TSM-000003', 'Ibu Siti Rahmah & Putri', 'Bandung', 'assets/pkg-reguler-syawal.png', 'Umroh Awal Ramadhan 1448H', 5, 'Suasana tarawih di Masjidil Haram dan ziarah Raudhah dibimbing dengan sangat baik. Jadwal terorganisir rapi tanpa tergesa-gesa. Terima kasih SDW Umroh atas pelayanan sepenuh hati.', '', 'Musim 1447H', 'PUBLISHED', true, nowStr2],
+      ['TSM-000004', 'Ust. Syarifuddin Malik', 'Medan', 'assets/hero-twilight.jpg', 'Umroh Plus Turki Musim Semi', 5, 'Penerbangan direct tanpa kendala dan hotel di Istanbul maupun Madinah sangat dekat. Tim TL sigap membantu saat bagasi jamaah mendarat. Bintang 5 untuk profesionalitas SDW Umroh.', '', 'Musim 1446H', 'PUBLISHED', false, nowStr2]
+    ];
+    tSheet.getRange(2, 1, seedTestimonials.length, tCanonical.length).setValues(seedTestimonials);
+  }
+  tSheet.autoResizeColumns(1, tCanonical.length);
+
+  Logger.log("✓ Sheet DB_Gallery dan DB_Testimonials berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET DB_Gallery & DB_Testimonials SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -520,10 +597,11 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, dan piagam badal selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, dan piagam badal selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
+  setupGalleryAndTestimonialsSheets();
   setupBadalCertificatesSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");

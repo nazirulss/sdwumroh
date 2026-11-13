@@ -159,8 +159,8 @@
         assert(hotelHtml.includes('initDynamicHotels'), 'initDynamicHotels tidak ditemukan di hotel.html');
     });
 
-    test('12. sw.js mendaftarkan /js/admin/admin-hotels.js dan menaikkan cache ke v62', () => {
-        assert(swJs.includes("const CACHE_NAME = 'sdw-umroh-pwa-v62';"), 'CACHE_NAME belum dinaikkan ke v62');
+    test('12. sw.js mendaftarkan /js/admin/admin-hotels.js dan menaikkan cache ke v62+', () => {
+        assert(/sdw-umroh-pwa-v6[2-9]/.test(swJs), 'CACHE_NAME belum dinaikkan ke v62+');
         assert(swJs.includes("'/js/admin/admin-hotels.js'"), 'admin-hotels.js belum masuk ke PRECACHE_URLS');
     });
 
@@ -170,3 +170,4 @@
         process.exit(1);
     }
 })();
+
