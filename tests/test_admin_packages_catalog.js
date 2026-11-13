@@ -49,6 +49,22 @@ assert.ok(
     'admin.html must have select id="pkgType"'
 );
 assert.ok(
+    adminHtml.includes('id="pkgImageFileInput"'),
+    'admin.html must have file input id="pkgImageFileInput"'
+);
+assert.ok(
+    adminHtml.includes('id="pkgImagePreview"'),
+    'admin.html must have image preview element id="pkgImagePreview"'
+);
+assert.ok(
+    adminHtml.includes('SDW_ADMIN.handlePackageImageUpload'),
+    'admin.html must invoke SDW_ADMIN.handlePackageImageUpload'
+);
+assert.ok(
+    adminHtml.includes('SDW_ADMIN.selectPresetPackageImage'),
+    'admin.html must invoke SDW_ADMIN.selectPresetPackageImage'
+);
+assert.ok(
     adminHtml.includes('id="pkgQuadPrice"'),
     'admin.html must have input id="pkgQuadPrice"'
 );
@@ -131,6 +147,9 @@ assert.strictEqual(typeof adminPackages.deletePackage, 'function', 'deletePackag
 assert.strictEqual(typeof adminPackages.previewPackageWeb, 'function', 'previewPackageWeb must be exported');
 assert.strictEqual(typeof adminPackages.syncPackagesFromCloud, 'function', 'syncPackagesFromCloud must be exported');
 assert.strictEqual(typeof adminPackages.switchPackageViewMode, 'function', 'switchPackageViewMode must be exported');
+assert.strictEqual(typeof adminPackages.handlePackageImageUpload, 'function', 'handlePackageImageUpload must be exported');
+assert.strictEqual(typeof adminPackages.onPackageImageUrlInput, 'function', 'onPackageImageUrlInput must be exported');
+assert.strictEqual(typeof adminPackages.selectPresetPackageImage, 'function', 'selectPresetPackageImage must be exported');
 console.log('✔ admin-packages.js controller exports passed');
 
 console.log('\n======================================================');

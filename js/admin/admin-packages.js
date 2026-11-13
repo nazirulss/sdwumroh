@@ -423,6 +423,11 @@
 
                 setInputValue('pkgImageUrl', pkg.image_url || pkg.image || 'assets/hero-haram.png');
                 setInputValue('pkgDescription', pkg.description || '');
+
+                const previewImg = document.getElementById('pkgImagePreview');
+                if (previewImg) previewImg.src = pkg.image_url || pkg.image || 'assets/hero-haram.png';
+                const statusEl = document.getElementById('pkgImageUploadStatus');
+                if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-xs text-emerald-600"></i> Banner aktif';
             }
         } else {
             if (modalTitle) modalTitle.innerText = 'Tambah Paket Umroh Baru';
@@ -437,6 +442,11 @@
             setInputValue('pkgTriplePrice', 34500000);
             setInputValue('pkgDoublePrice', 37500000);
             setInputValue('pkgImageUrl', 'assets/hero-haram.png');
+
+            const previewImg = document.getElementById('pkgImagePreview');
+            if (previewImg) previewImg.src = 'assets/hero-haram.png';
+            const statusEl = document.getElementById('pkgImageUploadStatus');
+            if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-xs text-emerald-600"></i> Banner default (Pilih / Upload)';
         }
 
         modal.classList.remove('hidden');
@@ -446,6 +456,99 @@
     function setInputValue(id, val) {
         const el = document.getElementById(id);
         if (el) el.value = val;
+    }
+
+    // Upload Handler Gambar Banner Paket
+    function handlePackageImageUpload(input) {
+        if (!input || !input.files || !input.files[0]) return;
+        const file = input.files[0];
+
+        if (!file.type.match('image.*')) {
+            if (admin.showToast) admin.showToast('File yang dipilih harus berupa gambar!');
+            return;
+        }
+
+        const statusEl = document.getElementById('pkgImageUploadStatus');
+        if (statusEl) {
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-500 mr-1"></i> Memproses gambar...';
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const rawDataUrl = e.target.result;
+            const img = new Image();
+            img.onload = function() {
+                const maxWidth = 1200;
+                let targetWidth = img.width;
+                let targetHeight = img.height;
+
+                if (targetWidth > maxWidth) {
+                    targetHeight = Math.round((targetHeight * maxWidth) / targetWidth);
+                    targetWidth = maxWidth;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                const optimizedDataUrl = canvas.toDataURL('image/jpeg', 0.88);
+
+                setInputValue('pkgImageUrl', optimizedDataUrl);
+                const previewImg = document.getElementById('pkgImagePreview');
+                if (previewImg) previewImg.src = optimizedDataUrl;
+
+                if (statusEl) {
+                    statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-xs text-emerald-600"></i> ${escapeHtml(file.name)} (${Math.round(file.size / 1024)} KB)`;
+                }
+
+                if (admin.showToast) admin.showToast('✅ Gambar banner berhasil dimuat!');
+            };
+            img.onerror = function() {
+                setInputValue('pkgImageUrl', rawDataUrl);
+                const previewImg = document.getElementById('pkgImagePreview');
+                if (previewImg) previewImg.src = rawDataUrl;
+                if (statusEl) statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-xs text-emerald-600"></i> Gambar dimuat';
+            };
+            img.src = rawDataUrl;
+        };
+        reader.readAsDataURL(file);
+        input.value = '';
+    }
+
+    function onPackageImageUrlInput(url) {
+        const previewImg = document.getElementById('pkgImagePreview');
+        if (previewImg) {
+            previewImg.src = url || 'assets/hero-haram.png';
+        }
+    }
+
+    const BANNER_PRESETS = [
+        { label: 'Umroh Reguler Syawal', url: 'assets/pkg-reguler-syawal.png' },
+        { label: 'VIP Khidmat Clock Tower', url: 'assets/pkg-vip-khidmat.png' },
+        { label: 'Umroh Plus Turki', url: 'assets/pkg-plus-turki.png' },
+        { label: 'Ramadhan & Lailatul Qadr', url: 'assets/pkg-ramadhan.webp' },
+        { label: 'Paling Hemat', url: 'assets/pkg-hemat.webp' },
+        { label: 'Masjidil Haram Hero', url: 'assets/hero-haram.png' },
+        { label: 'Twilight Haramain', url: 'assets/hero-twilight.jpg' }
+    ];
+    let presetIdx = 0;
+
+    function selectPresetPackageImage() {
+        const preset = BANNER_PRESETS[presetIdx % BANNER_PRESETS.length];
+        presetIdx++;
+
+        setInputValue('pkgImageUrl', preset.url);
+        const previewImg = document.getElementById('pkgImagePreview');
+        if (previewImg) previewImg.src = preset.url;
+
+        const statusEl = document.getElementById('pkgImageUploadStatus');
+        if (statusEl) {
+            statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-xs text-emerald-600"></i> Preset: ${preset.label}`;
+        }
+
+        if (admin.showToast) admin.showToast(`Preset dipilih: ${preset.label}`);
     }
 
     function closePackageModal() {
@@ -679,6 +782,9 @@
     admin.deletePackage = deletePackage;
     admin.previewPackageWeb = previewPackageWeb;
     admin.syncPackagesFromCloud = syncPackagesFromCloud;
+    admin.handlePackageImageUpload = handlePackageImageUpload;
+    admin.onPackageImageUrlInput = onPackageImageUrlInput;
+    admin.selectPresetPackageImage = selectPresetPackageImage;
 
     return {
         renderPackages,
@@ -692,7 +798,10 @@
         togglePackageStatus,
         deletePackage,
         previewPackageWeb,
-        syncPackagesFromCloud
+        syncPackagesFromCloud,
+        handlePackageImageUpload,
+        onPackageImageUrlInput,
+        selectPresetPackageImage
     };
 });
 
