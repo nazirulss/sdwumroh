@@ -3,14 +3,17 @@
  * Tests HTML markup, state management, RBAC, nav routing, SW cache, and controller functions.
  */
 
-const fs = require('fs');
-const path = require('path');
-const assert = require('assert');
+(function () {
+    'use strict';
 
-console.log('--- STARTING ADMIN PACKAGES CATALOG TEST SUITE ---');
+    const fs = require('fs');
+    const path = require('path');
+    const assert = require('assert');
 
-// 1. Verify admin.html markup
-const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
+    console.log('--- STARTING ADMIN PACKAGES CATALOG TEST SUITE ---');
+
+    // 1. Verify admin.html markup
+    const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
 
 assert.ok(
     adminHtml.includes('data-admin-tab="tab-packages"'),
@@ -165,4 +168,6 @@ console.log('✔ admin-packages.js controller exports passed');
 console.log('\n======================================================');
 console.log('🎉 ALL ADMIN PACKAGES CATALOG TESTS PASSED SUCCESSFULLY!');
 console.log('======================================================\n');
+})();
+
 
