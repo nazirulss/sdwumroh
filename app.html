@@ -284,8 +284,8 @@
                             <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Live Ka'bah</span>
                         </button>
 
-                        <!-- 8. Profil Lembaga (4 Pilar Web Publik) -->
-                        <button type="button" onclick="window.openAppProfileModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                        <!-- 8. Profil Lembaga (Tampilan Khusus Mobile PWA) -->
+                        <button type="button" onclick="window.openAppSubView('profil')" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
                             <div class="w-12 h-12 bg-purple-50 text-sdw-pine rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sdw-pine group-hover:text-white transition-all duration-300 border border-purple-100/80">
                                 <i class="fa-solid fa-landmark text-xl"></i>
                             </div>
@@ -2987,135 +2987,423 @@
                     </form>
                 </div>
             </div>
-        </main>
-    </div>
 
-    <!-- ==================== MODAL: PROFIL LEMBAGA PT SAHABAT DHUHA WISATA (4 PILAR WEB PUBLIK) ==================== -->
-    <div id="modalAppProfileSheet" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300">
-        <!-- Backdrop click listener -->
-        <div class="absolute inset-0" onclick="window.closeAppProfileModal()"></div>
-
-        <!-- Sheet Dialog Panel -->
-        <div class="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-purple-100 overflow-hidden max-h-[92vh] flex flex-col z-10 animate-in fade-in slide-in-from-bottom duration-300">
-            <!-- Header Modal -->
-            <div class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#551C7A] text-white p-5 relative shrink-0">
-                <button type="button" onclick="window.closeAppProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/20" aria-label="Tutup Profil">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-2xl border border-amber-400/30 shrink-0">
-                        <i class="fa-solid fa-landmark"></i>
+            <!-- ==================== SUBVIEW 9: FULL-PAGE PROFIL LEMBAGA PWA (4 PILAR NATIVE) ==================== -->
+            <div id="subview-profil" class="app-view-container hidden space-y-4 max-w-5xl mx-auto pb-16">
+                <!-- Sticky Top App Bar -->
+                <div class="sticky top-0 z-30 bg-[#240833] text-white -mx-3.5 sm:-mx-6 lg:-mx-8 -mt-3.5 sm:-mt-6 lg:-mt-8 px-4 py-3 sm:px-6 flex items-center justify-between border-b border-sdw-gold/30 shadow-md">
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="window.backToAppHome()" class="w-10 h-10 rounded-2xl bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/10" aria-label="Kembali ke Beranda">
+                            <i class="fa-solid fa-arrow-left text-base text-amber-300"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-base font-black text-white leading-tight">Profil Lembaga &amp; Syiar</h2>
+                            <p class="text-[11px] text-purple-200/80">PT Sahabat Dhuha Wisata &bull; PPIU No. 123/2021</p>
+                        </div>
                     </div>
-                    <div>
+                    <span class="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-[10.5px] font-black">Akreditasi A</span>
+                </div>
+
+                <!-- 4-Pillar Segmented Submenu Tabs (Khusus Mobile PWA) -->
+                <div class="bg-white p-1.5 rounded-2xl border border-slate-200/80 shadow-xs grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                    <button type="button" id="btn-profile-subtab-visi" onclick="window.switchAppProfileSubtab('visi')" class="app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-white bg-sdw-pine transition flex items-center justify-center gap-2 cursor-pointer shadow-xs">
+                        <i class="fa-solid fa-bullseye text-amber-300 text-sm"></i>
+                        <span>Visi &amp; Misi</span>
+                    </button>
+                    <button type="button" id="btn-profile-subtab-sambutan" onclick="window.switchAppProfileSubtab('sambutan')" class="app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-user-tie text-sdw-gold text-sm"></i>
+                        <span>Sambutan</span>
+                    </button>
+                    <button type="button" id="btn-profile-subtab-pembimbing" onclick="window.switchAppProfileSubtab('pembimbing')" class="app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-graduation-cap text-sdw-gold text-sm"></i>
+                        <span>Pembimbing</span>
+                    </button>
+                    <button type="button" id="btn-profile-subtab-mitra" onclick="window.switchAppProfileSubtab('mitra')" class="app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-handshake text-sdw-gold text-sm"></i>
+                        <span>Legalitas &amp; Mitra</span>
+                    </button>
+                </div>
+
+                <!-- ==================== SUBTAB 1: VISI, MISI & KREDENSIAL ==================== -->
+                <div id="content-profile-subtab-visi" class="app-profile-subtab-content space-y-4">
+                    <!-- Hero Card Lembaga -->
+                    <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#1E052B] via-[#320D4A] to-[#170322] text-white p-5 sm:p-6 shadow-md border border-amber-400/20">
+                        <div class="relative z-10 space-y-3">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                    Izin Resmi Kemenag RI
+                                </span>
+                                <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                                    Predikat Akreditasi A Unggul
+                                </span>
+                            </div>
+                            <h3 class="text-lg sm:text-2xl font-black text-white leading-tight">
+                                PT Sahabat Dhuha Wisata (SDW UMROH)
+                            </h3>
+                            <p class="text-xs sm:text-sm text-purple-200/90 leading-relaxed">
+                                Penyelenggara Perjalanan Ibadah Umroh (PPIU) berizin resmi No. 123 Tahun 2021 Kementerian Agama Republik Indonesia, berkhidmat mendampingi jamaah dengan kepastian jadwal, kenyamanan fasilitas, dan bimbingan manasik bersanad nabawi.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 4 KPI Kredensial Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs text-center space-y-1">
+                            <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">No. Izin PPIU</span>
+                            <span class="text-sm font-black text-sdw-pine font-mono block">123 / 2021</span>
+                            <span class="text-[9.5px] text-emerald-600 font-bold block">Terdaftar Resmi</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs text-center space-y-1">
+                            <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Akreditasi</span>
+                            <span class="text-sm font-black text-amber-600 block">Grade A (Unggul)</span>
+                            <span class="text-[9.5px] text-slate-500 font-bold block">BAN-PPIU Kemenag</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs text-center space-y-1">
+                            <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Keberangkatan</span>
+                            <span class="text-sm font-black text-emerald-600 block">100% Pasti</span>
+                            <span class="text-[9.5px] text-slate-500 font-bold block">Garansi Jadwal</span>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-2xs text-center space-y-1">
+                            <span class="text-[10px] font-extrabold uppercase text-slate-400 block tracking-wider">Rasio Bimbingan</span>
+                            <span class="text-sm font-black text-purple-700 block">1 : 35 Jamaah</span>
+                            <span class="text-[9.5px] text-slate-500 font-bold block">Khidmat Intensif</span>
+                        </div>
+                    </div>
+
+                    <!-- Visi Lembaga -->
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-xs space-y-2">
+                        <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                            <div class="w-8 h-8 rounded-xl bg-purple-100 text-sdw-pine flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-eye"></i>
+                            </div>
+                            <h4>Visi Lembaga</h4>
+                        </div>
+                        <p class="text-xs text-slate-700 leading-relaxed font-medium bg-purple-50/50 p-4 rounded-2xl border border-purple-100/70 italic">
+                            "Menjadi biro perjalanan ibadah umroh dan haji khusus rujukan utama di Indonesia yang amanah, profesional, dan menentramkan hati jamaah melalui bimbingan manasik bersanad serta pelayanan prima berstandar internasional."
+                        </p>
+                    </div>
+
+                    <!-- 5 Misi Khidmat -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                        <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <h4>Misi Khidmat</h4>
+                        </div>
+                        <ul class="space-y-2.5 text-xs text-slate-700">
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-100 text-sdw-pine text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">1</span>
+                                <span>Menyediakan bimbingan manasik komprehensif dan bersanad sesuai sunnah Rasulullah SAW agar jamaah meraih predikat umroh maqbullah.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-100 text-sdw-pine text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">2</span>
+                                <span>Menjamin kepastian tiket penerbangan direct tanpa transit berlebih dan akomodasi hotel ring-1 di pelataran Masjidil Haram &amp; Nabawi.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-100 text-sdw-pine text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">3</span>
+                                <span>Menerapkan rasio pembimbing ideal 1 : 35 jamaah dengan asatidz lulusan universitas Timur Tengah dan dokter medis pendamping kloter.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-100 text-sdw-pine text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">4</span>
+                                <span>Mengedepankan transparansi finansial melalui rekening escrow perbankan syariah resmi dan fasilitas perlindungan jamaah tanpa biaya tersembunyi.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <span class="w-5 h-5 rounded-full bg-purple-100 text-sdw-pine text-[11px] font-black flex items-center justify-center shrink-0 mt-0.5">5</span>
+                                <span>Memanfaatkan ekosistem teknologi modern (One Journey, One Platform) untuk memudahkan monitoring jadwal, manasik digital, dan administrasi mandiri.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 5 Nilai Utama Khidmat (Panca Khidmat) -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                        <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                            <div class="w-8 h-8 rounded-xl bg-purple-100 text-sdw-pine flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-gem"></i>
+                            </div>
+                            <h4>Panca Khidmat (5 Nilai Luhur)</h4>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-sdw-pine">
+                                    <i class="fa-solid fa-shield-halved text-amber-500"></i>
+                                    <h5>1. Amanah</h5>
+                                </div>
+                                <p class="text-[11px] text-slate-600 leading-snug">Menjaga setiap rupiah tabungan jamaah dengan integritas dan tata kelola syariah tanpa kompromi.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-sdw-pine">
+                                    <i class="fa-solid fa-hand-holding-heart text-rose-500"></i>
+                                    <h5>2. Khidmat</h5>
+                                </div>
+                                <p class="text-[11px] text-slate-600 leading-snug">Melayani para Dhuyufurrahman dengan ketulusan dan kehangatan layaknya memperlakukan orang tua sendiri.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-sdw-pine">
+                                    <i class="fa-solid fa-book-quran text-emerald-600"></i>
+                                    <h5>3. Sunnah</h5>
+                                </div>
+                                <p class="text-[11px] text-slate-600 leading-snug">Memastikan seluruh rukun, wajib, dan tata cara ziarah berpegang teguh pada dalil shahih dan sunnah nabawi.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-sdw-pine">
+                                    <i class="fa-solid fa-calendar-check text-blue-600"></i>
+                                    <h5>4. Kepastian</h5>
+                                </div>
+                                <p class="text-[11px] text-slate-600 leading-snug">Memberikan kepastian tanggal keberangkatan, nomor penerbangan riil, serta konfirmasi hotel bintang 5 sejak awal.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lini Masa Tonggak Sejarah -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                        <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                            <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-timeline"></i>
+                            </div>
+                            <h4>Tonggak Sejarah Lembaga</h4>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div class="p-3.5 rounded-2xl bg-purple-50/40 border border-purple-100 space-y-1">
+                                <span class="text-[9.5px] font-black uppercase text-amber-600 bg-amber-400/10 px-2 py-0.5 rounded-full inline-block">Fase 1 (2018 - 2020)</span>
+                                <h5 class="text-xs font-black text-slate-800">Perintisan &amp; Komitmen Khidmat</h5>
+                                <p class="text-[11px] text-slate-600">Berawal dari inisiatif kelompok bimbingan manasik alumni Timur Tengah yang berdedikasi melayani jamaah dengan transparansi biaya dan bimbingan ibadah intensif.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-purple-50/40 border border-purple-100 space-y-1">
+                                <span class="text-[9.5px] font-black uppercase text-amber-600 bg-amber-400/10 px-2 py-0.5 rounded-full inline-block">Fase 2 (2021 - 2023)</span>
+                                <h5 class="text-xs font-black text-slate-800">Pengukuhan Badan Hukum &amp; Lisensi</h5>
+                                <p class="text-[11px] text-slate-600">Transformasi menjadi perseroan resmi PT Sahabat Dhuha Wisata, penataan SOP operasional, serta pengajuan izin resmi PPIU Kementerian Agama Republik Indonesia.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-purple-50/40 border border-purple-100 space-y-1">
+                                <span class="text-[9.5px] font-black uppercase text-amber-600 bg-amber-400/10 px-2 py-0.5 rounded-full inline-block">Fase 3 (2024 - 2025)</span>
+                                <h5 class="text-xs font-black text-slate-800">Akreditasi A &amp; Kemitraan Strategis</h5>
+                                <p class="text-[11px] text-slate-600">Meraih predikat Akreditasi A Unggul, penguncian kontrak jangka panjang dengan Saudia &amp; Garuda Indonesia, serta hotel pelataran Haramain bintang 5.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-purple-50/40 border border-purple-100 space-y-1">
+                                <span class="text-[9.5px] font-black uppercase text-amber-600 bg-amber-400/10 px-2 py-0.5 rounded-full inline-block">Fase 4 (2026 - Sekarang)</span>
+                                <h5 class="text-xs font-black text-slate-800">Ekosistem Digital One Journey</h5>
+                                <p class="text-[11px] text-slate-600">Peluncuran platform digital terpadu PWA SDW Umroh, portal manajemen kloter real-time, dan bimbingan ibadah mandiri yang tercatat secara akurat.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SUBTAB 2: SAMBUTAN DIREKTUR UTAMA ==================== -->
+                <div id="content-profile-subtab-sambutan" class="app-profile-subtab-content hidden space-y-4">
+                    <!-- Kartu Profil Pimpinan -->
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-xs flex flex-col sm:flex-row items-center gap-5">
+                        <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-3xl overflow-hidden shadow-md border-2 border-amber-400/50 shrink-0 bg-slate-100">
+                            <img id="app-profile-director-img" src="assets/direktur-utama.jpg" alt="H. Muhammad Syarif" class="w-full h-full object-cover" onerror="this.src='assets/hero-haram.png'">
+                        </div>
+                        <div class="space-y-1.5 text-center sm:text-left">
+                            <span class="px-2.5 py-0.5 rounded-full bg-purple-100 text-sdw-pine text-[10px] font-black uppercase tracking-wider inline-block">
+                                Pimpinan Perseroan
+                            </span>
+                            <h3 id="app-profile-director-name" class="text-base sm:text-lg font-black text-slate-800">
+                                H. Muhammad Syarif
+                            </h3>
+                            <p id="app-profile-director-title" class="text-xs font-bold text-amber-600">
+                                Direktur Utama PT Sahabat Dhuha Wisata
+                            </p>
+                            <p class="text-[11px] text-slate-500">
+                                Berpengalaman memimpin tata kelola perjalanan ibadah haji khusus &amp; umroh dengan dedikasi lebih dari 12 tahun khidmat di Haramain.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Gold Quote Pimpinan -->
+                    <div class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#4C1D6B] text-white p-5 rounded-3xl shadow-sm border border-amber-400/30 space-y-2">
+                        <div class="flex items-center gap-2 text-amber-300 text-xs font-bold">
+                            <i class="fa-solid fa-quote-left text-sm"></i>
+                            <span>Komitmen Pimpinan</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-purple-100 font-medium italic leading-relaxed">
+                            "Di SDW UMROH, kami memandang perjalanan ke Baitullah bukan sekadar perniagaan tiket dan hotel, melainkan sebuah amanah suci yang agung. Setiap tetes keringat tabungan jamaah kami jaga dengan kepastian fasilitas, transparansi penuh tanpa biaya siluman, dan bimbingan manasik bersanad yang menenteramkan kalbu."
+                        </p>
+                    </div>
+
+                    <!-- Naskah Sambutan Lengkap Mobile -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-3.5 text-xs text-slate-700 leading-relaxed">
+                        <h4 class="text-sm font-black text-sdw-pine">
+                            Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia
+                        </h4>
+                        <p>
+                            Assalamu’alaikum Warahmatullahi Wabarakatuh. Segala puji bagi Allah SWT, Tuhan semesta alam, yang telah memanggil hamba-hamba pilihan-Nya untuk berziarah ke Baitullah Al-Haram di Makkah Al-Mukarramah dan berziarah ke makam baginda Rasulullah SAW di Madinah Al-Munawwarah.
+                        </p>
+                        <p>
+                            Menjadi pelayan bagi Dhuyufurrahman (Tamu-Tamu Allah) adalah sebuah kehormatan agung sekaligus amanah yang sangat berat di hadapan Allah SWT. Oleh karena itu, sejak pertama kali PT Sahabat Dhuha Wisata (SDW UMROH) didirikan, kami meletakkan satu komitmen mendasar: <strong>Kepastian Fasilitas, Transparansi Biaya, dan Kemurnian Ibadah Sesuai Tuntunan Sunnah</strong>.
+                        </p>
+                        <p>
+                            Kami memahami betapa berharganya setiap tetes keringat dan doa yang dipanjatkan para jamaah untuk mengumpulkan bekal menuju Baitullah. Banyak di antara kita yang menanti bertahun-tahun untuk dapat bersujud di depan Ka'bah. Karena itu, kami tidak akan pernah berkompromi dengan mutu pelayanan. Kami mengunci kontrak hotel-hotel terbaik yang berjarak dekat dengan pelataran masjid, menggunakan maskapai penerbangan direct tanpa transit berlebih, dan mendampingkan asatidz pembimbing bersanad yang siap membimbing langkah demi langkah ibadah Anda.
+                        </p>
+                        <p>
+                            Melalui platform digital dan aplikasi PWA SDW UMROH ini, kami berupaya menghadirkan kemudahan terpadu bagi keluarga jamaah: mulai dari kemudahan pendaftaran, pengecekan tabungan, jadwal manasik berkala, panduan doa offline, hingga pantauan kloter secara transparan.
+                        </p>
+                        <p>
+                            Semoga Allah SWT meridhai setiap niat suci kita, menganugerahi kemudahan dalam perjalanan, dan menyambut kepulangan Bapak/Ibu sekalian dengan predikat umroh yang maqbullah dan mabrurah. Aamiin Ya Rabbal ‘Alamin.
+                        </p>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[10px] text-slate-400 block">Khadimul Ummah &bull; Makkah &amp; Jakarta</span>
+                                <strong class="text-xs text-sdw-pine block font-bold">H. Muhammad Syarif</strong>
+                            </div>
+                            <div class="px-2.5 py-1 rounded-xl bg-purple-50 text-sdw-pine text-[10px] font-black border border-purple-200">
+                                Khidmat Untuk Jamaah
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== SUBTAB 3: DEWAN PEMBIMBING & MUTHAWWIF ==================== -->
+                <div id="content-profile-subtab-pembimbing" class="app-profile-subtab-content hidden space-y-4">
+                    <!-- Kartu Pembimbing Utama -->
+                    <div class="bg-gradient-to-br from-purple-900 via-indigo-950 to-slate-900 text-white p-5 rounded-3xl shadow-md border border-amber-400/30 space-y-3">
                         <div class="flex items-center gap-2">
-                            <span class="text-[9.5px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/30">Profil Lembaga</span>
-                            <span class="text-[9.5px] font-extrabold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-400/30">Akreditasi A</span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 text-[10px] font-black uppercase tracking-wider border border-amber-400/30">
+                                Pembimbing Utama Syariah
+                            </span>
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-400/30">
+                                Rasio 1 : 35
+                            </span>
                         </div>
-                        <h3 class="font-black text-base text-white mt-1 leading-snug">PT Sahabat Dhuha Wisata</h3>
-                        <p class="text-[11px] text-purple-200/90">Izin PPIU No. 123/2021 Kemenag RI &bull; One Journey, One Platform</p>
+                        <div class="flex items-start gap-4">
+                            <div class="w-16 h-16 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-3xl shrink-0 border border-amber-400/30 shadow-inner">
+                                <i class="fa-solid fa-user-graduate"></i>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-black text-white">Ust. H. Ahmad Fauzan, Lc., M.Ag.</h3>
+                                <p class="text-xs text-amber-300 font-medium">Ketua Dewan Pembimbing Syariah &amp; Muthawwif Utama</p>
+                                <p class="text-[11px] text-purple-200/80">Alumni Universitas Islam Madinah (Fakultas Syariah) &bull; Pemegang Sanad Manasik Nabawi</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-purple-100/90 leading-relaxed italic bg-black/20 p-3 rounded-2xl border border-white/10">
+                            "Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW dengan sabar, santun, dan menentramkan."
+                        </p>
+                    </div>
+
+                    <!-- Filter Kategori Pembimbing -->
+                    <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                        <button type="button" onclick="window.filterAppProfileGuides('ALL')" class="app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shrink-0 cursor-pointer shadow-2xs">
+                            Semua (6)
+                        </button>
+                        <button type="button" onclick="window.filterAppProfileGuides('MAKKAH')" class="app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                            Makkah
+                        </button>
+                        <button type="button" onclick="window.filterAppProfileGuides('MADINAH')" class="app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                            Madinah
+                        </button>
+                        <button type="button" onclick="window.filterAppProfileGuides('MEDIS')" class="app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                            Tim Medis Kloter
+                        </button>
+                        <button type="button" onclick="window.filterAppProfileGuides('MANASIK')" class="app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                            Manasik Bersanad
+                        </button>
+                    </div>
+
+                    <!-- Container Grid Asatidz & Muthawwif -->
+                    <div id="appProfileGuidesContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Populated by JavaScript -->
                     </div>
                 </div>
-            </div>
 
-            <!-- Scrollable Content: 4 Pilar Profil -->
-            <div class="p-5 overflow-y-auto space-y-3 divide-y divide-slate-100">
-                <!-- Pengantar Singkat -->
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    Mengenal lebih dekat ekosistem, legalitas, kepemimpinan, dan bimbingan ibadah terpercaya bersama PT Sahabat Dhuha Wisata:
-                </p>
+                <!-- ==================== SUBTAB 4: LEGALITAS & JARINGAN MITRA ==================== -->
+                <div id="content-profile-subtab-mitra" class="app-profile-subtab-content hidden space-y-4">
+                    <!-- Dokumen Izin Resmi -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200/80 shadow-xs space-y-3">
+                        <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                            <div class="w-8 h-8 rounded-xl bg-purple-100 text-sdw-pine flex items-center justify-center text-sm">
+                                <i class="fa-solid fa-stamp"></i>
+                            </div>
+                            <h4>Legalitas &amp; Lisensi Operasional</h4>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <span class="text-[9.5px] font-extrabold uppercase text-slate-400 block tracking-wider">Izin Resmi PPIU Kemenag</span>
+                                <h5 class="text-xs font-black text-sdw-pine font-mono">No. 123 Tahun 2021</h5>
+                                <p class="text-[11px] text-slate-600">Surat Keputusan Menteri Agama RI tentang Izin Operasional Penyelenggara Perjalanan Ibadah Umroh.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <span class="text-[9.5px] font-extrabold uppercase text-slate-400 block tracking-wider">Akreditasi Lembaga</span>
+                                <h5 class="text-xs font-black text-amber-600">Predikat A (Sangat Baik)</h5>
+                                <p class="text-[11px] text-slate-600">Sertifikat Akreditasi Badan Akreditasi Nasional PPIU dengan kualifikasi mutu kepatuhan syariah &amp; operasional.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <span class="text-[9.5px] font-extrabold uppercase text-slate-400 block tracking-wider">Badan Hukum Perseroan</span>
+                                <h5 class="text-xs font-black text-slate-800">AHU-0012345.AH.01.01.2021</h5>
+                                <p class="text-[11px] text-slate-600">Pengesahan Pendirian Badan Hukum PT Sahabat Dhuha Wisata oleh Kementerian Hukum dan HAM RI.</p>
+                            </div>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 space-y-1">
+                                <span class="text-[9.5px] font-extrabold uppercase text-slate-400 block tracking-wider">MOU Kemitraan Strategis</span>
+                                <h5 class="text-xs font-black text-emerald-700">Maskapai &amp; Bank Syariah</h5>
+                                <p class="text-[11px] text-slate-600">Kerjasama resmi dengan Saudia Airlines, Garuda Indonesia, dan Kustodian Escrow Bank Syariah Indonesia (BSI).</p>
+                            </div>
+                        </div>
+                    </div>
 
-                <!-- Pilar 1: Profil & Visi Misi -->
-                <div class="pt-3">
-                    <a href="tentang.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
-                                <i class="fa-solid fa-bullseye"></i>
+                    <!-- Seksi Jaringan Mitra Syiar & Koordinator Daerah -->
+                    <div class="bg-white p-5 rounded-3xl border border-purple-100 shadow-xs space-y-3.5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div class="flex items-center gap-2.5 text-sdw-pine font-black text-sm">
+                                <div class="w-8 h-8 rounded-xl bg-purple-100 text-sdw-pine flex items-center justify-center text-sm">
+                                    <i class="fa-solid fa-users"></i>
+                                </div>
+                                <div>
+                                    <h4>Jaringan Mitra Syiar &amp; Cabang Daerah</h4>
+                                    <p class="text-[11px] text-slate-500 font-normal">Koordinator resmi, majelis ta'lim &amp; perwakilan wilayah</p>
+                                </div>
                             </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">1. Profil &amp; Visi Misi Lembaga</h4>
-                                <p class="text-[11px] text-slate-500 line-clamp-1">Visi, misi, 5 nilai khidmat, rekam jejak &amp; fasilitas jamaah</p>
-                            </div>
+                            <span id="appProfileMitraCountBadge" class="px-2.5 py-1 rounded-full bg-purple-50 text-sdw-pine border border-purple-200 text-[10px] font-black self-start sm:self-auto">
+                                6 Mitra Aktif
+                            </span>
                         </div>
-                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </div>
-                    </a>
-                </div>
 
-                <!-- Pilar 2: Sambutan Direktur -->
-                <div class="pt-3">
-                    <a href="sambutan.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
-                                <i class="fa-solid fa-user-tie"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">2. Sambutan Direktur Utama</h4>
-                                <p class="text-[11px] text-slate-500 line-clamp-1">Pesan resmi &amp; komitmen pimpinan H. Muhammad Syarif</p>
-                            </div>
+                        <!-- Filter Wilayah Mitra -->
+                        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                            <button type="button" onclick="window.filterAppProfileMitra('ALL')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shrink-0 cursor-pointer shadow-2xs">
+                                Semua Wilayah
+                            </button>
+                            <button type="button" onclick="window.filterAppProfileMitra('Jawa Timur')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                                Jawa Timur
+                            </button>
+                            <button type="button" onclick="window.filterAppProfileMitra('Jawa Barat')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                                Jawa Barat
+                            </button>
+                            <button type="button" onclick="window.filterAppProfileMitra('DKI Jakarta')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                                DKI Jakarta
+                            </button>
+                            <button type="button" onclick="window.filterAppProfileMitra('Sulawesi Selatan')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                                Sulawesi Selatan
+                            </button>
+                            <button type="button" onclick="window.filterAppProfileMitra('Jawa Tengah')" class="app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer">
+                                Jawa Tengah
+                            </button>
                         </div>
-                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </div>
-                    </a>
-                </div>
 
-                <!-- Pilar 3: Dewan Pembimbing & Muthawwif -->
-                <div class="pt-3">
-                    <a href="muthawwif.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">3. Dewan Pembimbing &amp; Muthawwif</h4>
-                                <p class="text-[11px] text-slate-500 line-clamp-1">Asatidz pembimbing bersanad, rasio 1:35 &amp; tim medis kloter</p>
-                            </div>
+                        <!-- Grid Kartu Mitra Syiar -->
+                        <div id="appProfileMitraContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Populated dynamically by JavaScript -->
                         </div>
-                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Pilar 4: Legalitas & Jaringan Mitra -->
-                <div class="pt-3">
-                    <a href="legalitas.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
-                                <i class="fa-solid fa-certificate"></i>
-                            </div>
-                            <div>
-                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">4. Legalitas &amp; Jaringan Mitra</h4>
-                                <p class="text-[11px] text-slate-500 line-clamp-1">Izin PPIU Kemenag, MOU maskapai, serta Jaringan Mitra Syiar</p>
-                            </div>
-                        </div>
-                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
-                            <i class="fa-solid fa-chevron-right text-xs"></i>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Banner Bantuan Layanan CS Khidmat 24/7 -->
-                <div class="pt-3">
-                    <div class="p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl shrink-0 shadow-xs">
-                                <i class="fa-brands fa-whatsapp"></i>
-                            </div>
-                            <div>
-                                <h5 class="text-xs font-black text-emerald-950">Bantuan &amp; Konsultasi (CS Khidmat)</h5>
-                                <p class="text-[10.5px] text-emerald-800">Konsultasi pendaftaran, paket, atau jadwal manasik</p>
-                            </div>
-                        </div>
-                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20layanan%20jamaah." target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition active:scale-95 shrink-0">
-                            <span>Chat</span>
-                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
-                        </a>
                     </div>
                 </div>
+
+                <!-- Banner Bantuan Cepat CS Khidmat 24 Jam via WhatsApp -->
+                <div class="p-4 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-md flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-11 h-11 rounded-2xl bg-white/10 text-white flex items-center justify-center text-2xl shrink-0 border border-white/20">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-black text-white">Konsultasi Layanan &amp; Pendaftaran Umroh</h4>
+                            <p class="text-[11px] text-emerald-100">Hubungi langsung tim CS Khidmat 24 Jam via WhatsApp</p>
+                        </div>
+                    </div>
+                    <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20ingin%20konsultasi%20mengenai%20layanan%20umroh." target="_blank" rel="noopener noreferrer" class="px-3.5 py-2 rounded-xl bg-white text-emerald-800 text-xs font-black shadow-xs hover:bg-emerald-50 active:scale-95 transition shrink-0">
+                        Chat Sekarang
+                    </a>
+                </div>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH 5-TAB STYLE) ==================== -->

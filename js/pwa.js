@@ -2894,24 +2894,346 @@
     }
   };
 
-  // ==================== APP PROFILE INSTITUTION MODAL (4-PILLAR EMBED) ====================
-  window.openAppProfileModal = function (options = { syncHistory: true }) {
-    const modal = document.getElementById('modalAppProfileSheet');
-    if (!modal) return;
-    modal.classList.remove('hidden');
-    document.body.classList.add('overflow-hidden');
-    if (options && options.syncHistory && typeof syncUrlView === 'function') {
-      syncUrlView('profil-lembaga');
+  // ==================== APP PROFILE INSTITUTION (4-PILLAR NATIVE MOBILE SUBVIEW) ====================
+  let appProfileActiveGuideFilter = 'ALL';
+  let appProfileActiveMitraFilter = 'ALL';
+
+  window.openAppProfileModal = function (options) {
+    window.openAppSubView('profil', options);
+  };
+
+  window.closeAppProfileModal = function (options) {
+    window.backToAppHome(options);
+  };
+
+  window.switchAppProfileSubtab = function (subtabKey = 'visi', options = { syncUrl: true }) {
+    const validTabs = ['visi', 'sambutan', 'pembimbing', 'mitra'];
+    const key = validTabs.includes(subtabKey) ? subtabKey : 'visi';
+
+    // 1. Update Buttons
+    validTabs.forEach((tab) => {
+      const btn = document.getElementById('btn-profile-subtab-' + tab);
+      const content = document.getElementById('content-profile-subtab-' + tab);
+      if (btn) {
+        if (tab === key) {
+          btn.className = 'app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-white bg-sdw-pine transition flex items-center justify-center gap-2 cursor-pointer shadow-xs';
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = icon.className.replace('text-sdw-gold', 'text-amber-300');
+          }
+        } else {
+          btn.className = 'app-profile-subtab-btn py-2.5 px-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100 transition flex items-center justify-center gap-2 cursor-pointer';
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.className = icon.className.replace('text-amber-300', 'text-sdw-gold');
+          }
+        }
+      }
+      if (content) {
+        if (tab === key) {
+          content.classList.remove('hidden');
+        } else {
+          content.classList.add('hidden');
+        }
+      }
+    });
+
+    // 2. Render subtab dynamic content
+    if (key === 'sambutan') {
+      window.renderAppProfileDirector();
+    } else if (key === 'pembimbing') {
+      window.renderAppProfileGuides(appProfileActiveGuideFilter);
+    } else if (key === 'mitra') {
+      window.renderAppProfileMitra(appProfileActiveMitraFilter);
+    }
+
+    // 3. Sync URL query
+    if (options && options.syncUrl !== false) {
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('view', 'profil');
+        url.searchParams.set('sub', key);
+        window.history.pushState({ view: 'profil', sub: key }, '', url.toString());
+      } catch (_) {}
     }
   };
 
-  window.closeAppProfileModal = function (options = { syncHistory: true }) {
-    const modal = document.getElementById('modalAppProfileSheet');
-    if (modal) modal.classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-    if (options && options.syncHistory && typeof clearUrlView === 'function') {
-      clearUrlView();
+  // Controller Direktur
+  window.renderAppProfileDirector = function () {
+    try {
+      const raw = localStorage.getItem('sdw_admin_profile_director');
+      if (raw) {
+        const data = JSON.parse(raw);
+        const imgEl = document.getElementById('app-profile-director-img');
+        const nameEl = document.getElementById('app-profile-director-name');
+        const titleEl = document.getElementById('app-profile-director-title');
+        if (imgEl && data.photo) imgEl.src = data.photo;
+        if (nameEl && data.name) nameEl.textContent = data.name;
+        if (titleEl && data.title) titleEl.textContent = data.title;
+      }
+    } catch (_) {}
+  };
+
+  // Controller Guides & Asatidz
+  const DEFAULT_APP_GUIDES = [
+    {
+      id: 'G-01',
+      name: 'Ust. Muhammad Ridwan, Lc.',
+      role: 'Muthawwif Senior Makkah',
+      category: 'MAKKAH',
+      almaMater: 'Al-Azhar University, Cairo',
+      experience: '8 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
+    },
+    {
+      id: 'G-02',
+      name: 'Ust. Dr. H. Syarif Hidayat, M.A.',
+      role: 'Muthawwif Senior Madinah & Rawdah',
+      category: 'MADINAH',
+      almaMater: 'Universitas Islam Madinah (S2 Ushul Fiqh)',
+      experience: '10 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
+    },
+    {
+      id: 'G-03',
+      name: 'dr. H. Farhan Zulkarnain, Sp.PD',
+      role: 'Koordinator Tim Medis Kloter',
+      category: 'MEDIS',
+      almaMater: 'FK Universitas Indonesia (Spesialis Penyakit Dalam)',
+      experience: '7 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
+    },
+    {
+      id: 'G-04',
+      name: 'Ust. H. Abdullah Mansyur, Lc.',
+      role: 'Pembimbing Manasik Bersanad',
+      category: 'MANASIK',
+      almaMater: 'LIPIA Jakarta (Fakultas Syariah)',
+      experience: '9 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
+    },
+    {
+      id: 'G-05',
+      name: 'Ust. Ahmad Baehaqi, S.Th.I',
+      role: 'Muthawwif Ziarah Makkah & Madinah',
+      category: 'MAKKAH',
+      almaMater: 'UIN Syarif Hidayatullah Jakarta',
+      experience: '6 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
+    },
+    {
+      id: 'G-06',
+      name: 'dr. Hj. Siti Maryam, Sp.KO',
+      role: 'Dokter Kloter & Konsultan Jamaah Lansia',
+      category: 'MEDIS',
+      almaMater: 'FK Undip Semarang',
+      experience: '8 Tahun',
+      status: 'AKTIF',
+      photo: 'assets/hero-muthawwif.png'
     }
+  ];
+
+  window.renderAppProfileGuides = function (filter = 'ALL') {
+    appProfileActiveGuideFilter = filter;
+    const container = document.getElementById('appProfileGuidesContainer');
+    if (!container) return;
+
+    let list = DEFAULT_APP_GUIDES;
+    try {
+      const raw = localStorage.getItem('sdw_admin_profile_guides');
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.guides) && data.guides.length > 0) {
+          list = data.guides;
+        }
+      }
+    } catch (_) {}
+
+    const filtered = (filter === 'ALL') ? list : list.filter(g => (g.category === filter || (g.role && g.role.toUpperCase().includes(filter))));
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full p-6 text-center bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500">
+          Tidak ada personil pembimbing pada kategori ini.
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(g => `
+      <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-2.5">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
+            <img src="${g.photo || 'assets/hero-muthawwif.png'}" alt="${g.name}" class="w-full h-full object-cover" onerror="this.src='assets/hero-muthawwif.png'">
+          </div>
+          <div>
+            <h5 class="text-xs font-black text-slate-800 leading-snug">${g.name}</h5>
+            <span class="text-[10px] font-bold text-amber-600 block">${g.role}</span>
+            <span class="text-[9.5px] text-slate-500 line-clamp-1">${g.almaMater || 'Keilmuan Syariah Bersanad'}</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-slate-200/60 text-[10px]">
+          <span class="text-slate-500 font-medium">Pengalaman: <strong class="text-slate-700">${g.experience || '5+ Tahun'}</strong></span>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[9px]">SIAP KHIDMAT</span>
+        </div>
+      </div>
+    `).join('');
+  };
+
+  window.filterAppProfileGuides = function (category = 'ALL') {
+    document.querySelectorAll('.app-guide-filter-btn').forEach(btn => {
+      btn.className = 'app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer';
+    });
+    if (event && event.currentTarget) {
+      event.currentTarget.className = 'app-guide-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shrink-0 cursor-pointer shadow-2xs';
+    }
+    window.renderAppProfileGuides(category);
+  };
+
+  // Controller Mitra Syiar & Cabang Daerah
+  const DEFAULT_APP_MITRA = [
+    {
+      id: 'MTR-001',
+      name: 'H. M. Zaini Dahlan',
+      title: 'Majelis Ibadah Barakah',
+      region: 'Jawa Timur',
+      city: 'Kota Surabaya',
+      role: 'Korda Surabaya',
+      sk_number: 'SK-SDW/MTR-SBY/2024',
+      phone: '081234567891',
+      photo: 'assets/direktur-utama.jpg'
+    },
+    {
+      id: 'MTR-002',
+      name: 'Ust. Asep Saepudin, M.Pd.',
+      title: 'Pondok Tahfidz Al-Hidayah',
+      region: 'Jawa Barat',
+      city: 'Kota Bandung',
+      role: 'Mitra Bandung',
+      sk_number: 'SK-SDW/MTR-BDG/2024',
+      phone: '081234567892',
+      photo: 'assets/direktur-utama.jpg'
+    },
+    {
+      id: 'MTR-003',
+      name: 'H. Nuruddin, Lc.',
+      title: 'Kantor Wilayah Sulawesi Selatan',
+      region: 'Sulawesi Selatan',
+      city: 'Kota Makassar',
+      role: 'Cabang Makassar',
+      sk_number: 'SK-SDW/CAB-MKS/2023',
+      phone: '081234567893',
+      photo: 'assets/direktur-utama.jpg'
+    },
+    {
+      id: 'MTR-004',
+      name: 'Ust. H. Farhan Ramadhan',
+      title: 'Korda Khusus Jabodetabek',
+      region: 'DKI Jakarta',
+      city: 'Jakarta Selatan',
+      role: 'Korda Jakarta',
+      sk_number: 'SK-SDW/MTR-JKT/2024',
+      phone: '081234567894',
+      photo: 'assets/direktur-utama.jpg'
+    },
+    {
+      id: 'MTR-005',
+      name: 'H. Irfan Fauzi, S.E.',
+      title: 'Kantor Cabang Resmi Semarang',
+      region: 'Jawa Tengah',
+      city: 'Kota Semarang',
+      role: 'Cabang Semarang',
+      sk_number: 'SK-SDW/CAB-SMG/2023',
+      phone: '081234567895',
+      photo: 'assets/direktur-utama.jpg'
+    },
+    {
+      id: 'MTR-006',
+      name: 'Hj. Fatimah Azzahra',
+      title: 'Komunitas Hijrah Mulia',
+      region: 'Jawa Timur',
+      city: 'Kab. Sidoarjo',
+      role: 'Mitra Sidoarjo',
+      sk_number: 'SK-SDW/MTR-SDA/2024',
+      phone: '081234567896',
+      photo: 'assets/direktur-utama.jpg'
+    }
+  ];
+
+  window.renderAppProfileMitra = function (region = 'ALL') {
+    appProfileActiveMitraFilter = region;
+    const container = document.getElementById('appProfileMitraContainer');
+    const badgeEl = document.getElementById('appProfileMitraCountBadge');
+    if (!container) return;
+
+    let list = DEFAULT_APP_MITRA;
+    try {
+      const raw = localStorage.getItem('sdw_admin_profile_legality');
+      if (raw) {
+        const data = JSON.parse(raw);
+        if (Array.isArray(data.mitra_syiar) && data.mitra_syiar.length > 0) {
+          list = data.mitra_syiar;
+        }
+      }
+    } catch (_) {}
+
+    const filtered = (region === 'ALL') ? list : list.filter(m => (m.region === region || (m.city && m.city.includes(region))));
+
+    if (badgeEl) {
+      badgeEl.textContent = `${filtered.length} Mitra Aktif`;
+    }
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="col-span-full p-6 text-center bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500">
+          Belum ada mitra syiar terdaftar di wilayah ${region}.
+        </div>`;
+      return;
+    }
+
+    container.innerHTML = filtered.map(m => {
+      const waNumber = (m.phone || '081234567890').replace(/[^0-9]/g, '');
+      const waLink = `https://wa.me/${waNumber}?text=${encodeURIComponent(`Assalamualaikum Bapak/Ibu ${m.name}, saya ingin konsultasi pendaftaran umroh melalui ${m.title || 'Mitra SDW UMROH'}.`)}`;
+      return `
+        <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-16 h-16 rounded-2xl aspect-square overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
+              <img src="${m.photo || 'assets/direktur-utama.jpg'}" alt="${m.name}" class="w-full h-full object-cover" onerror="this.src='assets/direktur-utama.jpg'">
+            </div>
+            <div class="space-y-1 min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="px-2 py-0.5 rounded-md bg-amber-400/20 text-amber-800 text-[9px] font-black uppercase tracking-wider">${m.role || 'Mitra Syiar'}</span>
+                <span class="text-[9.5px] text-slate-400 font-mono">${m.region}</span>
+              </div>
+              <h5 class="text-xs font-black text-slate-800 leading-tight truncate">${m.name}</h5>
+              <p class="text-[10.5px] text-slate-600 line-clamp-1">${m.title || m.city}</p>
+              <p class="text-[9.5px] text-slate-400 font-mono truncate">SK: ${m.sk_number || 'SK-RESMI-SDW'}</p>
+            </div>
+          </div>
+          <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
+            <span class="text-[10px] text-slate-500"><i class="fa-solid fa-location-dot text-amber-500 mr-1"></i>${m.city}</span>
+            <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-[10.5px] font-bold flex items-center gap-1.5 transition shadow-2xs">
+              <i class="fa-brands fa-whatsapp text-xs"></i>
+              <span>Hubungi</span>
+            </a>
+          </div>
+        </div>
+      `;
+    }).join('');
+  };
+
+  window.filterAppProfileMitra = function (region = 'ALL') {
+    document.querySelectorAll('.app-mitra-filter-btn').forEach(btn => {
+      btn.className = 'app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-white text-slate-600 hover:bg-slate-100 border border-slate-200 shrink-0 cursor-pointer';
+    });
+    if (event && event.currentTarget) {
+      event.currentTarget.className = 'app-mitra-filter-btn px-3 py-1.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shrink-0 cursor-pointer shadow-2xs';
+    }
+    window.renderAppProfileMitra(region);
   };
 
   // ==================== IN-APP ROUTER & URL HISTORY SYNC ENGINE ====================
@@ -2963,11 +3285,10 @@
     'wartaDetailModal',
     'ibadahHubModal',
     'settingsModal',
-    'notificationModal',
-    'modalAppProfileSheet'
+    'notificationModal'
   ];
 
-  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'ibadah', 'live', 'auth'];
+  const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'ibadah', 'live', 'auth', 'profil', 'profil-lembaga'];
 
   // Master SPA Full-Screen Sub-Page Navigator (Opsi 1)
   window.openAppSubView = function (viewName, options = { syncHistory: true }) {
@@ -3070,6 +3391,23 @@
       if (typeof window.switchAuthTab === 'function') window.switchAuthTab('login');
     } else if (v === 'booking') {
       if (typeof window.initInAppBookingView === 'function') window.initInAppBookingView();
+    } else if (v === 'profil' || v === 'profil-lembaga') {
+      if (typeof window.switchAppProfileSubtab === 'function') {
+        let targetTab = 'visi';
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const qSub = urlParams.get('sub') || urlParams.get('tab');
+          if (['visi', 'sambutan', 'pembimbing', 'mitra'].includes(qSub)) targetTab = qSub;
+        } catch (e) {}
+        if (options && (options.sub || options.tab)) targetTab = options.sub || options.tab;
+        window.switchAppProfileSubtab(targetTab, { syncUrl: false });
+      }
+      if (typeof window.renderAppProfileGuides === 'function') {
+        window.renderAppProfileGuides();
+      }
+      if (typeof window.renderAppProfileMitra === 'function') {
+        window.renderAppProfileMitra();
+      }
     }
 
     // 5. Synchronize URL query parameter (?view=...)
@@ -3216,18 +3554,18 @@
       }
     },
     'account': (opts) => APP_VIEW_MAP['akun'](opts),
-    'profil': (opts) => APP_VIEW_MAP['akun'](opts),
-    'profile': (opts) => APP_VIEW_MAP['akun'](opts),
 
-    'profil-lembaga': (opts) => {
-      dismissSubViewsAndModals();
-      if (typeof window.openAppProfileModal === 'function') {
-        window.openAppProfileModal({ syncHistory: false });
-      }
-    },
-    'profil_lembaga': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
-    'lembaga': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
-    'tentang-kami': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
+    'profil': (opts) => window.openAppSubView('profil', opts),
+    'profile': (opts) => window.openAppSubView('profil', opts),
+    'profil-lembaga': (opts) => window.openAppSubView('profil', opts),
+    'profil_lembaga': (opts) => window.openAppSubView('profil', opts),
+    'lembaga': (opts) => window.openAppSubView('profil', opts),
+    'tentang-kami': (opts) => window.openAppSubView('profil', opts),
+    'sambutan': (opts) => window.openAppSubView('profil', { ...opts, sub: 'sambutan' }),
+    'pembimbing': (opts) => window.openAppSubView('profil', { ...opts, sub: 'pembimbing' }),
+    'muthawwif': (opts) => window.openAppSubView('profil', { ...opts, sub: 'pembimbing' }),
+    'mitra': (opts) => window.openAppSubView('profil', { ...opts, sub: 'mitra' }),
+    'legalitas': (opts) => window.openAppSubView('profil', { ...opts, sub: 'mitra' }),
 
     // 3. Ibadah Super Hub Full-Screen SPA (Sesuai Konsep Asnawiyyah)
     'ibadah': (opts) => {
