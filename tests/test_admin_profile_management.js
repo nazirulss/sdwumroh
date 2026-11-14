@@ -252,12 +252,41 @@ test('10. saveAll() menyimpan seluruh 4 data store ke localStorage', () => {
     assert(Array.isArray(savedLeg.documents));
 });
 
+test('11. admin.html memiliki input file upload untuk foto Direktur, Pembimbing & Asatidz', () => {
+    assert(adminHtml.includes('id="profDirPhotoFileInput"'));
+    assert(adminHtml.includes('id="profLeadPhotoFileInput"'));
+    assert(adminHtml.includes('id="guideFormPhotoFileInput"'));
+    assert(adminHtml.includes('handleDirectorPhotoUpload'));
+    assert(adminHtml.includes('handleLeadPhotoUpload'));
+    assert(adminHtml.includes('handleGuidePhotoUpload'));
+});
+
+test('12. Controller menyediakan method upload foto untuk Direktur, Pembimbing, Asatidz, dan Direksi', () => {
+    assert(typeof profileController.handleDirectorPhotoUpload === 'function');
+    assert(typeof profileController.handleLeadPhotoUpload === 'function');
+    assert(typeof profileController.handleGuidePhotoUpload === 'function');
+    assert(typeof profileController.handleDireksiPhotoUpload === 'function');
+
+    // Simulate Director Photo Upload
+    const mockFile = { name: 'foto_direktur_test.jpg', size: 102400, type: 'image/jpeg' };
+    const mockInput = { files: [mockFile], value: 'C:\\fake\\path' };
+    profileController.handleDirectorPhotoUpload(mockInput);
+    assert(document.getElementById('profDirPhotoPreview').src.length > 0);
+    assert(adminState.profileDirectorData.photo.length > 0);
+
+    // Simulate Guide Photo Upload
+    const mockGuideInput = { files: [mockFile], value: 'C:\\fake\\path' };
+    profileController.handleGuidePhotoUpload(mockGuideInput);
+    assert(document.getElementById('guideFormPhotoPreview').src.length > 0);
+    assert(document.getElementById('guideFormPhoto').value.length > 0);
+});
+
 // -----------------------------------------------------------------------------
 // 5. UJI SERVICE WORKER PRECACHE & VERSIONING (sw.js)
 // -----------------------------------------------------------------------------
 const swJs = fs.readFileSync(path.join(root, 'sw.js'), 'utf8');
 
-test('11. sw.js mem-precache admin-profile.js dan cache version naik ke minimal v84', () => {
+test('13. sw.js mem-precache admin-profile.js dan cache version naik ke minimal v84', () => {
     const vMatch = swJs.match(/sdw-umroh-pwa-v(\d+)/);
     const v = vMatch ? parseInt(vMatch[1], 10) : 0;
     assert(v >= 84, `Versi cache harus minimal v84, terdeteksi: v${v}`);
@@ -265,5 +294,5 @@ test('11. sw.js mem-precache admin-profile.js dan cache version naik ke minimal 
 });
 
 console.log(`\n======================================================`);
-console.log(`Pengujian Selesai: ${passCount} / 11 Berhasil (100%)`);
+console.log(`Pengujian Selesai: ${passCount} / 13 Berhasil (100%)`);
 console.log(`======================================================\n`);

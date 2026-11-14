@@ -30,6 +30,171 @@
     let currentEditingPartnerId = null;
 
     /**
+     * Client-side Image Compression Helper via HTML5 Canvas
+     */
+    function optimizeImageFile(file, maxWidth, maxHeight, quality, callback) {
+        if (!file) return;
+
+        if (typeof FileReader === 'undefined') {
+            // Environment without FileReader (e.g. headless unit testing)
+            callback('assets/direktur-utama.jpg');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const rawDataUrl = e.target.result;
+            if (typeof Image === 'undefined') {
+                callback(rawDataUrl);
+                return;
+            }
+            const img = new Image();
+            img.onload = function() {
+                let targetWidth = img.width;
+                let targetHeight = img.height;
+
+                if (targetWidth > maxWidth) {
+                    targetHeight = Math.round((targetHeight * maxWidth) / targetWidth);
+                    targetWidth = maxWidth;
+                }
+                if (targetHeight > maxHeight) {
+                    targetWidth = Math.round((targetWidth * maxHeight) / targetHeight);
+                    targetHeight = maxHeight;
+                }
+
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = targetWidth;
+                    canvas.height = targetHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+                    const optimizedDataUrl = canvas.toDataURL('image/jpeg', quality || 0.88);
+                    callback(optimizedDataUrl);
+                } catch (_) {
+                    callback(rawDataUrl);
+                }
+            };
+            img.onerror = function() {
+                callback(rawDataUrl);
+            };
+            img.src = rawDataUrl;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    /**
+     * Upload Handler for Direktur Utama (Sambutan Pimpinan)
+     */
+    function handleDirectorPhotoUpload(input) {
+        if (!input || !input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const statusEl = document.getElementById('profDirPhotoUploadStatus');
+        if (statusEl) {
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-500 mr-1"></i> Mengoptimasi foto...';
+        }
+
+        optimizeImageFile(file, 900, 1125, 0.88, function(optimizedDataUrl) {
+            const preview = document.getElementById('profDirPhotoPreview');
+            const urlInput = document.getElementById('profDirPhotoUrl');
+            if (preview) preview.src = optimizedDataUrl;
+            if (urlInput) urlInput.value = optimizedDataUrl;
+
+            if (!admin.profileDirectorData) admin.profileDirectorData = {};
+            admin.profileDirectorData.photo = optimizedDataUrl;
+            if (typeof admin.persistStorage === 'function') {
+                admin.persistStorage(admin.STORAGE_KEYS.PROFILE_DIRECTOR, admin.profileDirectorData);
+            }
+
+            if (statusEl) {
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> ${admin.escapeHtml(file.name)} (${Math.round(file.size / 1024)} KB)`;
+            }
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('✅ Foto Direktur Utama berhasil diperbarui!');
+            }
+        });
+        input.value = '';
+    }
+
+    /**
+     * Upload Handler for Pembimbing Utama (Dewan Pembimbing)
+     */
+    function handleLeadPhotoUpload(input) {
+        if (!input || !input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const statusEl = document.getElementById('profLeadPhotoStatus');
+        if (statusEl) {
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-500 mr-1"></i> Memproses...';
+        }
+
+        optimizeImageFile(file, 800, 1000, 0.88, function(optimizedDataUrl) {
+            const preview = document.getElementById('profLeadPhotoPreview');
+            if (preview) preview.src = optimizedDataUrl;
+
+            if (!admin.profileGuidesData) admin.profileGuidesData = {};
+            if (!admin.profileGuidesData.lead_advisor) admin.profileGuidesData.lead_advisor = {};
+            admin.profileGuidesData.lead_advisor.photo = optimizedDataUrl;
+            if (typeof admin.persistStorage === 'function') {
+                admin.persistStorage(admin.STORAGE_KEYS.PROFILE_GUIDES, admin.profileGuidesData);
+            }
+
+            if (statusEl) {
+                statusEl.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Foto diperbarui';
+            }
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('✅ Foto Pembimbing Utama berhasil diperbarui!');
+            }
+        });
+        input.value = '';
+    }
+
+    /**
+     * Upload Handler for Guide in Modal Form
+     */
+    function handleGuidePhotoUpload(input) {
+        if (!input || !input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const statusEl = document.getElementById('guideFormPhotoStatus');
+        if (statusEl) {
+            statusEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-amber-500 mr-1"></i> Mengoptimasi foto...';
+        }
+
+        optimizeImageFile(file, 600, 600, 0.88, function(optimizedDataUrl) {
+            const preview = document.getElementById('guideFormPhotoPreview');
+            const hiddenInput = document.getElementById('guideFormPhoto');
+            if (preview) preview.src = optimizedDataUrl;
+            if (hiddenInput) hiddenInput.value = optimizedDataUrl;
+
+            if (statusEl) {
+                statusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> ${admin.escapeHtml(file.name)}`;
+            }
+        });
+        input.value = '';
+    }
+
+    /**
+     * Upload Handler for Dewan Direksi Card
+     */
+    function handleDireksiPhotoUpload(idx, input) {
+        if (!input || !input.files || !input.files[0]) return;
+        const file = input.files[0];
+
+        optimizeImageFile(file, 600, 600, 0.88, function(optimizedDataUrl) {
+            if (!admin.profileInstitutionData || !Array.isArray(admin.profileInstitutionData.direksi)) return;
+            if (admin.profileInstitutionData.direksi[idx]) {
+                admin.profileInstitutionData.direksi[idx].photo = optimizedDataUrl;
+                if (typeof admin.persistStorage === 'function') {
+                    admin.persistStorage(admin.STORAGE_KEYS.PROFILE_INSTITUTION, admin.profileInstitutionData);
+                }
+                renderDireksiList();
+                if (typeof admin.showToast === 'function') {
+                    admin.showToast('✅ Foto Direksi berhasil diperbarui!');
+                }
+            }
+        });
+        input.value = '';
+    }
+
+    /**
      * Main Renderer triggered when tab-profile is active
      */
     function renderProfileManagement() {
@@ -202,10 +367,19 @@
         const direksi = (data && Array.isArray(data.direksi)) ? data.direksi : [];
 
         container.innerHTML = direksi.map((dir, idx) => `
-            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
-                <div class="w-12 h-12 rounded-xl overflow-hidden border border-purple-200 bg-slate-200 mx-auto">
-                    <img src="${admin.escapeHtml(dir.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(dir.name)}" class="w-full h-full object-cover">
+            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-center">
+                <div class="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-purple-200 bg-slate-200 mx-auto group shadow-xs">
+                    <img id="direksiPhotoPreview_${idx}" src="${admin.escapeHtml(dir.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(dir.name)}" class="w-full h-full object-cover">
+                    <button type="button" onclick="document.getElementById('direksiPhotoInput_${idx}').click()" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-bold cursor-pointer" title="Ganti Foto">
+                        <i class="fa-solid fa-camera mb-0.5"></i>
+                        <span>Ganti</span>
+                    </button>
                 </div>
+                <input type="file" id="direksiPhotoInput_${idx}" accept="image/*" class="hidden" onchange="SDW_ADMIN_PROFILE.handleDireksiPhotoUpload(${idx}, this)">
+                <button type="button" onclick="document.getElementById('direksiPhotoInput_${idx}').click()" class="text-[9.5px] font-bold text-sdw-pine hover:underline flex items-center justify-center gap-1 mx-auto cursor-pointer">
+                    <i class="fa-solid fa-cloud-arrow-up text-amber-500"></i>
+                    <span>Unggah Foto</span>
+                </button>
                 <input type="text" value="${admin.escapeHtml(dir.role)}" onchange="SDW_ADMIN_PROFILE.updateDireksiItem(${idx}, 'role', this.value)" class="w-full text-center text-[10px] font-black uppercase text-sdw-pine bg-purple-50 py-0.5 rounded border border-purple-100">
                 <input type="text" value="${admin.escapeHtml(dir.name)}" onchange="SDW_ADMIN_PROFILE.updateDireksiItem(${idx}, 'name', this.value)" class="w-full text-center text-xs font-bold text-slate-800 bg-white px-1.5 py-1 rounded border border-slate-200">
                 <input type="text" value="${admin.escapeHtml(dir.title)}" onchange="SDW_ADMIN_PROFILE.updateDireksiItem(${idx}, 'title', this.value)" class="w-full text-center text-[10px] text-slate-500 bg-white px-1 py-0.5 rounded border border-slate-200">
@@ -333,12 +507,14 @@
         const credEl = document.getElementById('profLeadCredentials');
         const bioEl = document.getElementById('profLeadBio');
         const ratioEl = document.getElementById('profGuidesRatio');
+        const leadPhotoPreview = document.getElementById('profLeadPhotoPreview');
 
         if (nameEl) nameEl.value = lead.name || '';
         if (roleEl) roleEl.value = lead.role || '';
         if (credEl) credEl.value = lead.credentials || '';
         if (bioEl) bioEl.value = lead.bio || '';
         if (ratioEl) ratioEl.value = data.ratio_pilgrim || 35;
+        if (leadPhotoPreview) leadPhotoPreview.src = lead.photo || 'assets/direktur-utama.jpg';
 
         // Table
         renderGuidesTable();
@@ -362,8 +538,8 @@
                 <tr class="hover:bg-slate-50 transition">
                     <td class="p-3">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-8 h-8 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center text-sdw-pine font-black text-xs shrink-0">
-                                <i class="fa-solid fa-user"></i>
+                            <div class="w-8 h-8 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center text-sdw-pine font-black text-xs shrink-0 border border-purple-200">
+                                <img src="${admin.escapeHtml(g.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(g.name)}" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <span class="font-extrabold text-slate-900 block">${admin.escapeHtml(g.name)}</span>
@@ -395,10 +571,14 @@
         const modal = document.getElementById('modalGuideForm');
         const title = document.getElementById('modalGuideTitle');
         const form = document.getElementById('formGuide');
+        const preview = document.getElementById('guideFormPhotoPreview');
+        const hiddenPhoto = document.getElementById('guideFormPhoto');
+        const statusEl = document.getElementById('guideFormPhotoStatus');
         if (!modal || !form) return;
 
         form.reset();
         document.getElementById('guideFormId').value = guideId || '';
+        if (statusEl) statusEl.innerHTML = 'Format JPG, PNG, WEBP';
 
         if (guideId && admin.profileGuidesData && Array.isArray(admin.profileGuidesData.guides)) {
             const g = admin.profileGuidesData.guides.find(item => item.id === guideId);
@@ -409,9 +589,13 @@
                 document.getElementById('guideFormUniversity').value = g.university || '';
                 document.getElementById('guideFormExperience').value = g.experience || '';
                 document.getElementById('guideFormStatus').value = g.status || 'AKTIF';
+                if (preview) preview.src = g.photo || 'assets/direktur-utama.jpg';
+                if (hiddenPhoto) hiddenPhoto.value = g.photo || '';
             }
         } else {
             if (title) title.innerText = 'Tambah Personil Pembimbing';
+            if (preview) preview.src = 'assets/direktur-utama.jpg';
+            if (hiddenPhoto) hiddenPhoto.value = '';
         }
 
         modal.classList.remove('hidden');
@@ -427,6 +611,8 @@
         const university = document.getElementById('guideFormUniversity').value.trim();
         const experience = document.getElementById('guideFormExperience').value.trim();
         const status = document.getElementById('guideFormStatus').value;
+        const photoEl = document.getElementById('guideFormPhoto');
+        const photo = (photoEl && photoEl.value) ? photoEl.value.trim() : 'assets/direktur-utama.jpg';
 
         if (!admin.profileGuidesData) admin.profileGuidesData = { guides: [] };
         if (!Array.isArray(admin.profileGuidesData.guides)) admin.profileGuidesData.guides = [];
@@ -439,6 +625,7 @@
                 existing.university = university;
                 existing.experience = experience;
                 existing.status = status;
+                if (photo) existing.photo = photo;
             }
         } else {
             const newId = `GD-${(admin.profileGuidesData.guides.length + 1).toString().padStart(3, '0')}`;
@@ -449,7 +636,7 @@
                 university,
                 experience,
                 status,
-                photo: 'assets/direktur-utama.jpg'
+                photo: photo || 'assets/direktur-utama.jpg'
             });
         }
 
@@ -811,6 +998,9 @@
             if (bioEl) lead.bio = bioEl.value;
             if (ratioEl) admin.profileGuidesData.ratio_pilgrim = parseInt(ratioEl.value, 10) || 35;
 
+            const leadPhotoPreview = document.getElementById('profLeadPhotoPreview');
+            if (leadPhotoPreview && leadPhotoPreview.src) lead.photo = leadPhotoPreview.src;
+
             admin.profileGuidesData.lead_advisor = lead;
             if (typeof admin.persistStorage === 'function') {
                 admin.persistStorage(admin.STORAGE_KEYS.PROFILE_GUIDES, admin.profileGuidesData);
@@ -836,6 +1026,10 @@
         renderDirector,
         renderGuides,
         renderLegality,
+        handleDirectorPhotoUpload,
+        handleLeadPhotoUpload,
+        handleGuidePhotoUpload,
+        handleDireksiPhotoUpload,
         addMisiItem,
         updateMisiItem,
         deleteMisiItem,
