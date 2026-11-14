@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-const CACHE_NAME = 'sdw-umroh-pwa-v82';
-const RUNTIME_CACHE = 'sdw-runtime-v82';
+const CACHE_NAME = 'sdw-umroh-pwa-v83';
+const RUNTIME_CACHE = 'sdw-runtime-v83';
 
 const PRECACHE_URLS = [
   '/',
@@ -120,7 +120,10 @@ function resolveNavigationFallback(pathname) {
   if (pathname.endsWith('/jadwal')) return '/jadwal.html';
   if (pathname.endsWith('/kalkulator')) return '/kalkulator.html';
   if (pathname.endsWith('/ziarah')) return '/ziarah.html';
-  if (pathname.endsWith('/tentang')) return '/tentang.html';
+  if (pathname.endsWith('/tentang') || pathname.endsWith('/profil')) return '/tentang.html';
+  if (pathname.endsWith('/sambutan')) return '/sambutan.html';
+  if (pathname.endsWith('/muthawwif') || pathname.endsWith('/guru')) return '/muthawwif.html';
+  if (pathname.endsWith('/legalitas') || pathname.endsWith('/mou')) return '/legalitas.html';
   if (pathname.endsWith('/faq')) return '/faq.html';
   return '/index.html';
 }

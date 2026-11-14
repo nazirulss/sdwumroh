@@ -158,15 +158,27 @@ audit('Beranda', 'index.html memiliki seksi komitmen pimpinan dengan tautan lang
     assert(indexHtml.includes('Baca Sambutan Lengkap'));
 });
 
-audit('PWA', 'sw.js memiliki versi v82+ dan mem-precache seluruh 4 halaman profil', () => {
+audit('PWA', 'sw.js memiliki versi v83+, mem-precache seluruh 4 halaman profil, dan fallback clean URL akurat', () => {
     const versionMatch = swJs.match(/sdw-umroh-pwa-v(\d+)/);
     const v = versionMatch ? parseInt(versionMatch[1], 10) : 0;
-    assert(v >= 82, `Versi cache harus minimal v82, terdeteksi: v${v}`);
+    assert(v >= 83, `Versi cache harus minimal v83, terdeteksi: v${v}`);
     assert(swJs.includes("'/tentang.html'"));
     assert(swJs.includes("'/sambutan.html'"));
     assert(swJs.includes("'/muthawwif.html'"));
     assert(swJs.includes("'/legalitas.html'"));
     assert(swJs.includes("'/assets/direktur-utama.jpg'"));
+    assert(swJs.includes("if (pathname.endsWith('/sambutan')) return '/sambutan.html';"));
+    assert(swJs.includes("if (pathname.endsWith('/muthawwif') || pathname.endsWith('/guru')) return '/muthawwif.html';"));
+    assert(swJs.includes("if (pathname.endsWith('/legalitas') || pathname.endsWith('/mou')) return '/legalitas.html';"));
+});
+
+audit('Vercel', 'vercel.json memuat konfigurasi rewrite eksplisit untuk 4 halaman profil', () => {
+    const vercelJson = JSON.parse(fs.readFileSync(path.join(root, 'vercel.json'), 'utf8'));
+    const rewrites = vercelJson.rewrites || [];
+    assert(rewrites.some(r => r.source === '/tentang' && r.destination === '/tentang.html'), 'Rewrite /tentang hilang');
+    assert(rewrites.some(r => r.source === '/sambutan' && r.destination === '/sambutan.html'), 'Rewrite /sambutan hilang');
+    assert(rewrites.some(r => r.source === '/muthawwif' && r.destination === '/muthawwif.html'), 'Rewrite /muthawwif hilang');
+    assert(rewrites.some(r => r.source === '/legalitas' && r.destination === '/legalitas.html'), 'Rewrite /legalitas hilang');
 });
 
 audit('Disk', 'Semua file halaman dan aset fisik tersedia di disk dan tidak kosong', () => {

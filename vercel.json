@@ -25,6 +25,26 @@
     {
       "source": "/app/(.*)",
       "destination": "/app.html"
+    },
+    {
+      "source": "/tentang",
+      "destination": "/tentang.html"
+    },
+    {
+      "source": "/profil",
+      "destination": "/tentang.html"
+    },
+    {
+      "source": "/sambutan",
+      "destination": "/sambutan.html"
+    },
+    {
+      "source": "/muthawwif",
+      "destination": "/muthawwif.html"
+    },
+    {
+      "source": "/legalitas",
+      "destination": "/legalitas.html"
     }
   ]
 }
