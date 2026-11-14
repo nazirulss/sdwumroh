@@ -413,26 +413,38 @@
         <!-- ==================== MAIN CONTENT WRAPPER ==================== -->
         <div class="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">
 
-            <!-- Top Header Bar -->
+            <!-- Top Header Bar (Asnawiyyah Modern Islamic Enterprise Style) -->
             <header class="h-16 bg-white border-b border-slate-200/90 px-3.5 sm:px-6 flex items-center justify-between shrink-0 z-20">
-                <!-- Hamburger Button (Mobile Only) + Search Trigger Bar (Ctrl + K) -->
-                <div class="flex items-center gap-2 sm:gap-3 flex-1 max-w-md">
+                <!-- Sisi Kiri: Hamburger Mobile + Breadcrumb Pill Dinamis + Search Trigger (Alt+F / Ctrl+K) -->
+                <div class="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
                     <button type="button" onclick="SDW_ADMIN.toggleMobileSidebar(true)" class="md:hidden w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center text-sm transition shrink-0 cursor-pointer" aria-label="Buka Menu Sidebar">
                         <i class="fa-solid fa-bars"></i>
                     </button>
-                    <button type="button" onclick="SDW_ADMIN.openGlobalSearch()" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-400 text-xs font-medium transition cursor-pointer border border-slate-200">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
-                            <span class="truncate">Cari jamaah, paspor, no. registrasi...</span>
+
+                    <!-- Breadcrumb Dinamis Asnawiyyah: (✓) Admin > [Nama Modul] -->
+                    <div id="headerBreadcrumbContainer" class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs shrink-0 select-none shadow-2xs">
+                        <span class="w-4 h-4 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[9px] font-bold">
+                            <i class="fa-solid fa-check"></i>
                         </span>
-                        <kbd class="hidden sm:inline-block px-1.5 py-0.5 rounded bg-white text-[10px] font-mono font-bold text-slate-500 border border-slate-200 shadow-2xs">Ctrl K</kbd>
+                        <span class="font-bold text-slate-500">Admin</span>
+                        <i class="fa-solid fa-chevron-right text-[8.5px] text-slate-300"></i>
+                        <span id="headerBreadcrumbCurrent" class="font-black text-slate-800">Dashboard Utama</span>
+                    </div>
+
+                    <!-- Global Search Trigger Pill (Alt+F / Ctrl+K) -->
+                    <button type="button" onclick="SDW_ADMIN.openGlobalSearch()" class="flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-400 text-xs font-medium transition cursor-pointer border border-slate-200/80 w-44 sm:w-56 md:w-64 shrink-0 shadow-2xs">
+                        <span class="flex items-center gap-2 truncate">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
+                            <span class="truncate">Cari menu &amp; modul...</span>
+                        </span>
+                        <kbd class="hidden md:inline-block px-1.5 py-0.5 rounded bg-white text-[10px] font-mono font-bold text-slate-500 border border-slate-200 shadow-2xs">Alt+F</kbd>
                     </button>
                 </div>
 
-                <!-- Right Action Bar, Clocks, Quick Tools, & Asnawiyyah Session Profile Capsule -->
-                <div class="flex items-center gap-2.5 sm:gap-3.5">
-                    <!-- Dual Time Clocks -->
-                    <div class="hidden xl:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono">
+                <!-- Sisi Kanan: Action Pills, Clocks, Web Publik, & Asnawiyyah Session Profile Capsule -->
+                <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
+                    <!-- Dual Time Clocks (Makkah & Jakarta) -->
+                    <div class="hidden 2xl:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono">
                         <div class="text-right">
                             <span class="text-[9.5px] font-bold text-amber-700 block">🇸🇦 Makkah (AST)</span>
                             <span id="adminMakkahClock" class="font-bold text-slate-800">--:--:--</span>
@@ -444,21 +456,16 @@
                         </div>
                     </div>
 
-                    <!-- Live Sync Engine Status Pill (Fase 4) -->
+                    <!-- Live Sync Engine Status Pill -->
                     <button type="button" id="adminSyncButton" onclick="SDW_ADMIN.openSyncStatusModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition cursor-pointer" title="Klik untuk status sinkronisasi & antrean database">
                         <span id="adminSyncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span id="adminSyncText">Live DB Synced</span>
                     </button>
 
-                    <!-- Quick Actions: + Prospek Baru -->
-                    <button type="button" onclick="SDW_ADMIN.openModal('modalCreateLead')" class="hidden lg:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-sdw-pine hover:bg-purple-900 text-white font-bold text-xs transition shadow-xs cursor-pointer">
-                        <i class="fa-solid fa-user-plus text-[11px]"></i>
-                        <span>+ Prospek Baru</span>
-                    </button>
-
-                    <!-- Quick Tool: Public Portal Web Link (Asnawiyyah Style) -->
-                    <a href="index.html" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 flex items-center justify-center text-sm transition cursor-pointer" title="Buka Portal Publik SDW UMROH (Tab Baru)">
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    <!-- Tombol Pill Web Publik Asnawiyyah Style -->
+                    <a href="index.html" target="_blank" id="headerBtnWebPublic" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200/90 bg-white hover:bg-emerald-50 text-emerald-800 font-bold text-xs transition cursor-pointer shadow-2xs" title="Buka Portal Publik SDW UMROH (Tab Baru)">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10.5px]"></i>
+                        <span class="hidden sm:inline">Web Publik</span>
                     </a>
 
                     <!-- Notification Bell -->
@@ -485,33 +492,29 @@
                                 <div class="flex items-center gap-1">
                                     <span id="headerUserName" class="text-xs font-bold text-slate-800">Super Admin</span>
                                     <span id="headerUserRoleShort" class="text-[10px] font-bold text-teal-700">(Super Admin)</span>
-                                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-slate-600 transition-transform"></i>
+                                    <i id="headerProfileChevron" class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-slate-600 transition-transform"></i>
                                 </div>
                                 <div id="headerUserRoleDesc" class="text-[10px] text-slate-400 font-medium truncate max-w-[130px]">Super Administrator</div>
                             </div>
                         </button>
 
-                        <!-- Dropdown Menu Card -->
+                        <!-- Dropdown Menu Card (Persis Tangkapan Layar 2 Asnawiyyah) -->
                         <div id="userProfileDropdownMenu" class="hidden absolute right-0 top-full mt-2 w-72 rounded-2xl bg-white shadow-2xl border border-slate-200/90 p-3 z-50 animate-in fade-in zoom-in-95 duration-150 space-y-3">
-                            <!-- Profile Identity Card -->
-                            <div class="p-3 rounded-xl bg-linear-to-br from-slate-50 to-teal-50/40 border border-slate-100 flex items-center gap-3">
-                                <div id="dropdownUserAvatar" class="w-10 h-10 rounded-xl bg-teal-700 text-white font-black text-sm flex items-center justify-center shadow-2xs shrink-0">
-                                    SU
+                            <!-- Header Identitas Lembaga Asnawiyyah -->
+                            <div class="p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-3">
+                                <div id="dropdownUserAvatar" class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm shrink-0">
+                                    <i class="fa-solid fa-mosque"></i>
                                 </div>
                                 <div class="min-w-0 flex-1">
-                                    <div class="flex items-center justify-between gap-1">
-                                        <div id="dropdownUserName" class="text-xs font-black text-slate-800 truncate">Super Admin</div>
-                                        <span class="w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-emerald-100 shrink-0" title="Sesi Aktif Online"></span>
+                                    <div class="flex items-center justify-between">
+                                        <div id="dropdownUserName" class="text-xs font-black text-slate-800 truncate">Akun Travel (SDW Pusat)</div>
+                                        <span id="dropdownRoleBadge" class="hidden">SUPER ADMIN</span>
                                     </div>
                                     <div id="dropdownUserEmail" class="text-[10.5px] text-slate-400 truncate">admin@sdwumroh.com</div>
-                                    <div class="mt-1 flex items-center gap-1.5">
-                                        <span id="dropdownRoleBadge" class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-100 text-teal-800">SUPER ADMIN</span>
-                                        <span class="text-[9.5px] text-emerald-600 font-bold flex items-center gap-0.5"><i class="fa-solid fa-circle-check text-[8px]"></i> Aktif</span>
-                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Role Simulator Switcher -->
+                            <!-- Role Simulator Switcher (Testing & Debugging) -->
                             <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1.5">
                                 <div class="flex items-center justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
                                     <span><i class="fa-solid fa-wand-magic-sparkles text-amber-500 mr-1"></i> Simulasi Peran RBAC</span>
@@ -529,13 +532,16 @@
                                 </select>
                             </div>
 
-                            <!-- Quick Navigation Shortcuts -->
+                            <!-- Menu Navigasi Sesuai Asnawiyyah -->
                             <div class="space-y-0.5 pt-1 text-xs">
-                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
-                                    <i class="fa-solid fa-users text-slate-400 w-4 text-center"></i> Manajemen Pengguna
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.openProfileModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-id-card text-slate-400 w-4 text-center"></i> Profil Saya
                                 </button>
                                 <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.switchTab('tab-roles')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
-                                    <i class="fa-solid fa-shield-halved text-slate-400 w-4 text-center"></i> Matriks Peran &amp; Hak Akses
+                                    <i class="fa-solid fa-sliders text-slate-400 w-4 text-center"></i> Pengaturan Sistem &amp; RBAC
+                                </button>
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-slate-100 hover:text-teal-800 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-users text-slate-400 w-4 text-center"></i> Kelola Pengguna
                                 </button>
                                 <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.openLoginModal()" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 font-bold text-xs transition cursor-pointer">
                                     <i class="fa-solid fa-right-to-bracket text-slate-400 w-4 text-center"></i> Ganti Akun / Login Baru
@@ -545,10 +551,10 @@
                                 </button>
                             </div>
 
-                            <!-- Logout Button -->
+                            <!-- Logout Button (Merah Ceri Sesuai Asnawiyyah) -->
                             <div class="pt-2 border-t border-slate-100">
-                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.logout()" class="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold text-xs transition cursor-pointer">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar (Logout)
+                                <button type="button" onclick="SDW_ADMIN.toggleUserProfileDropdown(false); SDW_ADMIN.logout()" class="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-rose-600 hover:bg-rose-50 font-bold text-xs transition cursor-pointer">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
                                 </button>
                             </div>
                         </div>
@@ -5792,6 +5798,84 @@
                     Mengerti &amp; Tutup
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL: PROFIL SAYA (AKUN STAF ADMINISTRATOR) ==================== -->
+    <div id="modalUserProfile" class="fixed inset-0 z-[115] bg-slate-950/80 backdrop-blur-md hidden items-center justify-center p-3 sm:p-5 overflow-y-auto" aria-hidden="true">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-200/90 text-left space-y-5 transform transition-all duration-200">
+            <!-- Header -->
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                <div class="flex items-center gap-3">
+                    <div id="profileModalAvatar" class="w-12 h-12 rounded-2xl bg-teal-700 text-white font-black text-lg flex items-center justify-center shadow-md">
+                        SU
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h3 id="profileModalName" class="text-base font-black text-slate-900 tracking-tight">Super Administrator</h3>
+                            <span id="profileModalRoleBadge" class="px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider bg-teal-100 text-teal-800">SUPER ADMIN</span>
+                        </div>
+                        <p class="text-[11px] text-slate-500">Profil Pengguna &amp; Otoritas Hak Akses Sistem</p>
+                    </div>
+                </div>
+                <button type="button" onclick="SDW_ADMIN.closeProfileModal()" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center text-xs transition cursor-pointer" title="Tutup">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Profile Info Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">ID Pengguna</span>
+                    <span id="profileModalUserId" class="font-bold text-slate-800 font-mono">USR-000001</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">Status Akun</span>
+                    <span class="inline-flex items-center gap-1 font-bold text-emerald-700">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Aktif &amp; Terverifikasi
+                    </span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">Email Terdaftar</span>
+                    <span id="profileModalEmail" class="font-bold text-slate-800 truncate block">admin@sdwumroh.com</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">Nomor WhatsApp</span>
+                    <span id="profileModalPhone" class="font-bold text-slate-800 font-mono">+62 812-3456-7890</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 sm:col-span-2">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">Unit Kerja &amp; Otoritas Terhubung</span>
+                    <span id="profileModalConnectedEntity" class="font-bold text-slate-800 block">Semua Sistem &amp; Otoritas Penuh</span>
+                </div>
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1 sm:col-span-2">
+                    <span class="text-[10.5px] text-slate-400 font-bold block">Sesi Terakhir Tercatat</span>
+                    <span id="profileModalLastActive" class="font-bold text-slate-700 block">Aktif Sekarang</span>
+                </div>
+            </div>
+
+            <!-- Form Ubah Kata Sandi Mandiri -->
+            <form onsubmit="SDW_ADMIN.saveProfilePassword(event)" class="pt-3 border-t border-slate-100 space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                        <i class="fa-solid fa-key text-amber-500"></i> Perbarui Kata Sandi Mandiri
+                    </span>
+                    <span class="text-[10px] text-slate-400">Minimal 6 karakter</span>
+                </div>
+                <div class="relative">
+                    <input type="password" id="profileModalNewPassword" placeholder="Masukkan kata sandi baru..." class="w-full px-3 py-2 text-xs font-medium rounded-xl border border-slate-300 focus:border-sdw-pine focus:ring-2 focus:ring-emerald-200 outline-none transition bg-white">
+                </div>
+                <div id="profileModalError" class="text-[11px] text-rose-600 font-bold hidden">
+                    Pesan error validasi sandi.
+                </div>
+                <div class="flex items-center justify-end gap-2">
+                    <button type="button" onclick="SDW_ADMIN.closeProfileModal()" class="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-100 transition cursor-pointer">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-900 text-white font-bold text-xs transition shadow-xs cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan Sandi Baru
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -31,6 +31,35 @@
         'PILGRIM': { name: 'Siti Aisyah', shortRole: '(Jamaah)', desc: 'Akun Jamaah Umroh', initial: 'SA', email: 'aisyah@gmail.com', bg: 'bg-slate-700 text-white' }
     };
 
+    // Breadcrumb Mapping Asnawiyyah Style
+    const TAB_BREADCRUMBS = {
+        'tab-dashboard': 'Dashboard Utama',
+        'tab-crm': 'Manajemen Prospek CRM',
+        'tab-packages': 'Katalog Paket Umroh',
+        'tab-departures': 'Jadwal Kloter Keberangkatan',
+        'tab-hotels': 'Master Data Hotel Haramain',
+        'tab-airlines': 'Maskapai & Bandara Transit',
+        'tab-gallery': 'Galeri Dokumentasi & Testimoni',
+        'tab-articles': 'Artikel, Berita & Titik Ziarah',
+        'tab-faq': 'Master FAQ & Layanan Bantuan CS',
+        'tab-users': 'Manajemen Pengguna Terpadu',
+        'tab-roles': 'Manajemen Peran & Hak Akses',
+        'tab-registrations': 'Manifest Pendaftaran Jamaah',
+        'tab-finance': 'Keuangan, Kasir & Escrow',
+        'tab-operations': 'Operasional & Logistik Kloter',
+        'tab-certificates': 'E-Sertifikat Umroh',
+        'tab-badal-certificates': 'E-Sertifikat Badal Umroh',
+        'tab-audit': 'Audit Trail & Log Keamanan'
+    };
+
+    function updateBreadcrumb(tabId) {
+        if (typeof document === 'undefined') return;
+        const currentEl = document.getElementById('headerBreadcrumbCurrent');
+        if (currentEl) {
+            currentEl.innerText = TAB_BREADCRUMBS[tabId] || 'Portal Administrasi';
+        }
+    }
+
     function updateHeaderProfileUI(role) {
         if (typeof document === 'undefined') return;
         const r = (role || admin.currentRole || 'SUPER_ADMIN').toUpperCase();
@@ -185,6 +214,7 @@
         admin.currentTab = tabId;
 
         if (typeof document !== 'undefined') {
+            updateBreadcrumb(tabId);
             const allContainers = document.querySelectorAll('.admin-tab-container');
             allContainers.forEach(c => c.classList.add('hidden'));
 
@@ -559,6 +589,8 @@
     admin.updateClocks = updateClocks;
     admin.renderDashboard = renderDashboard;
     admin.USER_ROLE_PROFILES = USER_ROLE_PROFILES;
+    admin.TAB_BREADCRUMBS = TAB_BREADCRUMBS;
+    admin.updateBreadcrumb = updateBreadcrumb;
     admin.updateHeaderProfileUI = updateHeaderProfileUI;
     admin.toggleUserProfileDropdown = toggleUserProfileDropdown;
     admin.logout = logout;

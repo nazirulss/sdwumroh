@@ -80,10 +80,10 @@
             admin.applyRolePermissions(admin.currentRole);
         }
 
-        // 5. Global Keyboard Shortcuts: Ctrl+K (Search), ESC (Close Modals/Drawers)
+        // 5. Global Keyboard Shortcuts: Ctrl+K / Alt+F (Search), ESC (Close Modals/Drawers)
         if (typeof window !== 'undefined') {
             window.addEventListener('keydown', function (e) {
-                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+                if (((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') || (e.altKey && e.key.toLowerCase() === 'f')) {
                     e.preventDefault();
                     if (typeof admin.openGlobalSearch === 'function') admin.openGlobalSearch();
                 }

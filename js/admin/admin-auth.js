@@ -375,6 +375,98 @@
         openLoginModal({ prefillRole: null, keepValues: false });
     }
 
+    // 5. User Profile Modal Controls (Asnawiyyah "Profil Saya")
+    function openProfileModal() {
+        if (typeof document === 'undefined') return;
+        const modal = document.getElementById('modalUserProfile');
+        if (!modal) return;
+
+        const session = getAdminSession() || admin.currentUser;
+        const role = (session && session.role ? session.role : admin.currentRole || 'SUPER_ADMIN').toUpperCase();
+        const profile = (admin.USER_ROLE_PROFILES && admin.USER_ROLE_PROFILES[role]) || {
+            name: session ? session.name : 'Super Administrator',
+            initial: 'SU',
+            email: session ? session.email : 'admin@sdwumroh.com',
+            desc: 'Super Administrator',
+            bg: 'bg-teal-700 text-white'
+        };
+
+        const avatarEl = document.getElementById('profileModalAvatar');
+        const nameEl = document.getElementById('profileModalName');
+        const roleEl = document.getElementById('profileModalRoleBadge');
+        const emailEl = document.getElementById('profileModalEmail');
+        const phoneEl = document.getElementById('profileModalPhone');
+        const idEl = document.getElementById('profileModalUserId');
+        const entityEl = document.getElementById('profileModalConnectedEntity');
+        const lastActiveEl = document.getElementById('profileModalLastActive');
+        const newPassInput = document.getElementById('profileModalNewPassword');
+        const errEl = document.getElementById('profileModalError');
+
+        if (avatarEl) {
+            avatarEl.innerText = profile.initial;
+            avatarEl.className = `w-14 h-14 rounded-2xl ${profile.bg} font-black text-xl flex items-center justify-center shadow-md`;
+        }
+        if (nameEl) nameEl.innerText = session ? session.name : profile.name;
+        if (roleEl) roleEl.innerText = role.replace('_', ' ');
+        if (emailEl) emailEl.innerText = session ? session.email : profile.email;
+        if (phoneEl) phoneEl.innerText = session && session.phone ? session.phone : '+62 812-3456-7890';
+        if (idEl) idEl.innerText = session && session.id ? session.id : 'USR-000001';
+        if (entityEl) entityEl.innerText = session && session.connected_entity ? session.connected_entity : 'Semua Sistem & Otoritas Penuh';
+        if (lastActiveEl) lastActiveEl.innerText = session && session.loggedInAt ? new Date(session.loggedInAt).toLocaleString('id-ID') : 'Aktif Sekarang';
+        if (newPassInput) newPassInput.value = '';
+        if (errEl) errEl.classList.add('hidden');
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeProfileModal() {
+        if (typeof document === 'undefined') return;
+        const modal = document.getElementById('modalUserProfile');
+        if (!modal) return;
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function saveProfilePassword(event) {
+        if (event && event.preventDefault) event.preventDefault();
+        if (typeof document === 'undefined') return;
+
+        const passInput = document.getElementById('profileModalNewPassword');
+        const errEl = document.getElementById('profileModalError');
+        const newPass = passInput ? passInput.value.trim() : '';
+
+        if (!newPass || newPass.length < 6) {
+            if (errEl) {
+                errEl.innerText = 'Kata sandi baru minimal 6 karakter.';
+                errEl.classList.remove('hidden');
+            }
+            return;
+        }
+
+        const session = getAdminSession() || admin.currentUser;
+        const users = getAvailableUsers();
+        if (session && session.id) {
+            const user = users.find(u => u.id === session.id);
+            if (user) {
+                user.password = newPass;
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('sdw_admin_users', JSON.stringify(users));
+                }
+            }
+        }
+
+        if (typeof admin.logAdminAudit === 'function') {
+            admin.logAdminAudit('CHANGE_PASSWORD', 'USER_PROFILE', session ? session.id : 'USR-000001', 'Pengguna berhasil memperbarui kata sandi mandiri.', 'INFO');
+        }
+
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('Kata sandi berhasil diperbarui dengan aman.', 'success');
+        }
+
+        closeProfileModal();
+    }
+
     // Attach to admin namespace
     admin.SESSION_KEYS = SESSION_KEYS;
     admin.getAdminSession = getAdminSession;
@@ -388,6 +480,9 @@
     admin.handleAdminLogin = handleAdminLogin;
     admin.checkAdminAuth = checkAdminAuth;
     admin.switchAccount = switchAccount;
+    admin.openProfileModal = openProfileModal;
+    admin.closeProfileModal = closeProfileModal;
+    admin.saveProfilePassword = saveProfilePassword;
 
     return {
         SESSION_KEYS,
@@ -401,6 +496,9 @@
         quickFillLogin,
         handleAdminLogin,
         checkAdminAuth,
-        switchAccount
+        switchAccount,
+        openProfileModal,
+        closeProfileModal,
+        saveProfilePassword
     };
 });
