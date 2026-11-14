@@ -171,7 +171,7 @@
       category: 'REGULASI SAUDI',
       badgeClass: 'bg-amber-400 text-slate-950',
       date: '28 Oktober 2026',
-      image: 'assets/hero-haram.png',
+      image: 'assets/hero-haram.webp',
       content: `
         <p>Kementerian Haji dan Umrah Kerajaan Arab Saudi secara resmi memberlakukan pembaruan jadwal dan kuota penerbitan <strong>Tasreh Raudhah Syarifah</strong> melalui sistem Nusuk Pass untuk musim umrah 1448H.</p>
         <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
@@ -191,7 +191,7 @@
       category: 'PANDUAN SUNNAH',
       badgeClass: 'bg-purple-500 text-white',
       date: '25 Oktober 2026',
-      image: 'assets/pkg-vip-khidmat.png',
+      image: 'assets/pkg-vip-khidmat.webp',
       content: `
         <p>Bagi penerbangan langsung Jakarta/Surabaya menuju Bandara King Abdulaziz Jeddah (JED), miqat jamaah adalah di atas wilayah <strong>Yalamlam</strong>, kira-kira 30 menit sebelum pesawat mendarat.</p>
         <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
@@ -211,7 +211,7 @@
       category: 'AGENDA KLOTER',
       badgeClass: 'bg-blue-500 text-white',
       date: '22 Oktober 2026',
-      image: 'assets/hero-twilight.jpg',
+      image: 'assets/hero-twilight.webp',
       content: `
         <p>Sebagai ikhtiar memberikan pelayanan terbaik dan kesiapan mental spiritual para tamu Allah, Manajemen SDW UMROH mengundang seluruh calon jamaah kloter Swissotel 15 Januari 2027.</p>
         <div class="p-3 bg-black/30 rounded-xl border border-gold-500/30 text-xs text-gold-300 space-y-1">
@@ -713,7 +713,7 @@
 
           <!-- Banner Image -->
           <div class="relative aspect-video w-full overflow-hidden bg-black/40 shrink-0 rounded-t-3xl">
-            <img id="wartaModalImg" src="assets/hero-haram.png" alt="Warta Gambar" class="w-full h-full object-cover">
+            <img id="wartaModalImg" src="assets/hero-haram.webp" alt="Warta Gambar" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-t from-[#240833] via-transparent to-transparent"></div>
             <span id="wartaModalBadge" class="absolute bottom-3 left-4 px-3 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-gold-500 text-slate-950 shadow-md"></span>
           </div>
@@ -1039,28 +1039,28 @@
           <div id="galeriTabContentFoto" class="space-y-3">
             <div class="grid grid-cols-2 gap-2.5">
               <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
-                <img src="assets/hero-haram.png" alt="Dokumentasi Ka'bah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <img src="assets/hero-haram.webp" alt="Dokumentasi Ka'bah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
                 <div class="p-2 text-[10px]">
                   <span class="font-bold text-white block truncate">Thawaf Akbar Bersama</span>
                   <span class="text-slate-400">Pelataran Mataf Ka'bah</span>
                 </div>
               </div>
               <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
-                <img src="assets/hero-twilight.jpg" alt="Dokumentasi Madinah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <img src="assets/hero-twilight.webp" alt="Dokumentasi Madinah" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
                 <div class="p-2 text-[10px]">
                   <span class="font-bold text-white block truncate">Ziarah Raudhah Syarif</span>
                   <span class="text-slate-400">Masjid Nabawi Madinah</span>
                 </div>
               </div>
               <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
-                <img src="assets/pkg-vip-khidmat.png" alt="Dokumentasi Manasik" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <img src="assets/pkg-vip-khidmat.webp" alt="Dokumentasi Manasik" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
                 <div class="p-2 text-[10px]">
                   <span class="font-bold text-white block truncate">Napak Tilas Jabal Uhud</span>
                   <span class="text-slate-400">Bukit Pemanah Rummat</span>
                 </div>
               </div>
               <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 relative group">
-                <img src="assets/hero-haram.png" alt="Dokumentasi Kepulangan" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
+                <img src="assets/hero-haram.webp" alt="Dokumentasi Kepulangan" class="w-full h-28 object-cover group-hover:scale-105 transition-transform">
                 <div class="p-2 text-[10px]">
                   <span class="font-bold text-white block truncate">Pelepasan Bandara Jeddah</span>
                   <span class="text-slate-400">King Abdulaziz Airport</span>
@@ -2984,7 +2984,7 @@
       almaMater: 'Al-Azhar University, Cairo',
       experience: '8 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'G-02',
@@ -2994,7 +2994,7 @@
       almaMater: 'Universitas Islam Madinah (S2 Ushul Fiqh)',
       experience: '10 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'G-03',
@@ -3004,7 +3004,7 @@
       almaMater: 'FK Universitas Indonesia (Spesialis Penyakit Dalam)',
       experience: '7 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'G-04',
@@ -3014,7 +3014,7 @@
       almaMater: 'LIPIA Jakarta (Fakultas Syariah)',
       experience: '9 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'G-05',
@@ -3024,7 +3024,7 @@
       almaMater: 'UIN Syarif Hidayatullah Jakarta',
       experience: '6 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'G-06',
@@ -3034,7 +3034,7 @@
       almaMater: 'FK Undip Semarang',
       experience: '8 Tahun',
       status: 'AKTIF',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     }
   ];
 
@@ -3068,7 +3068,7 @@
       <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-2.5">
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 rounded-xl overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
-            <img src="${g.photo || 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'}" alt="${g.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'">
+            <img src="${g.photo || 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'}" alt="${g.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'">
           </div>
           <div>
             <h5 class="text-xs font-black text-slate-800 leading-snug">${g.name}</h5>
@@ -3105,7 +3105,7 @@
       role: 'Korda Surabaya',
       sk_number: 'SK-SDW/MTR-SBY/2024',
       phone: '081234567891',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'MTR-002',
@@ -3116,7 +3116,7 @@
       role: 'Mitra Bandung',
       sk_number: 'SK-SDW/MTR-BDG/2024',
       phone: '081234567892',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'MTR-003',
@@ -3127,7 +3127,7 @@
       role: 'Cabang Makassar',
       sk_number: 'SK-SDW/CAB-MKS/2023',
       phone: '081234567893',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'MTR-004',
@@ -3138,7 +3138,7 @@
       role: 'Korda Jakarta',
       sk_number: 'SK-SDW/MTR-JKT/2024',
       phone: '081234567894',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'MTR-005',
@@ -3149,7 +3149,7 @@
       role: 'Cabang Semarang',
       sk_number: 'SK-SDW/CAB-SMG/2023',
       phone: '081234567895',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     },
     {
       id: 'MTR-006',
@@ -3160,7 +3160,7 @@
       role: 'Mitra Sidoarjo',
       sk_number: 'SK-SDW/MTR-SDA/2024',
       phone: '081234567896',
-      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
+      photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'
     }
   ];
 
@@ -3202,7 +3202,7 @@
         <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-3">
           <div class="flex items-start gap-3">
             <div class="w-16 h-16 rounded-2xl aspect-square overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
-              <img src="${m.photo || 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'}" alt="${m.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'">
+              <img src="${m.photo || 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'}" alt="${m.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0'">
             </div>
             <div class="space-y-1 min-w-0 flex-1">
               <div class="flex items-center gap-1.5 flex-wrap">

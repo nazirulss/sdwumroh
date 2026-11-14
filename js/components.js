@@ -105,7 +105,7 @@
                 <a href="/" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
                     <picture>
                         <source srcset="assets/sdw-logo.webp" type="image/webp">
-                        <img src="assets/sdw-logo.png" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                        <img src="assets/sdw-logo.webp" alt="SDW Umroh" class="nav-logo-img h-10 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
                     </picture>
                     <div class="flex flex-col">
                         <span class="nav-logo-text font-black text-lg sm:text-xl tracking-tight leading-none transition-colors">SDW <span class="text-sdw-gold">UMROH</span></span>
@@ -311,7 +311,7 @@
             <div>
                 <div class="flex items-center justify-between pb-5 border-b border-slate-100">
                     <div class="flex items-center gap-2">
-                        <img src="assets/sdw-logo.png" alt="SDW" class="h-8 w-auto">
+                        <img src="assets/sdw-logo.webp" alt="SDW" class="h-8 w-auto">
                         <span class="font-black text-base text-sdw-pine">SDW <span class="text-sdw-gold">UMROH</span></span>
                     </div>
                     <button type="button" onclick="SDW_COMPONENTS.toggleMobileNav(false)" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center text-sm cursor-pointer" aria-label="Tutup Menu">
@@ -489,7 +489,7 @@
                     <a href="/" class="flex items-center gap-3 group" title="SDW UMROH - Beranda">
                         <picture>
                             <source srcset="assets/sdw-logo.webp" type="image/webp">
-                            <img src="assets/sdw-logo.png" alt="SDW Umroh" class="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
+                            <img src="assets/sdw-logo.webp" alt="SDW Umroh" class="h-11 sm:h-12 w-auto object-contain group-hover:scale-105 transition-transform duration-300">
                         </picture>
                         <div class="flex flex-col">
                             <span class="font-black text-xl tracking-tight leading-none text-white">SDW <span class="text-sdw-gold">UMROH</span></span>

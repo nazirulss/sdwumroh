@@ -484,10 +484,10 @@
                 }
             ],
             direksi: [
-                { name: 'H. Muhammad Syarif', role: 'Direktur Utama', title: 'Direktur Utama PT Sahabat Dhuha Wisata', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0' },
-                { name: 'Hj. Siti Rahmawati, S.E.', role: 'Direktur Keuangan', title: 'Direktur Keuangan & Kustodian Escrow', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0' },
-                { name: 'Ust. H. Ahmad Fauzan, Lc., M.Ag.', role: 'Direktur Bimbingan Ibadah', title: 'Ketua Dewan Pembimbing Syariah', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0' },
-                { name: 'H. Bambang Irawan, S.T.', role: 'Direktur Operasional', title: 'Direktur Operasional & Pelayanan Haramain', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0' }
+                { name: 'H. Muhammad Syarif', role: 'Direktur Utama', title: 'Direktur Utama PT Sahabat Dhuha Wisata', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0' },
+                { name: 'Hj. Siti Rahmawati, S.E.', role: 'Direktur Keuangan', title: 'Direktur Keuangan & Kustodian Escrow', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0' },
+                { name: 'Ust. H. Ahmad Fauzan, Lc., M.Ag.', role: 'Direktur Bimbingan Ibadah', title: 'Ketua Dewan Pembimbing Syariah', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0' },
+                { name: 'H. Bambang Irawan, S.T.', role: 'Direktur Operasional', title: 'Direktur Operasional & Pelayanan Haramain', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0' }
             ]
         };
     }
@@ -496,7 +496,7 @@
         return {
             name: 'H. Muhammad Syarif',
             role: 'Direktur Utama PT Sahabat Dhuha Wisata',
-            photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+            photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
             headline: 'Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia',
             subheadline: 'Komitmen Pimpinan PT Sahabat Dhuha Wisata untuk Perjalanan Ibadah yang Amanah, Khidmat & Menenteramkan.',
             quote: 'Di SDW UMROH, kami memandang perjalanan ke Baitullah bukan sekadar perniagaan tiket dan hotel, melainkan sebuah amanah suci yang agung. Setiap tetes keringat tabungan jamaah kami jaga dengan kepastian fasilitas, transparansi penuh tanpa biaya siluman, dan bimbingan manasik bersanad yang menenteramkan kalbu.',
@@ -524,17 +524,17 @@
                 role: 'Ketua Dewan Pembimbing Syariah & Muthawwif Utama',
                 credentials: 'Alumni Universitas Islam Madinah (Fakultas Syariah) • Pemegang Sanad Manasik 4 Mazhab',
                 bio: 'Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Aktif mengajar hadits dan fiqh ibadah, serta konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW.',
-                photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                 badge: 'Ketua Pembimbing Syariah'
             },
             ratio_pilgrim: 35,
             guides: [
-                { id: 'GD-001', name: 'Ust. Muhammad Ridwan, Lc.', role: 'Muthawwif Senior Makkah', university: 'Al-Azhar University, Kairo', experience: '8 Tahun', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' },
-                { id: 'GD-002', name: 'Ust. Dr. H. Syarif Hidayat, M.A.', role: 'Muthawwif Senior Madinah', university: 'UIM Madinah (Kajian Hadits)', experience: '11 Tahun', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' },
-                { id: 'GD-003', name: 'Ust. Abdullah Faqih, S.Th.I.', role: 'Pembimbing Manasik Daerah', university: 'UIN Walisongo Semarang', experience: '6 Tahun', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' },
-                { id: 'GD-004', name: 'dr. Hj. Siti Fatimah, Sp.PD', role: 'Dokter Spesialis Kloter', university: 'FK Universitas Indonesia', experience: '9 Tahun Medis Haji', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' },
-                { id: 'GD-005', name: 'H. Ruslan Abdullah', role: 'Koordinator Handling Bandara Jeddah', university: 'Al-Azhar Handling Division', experience: '12 Tahun Lapangan', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' },
-                { id: 'GD-006', name: 'Ustzh. Nurul Hikmah, Lc.', role: 'Pembimbing Khusus Jamaah Wanita', university: 'Universitas Al-Ahgaff Yaman', experience: '7 Tahun', photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0', status: 'AKTIF' }
+                { id: 'GD-001', name: 'Ust. Muhammad Ridwan, Lc.', role: 'Muthawwif Senior Makkah', university: 'Al-Azhar University, Kairo', experience: '8 Tahun', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' },
+                { id: 'GD-002', name: 'Ust. Dr. H. Syarif Hidayat, M.A.', role: 'Muthawwif Senior Madinah', university: 'UIM Madinah (Kajian Hadits)', experience: '11 Tahun', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' },
+                { id: 'GD-003', name: 'Ust. Abdullah Faqih, S.Th.I.', role: 'Pembimbing Manasik Daerah', university: 'UIN Walisongo Semarang', experience: '6 Tahun', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' },
+                { id: 'GD-004', name: 'dr. Hj. Siti Fatimah, Sp.PD', role: 'Dokter Spesialis Kloter', university: 'FK Universitas Indonesia', experience: '9 Tahun Medis Haji', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' },
+                { id: 'GD-005', name: 'H. Ruslan Abdullah', role: 'Koordinator Handling Bandara Jeddah', university: 'Al-Azhar Handling Division', experience: '12 Tahun Lapangan', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' },
+                { id: 'GD-006', name: 'Ustzh. Nurul Hikmah, Lc.', role: 'Pembimbing Khusus Jamaah Wanita', university: 'Universitas Al-Ahgaff Yaman', experience: '7 Tahun', photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0', status: 'AKTIF' }
             ]
         };
     }
@@ -570,7 +570,7 @@
                     sk_number: 'SK-SDW/MTR-DMK/2023/007',
                     joined_year: '2021',
                     jamaah_served: 340,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 },
                 {
@@ -585,7 +585,7 @@
                     sk_number: 'SK-SDW/CAB-SMG/2024/012',
                     joined_year: '2022',
                     jamaah_served: 425,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 },
                 {
@@ -600,7 +600,7 @@
                     sk_number: 'SK-SDW/MTR-SBY/2023/019',
                     joined_year: '2022',
                     jamaah_served: 310,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 },
                 {
@@ -615,7 +615,7 @@
                     sk_number: 'SK-SDW/MTR-BDG/2024/025',
                     joined_year: '2023',
                     jamaah_served: 180,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 },
                 {
@@ -630,7 +630,7 @@
                     sk_number: 'SK-SDW/CAB-MKS/2024/031',
                     joined_year: '2024',
                     jamaah_served: 150,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 },
                 {
@@ -645,7 +645,7 @@
                     sk_number: 'SK-SDW/MTR-JKT/2023/001',
                     joined_year: '2021',
                     jamaah_served: 620,
-                    photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0',
+                    photo: 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0',
                     status: 'AKTIF'
                 }
             ]

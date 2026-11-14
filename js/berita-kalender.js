@@ -395,7 +395,7 @@
             date: '28 Oktober 2026',
             readTime: '4 menit baca',
             views: 1420,
-            image: 'assets/hero-haram.png',
+            image: 'assets/hero-haram.webp',
             summary: 'Kementerian Haji dan Umrah Kerajaan Arab Saudi memperbarui kuota penerbitan Tasreh Raudhah untuk jamaah umroh mandiri dan travel berizin.',
             content: `
                 <p>Kementerian Haji dan Umrah Kerajaan Arab Saudi secara resmi mengumumkan kebijakan operasional terbaru terkait penerbitan izin (tasreh) ziarah ke Raudhah Syarifah di Masjid Nabawi untuk musim umroh 1448 H.</p>
@@ -415,7 +415,7 @@
             date: '25 Oktober 2026',
             readTime: '5 menit baca',
             views: 980,
-            image: 'assets/hero-twilight.jpg',
+            image: 'assets/hero-twilight.webp',
             summary: 'Bimbingan praktis bagi jamaah yang mengambil rute penerbangan langsung menuju Bandara King Abdulaziz Jeddah melintasi titik Miqat Yalamlam.',
             content: `
                 <p>Bagi jamaah umroh yang terbang langsung menuju Bandara Internasional King Abdulaziz (JED) Jeddah, titik Miqat akan dilintasi sekitar 30 menit sebelum mendarat.</p>
@@ -434,7 +434,7 @@
             date: '22 Oktober 2026',
             readTime: '3 menit baca',
             views: 740,
-            image: 'assets/pkg-vip-khidmat.png',
+            image: 'assets/pkg-vip-khidmat.webp',
             summary: 'Akses tanpa shuttle bus dan lift langsung menuju pelataran Masjidil Haram memudahkan kekhusyukan ibadah 5 waktu di masjid suci.',
             content: `
                 <p>Kenyamanan beribadah menjadi prioritas utama SDW UMROH. Memilih akomodasi di pelataran Masjidil Haram seperti Pullman Zamzam dan Swissotel memberikan kemudahan bagi jamaah lansia.</p>
@@ -460,7 +460,7 @@
             date: '15 Oktober 2026',
             readTime: '3 menit baca',
             views: 890,
-            image: 'assets/pkg-ramadhan.png',
+            image: 'assets/pkg-ramadhan.webp',
             summary: 'Simulasi tawaf dan sa’i miniatur Ka’bah, pengenalan rute ziarah, dan pembagian paspor serta koper jamaah.',
             content: `
                 <p>Seluruh calon jamaah kloter Syawal diundang untuk menghadiri bimbingan manasik intensif sesuai sunnah yang dipandu oleh asatidz alumni Universitas Islam Madinah.</p>
@@ -487,7 +487,7 @@
                             date: a.publishedAt || 'Terbaru',
                             readTime: a.readTime || '5 menit baca',
                             views: Number(a.viewsCount) || 100,
-                            image: a.imageUrl || 'assets/hero-twilight.jpg',
+                            image: a.imageUrl || 'assets/hero-twilight.webp',
                             summary: a.summary || '',
                             content: a.content || `<p>${a.summary || ''}</p>`
                         }));

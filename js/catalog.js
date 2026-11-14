@@ -52,7 +52,7 @@
                                 description: p.description || existing.description,
                                 starting_price: existing.starting_price || 33500000,
                                 seats_left: existing.seats_left !== undefined ? existing.seats_left : 15,
-                                image: existing.image || 'assets/hero-haram.png'
+                                image: existing.image || 'assets/hero-haram.webp'
                             };
                         });
                         MOCK_DATA.packages = livePackages;

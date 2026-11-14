@@ -16,7 +16,8 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&family=Cinzel:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Amiri+Quran&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
@@ -197,7 +198,7 @@
                         <!-- Header Sertifikat: Logo & Bismillah -->
                         <div class="text-center space-y-2 mb-6">
                             <div class="flex items-center justify-center gap-3">
-                                <img src="assets/sdw-logo.png" alt="Logo SDW" class="h-12 w-auto object-contain">
+                                <img src="assets/sdw-logo.webp" alt="Logo SDW" class="h-12 w-auto object-contain">
                                 <div class="text-left">
                                     <div class="font-black text-base tracking-tight text-[#240833]">SDW <span class="text-[#C59B27]">UMROH</span></div>
                                     <div class="text-[9px] font-bold text-amber-800 tracking-widest uppercase">PPIU Kemenag RI Akreditasi A</div>
@@ -343,7 +344,7 @@
                 title: "Thawaf Qudum Berjamaah di Mataf Ka'bah",
                 desc: "Pelaksanaan rukun thawaf dipandu langsung oleh Muthawwif Bersanad.",
                 date: "24 Oktober 2026",
-                image: "assets/hero-haram.png",
+                image: "assets/hero-haram.webp",
                 tag: "Mataf Ka'bah"
             },
             {
@@ -355,7 +356,7 @@
                 title: "Ziarah Raudhah Asy-Syarifah & Maqam Nabi",
                 desc: "Khusyuk berdoa dan sholat sunnah di taman surga Raudhah Nabawi.",
                 date: "26 Oktober 2026",
-                image: "assets/hero-twilight.jpg",
+                image: "assets/hero-twilight.webp",
                 tag: "Raudhah Nabawi"
             },
             {
@@ -367,7 +368,7 @@
                 title: "Sa'i Safa-Marwah & Suasana Tahallul",
                 desc: "Kebahagiaan jamaah usai menyelesaikan 7 putaran Sa'i dan memotong rambut.",
                 date: "22 Oktober 2026",
-                image: "assets/pkg-vip-khidmat.png",
+                image: "assets/pkg-vip-khidmat.webp",
                 tag: "Bukit Safa"
             },
             {
@@ -379,7 +380,7 @@
                 title: "Napak Tilas Jabal Uhud & Syuhada Uhud",
                 desc: "Tausiyah sirah nabawiyah di kaki bukit pemanah Jabal Rumah.",
                 date: "18 Oktober 2026",
-                image: "assets/pkg-ramadhan.png",
+                image: "assets/pkg-ramadhan.webp",
                 tag: "Jabal Uhud"
             },
             {
@@ -391,7 +392,7 @@
                 title: "Pelepasan Jamaah di Bandara Soekarno-Hatta",
                 desc: "Doa bersama dan pembagian paspor sebelum penerbangan Saudia Airlines.",
                 date: "14 Oktober 2026",
-                image: "assets/pkg-reguler-syawal.png",
+                image: "assets/pkg-reguler-syawal.webp",
                 tag: "Terminal 3 Soetta"
             },
             {
@@ -403,7 +404,7 @@
                 title: "Sholat Sunnah di Masjid Quba & Kebun Kurma",
                 desc: "Mengejar pahala setara ibadah umroh di masjid pertama dalam sejarah Islam.",
                 date: "27 Oktober 2026",
-                image: "assets/pkg-hemat.png",
+                image: "assets/pkg-hemat.webp",
                 tag: "Masjid Quba"
             }
         ];
@@ -630,7 +631,7 @@
                     title: i.title,
                     desc: i.caption || '',
                     date: i.activity_date || '',
-                    image: i.media_url || 'assets/hero-haram.png',
+                    image: i.media_url || 'assets/hero-haram.webp',
                     tag: i.kloter_tag || i.category || 'Tanah Suci'
                 }));
                 renderGalleryGrid();

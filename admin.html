@@ -14,7 +14,8 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Amiri+Quran&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
@@ -267,7 +268,7 @@
             <!-- Brand Header Asnawiyyah Style in SDW Royal Purple -->
             <div class="h-16 px-4 border-b border-purple-900/50 flex items-center justify-between bg-[#240833] text-white sidebar-brand-wrapper">
                 <a href="admin.html" class="flex items-center gap-2.5 group min-w-0" title="SDW Admin Portal">
-                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-8 w-auto object-contain bg-white/10 rounded-lg p-0.5 shrink-0">
+                    <img src="assets/sdw-logo.webp" alt="SDW Logo" class="h-8 w-auto object-contain bg-white/10 rounded-lg p-0.5 shrink-0">
                     <div class="truncate sidebar-hide-on-collapse">
                         <div class="font-black text-sm tracking-tight leading-none text-white truncate">
                             SDW <span class="text-amber-400">ADMIN</span>
@@ -3022,7 +3023,7 @@
                                 <!-- Photo Preview & Upload Controls -->
                                 <div class="text-center">
                                     <div class="relative w-40 h-48 mx-auto rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-lg bg-slate-900 group">
-                                        <img id="profDirPhotoPreview" src="assets/direktur-utama.jpg" alt="Foto Direktur" class="w-full h-full object-cover object-top">
+                                        <img id="profDirPhotoPreview" src="assets/direktur-utama.webp" alt="Foto Direktur" class="w-full h-full object-cover object-top">
                                         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                             <span class="text-[10px] text-white font-bold px-2 py-1 bg-black/60 rounded">Rasio 4:5</span>
                                         </div>
@@ -3040,7 +3041,7 @@
 
                                     <div class="mt-2 text-left">
                                         <label class="block text-[10.5px] font-bold text-slate-500 mb-1">Atau gunakan URL / Path Aset:</label>
-                                        <input type="text" id="profDirPhotoUrl" oninput="document.getElementById('profDirPhotoPreview').src = this.value" class="w-full px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 focus:bg-white" placeholder="assets/direktur-utama.jpg">
+                                        <input type="text" id="profDirPhotoUrl" oninput="document.getElementById('profDirPhotoPreview').src = this.value" class="w-full px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 focus:bg-white" placeholder="assets/direktur-utama.webp">
                                     </div>
                                 </div>
 
@@ -3138,7 +3139,7 @@
                                 <!-- Photo & Upload Pembimbing Utama -->
                                 <div class="md:col-span-3 text-center space-y-2">
                                     <div class="relative w-28 h-36 mx-auto rounded-2xl overflow-hidden border-2 border-purple-300 shadow-md bg-slate-900 group">
-                                        <img id="profLeadPhotoPreview" src="assets/direktur-utama.jpg" alt="Foto Pembimbing Utama" class="w-full h-full object-cover">
+                                        <img id="profLeadPhotoPreview" src="assets/direktur-utama.webp" alt="Foto Pembimbing Utama" class="w-full h-full object-cover">
                                     </div>
                                     <input type="file" id="profLeadPhotoFileInput" accept="image/*" class="hidden" onchange="SDW_ADMIN_PROFILE.handleLeadPhotoUpload(this)">
                                     <button type="button" onclick="document.getElementById('profLeadPhotoFileInput').click()" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine font-bold text-xs flex items-center justify-center gap-1.5 mx-auto cursor-pointer">
@@ -3322,7 +3323,7 @@
                             <!-- Photo Upload for Guide -->
                             <div class="flex items-center gap-3 p-2.5 bg-purple-50/60 rounded-2xl border border-purple-100">
                                 <div class="w-14 h-14 rounded-2xl overflow-hidden border-2 border-purple-200 bg-slate-200 shrink-0">
-                                    <img id="guideFormPhotoPreview" src="assets/direktur-utama.jpg" alt="Foto Personil" class="w-full h-full object-cover">
+                                    <img id="guideFormPhotoPreview" src="assets/direktur-utama.webp" alt="Foto Personil" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1">
                                     <label class="block text-[11px] font-bold text-slate-700 mb-1">Foto Personil / Asatidz:</label>
@@ -3473,7 +3474,7 @@
                             <!-- Photo Upload for Mitra Syiar -->
                             <div class="flex items-center gap-3 p-3 bg-amber-50/50 rounded-2xl border border-amber-200/60">
                                 <div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-900 shrink-0 shadow-xs">
-                                    <img id="mitraFormPhotoPreview" src="assets/direktur-utama.jpg" alt="Foto Koordinator" class="w-full h-full object-cover">
+                                    <img id="mitraFormPhotoPreview" src="assets/direktur-utama.webp" alt="Foto Koordinator" class="w-full h-full object-cover">
                                 </div>
                                 <div class="flex-1">
                                     <label class="block text-[11px] font-bold text-slate-800 mb-1">Foto Koordinator / Kantor Cabang:</label>
@@ -4879,7 +4880,7 @@
                 <!-- Receipt Head -->
                 <div class="border-b-2 border-slate-800 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-12 w-auto object-contain">
+                        <img src="assets/sdw-logo.webp" alt="SDW Logo" class="h-12 w-auto object-contain">
                         <div>
                             <div class="font-black text-lg tracking-tight text-sdw-pine">
                                 PT SDW MANDIRI UTAMA
@@ -5348,7 +5349,7 @@
                     
                     <!-- Canvas Box -->
                     <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-amber-400/60 select-none bg-slate-900" style="aspect-ratio: 1.48 / 1; container-type: inline-size;">
-                        <img src="assets/certificate-template.jpg" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
+                        <img src="assets/certificate-template.webp" alt="Template Preview" class="w-full h-full object-cover pointer-events-none select-none block">
 
                         <!-- Dynamic Overlay 0: Nomor Sertifikat di Pojok Kiri Atas (Ukuran & Warna Sama Persis Font Keberangkatan) -->
                         <div id="modal-cert-preview-no" class="absolute font-semibold text-slate-500 tracking-normal pointer-events-none select-none"
@@ -5527,7 +5528,7 @@
 
                     <div class="relative w-full rounded-2xl overflow-hidden shadow-xl border border-slate-300 bg-white" style="aspect-ratio: 1024 / 723; container-type: inline-size;">
                         <!-- Certificate Background Template Resmi -->
-                        <img src="assets/certificate-badal-template.jpg" alt="Template Piagam Badal" class="w-full h-full object-cover pointer-events-none select-none">
+                        <img src="assets/certificate-badal-template.webp" alt="Template Piagam Badal" class="w-full h-full object-cover pointer-events-none select-none">
 
                         <!-- 1. Nomor Sertifikat (Di bawah teks BADAL UMROH) -->
                         <div id="badal-preview-cert-no" class="absolute font-mono font-bold select-none pointer-events-none text-center"
@@ -5850,7 +5851,7 @@
                         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                             <!-- Preview Thumbnail Box -->
                             <div class="relative w-28 h-20 sm:w-36 sm:h-24 rounded-xl overflow-hidden bg-slate-900 border border-slate-300 shrink-0 shadow-xs group">
-                                <img id="pkgImagePreview" src="assets/hero-haram.png" alt="Preview Banner Paket" class="w-full h-full object-cover">
+                                <img id="pkgImagePreview" src="assets/hero-haram.webp" alt="Preview Banner Paket" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center pointer-events-none">
                                     <span class="text-[10px] text-white font-bold bg-black/60 px-2 py-0.5 rounded">Preview</span>
                                 </div>
@@ -5879,7 +5880,7 @@
                         <!-- URL / Path Gambar Input (Bisa diketik manual atau otomatis terisi dari upload) -->
                         <div>
                             <label class="block font-semibold text-slate-600 text-[11px] mb-1">URL / Path Gambar (Otomatis terisi saat upload atau masukkan URL gambar web):</label>
-                            <input type="text" id="pkgImageUrl" oninput="SDW_ADMIN.onPackageImageUrlInput(this.value)" placeholder="assets/pkg-reguler-syawal.png atau https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-mono text-slate-800 text-xs focus:outline-none focus:border-sdw-pine">
+                            <input type="text" id="pkgImageUrl" oninput="SDW_ADMIN.onPackageImageUrlInput(this.value)" placeholder="assets/pkg-reguler-syawal.webp atau https://..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white font-mono text-slate-800 text-xs focus:outline-none focus:border-sdw-pine">
                         </div>
                     </div>
 
@@ -6121,12 +6122,12 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div>
                             <label class="block font-bold text-slate-700 mb-1">URL / Path Foto Banner</label>
-                            <input type="text" id="htlModalImage" value="assets/hero-haram.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
+                            <input type="text" id="htlModalImage" value="assets/hero-haram.webp" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs">
                             <div class="mt-1 flex items-center gap-1.5 text-[10px] text-slate-500">
                                 <span>Pilihan preset:</span>
-                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-vip-khidmat.png'" class="text-purple-700 hover:underline">VIP Clock Tower</button> •
-                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/hero-haram.png'" class="text-purple-700 hover:underline">Haramain</button> •
-                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-reguler-syawal.png'" class="text-purple-700 hover:underline">Reguler</button>
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-vip-khidmat.webp'" class="text-purple-700 hover:underline">VIP Clock Tower</button> •
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/hero-haram.webp'" class="text-purple-700 hover:underline">Haramain</button> •
+                                <button type="button" onclick="document.getElementById('htlModalImage').value='assets/pkg-reguler-syawal.webp'" class="text-purple-700 hover:underline">Reguler</button>
                             </div>
                         </div>
                         <div>
@@ -6216,7 +6217,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Media Gambar / Video <span class="text-rose-500">*</span></label>
-                        <input type="text" id="galleryInputMediaUrl" required placeholder="assets/hero-haram.png atau URL eksternal" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                        <input type="text" id="galleryInputMediaUrl" required placeholder="assets/hero-haram.webp atau URL eksternal" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Thumbnail (Opsional)</label>
@@ -6326,7 +6327,7 @@
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Foto Profil Jamaah</label>
-                        <input type="text" id="testiInputPhoto" placeholder="assets/pkg-vip-khidmat.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                        <input type="text" id="testiInputPhoto" placeholder="assets/pkg-vip-khidmat.webp" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
                     </div>
                 </div>
 
@@ -6417,7 +6418,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Cover / Banner Gambar</label>
-                        <input type="text" id="artInputImageUrl" placeholder="assets/hero-twilight.jpg" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                        <input type="text" id="artInputImageUrl" placeholder="assets/hero-twilight.webp" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Estimasi Waktu Baca (Menit)</label>
@@ -6530,7 +6531,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Foto Lokasi</label>
-                        <input type="text" id="zrhInputImageUrl" placeholder="assets/pkg-vip-khidmat.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                        <input type="text" id="zrhInputImageUrl" placeholder="assets/pkg-vip-khidmat.webp" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Tautan Navigasi Google Maps</label>
@@ -6628,7 +6629,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">URL Logo / Foto Pesawat</label>
-                        <input type="text" id="airlineModalLogoUrl" placeholder="assets/hero-haram.png" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
+                        <input type="text" id="airlineModalLogoUrl" placeholder="assets/hero-haram.webp" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-hidden focus:border-sdw-pine text-xs">
                     </div>
                     <div>
                         <label class="block font-bold text-slate-700 mb-1">Nomor Urutan Prioritas</label>

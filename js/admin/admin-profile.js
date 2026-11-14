@@ -24,7 +24,7 @@
     'use strict';
 
     const admin = adminState || window.SDW_ADMIN || {};
-    const DEFAULT_PROFILE_PHOTO = 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0';
+    const DEFAULT_PROFILE_PHOTO = 'https://lh3.googleusercontent.com/d/1fE16Qloey3OelIJNd4mszO23w5NL0ZEJ=s0';
 
     let currentEditingGuideId = null;
     let currentEditingDocId = null;

@@ -16,7 +16,8 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Amiri+Quran&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- CSS -->
@@ -352,7 +353,7 @@
                     sk_number: "SK-SDW/MTR-DMK/2023/007",
                     joined_year: "2021",
                     jamaah_served: 340,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 },
                 {
@@ -367,7 +368,7 @@
                     sk_number: "SK-SDW/CAB-SMG/2024/012",
                     joined_year: "2022",
                     jamaah_served: 425,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 },
                 {
@@ -382,7 +383,7 @@
                     sk_number: "SK-SDW/MTR-SBY/2023/019",
                     joined_year: "2022",
                     jamaah_served: 310,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 },
                 {
@@ -397,7 +398,7 @@
                     sk_number: "SK-SDW/MTR-BDG/2024/025",
                     joined_year: "2023",
                     jamaah_served: 180,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 },
                 {
@@ -412,7 +413,7 @@
                     sk_number: "SK-SDW/CAB-MKS/2024/031",
                     joined_year: "2024",
                     jamaah_served: 150,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 },
                 {
@@ -427,7 +428,7 @@
                     sk_number: "SK-SDW/MTR-JKT/2023/001",
                     joined_year: "2021",
                     jamaah_served: 620,
-                    photo: "assets/direktur-utama.jpg",
+                    photo: "assets/direktur-utama.webp",
                     status: "AKTIF"
                 }
             ];
@@ -484,7 +485,7 @@
                 container.innerHTML = filtered.map(m => {
                     const cleanPhone = String(m.phone || '').replace(/[^0-9]/g, '');
                     const waText = encodeURIComponent(`Assalamualaikum ${m.name}, saya ingin konsultasi pendaftaran umroh SDW di ${m.city}.`);
-                    const photoSrc = m.photo || 'assets/direktur-utama.jpg';
+                    const photoSrc = m.photo || 'assets/direktur-utama.webp';
 
                     return `
                     <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md space-y-4 hover:shadow-xl transition flex flex-col justify-between group">

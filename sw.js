@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-const CACHE_NAME = 'sdw-umroh-pwa-v91';
-const RUNTIME_CACHE = 'sdw-runtime-v91';
+const CACHE_NAME = 'sdw-umroh-pwa-v92';
+const RUNTIME_CACHE = 'sdw-runtime-v92';
 
 const PRECACHE_URLS = [
   '/',
@@ -26,6 +26,7 @@ const PRECACHE_URLS = [
   '/assets/sdw-logo.png',
   '/assets/sdw-logo.webp',
   '/assets/direktur-utama.jpg',
+  '/assets/direktur-utama.webp',
   '/assets/hero-haram.png',
   '/assets/hero-haram.webp',
   '/assets/hero-twilight.jpg',
@@ -38,7 +39,10 @@ const PRECACHE_URLS = [
   '/assets/icon-192.png',
   '/assets/icon-512.png',
   '/assets/icon-maskable.png',
+  '/assets/certificate-template.jpg',
+  '/assets/certificate-template.webp',
   '/assets/certificate-badal-template.jpg',
+  '/assets/certificate-badal-template.webp',
   '/js/components.js',
   '/js/app-config.js',
   '/js/data-mock.js',

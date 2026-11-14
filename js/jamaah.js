@@ -1063,7 +1063,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Masjidil Haram, Makkah',
             caption: 'Thawaf Wada Jamaah Kloter 27 Oktober 2026 mengelilingi Ka\'bah Baitullah.',
-            imgUrl: 'assets/hero-haram.png',
+            imgUrl: 'assets/hero-haram.webp',
             dateStr: '28 Oktober 2026'
         },
         {
@@ -1072,7 +1072,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Bukit Shafa & Marwah',
             caption: 'Ibadah Sa\'i jamaah bersama Muthawwif pembimbing PT SDW.',
-            imgUrl: 'assets/pkg-vip-khidmat.png',
+            imgUrl: 'assets/pkg-vip-khidmat.webp',
             dateStr: '28 Oktober 2026'
         },
         {
@@ -1081,7 +1081,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Masjid Nabawi, Madinah',
             caption: 'Ziarah Raudhah Syarifah dan Makam Rasulullah SAW.',
-            imgUrl: 'assets/hero-twilight.jpg',
+            imgUrl: 'assets/hero-twilight.webp',
             dateStr: '01 November 2026'
         },
         {
@@ -1090,7 +1090,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Jabal Uhud, Madinah',
             caption: 'Napak tilas perjuangan syuhada perang Uhud dan doa bersama.',
-            imgUrl: 'assets/hero-haram.png',
+            imgUrl: 'assets/hero-haram.webp',
             dateStr: '02 November 2026'
         },
         {
@@ -1099,7 +1099,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Miqat Masjid Bir Ali',
             caption: 'Pengambilan Miqat ihram dan pemantapan niat manasik.',
-            imgUrl: 'assets/hero-twilight.jpg',
+            imgUrl: 'assets/hero-twilight.webp',
             dateStr: '27 Oktober 2026'
         },
         {
@@ -1108,7 +1108,7 @@
             kloterTitle: '27 Oktober 2026',
             location: 'Jabal Rahmah, Padang Arafah',
             caption: 'Momen kebersamaan keluarga jamaah di puncak Jabal Rahmah.',
-            imgUrl: 'assets/pkg-vip-khidmat.png',
+            imgUrl: 'assets/pkg-vip-khidmat.webp',
             dateStr: '29 Oktober 2026'
         },
         {
@@ -1117,7 +1117,7 @@
             kloterTitle: '15 Januari 2027',
             location: 'Pelataran Ka\'bah Baitullah',
             caption: 'Khidmat doa bersama di depan Multazam dan Hijir Ismail.',
-            imgUrl: 'assets/hero-haram.png',
+            imgUrl: 'assets/hero-haram.webp',
             dateStr: '16 Januari 2027'
         },
         {
@@ -1126,7 +1126,7 @@
             kloterTitle: '28 Februari 2027',
             location: 'Masjid Quba, Madinah',
             caption: 'Sholat sunnah dua rakaat di Masjid Quba berpahala seperti umroh.',
-            imgUrl: 'assets/hero-twilight.jpg',
+            imgUrl: 'assets/hero-twilight.webp',
             dateStr: '01 Maret 2027'
         }
     ];
