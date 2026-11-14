@@ -27,11 +27,13 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-        /* Sidebar Desktop Side-by-Side vs Mobile Drawer Layout */
+        /* Sidebar Desktop Side-by-Side vs Mobile Drawer Layout Asnawiyyah Style */
         #adminSidebar {
-            width: 16rem !important;
+            width: 17.5rem !important;
             height: 100vh !important;
             flex-shrink: 0 !important;
+            background-color: #046A38 !important;
+            color: #ffffff !important;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -194,20 +196,25 @@
         <div id="adminSidebarBackdrop" onclick="SDW_ADMIN.toggleMobileSidebar(false)" class="fixed inset-0 bg-black/60 backdrop-blur-2xs z-30 hidden transition-opacity" aria-hidden="true"></div>
 
         <!-- ==================== SIDEBAR NAVIGASI (SIDE-BY-SIDE ON DESKTOP / DRAWER ON MOBILE) ==================== -->
-        <aside id="adminSidebar" class="bg-white border-r border-slate-200/90 flex flex-col z-40">
-            <!-- Brand Header -->
-            <div class="h-16 px-5 border-b border-slate-200/80 flex items-center justify-between bg-gradient-to-r from-purple-900 via-[#3E165B] to-[#240833] text-white">
-                <a href="admin.html" class="flex items-center gap-2.5 group">
-                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-8 w-auto object-contain">
-                    <div>
-                        <div class="font-black text-sm tracking-tight leading-none text-white">
+        <aside id="adminSidebar" class="bg-[#046A38] border-r border-emerald-950/20 flex flex-col z-40 text-white select-none relative">
+            <!-- Floating Round Toggle Button (Asnawiyyah Style) -->
+            <button type="button" onclick="SDW_ADMIN.toggleMobileSidebar()" class="hidden md:flex absolute -right-3 top-5 w-6 h-6 rounded-full bg-white text-[#046A38] shadow-md border border-emerald-100 items-center justify-center text-xs z-50 hover:scale-110 transition-transform cursor-pointer" title="Persempit / Buka Sidebar">
+                <i class="fa-solid fa-chevron-left text-[9px]"></i>
+            </button>
+
+            <!-- Brand Header Asnawiyyah Style -->
+            <div class="h-16 px-4 border-b border-emerald-900/50 flex items-center justify-between bg-[#03542c] text-white">
+                <a href="admin.html" class="flex items-center gap-2.5 group min-w-0">
+                    <img src="assets/sdw-logo.png" alt="SDW Logo" class="h-8 w-auto object-contain bg-white/10 rounded-lg p-0.5">
+                    <div class="truncate">
+                        <div class="font-black text-sm tracking-tight leading-none text-white truncate">
                             SDW <span class="text-amber-400">ADMIN</span>
                         </div>
-                        <span class="text-[9px] text-amber-300/90 font-bold uppercase tracking-wider block mt-0.5">Backoffice Hub</span>
+                        <span class="text-[9px] text-emerald-200/80 font-bold uppercase tracking-wider block mt-0.5 truncate">Portal Administrasi</span>
                     </div>
                 </a>
-                <div class="flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded text-[9.5px] font-mono font-bold bg-white/10 text-amber-300 border border-white/15">v2.4</span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-white/10 text-amber-300 border border-white/15">v2.4</span>
                     <button type="button" onclick="SDW_ADMIN.toggleMobileSidebar(false)" class="md:hidden w-7 h-7 rounded-lg bg-white/15 hover:bg-white/25 text-white flex items-center justify-center text-xs transition cursor-pointer" aria-label="Tutup Menu Sidebar">
                         <i class="fa-solid fa-xmark"></i>
                     </button>
@@ -224,165 +231,165 @@
             <div class="flex-1 overflow-y-auto p-3 space-y-4 text-xs font-semibold">
                 <!-- Group 1: Ringkasan -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Ringkasan</div>
-                    <button type="button" data-admin-tab="tab-dashboard" onclick="SDW_ADMIN.switchTab('tab-dashboard')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-gauge-high nav-icon text-amber-300 w-5 text-center text-sm"></i>
-                            <span>Dashboard Utama</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Ringkasan &amp; Overview</div>
+                    <button type="button" data-admin-tab="tab-dashboard" onclick="SDW_ADMIN.switchTab('tab-dashboard')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold bg-white text-[#046A38] shadow-md transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-gauge-high nav-icon text-[#046A38] w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Dashboard Utama</span>
                         </span>
                     </button>
                 </div>
 
                 <!-- Group 2: Sales & Pelanggan -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Pemasaran &amp; CRM</div>
-                    <button type="button" data-admin-tab="tab-crm" onclick="SDW_ADMIN.switchTab('tab-crm')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-users-viewfinder nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Leads &amp; Prospek</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Pemasaran &amp; CRM</div>
+                    <button type="button" data-admin-tab="tab-crm" onclick="SDW_ADMIN.switchTab('tab-crm')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-users-viewfinder nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Leads &amp; Prospek</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">4</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">4</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-packages" onclick="SDW_ADMIN.switchTab('tab-packages')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-boxes-packing nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Katalog Pilihan Paket</span>
+                    <button type="button" data-admin-tab="tab-packages" onclick="SDW_ADMIN.switchTab('tab-packages')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-boxes-packing nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Katalog Paket</span>
                         </span>
-                        <span id="badgePackageCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Katalog</span>
+                        <span id="badgePackageCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Katalog</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-gallery" onclick="SDW_ADMIN.switchTab('tab-gallery')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-photo-film nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Galeri &amp; Testimoni</span>
+                    <button type="button" data-admin-tab="tab-gallery" onclick="SDW_ADMIN.switchTab('tab-gallery')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-photo-film nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Galeri &amp; Testimoni</span>
                         </span>
-                        <span id="badgeGalleryCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Media</span>
+                        <span id="badgeGalleryCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Media</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-articles" onclick="SDW_ADMIN.switchTab('tab-articles')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-book-quran nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Artikel &amp; Panduan</span>
+                    <button type="button" data-admin-tab="tab-articles" onclick="SDW_ADMIN.switchTab('tab-articles')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-book-quran nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Artikel &amp; Panduan</span>
                         </span>
-                        <span id="badgeArticlesCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-emerald-50 text-emerald-700">Edukasi</span>
+                        <span id="badgeArticlesCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Edukasi</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-faq" onclick="SDW_ADMIN.switchTab('tab-faq')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-circle-question nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>FAQ &amp; Bantuan CS</span>
+                    <button type="button" data-admin-tab="tab-faq" onclick="SDW_ADMIN.switchTab('tab-faq')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-circle-question nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">FAQ &amp; Bantuan CS</span>
                         </span>
-                        <span id="badgeFaqCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-teal-50 text-teal-700">Helpdesk</span>
+                        <span id="badgeFaqCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Helpdesk</span>
                     </button>
                 </div>
 
                 <!-- Group 3: Registrasi & Dokumen -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Registrasi &amp; Berkas</div>
-                    <button type="button" data-admin-tab="tab-docs" onclick="SDW_ADMIN.switchTab('tab-docs')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-passport nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Verifikasi Paspor &amp; Visa</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Registrasi &amp; Berkas</div>
+                    <button type="button" data-admin-tab="tab-docs" onclick="SDW_ADMIN.switchTab('tab-docs')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-passport nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Verifikasi Paspor &amp; Visa</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-rose-50 text-rose-700">3</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">3</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-registrations" onclick="SDW_ADMIN.switchTab('tab-registrations')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-id-card-clip nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Booking &amp; Pendaftaran</span>
+                    <button type="button" data-admin-tab="tab-registrations" onclick="SDW_ADMIN.switchTab('tab-registrations')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-id-card-clip nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Booking &amp; Pendaftaran</span>
                         </span>
                     </button>
                 </div>
 
                 <!-- Group 4: Keuangan -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Keuangan</div>
-                    <button type="button" data-admin-tab="tab-finance" onclick="SDW_ADMIN.switchTab('tab-finance')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-receipt nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Invoice &amp; Mutasi Bank</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Keuangan</div>
+                    <button type="button" data-admin-tab="tab-finance" onclick="SDW_ADMIN.switchTab('tab-finance')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-receipt nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Invoice &amp; Mutasi Bank</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">1</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">1</span>
                     </button>
                 </div>
 
                 <!-- Group 5: Operasional Tanah Suci -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Operasional Kloter</div>
-                    <button type="button" data-admin-tab="tab-departures" onclick="SDW_ADMIN.switchTab('tab-departures')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-plane-departure nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Jadwal Kloter</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Operasional Kloter</div>
+                    <button type="button" data-admin-tab="tab-departures" onclick="SDW_ADMIN.switchTab('tab-departures')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-plane-departure nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Jadwal Kloter</span>
                         </span>
-                        <span id="badgeDepartureCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Live</span>
+                        <span id="badgeDepartureCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Live</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-hotels" onclick="SDW_ADMIN.switchTab('tab-hotels')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-hotel nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Master Data Hotel</span>
+                    <button type="button" data-admin-tab="tab-hotels" onclick="SDW_ADMIN.switchTab('tab-hotels')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-hotel nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Master Data Hotel</span>
                         </span>
-                        <span id="badgeHotelCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Haramain</span>
+                        <span id="badgeHotelCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Haramain</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-airlines" onclick="SDW_ADMIN.switchTab('tab-airlines')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-plane-departure nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Maskapai &amp; Bandara</span>
+                    <button type="button" data-admin-tab="tab-airlines" onclick="SDW_ADMIN.switchTab('tab-airlines')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-plane-departure nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Maskapai &amp; Bandara</span>
                         </span>
-                        <span id="badgeAirlineCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-sky-50 text-sky-700">Flight Hub</span>
+                        <span id="badgeAirlineCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Flight Hub</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-operations" onclick="SDW_ADMIN.switchTab('tab-operations')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-kaaba nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Kloter, Bus &amp; Kamar Hotel</span>
+                    <button type="button" data-admin-tab="tab-operations" onclick="SDW_ADMIN.switchTab('tab-operations')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-kaaba nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Operasional Lapangan</span>
                         </span>
                     </button>
-                    <button type="button" data-admin-tab="tab-certificates" onclick="SDW_ADMIN.switchTab('tab-certificates')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-award nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>E-Sertifikat Umroh</span>
+                    <button type="button" data-admin-tab="tab-certificates" onclick="SDW_ADMIN.switchTab('tab-certificates')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-award nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">E-Sertifikat Umroh</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Resmi</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Resmi</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-badal-certificates" onclick="SDW_ADMIN.switchTab('tab-badal-certificates')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-kaaba nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>E-Sertifikat Badal</span>
+                    <button type="button" data-admin-tab="tab-badal-certificates" onclick="SDW_ADMIN.switchTab('tab-badal-certificates')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-kaaba nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">E-Sertifikat Badal</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700 border border-amber-200">Amanah</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Amanah</span>
                     </button>
                 </div>
 
                 <!-- Group 6: Sistem & Hak Akses -->
                 <div class="space-y-1">
-                    <div class="px-3 text-[10px] font-extrabold text-slate-400 uppercase tracking-wider">Sistem &amp; Hak Akses</div>
-                    <button type="button" data-admin-tab="tab-users" onclick="SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-users-gear nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Manajemen Pengguna</span>
+                    <div class="px-3 text-[10px] font-black text-emerald-200/60 uppercase tracking-wider">Sistem &amp; Hak Akses</div>
+                    <button type="button" data-admin-tab="tab-users" onclick="SDW_ADMIN.switchTab('tab-users')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-users-gear nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Kelola Pengguna</span>
                         </span>
-                        <span id="badgeUsersCount" class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-50 text-purple-700">Akun</span>
+                        <span id="badgeUsersCount" class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Akun</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-roles" onclick="SDW_ADMIN.switchTab('tab-roles')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-shield-halved nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Manajemen Peran &amp; RBAC</span>
+                    <button type="button" data-admin-tab="tab-roles" onclick="SDW_ADMIN.switchTab('tab-roles')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-shield-halved nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Peran &amp; RBAC</span>
                         </span>
-                        <span class="px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-50 text-amber-700">Matrix</span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5">Matrix</span>
                     </button>
-                    <button type="button" data-admin-tab="tab-audit" onclick="SDW_ADMIN.switchTab('tab-audit')" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition">
-                        <span class="flex items-center gap-2.5">
-                            <i class="fa-solid fa-shield-virus nav-icon text-slate-400 w-5 text-center text-sm"></i>
-                            <span>Jejak Audit Log</span>
+                    <button type="button" data-admin-tab="tab-audit" onclick="SDW_ADMIN.switchTab('tab-audit')" class="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-shield-virus nav-icon text-white/70 w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Jejak Audit Log</span>
                         </span>
                     </button>
                 </div>
             </div>
 
             <!-- Footer: Switch to Pilgrim App -->
-            <div class="p-3 border-t border-slate-200/80 bg-slate-50/70">
-                <a href="app.html" class="w-full py-2.5 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine font-bold text-xs flex items-center justify-between transition border border-purple-200/70">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-mobile-screen-button text-purple-700"></i>
-                        <span>Buka Aplikasi Jamaah</span>
+            <div class="p-3 border-t border-emerald-900/40 bg-[#03542c]">
+                <a href="index.html" target="_blank" class="w-full py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 text-white/90 hover:text-white font-bold text-xs flex items-center justify-between transition border border-white/10">
+                    <div class="flex items-center gap-2 truncate">
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-emerald-300"></i>
+                        <span class="truncate">sdwumroh.com</span>
                     </div>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-500"></i>
+                    <span class="text-[10px] text-emerald-200">Portal Publik</span>
                 </a>
             </div>
         </aside>
@@ -598,94 +605,95 @@
                         </div>
                     </div>
 
-                    <!-- Section 3: 4 Vibrant Gradient KPI Cards (Asnawiyyah Style) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Section 3: 4 Vibrant Gradient KPI Cards (Asnawiyyah Style - Compact & Sleek) -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-3.5">
                         <!-- Card 1: Emerald/Teal (Total Jamaah Terdaftar) -->
-                        <div class="p-5 rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #059669 0%, #0f766e 100%);">
+                        <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-md flex flex-col justify-between space-y-2.5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #059669 0%, #0f766e 100%);">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-emerald-100">Total Jamaah Terdaftar</span>
-                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                <span class="text-xs font-bold text-white/95">Total Jamaah Terdaftar</span>
+                                <div class="w-7 h-7 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-users"></i>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-baseline gap-1.5">
-                                    <span id="kpi-total-pilgrims" class="text-3xl font-black font-mono">142</span>
-                                    <span class="text-sm font-bold text-emerald-100">Jamaah</span>
-                                    <span class="text-xs font-black text-emerald-200 ml-0.5">↑</span>
+                                    <span id="kpi-total-pilgrims" class="text-2xl font-black font-mono">142</span>
+                                    <span class="text-xs font-bold text-white/90">Jamaah</span>
+                                    <span class="text-[10px] font-black text-white/80 ml-0.5">↑</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
-                                <span class="text-emerald-100 font-medium">Kloter Aktif &amp; Binaan</span>
-                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-registrations')" class="px-2.5 py-1 rounded-full bg-white text-emerald-800 font-bold text-[10.5px] hover:bg-emerald-50 transition shadow-2xs cursor-pointer">
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[10.5px]">
+                                <span class="text-white/80 font-medium">Kloter Aktif &amp; Binaan</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-registrations')" class="px-2.5 py-0.5 rounded-full bg-white text-emerald-800 font-bold text-[10px] hover:bg-emerald-50 transition shadow-2xs cursor-pointer">
                                     Data Induk
                                 </button>
                             </div>
                         </div>
 
                         <!-- Card 2: Sapphire Blue / Indigo (Kapasitas Seat Kloter) -->
-                        <div class="p-5 rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);">
+                        <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-700 text-white shadow-md flex flex-col justify-between space-y-2.5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-blue-100">Kapasitas Seat Kloter</span>
-                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                <span class="text-xs font-bold text-white/95">Kapasitas Seat Kloter</span>
+                                <div class="w-7 h-7 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-plane-departure"></i>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-baseline gap-1.5">
-                                    <span id="kpi-seat-occupancy" class="text-3xl font-black font-mono">88%</span>
-                                    <span class="text-sm font-bold text-blue-100">Terisi</span>
-                                    <span class="text-xs font-black text-blue-200 ml-0.5">↑</span>
+                                    <span id="kpi-seat-occupancy" class="text-2xl font-black font-mono">88%</span>
+                                    <span class="text-xs font-bold text-white/90">Terisi</span>
+                                    <span class="text-[10px] font-black text-white/80 ml-0.5">↑</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
-                                <span class="text-blue-100 font-medium">Target 5 Kloter Musim 1448H</span>
-                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-departures')" class="px-2.5 py-1 rounded-full bg-white text-blue-800 font-bold text-[10.5px] hover:bg-blue-50 transition shadow-2xs cursor-pointer">
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[10.5px]">
+                                <span class="text-white/80 font-medium">Target 5 Kloter Musim 1448H</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-departures')" class="px-2.5 py-0.5 rounded-full bg-white text-blue-800 font-bold text-[10px] hover:bg-blue-50 transition shadow-2xs cursor-pointer">
                                     Jadwal Kloter
                                 </button>
                             </div>
                         </div>
 
                         <!-- Card 3: Deep Magenta / Coral / Raspberry (Muthawwif & Pembina) -->
-                        <div class="p-5 rounded-3xl bg-gradient-to-br from-rose-500 via-pink-600 to-rose-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f43f5e 0%, #be185d 100%);">
+                        <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-rose-500 via-pink-600 to-rose-700 text-white shadow-md flex flex-col justify-between space-y-2.5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f43f5e 0%, #be185d 100%);">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-rose-100">Muthawwif &amp; Pembina</span>
-                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                <span class="text-xs font-bold text-white/95">Muthawwif &amp; Pembina</span>
+                                <div class="w-7 h-7 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-user-tie"></i>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-baseline gap-1.5">
-                                    <span id="kpi-active-muthawwif" class="text-3xl font-black font-mono">18</span>
-                                    <span class="text-sm font-bold text-rose-100">Petugas</span>
-                                    <span class="text-xs font-black text-rose-200 ml-0.5">↑</span>
+                                    <span id="kpi-active-muthawwif" class="text-2xl font-black font-mono">18</span>
+                                    <span class="text-xs font-bold text-white/90">Petugas</span>
+                                    <span class="text-[10px] font-black text-white/80 ml-0.5">↑</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
-                                <span class="text-rose-100 font-medium">Petugas Bersertifikat Kemenag</span>
-                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-operations')" class="px-2.5 py-1 rounded-full bg-white text-rose-800 font-bold text-[10.5px] hover:bg-rose-50 transition shadow-2xs cursor-pointer">
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[10.5px]">
+                                <span class="text-white/80 font-medium">Petugas Bersertifikat Kemenag</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-operations')" class="px-2.5 py-0.5 rounded-full bg-white text-rose-800 font-bold text-[10px] hover:bg-rose-50 transition shadow-2xs cursor-pointer">
                                     Tim Lapangan
                                 </button>
                             </div>
                         </div>
 
                         <!-- Card 4: Sunset Orange / Warm Amber (Verifikasi Dokumen & Visa) -->
-                        <div class="p-5 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">
+                        <div class="p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-md flex flex-col justify-between space-y-2.5 hover:shadow-lg hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs font-bold text-amber-100">Verifikasi Dokumen &amp; Visa</span>
-                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                <span class="text-xs font-bold text-white/95">Verifikasi Dokumen &amp; Visa</span>
+                                <div class="w-7 h-7 rounded-lg bg-white/20 text-white flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-passport"></i>
                                 </div>
                             </div>
                             <div>
                                 <div class="flex items-baseline gap-1.5">
-                                    <span id="kpi-docs-accuracy" class="text-3xl font-black font-mono">98.5%</span>
-                                    <span class="text-xs font-black text-amber-200 ml-0.5">↑</span>
+                                    <span id="kpi-docs-accuracy" class="text-2xl font-black font-mono">98.5%</span>
+                                    <span class="text-xs font-bold text-white/90">Valid</span>
+                                    <span class="text-[10px] font-black text-white/80 ml-0.5">↑</span>
                                 </div>
                             </div>
-                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
-                                <span class="text-amber-100 font-medium">Paspor &amp; Biometrik Siap</span>
-                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-docs')" class="px-2.5 py-1 rounded-full bg-white text-amber-800 font-bold text-[10.5px] hover:bg-amber-50 transition shadow-2xs cursor-pointer">
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[10.5px]">
+                                <span class="text-white/80 font-medium">Paspor &amp; Biometrik Siap</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-docs')" class="px-2.5 py-0.5 rounded-full bg-white text-amber-800 font-bold text-[10px] hover:bg-amber-50 transition shadow-2xs cursor-pointer">
                                     98.5% Valid
                                 </button>
                             </div>

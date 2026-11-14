@@ -226,14 +226,17 @@
             const allNavBtns = document.querySelectorAll('[data-admin-tab]');
             allNavBtns.forEach(btn => {
                 const btnTarget = btn.getAttribute('data-admin-tab');
+                const icon = btn.querySelector('.nav-icon');
+                const badge = btn.querySelector('.nav-badge');
+
                 if (btnTarget === tabId) {
-                    btn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-sm transition";
-                    const icon = btn.querySelector('.nav-icon');
-                    if (icon) icon.className = "nav-icon text-amber-300 w-5 text-center text-sm";
+                    btn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold bg-white text-[#046A38] shadow-md transition whitespace-nowrap cursor-pointer";
+                    if (icon) icon.className = "nav-icon text-[#046A38] w-5 text-center text-sm shrink-0";
+                    if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-emerald-100 text-[#046A38] shrink-0 ml-1.5";
                 } else {
-                    btn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:text-sdw-pine hover:bg-slate-100 transition";
-                    const icon = btn.querySelector('.nav-icon');
-                    if (icon) icon.className = "nav-icon text-slate-400 group-hover:text-sdw-gold w-5 text-center text-sm";
+                    btn.className = "w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer";
+                    if (icon) icon.className = "nav-icon text-white/70 group-hover:text-white w-5 text-center text-sm shrink-0";
+                    if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5";
                 }
             });
         }
