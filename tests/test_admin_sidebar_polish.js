@@ -148,6 +148,35 @@ runTest('6. toggleSidebarCollapse mengubah class collapsed, membalik chevron ico
     assert.strictEqual(mockStorage['sdw_admin_sidebar_collapsed'], 'false', 'State harus tersimpan false di localStorage');
 });
 
+// 7. Verifikasi switchTab Mempertahankan Kelas Ikon FontAwesome (Tidak Menghapus fa-solid fa-*)
+runTest('7. switchTab mempertahankan kelas ikon FontAwesome pada tombol menu aktif dan inaktif', () => {
+    let mockBtnClasses = "nav-item-btn w-full flex";
+    const mockIcon = { className: "fa-solid fa-gauge-high nav-icon w-5 text-center text-sm shrink-0" };
+    const mockBtn = {
+        getAttribute: () => 'tab-dashboard',
+        querySelector: (sel) => sel === '.nav-icon' ? mockIcon : null,
+        get className() { return mockBtnClasses; },
+        set className(v) { mockBtnClasses = v; }
+    };
+
+    const mockDoc = {
+        getElementById: () => null,
+        querySelectorAll: (sel) => sel === '[data-admin-tab]' ? [mockBtn] : [],
+        addEventListener: () => {}
+    };
+
+    const factory = new Function('module', 'require', 'self', 'localStorage', 'document', 'window', `
+        ${adminNavJs}
+        return (typeof module !== 'undefined' && module.exports) ? module.exports : self.SDW_ADMIN;
+    `);
+
+    const loadedAdmin = factory({}, () => ({}), {}, {}, mockDoc, { innerWidth: 1024 });
+    loadedAdmin.switchTab('tab-dashboard');
+
+    assert(mockIcon.className.includes('fa-gauge-high'), 'Ikon fa-gauge-high tidak boleh terhapus oleh switchTab');
+    assert(mockIcon.className.includes('fa-solid'), 'Ikon fa-solid tidak boleh terhapus oleh switchTab');
+});
+
 console.log(`\n======================================================`);
 console.log(`Pengujian Selesai: ${passedTests} / ${totalTests} Berhasil (${Math.round((passedTests / totalTests) * 100)}%)`);
 console.log(`======================================================\n`);

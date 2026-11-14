@@ -226,16 +226,13 @@
             const allNavBtns = document.querySelectorAll('[data-admin-tab]');
             allNavBtns.forEach(btn => {
                 const btnTarget = btn.getAttribute('data-admin-tab');
-                const icon = btn.querySelector('.nav-icon');
                 const badge = btn.querySelector('.nav-badge');
 
                 if (btnTarget === tabId) {
                     btn.className = "nav-item-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold bg-white text-[#4C1D6B] shadow-md transition whitespace-nowrap cursor-pointer";
-                    if (icon) icon.className = "nav-icon text-[#4C1D6B] w-5 text-center text-sm shrink-0";
                     if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-100 text-[#4C1D6B] shrink-0 ml-1.5";
                 } else {
                     btn.className = "nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer";
-                    if (icon) icon.className = "nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0";
                     if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5";
                 }
             });
@@ -629,15 +626,15 @@
         const pendingDocsEl = document.getElementById('kpi-pending-docs');
         const totalRevenueEl = document.getElementById('kpi-total-revenue');
 
-        const regsCount = admin.registrationsData.length + 42;
-        const pendingDocsCount = admin.docsQueue.filter(d => d.status === 'UNDER_REVIEW').length;
+        const regsCount = (admin.registrationsData && Array.isArray(admin.registrationsData) ? admin.registrationsData.length : 0) + 42;
+        const pendingDocsCount = admin.docsQueue && Array.isArray(admin.docsQueue) ? admin.docsQueue.filter(d => d.status === 'UNDER_REVIEW').length : 0;
 
         if (totalPilgrimsEl) totalPilgrimsEl.innerText = regsCount;
         if (seatOccupancyEl) seatOccupancyEl.innerText = '88%';
         if (activeMuthawwifEl) activeMuthawwifEl.innerText = '18';
         if (docsAccuracyEl) docsAccuracyEl.innerText = '98.5%';
 
-        if (activeLeadsEl) activeLeadsEl.innerText = admin.leadsData.length;
+        if (activeLeadsEl) activeLeadsEl.innerText = admin.leadsData && Array.isArray(admin.leadsData) ? admin.leadsData.length : 0;
         if (pendingDocsEl) pendingDocsEl.innerText = `${pendingDocsCount} Dokumen`;
         if (totalRevenueEl) totalRevenueEl.innerText = "Rp 1.48 Miliar";
 

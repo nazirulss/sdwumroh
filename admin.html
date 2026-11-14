@@ -70,32 +70,63 @@
             }
         }
 
+        .nav-icon {
+            color: inherit !important;
+            transition: color 0.15s ease;
+        }
+
         /* Sidebar Collapsed State (Asnawiyyah Desktop Mini Mode) */
+        #adminSidebar.collapsed {
+            width: 4.75rem !important;
+        }
         #adminSidebar.collapsed .sidebar-hide-on-collapse {
             display: none !important;
         }
         #adminSidebar.collapsed .sidebar-brand-wrapper {
             justify-content: center !important;
-            padding-left: 0.5rem !important;
-            padding-right: 0.5rem !important;
+            padding-left: 0.25rem !important;
+            padding-right: 0.25rem !important;
+        }
+        #adminSidebar.collapsed .sidebar-brand-wrapper a {
+            justify-content: center !important;
+            margin: 0 auto !important;
+        }
+        #adminSidebar.collapsed .sidebar-brand-wrapper img {
+            height: 2.25rem !important;
+            width: 2.25rem !important;
+            margin: 0 auto !important;
         }
         #adminSidebar.collapsed .nav-item-btn {
             width: 2.75rem !important;
             height: 2.75rem !important;
             padding: 0 !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
+            margin: 0.35rem auto !important;
+            display: flex !important;
+            align-items: center !important;
             justify-content: center !important;
             border-radius: 1rem !important;
+        }
+        #adminSidebar.collapsed .nav-item-btn > span:first-child {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 100% !important;
+            height: 100% !important;
+            margin: 0 !important;
+            gap: 0 !important;
         }
         #adminSidebar.collapsed .nav-label,
         #adminSidebar.collapsed .nav-badge {
             display: none !important;
         }
         #adminSidebar.collapsed .nav-icon {
+            font-size: 1.15rem !important;
             width: auto !important;
-            font-size: 1rem !important;
-            margin: 0 !important;
+            text-align: center !important;
+            margin: 0 auto !important;
+            display: inline-block !important;
+            line-height: 1 !important;
+            color: inherit !important;
         }
 
         /* Responsive utility overrides */
