@@ -23,6 +23,7 @@
         require('./admin/admin-faq.js');
         require('./admin/admin-users.js');
         require('./admin/admin-roles.js');
+        require('./admin/admin-auth.js');
         require('./admin/admin-docs.js');
         require('./admin/admin-registrations.js');
         require('./admin/admin-finance.js');
@@ -51,8 +52,10 @@
             admin.initDataStore();
         }
 
-        // 2. Ambil Role Tersimpan
-        if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.storage) {
+        // 2. Ambil Sesi & Role Tersimpan (Autentikasi Terpadu DB_Users)
+        if (typeof admin.checkAdminAuth === 'function') {
+            admin.checkAdminAuth();
+        } else if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.storage) {
             let savedRole = null;
             if (typeof sessionStorage !== 'undefined') savedRole = sessionStorage.getItem(APP_CONFIG.storage.keys.adminRole);
             if (!savedRole && typeof localStorage !== 'undefined') savedRole = localStorage.getItem(APP_CONFIG.storage.keys.adminRole);
