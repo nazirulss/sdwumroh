@@ -920,6 +920,36 @@ function setupFaqAndHelpdeskSheets() {
   Logger.log("=== SETUP SHEET DB_Faq & DB_Helpdesk_Contacts SELESAI ===");
 }
 
+function ensureHeadersMatch_(sheet, canonical) {
+  if (!sheet || !canonical || canonical.length === 0) return;
+  var lastCol = sheet.getLastColumn();
+  var currentHeaders = lastCol > 0 ? sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h) { return String(h).trim(); }) : [];
+  if (currentHeaders.length === 0) {
+    sheet.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+    sheet.getRange(1, 1, 1, canonical.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+    sheet.setFrozenRows(1);
+    return;
+  }
+  var missing = [];
+  canonical.forEach(function(col) {
+    if (currentHeaders.indexOf(col) === -1) {
+      missing.push(col);
+    }
+  });
+  if (missing.length > 0) {
+    sheet.getRange(1, currentHeaders.length + 1, 1, missing.length).setValues([missing]);
+    sheet.getRange(1, currentHeaders.length + 1, 1, missing.length)
+      .setBackground("#0F3D2E")
+      .setFontColor("#FFFFFF")
+      .setFontWeight("bold")
+      .setFontFamily("Plus Jakarta Sans");
+  }
+}
+
 /**
  * Setup dan standardisasi skema DB_Users dan DB_Role_Permissions
  */

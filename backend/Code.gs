@@ -4492,6 +4492,25 @@ function doPost(e) {
  * ============================================================================
  */
 
+function getSheetDataAsObjects(sh) {
+  if (!sh) return [];
+  const rows = sh.getDataRange().getValues();
+  if (!rows || rows.length <= 1) return [];
+  const headers = rows[0];
+  const results = [];
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    if (!row[0] && row[0] !== 0) continue;
+    const obj = {};
+    for (let c = 0; c < headers.length; c++) {
+      obj[headers[c]] = row[c];
+    }
+    obj._rowIndex = i + 1;
+    results.push(obj);
+  }
+  return results;
+}
+
 function getProfileFolder_() {
   if (CONFIG.DRIVE_FOLDER_ID && CONFIG.DRIVE_FOLDER_ID !== '__SDW_CONFIG_PENDING__') {
     try {
