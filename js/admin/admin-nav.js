@@ -230,11 +230,11 @@
                 const badge = btn.querySelector('.nav-badge');
 
                 if (btnTarget === tabId) {
-                    btn.className = "w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold bg-white text-[#4C1D6B] shadow-md transition whitespace-nowrap cursor-pointer";
+                    btn.className = "nav-item-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold bg-white text-[#4C1D6B] shadow-md transition whitespace-nowrap cursor-pointer";
                     if (icon) icon.className = "nav-icon text-[#4C1D6B] w-5 text-center text-sm shrink-0";
                     if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-100 text-[#4C1D6B] shrink-0 ml-1.5";
                 } else {
-                    btn.className = "w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer";
+                    btn.className = "nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer";
                     if (icon) icon.className = "nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0";
                     if (badge) badge.className = "nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-white/20 text-white shrink-0 ml-1.5";
                 }
@@ -281,6 +281,69 @@
             sidebar.classList.remove('mobile-open');
             if (backdrop) backdrop.classList.remove('active');
             if (document.body) document.body.style.overflow = '';
+        }
+    }
+
+    // Toggle Desktop Sidebar Collapse (Asnawiyyah Desktop Mini Mode ~72px)
+    function toggleSidebarCollapse(forceState) {
+        if (typeof document === 'undefined') return;
+        const sidebar = document.getElementById('adminSidebar');
+        const toggleIcon = document.getElementById('sidebarCollapseIcon');
+        const toggleBtn = document.getElementById('sidebarCollapseBtn');
+        if (!sidebar) return;
+
+        let willCollapse;
+        if (typeof forceState === 'boolean') {
+            willCollapse = forceState;
+        } else {
+            willCollapse = !sidebar.classList.contains('collapsed');
+        }
+
+        if (willCollapse) {
+            sidebar.classList.add('collapsed');
+            if (toggleIcon) {
+                toggleIcon.className = "fa-solid fa-chevron-right text-[9px]";
+            }
+            if (toggleBtn) {
+                toggleBtn.setAttribute('title', 'Perluas Sidebar');
+                toggleBtn.setAttribute('aria-expanded', 'false');
+            }
+        } else {
+            sidebar.classList.remove('collapsed');
+            if (toggleIcon) {
+                toggleIcon.className = "fa-solid fa-chevron-left text-[9px]";
+            }
+            if (toggleBtn) {
+                toggleBtn.setAttribute('title', 'Persempit Sidebar');
+                toggleBtn.setAttribute('aria-expanded', 'true');
+            }
+        }
+
+        try {
+            if (typeof localStorage !== 'undefined') {
+                localStorage.setItem('sdw_admin_sidebar_collapsed', willCollapse ? 'true' : 'false');
+            }
+        } catch (_) {}
+    }
+
+    function initSidebarCollapseState() {
+        if (typeof document === 'undefined') return;
+        try {
+            if (typeof localStorage !== 'undefined' && typeof window !== 'undefined' && window.innerWidth >= 768) {
+                const saved = localStorage.getItem('sdw_admin_sidebar_collapsed');
+                if (saved === 'true') {
+                    toggleSidebarCollapse(true);
+                }
+            }
+        } catch (_) {}
+    }
+
+    // Auto-init sidebar collapse on script load / DOM ready
+    if (typeof document !== 'undefined') {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSidebarCollapseState);
+        } else {
+            initSidebarCollapseState();
         }
     }
 
@@ -845,6 +908,8 @@
     admin.applyRolePermissions = applyRolePermissions;
     admin.switchTab = switchTab;
     admin.toggleMobileSidebar = toggleMobileSidebar;
+    admin.toggleSidebarCollapse = toggleSidebarCollapse;
+    admin.initSidebarCollapseState = initSidebarCollapseState;
     admin.openModal = openModal;
     admin.closeModal = closeModal;
     admin.openDrawer = openDrawer;
