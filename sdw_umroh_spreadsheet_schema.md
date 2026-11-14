@@ -276,3 +276,32 @@ Dokumen ini mendefinisikan struktur 22 sheet Google Spreadsheet yang berfungsi s
   10. `status` — Status Keaktifan (`AKTIF`, `INAKTIF`)
   11. `order_index` — Urutan Tampil pada Slider & Direktori
   12. `updated_at` — Waktu Pembaruan Terakhir
+
+### `DB_Contact_Social`
+
+* **Primary Key:** `CNT-000001`
+* **Tujuan:** Mengelola konfigurasi terpusat alamat kantor pusat, nomor WhatsApp CS Khidmat, telepon/hotline, email resmi, serta 4 saluran media sosial (Instagram, Facebook, YouTube, TikTok) yang terhubung dinamis ke footer publik, floating WhatsApp widget, dan navigasi aplikasi.
+* **Columns (22 Kolom Otoritatif):**
+  1. `id` — Primary Key tunggal konfigurasi (contoh: `CNT-000001`)
+  2. `company_name` — Nama Badan Hukum / Lembaga Perjalanan (contoh: `PT Sahabat Dhuha Wisata (SDW UMROH)`)
+  3. `address_line` — Alamat Fisik Kantor (Jalan, Nomor, Kawasan/Gedung)
+  4. `city_province_postal` — Kota, Kabupaten, Provinsi, dan Kode Pos
+  5. `google_maps_url` — Tautan / URL Google Maps Navigasi Kantor
+  6. `whatsapp_number` — Nomor WhatsApp Resmi berformat tampilan (contoh: `+62 812-3456-7890`)
+  7. `whatsapp_clean` — Nomor WhatsApp numerik murni internasional tanpa simbol (contoh: `6281234567890`)
+  8. `whatsapp_template` — Pesan pembuka otomatis saat jamaah menekan tombol WhatsApp
+  9. `phone_office` — Nomor Telepon PSTN / Kantor Pusat (contoh: `(0291) 438-999`)
+  10. `hotline_24h` — Nomor Telepon Darurat / Hotline Siaga 24 Jam
+  11. `email_official` — Alamat Email Resmi Pelayanan & Korespondensi (contoh: `layanan@sdwumroh.co.id`)
+  12. `operational_hours` — Hari & Jam Operasional Pelayanan Jamaah
+  13. `instagram_url` — URL Tautan Profil Resmi Instagram
+  14. `instagram_handle` — Username Akun Instagram (contoh: `@sdwumroh.official`)
+  15. `facebook_url` — URL Tautan Halaman Resmi Facebook
+  16. `facebook_name` — Nama Halaman / Fanpage Facebook
+  17. `youtube_url` — URL Tautan Channel Resmi YouTube (Manasik & Edukasi)
+  18. `youtube_name` — Nama Channel YouTube Resmi
+  19. `tiktok_url` — URL Tautan Profil Resmi TikTok
+  20. `tiktok_handle` — Username Akun TikTok (contoh: `@sdwumroh`)
+  21. `updated_at` — Timestamp Pembaruan Terakhir (ISO-8601)
+  22. `updated_by` — Identitas Administrator / Operator yang Melakukan Perubahan
+

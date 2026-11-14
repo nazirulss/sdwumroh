@@ -53,15 +53,16 @@
         PROFILE_INSTITUTION: 'sdw_admin_profile_institution',
         PROFILE_DIRECTOR: 'sdw_admin_profile_director',
         PROFILE_GUIDES: 'sdw_admin_profile_guides',
-        PROFILE_LEGALITY: 'sdw_admin_profile_legality'
+        PROFILE_LEGALITY: 'sdw_admin_profile_legality',
+        CONTACT_SOCIAL: 'sdw_admin_contact_social'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'SUPER_ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'SUPER_ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-contact-social', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-contact-social', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-contact-social', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-contact-social', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
         'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
@@ -408,6 +409,31 @@
                 updatedAt: '04 Nov 2026, 17:00 WIB'
             };
         });
+    }
+
+    function getDefaultContactSocialData() {
+        return {
+            id: 'CNT-000001',
+            company_name: 'PT Sahabat Dhuha Wisata (SDW UMROH)',
+            address_line: 'Jl. Raya Kudus - Jepara KM 5',
+            city_province_postal: 'Kabupaten Kudus, Jawa Tengah 59333',
+            google_maps_url: 'https://maps.google.com/?q=SDW+Umroh+Kudus',
+            whatsapp_number: '+62 812-3456-7890',
+            whatsapp_clean: '6281234567890',
+            whatsapp_template: 'Assalamualaikum CS SDW UMROH, saya ingin konsultasi pendaftaran umroh.',
+            phone_office: '(0291) 438-999',
+            hotline_24h: '+62 812-3456-7890',
+            email_official: 'layanan@sdwumroh.co.id',
+            operational_hours: 'Senin – Jumat: 08:30 – 17:00 WIB | Sabtu: 08:30 – 14:00 WIB',
+            instagram_url: 'https://instagram.com/sdwumroh.official',
+            instagram_handle: '@sdwumroh.official',
+            facebook_url: 'https://facebook.com/sdwumrohofficial',
+            facebook_name: 'SDW Umroh Official',
+            youtube_url: 'https://youtube.com/@sdwumroh',
+            youtube_name: 'SDW Umroh TV & Manasik',
+            tiktok_url: 'https://tiktok.com/@sdwumroh',
+            tiktok_handle: '@sdwumroh'
+        };
     }
 
     function getDefaultProfileInstitutionData() {
@@ -928,6 +954,16 @@
             state.profileLegalityData = getDefaultProfileLegalityData();
             persistStorage(STORAGE_KEYS.PROFILE_LEGALITY, state.profileLegalityData);
         }
+
+        // 12. Contact & Social Media Store (DB_Contact_Social)
+        try {
+            const savedContact = localStorage.getItem(STORAGE_KEYS.CONTACT_SOCIAL);
+            if (savedContact) state.contactSocialData = JSON.parse(savedContact);
+        } catch (_) {}
+        if (!state.contactSocialData) {
+            state.contactSocialData = getDefaultContactSocialData();
+            persistStorage(STORAGE_KEYS.CONTACT_SOCIAL, state.contactSocialData);
+        }
     }
 
     // Attach to admin object
@@ -948,6 +984,7 @@
     admin.getDefaultProfileDirectorData = getDefaultProfileDirectorData;
     admin.getDefaultProfileGuidesData = getDefaultProfileGuidesData;
     admin.getDefaultProfileLegalityData = getDefaultProfileLegalityData;
+    admin.getDefaultContactSocialData = getDefaultContactSocialData;
     admin.initDataStore = initDataStore;
 
     // Direct state delegations for transparent backward compatibility
@@ -955,6 +992,7 @@
         'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'airlinesData', 'airportsData', 'faqData', 'contactsData', 'usersData', 'rolesData', 'rbacMatrix', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
         'profileInstitutionData', 'profileDirectorData', 'profileGuidesData', 'profileLegalityData', 'profileSubtab',
+        'contactSocialData',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
         'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'galleryFilter', 'testimonialsFilter', 'gallerySubtab', 'galleryViewMode', 'testimonialsViewMode',
         'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'airlinesFilter', 'airportsFilter', 'airlinesSubtab', 'airlinesViewMode', 'airportsViewMode', 'faqFilter', 'helpdeskFilter', 'faqSubtab', 'faqViewMode', 'helpdeskViewMode', 'usersFilter', 'docsFilter',

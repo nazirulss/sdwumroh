@@ -26,6 +26,8 @@
         { id: 'tab-dashboard', name: 'Dashboard & Analitik', category: 'Dasbor', icon: 'fa-chart-pie', desc: 'Statistik eksekutif, KPI omset, dan ringkasan operasional' },
         { id: 'tab-crm', name: 'Leads & Konsultasi CRM', category: 'Pemasaran', icon: 'fa-headset', desc: 'Pipeline prospek calon jamaah dan pencatatan follow-up' },
         { id: 'tab-packages', name: 'Katalog Pilihan Paket', category: 'Pemasaran', icon: 'fa-cubes', desc: 'Master paket reguler, VIP Khidmat, dan umroh plus' },
+        { id: 'tab-profile', name: 'Profil Lembaga & Identitas', category: 'Pemasaran', icon: 'fa-landmark', desc: 'Visi misi, sambutan direktur, asatidz, legalitas & mitra syiar' },
+        { id: 'tab-contact-social', name: 'Kontak & Media Sosial', category: 'Pemasaran', icon: 'fa-address-book', desc: 'Pengaturan alamat kantor pusat, nomor WA, telepon hotline, email & 4 medsos' },
         { id: 'tab-departures', name: 'Jadwal Kloter Keberangkatan', category: 'Pemasaran', icon: 'fa-calendar-days', desc: 'Alokasi seat penerbangan dan tanggal terbang kloter' },
         { id: 'tab-hotels', name: 'Master Hotel Haramain', category: 'Pemasaran', icon: 'fa-hotel', desc: 'Direktori hotel bintang 4/5 Makkah dan Madinah' },
         { id: 'tab-airlines', name: 'Master Maskapai & Bandara', category: 'Pemasaran', icon: 'fa-plane-departure', desc: 'Armada pesawat direct/transit dan bandara embarkasi' },

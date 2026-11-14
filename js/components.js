@@ -56,6 +56,15 @@
         const defaultMsg = 'Assalamualaikum CS SDW UMROH, saya ingin konsultasi paket umroh.';
         try {
             if (typeof localStorage !== 'undefined') {
+                const csRaw = localStorage.getItem('sdw_admin_contact_social');
+                if (csRaw) {
+                    const cs = JSON.parse(csRaw);
+                    if (cs && (cs.whatsapp_clean || cs.whatsapp_number)) {
+                        const num = (cs.whatsapp_clean || cs.whatsapp_number).replace(/[^0-9]/g, '');
+                        const msg = cs.whatsapp_template || defaultMsg;
+                        return `https://wa.me/${num}?text=${encodeURIComponent(msg)}`;
+                    }
+                }
                 const raw = localStorage.getItem('sdw_admin_contacts');
                 if (raw) {
                     const list = JSON.parse(raw);
@@ -434,6 +443,42 @@
      * Renders the canonical Corporate & Legal Footer
      */
     function getFooterHTML() {
+        let addressText = 'Jl. Raya Kudus - Jepara KM 5, Kabupaten Kudus, Jawa Tengah 59333';
+        let phoneText = '(0291) 438-999 / +62 812-3456-7890';
+        let emailText = 'layanan@sdwumroh.co.id';
+        let igUrl = 'https://instagram.com';
+        let fbUrl = 'https://facebook.com';
+        let ytUrl = 'https://youtube.com';
+        let ttUrl = 'https://tiktok.com';
+        let igTitle = 'Instagram Resmi';
+        let fbTitle = 'Facebook Resmi';
+        let ytTitle = 'YouTube Manasik';
+        let ttTitle = 'TikTok Edukasi';
+
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const csRaw = localStorage.getItem('sdw_admin_contact_social');
+                if (csRaw) {
+                    const cs = JSON.parse(csRaw);
+                    if (cs) {
+                        if (cs.address_line) addressText = cs.address_line + (cs.city_province_postal ? ', ' + cs.city_province_postal : '');
+                        if (cs.phone_office || cs.whatsapp_number) {
+                            phoneText = cs.phone_office && cs.whatsapp_number ? `${cs.phone_office} / ${cs.whatsapp_number}` : (cs.phone_office || cs.whatsapp_number);
+                        }
+                        if (cs.email_official) emailText = cs.email_official;
+                        if (cs.instagram_url) igUrl = cs.instagram_url;
+                        if (cs.instagram_handle) igTitle = `Instagram: ${cs.instagram_handle}`;
+                        if (cs.facebook_url) fbUrl = cs.facebook_url;
+                        if (cs.facebook_name) fbTitle = `Facebook: ${cs.facebook_name}`;
+                        if (cs.youtube_url) ytUrl = cs.youtube_url;
+                        if (cs.youtube_name) ytTitle = `YouTube: ${cs.youtube_name}`;
+                        if (cs.tiktok_url) ttUrl = cs.tiktok_url;
+                        if (cs.tiktok_handle) ttTitle = `TikTok: ${cs.tiktok_handle}`;
+                    }
+                }
+            }
+        } catch (_) {}
+
         return `
     <footer id="globalFooter" class="bg-sdw-footer text-white border-t border-sdw-gold/30 pt-16 pb-20 lg:pb-12 relative overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -507,21 +552,21 @@
                     <div class="space-y-3 text-xs text-slate-300">
                         <div class="flex items-start gap-2.5">
                             <i class="fa-solid fa-location-dot text-sdw-gold mt-1 shrink-0"></i>
-                            <span>Jl. Raya Kudus - Jepara KM 5, Kabupaten Kudus, Jawa Tengah 59333</span>
+                            <span id="footerAddress">${addressText}</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-phone text-sdw-gold shrink-0"></i>
-                            <span>(0291) 438-999 / +62 812-3456-7890</span>
+                            <span id="footerPhone">${phoneText}</span>
                         </div>
                         <div class="flex items-center gap-2.5">
                             <i class="fa-solid fa-envelope text-sdw-gold shrink-0"></i>
-                            <span>layanan@sdwumroh.co.id</span>
+                            <span id="footerEmail">${emailText}</span>
                         </div>
                         <div class="pt-2 flex items-center gap-2">
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="Instagram Resmi"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="Facebook Resmi"><i class="fa-brands fa-facebook"></i></a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="YouTube Manasik"><i class="fa-brands fa-youtube"></i></a>
-                            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="TikTok Edukasi"><i class="fa-brands fa-tiktok"></i></a>
+                            <a id="footerIg" href="${igUrl}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="${igTitle}"><i class="fa-brands fa-instagram"></i></a>
+                            <a id="footerFb" href="${fbUrl}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="${fbTitle}"><i class="fa-brands fa-facebook"></i></a>
+                            <a id="footerYt" href="${ytUrl}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="${ytTitle}"><i class="fa-brands fa-youtube"></i></a>
+                            <a id="footerTt" href="${ttUrl}" target="_blank" rel="noopener noreferrer" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-sdw-gold hover:text-slate-900 transition flex items-center justify-center text-xs" title="${ttTitle}"><i class="fa-brands fa-tiktok"></i></a>
                         </div>
                     </div>
                 </div>

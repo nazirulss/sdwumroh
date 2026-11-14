@@ -151,6 +151,30 @@ var AUTHORITATIVE_SCHEMAS_ = {
     "order_index",
     "created_at",
     "updated_at"
+  ],
+  "DB_Contact_Social": [
+    "id",
+    "company_name",
+    "address_line",
+    "city_province_postal",
+    "google_maps_url",
+    "whatsapp_number",
+    "whatsapp_clean",
+    "whatsapp_template",
+    "phone_office",
+    "hotline_24h",
+    "email_official",
+    "operational_hours",
+    "instagram_url",
+    "instagram_handle",
+    "facebook_url",
+    "facebook_name",
+    "youtube_url",
+    "youtube_name",
+    "tiktok_url",
+    "tiktok_handle",
+    "created_at",
+    "updated_at"
   ]
 };
 
@@ -1241,6 +1265,60 @@ function setupProfileSheets() {
   Logger.log("=== SETUP SHEET PROFIL LEMBAGA & MITRA SYIAR SELESAI ===");
 }
 
+/**
+ * Setup dan standardisasi skema DB_Contact_Social (Kantor Pusat, WA, dan 4 Medsos)
+ */
+function setupContactSocialSheet() {
+  Logger.log("=== MEMULAI SETUP SHEET DB_Contact_Social ===");
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) return;
+
+  var sheetName = "DB_Contact_Social";
+  var sheet = ss.getSheetByName(sheetName);
+  var canonical = AUTHORITATIVE_SCHEMAS_[sheetName];
+
+  if (!sheet) {
+    sheet = ss.insertSheet(sheetName);
+    Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
+  }
+
+  ensureHeadersMatch_(sheet, canonical);
+
+  if (sheet.getLastRow() <= 1) {
+    var nowStr = new Date().toISOString();
+    var seedContact = [
+      [
+        'CNT-000001',
+        'PT Sahabat Dhuha Wisata (SDW UMROH)',
+        'Jl. Raya Kudus - Jepara KM 5',
+        'Kabupaten Kudus, Jawa Tengah 59333',
+        'https://maps.google.com/?q=SDW+Umroh+Kudus',
+        '+62 812-3456-7890',
+        '6281234567890',
+        'Assalamualaikum CS SDW UMROH, saya ingin konsultasi pendaftaran umroh.',
+        '(0291) 438-999',
+        '+62 812-3456-7890',
+        'layanan@sdwumroh.co.id',
+        'Senin – Jumat: 08:30 – 17:00 WIB | Sabtu: 08:30 – 14:00 WIB',
+        'https://instagram.com/sdwumroh.official',
+        '@sdwumroh.official',
+        'https://facebook.com/sdwumrohofficial',
+        'SDW Umroh Official',
+        'https://youtube.com/@sdwumroh',
+        'SDW Umroh TV & Manasik',
+        'https://tiktok.com/@sdwumroh',
+        '@sdwumroh',
+        nowStr,
+        nowStr
+      ]
+    ];
+    sheet.getRange(2, 1, seedContact.length, canonical.length).setValues(seedContact);
+    Logger.log("✓ Data seed DB_Contact_Social berhasil ditambahkan.");
+  }
+  sheet.autoResizeColumns(1, canonical.length);
+  Logger.log("=== SETUP SHEET DB_Contact_Social SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -1273,10 +1351,11 @@ function initializeSdwUmrohInfrastructure() {
   setupBadalCertificatesSheet();
   setupUsersAndRbacSheets();
   setupProfileSheets();
+  setupContactSocialSheet();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");
   return {
     success: true,
-    message: "Master Sheet SDW UMROH (termasuk 5 Sheet Profil & Mitra) berhasil divalidasi dan diinisialisasi."
+    message: "Master Sheet SDW UMROH (termasuk 5 Sheet Profil & Sheet Kontak Medsos) berhasil divalidasi dan diinisialisasi."
   };
 }

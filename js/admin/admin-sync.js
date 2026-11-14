@@ -88,12 +88,13 @@
         admin.showToast('⏳ Menarik data live terbaru dari Google Spreadsheet...');
 
         try {
-            const [leadsRes, regsRes, paysRes, manifestRes, profileRes] = await Promise.allSettled([
+            const [leadsRes, regsRes, paysRes, manifestRes, profileRes, contactRes] = await Promise.allSettled([
                 SDW_API.get('getLeads'),
                 SDW_API.get('getRegistrations'),
                 SDW_API.get('getPayments'),
                 SDW_API.get('getManifest'),
-                SDW_API.get('getAllProfileData')
+                SDW_API.get('getAllProfileData'),
+                SDW_API.get('getContactSocial')
             ]);
 
             let pulledCount = 0;
@@ -148,6 +149,12 @@
                 }
             }
 
+            if (contactRes.status === 'fulfilled' && contactRes.value && contactRes.value.success && contactRes.value.data) {
+                admin.contactSocialData = contactRes.value.data;
+                admin.persistStorage(admin.STORAGE_KEYS.CONTACT_SOCIAL || 'sdw_admin_contact_social', admin.contactSocialData);
+                pulledCount += 1;
+            }
+
             const nowIso = new Date().toISOString();
             admin.lastSyncTimestamp = nowIso;
             admin.persistStorage(admin.STORAGE_KEYS.LAST_SYNC, admin.lastSyncTimestamp);
@@ -159,6 +166,7 @@
             if (typeof admin.renderOperations === 'function') admin.renderOperations();
             if (typeof admin.renderCertificates === 'function') admin.renderCertificates();
             if (typeof admin.renderProfileManagement === 'function' && admin.currentTab === 'tab-profile') admin.renderProfileManagement();
+            if (typeof admin.renderContactSocial === 'function' && admin.currentTab === 'tab-contact-social') admin.renderContactSocial();
 
             admin.showToast(`✅ Berhasil menarik ${pulledCount} entri live dari Google Spreadsheet!`);
             console.info(`[SDW_SYNC] pullCloudDatabase selesai. Total entri termuat: ${pulledCount}`);

@@ -183,6 +183,37 @@
                         if (raw) leg = JSON.parse(raw);
                     } catch (_) {}
                     resolve({ success: true, data: (leg && leg.mitra_syiar) || [], source: 'mock' });
+                } else if (action === 'getContactSocial') {
+                    let cs = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_contact_social');
+                        if (raw) cs = JSON.parse(raw);
+                    } catch (_) {}
+                    if (!cs) {
+                        cs = {
+                            id: "CNT-000001",
+                            company_name: "PT Sahabat Dhuha Wisata (SDW UMROH)",
+                            address_line: "Jl. Raya Kudus - Jepara KM 5",
+                            city_province_postal: "Kabupaten Kudus, Jawa Tengah 59333",
+                            google_maps_url: "https://maps.google.com/?q=SDW+Umroh+Kudus",
+                            whatsapp_number: "+62 812-3456-7890",
+                            whatsapp_clean: "6281234567890",
+                            whatsapp_template: "Assalamualaikum CS SDW UMROH, saya ingin konsultasi pendaftaran umroh.",
+                            phone_office: "(0291) 438-999",
+                            hotline_24h: "+62 812-3456-7890",
+                            email_official: "layanan@sdwumroh.co.id",
+                            operational_hours: "Senin – Jumat: 08:30 – 17:00 WIB | Sabtu: 08:30 – 14:00 WIB",
+                            instagram_url: "https://instagram.com/sdwumroh.official",
+                            instagram_handle: "@sdwumroh.official",
+                            facebook_url: "https://facebook.com/sdwumrohofficial",
+                            facebook_name: "SDW Umroh Official",
+                            youtube_url: "https://youtube.com/@sdwumroh",
+                            youtube_name: "SDW Umroh TV & Manasik",
+                            tiktok_url: "https://tiktok.com/@sdwumroh",
+                            tiktok_handle: "@sdwumroh"
+                        };
+                    }
+                    resolve({ success: true, data: cs, source: 'mock' });
                 } else {
                     resolve({ success: true, data: null, source: 'mock' });
                 }
@@ -214,10 +245,15 @@
                     return;
                 }
 
-                if (action === 'saveAllProfileData' || action === 'saveProfileInstitution' || action === 'saveProfileDirector' || action === 'saveProfileGuide' || action === 'saveProfileLegalityDoc' || action === 'saveProfileMitraSyiar' || action === 'deleteProfileGuide' || action === 'deleteProfileLegalityDoc' || action === 'deleteProfileMitraSyiar') {
+                if (action === 'saveAllProfileData' || action === 'saveProfileInstitution' || action === 'saveProfileDirector' || action === 'saveProfileGuide' || action === 'saveProfileLegalityDoc' || action === 'saveProfileMitraSyiar' || action === 'deleteProfileGuide' || action === 'deleteProfileLegalityDoc' || action === 'deleteProfileMitraSyiar' || action === 'saveContactSocial') {
+                    if (action === 'saveContactSocial') {
+                        try {
+                            localStorage.setItem('sdw_admin_contact_social', JSON.stringify(payload));
+                        } catch (_) {}
+                    }
                     resolve({
                         success: true,
-                        message: "Data profil berhasil disimpan (Simulasi Database)",
+                        message: "Data berhasil disimpan (Simulasi Database)",
                         data: payload,
                         source: 'mock'
                     });

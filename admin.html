@@ -332,6 +332,13 @@
                         </span>
                         <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-400 text-purple-950 shrink-0 ml-1.5">PPIU</span>
                     </button>
+                    <button type="button" data-admin-tab="tab-contact-social" onclick="SDW_ADMIN.switchTab('tab-contact-social')" class="nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer" title="Kontak, Alamat &amp; Medsos">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-address-book nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Kontak &amp; Medsos</span>
+                        </span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-purple-900/80 text-amber-300 border border-amber-400/30 shrink-0 ml-1.5">INFO</span>
+                    </button>
                     <button type="button" data-admin-tab="tab-gallery" onclick="SDW_ADMIN.switchTab('tab-gallery')" class="nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer" title="Galeri &amp; Testimoni">
                         <span class="flex items-center gap-2.5 min-w-0">
                             <i class="fa-solid fa-photo-film nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0"></i>
@@ -3541,6 +3548,338 @@
                                 <button type="submit" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-emerald-800 cursor-pointer shadow-xs">Simpan Mitra Syiar</button>
                             </div>
                         </form>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: KONTAK, ALAMAT & MEDIA SOSIAL ==================== -->
+                <div id="tab-contact-social" class="admin-tab-container hidden space-y-6">
+                    <!-- Header Section -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs">
+                        <div>
+                            <div class="flex items-center gap-2.5 flex-wrap">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Pengaturan Alamat, WhatsApp &amp; Media Sosial</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    DB_Contact_Social Live
+                                </span>
+                            </div>
+                            <p class="text-xs sm:text-sm text-slate-500 mt-1">
+                                Atur alamat kantor pusat, nomor WhatsApp CS Khidmat, nomor telepon/hotline, email resmi, serta 4 tautan media sosial yang tersinkronisasi dinamis ke footer publik, widget WhatsApp, dan header.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-2.5 shrink-0">
+                            <a href="/" target="_blank" class="px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 transition flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[11px] text-sdw-pine"></i>
+                                <span>Lihat Web Publik</span>
+                            </a>
+                            <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.saveContactSocial()" class="px-4 py-2 rounded-xl bg-purple-900 hover:bg-[#3E165B] text-white text-xs font-black shadow-md shadow-purple-950/20 transition flex items-center gap-2 cursor-pointer">
+                                <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                                <span>Simpan Semua Perubahan</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Live Real-Time Preview Strip (Mirip Footer & Widget Publik) -->
+                    <div class="bg-gradient-to-br from-[#1F0628] via-[#3E165B] to-[#551C7A] text-white p-6 rounded-2xl shadow-lg border border-purple-800/40 relative overflow-hidden">
+                        <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="flex items-center justify-between gap-4 border-b border-white/10 pb-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                                <h3 class="text-xs font-black tracking-wider uppercase text-amber-300">Live Preview: Tampilan Footer Publik &amp; Floating Hub</h3>
+                            </div>
+                            <span class="text-[10px] text-purple-200/70 font-mono">Tersinkron otomatis saat Anda mengetik</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-purple-100/90">
+                            <!-- Kolom 1: Alamat Kantor -->
+                            <div class="space-y-2.5">
+                                <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-building text-xs"></i>
+                                    <span id="prevCompany">PT Sahabat Dhuha Wisata (SDW UMROH)</span>
+                                </div>
+                                <div class="flex items-start gap-2.5 text-xs text-slate-200 leading-relaxed">
+                                    <i class="fa-solid fa-location-dot text-amber-400 mt-1 shrink-0"></i>
+                                    <span id="prevAddress">Jl. Raya Kudus - Jepara KM 5, Kabupaten Kudus, Jawa Tengah 59333</span>
+                                </div>
+                                <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                    <i class="fa-solid fa-clock text-amber-400 shrink-0"></i>
+                                    <span id="prevHours">Senin – Jumat: 08:30 – 17:00 WIB</span>
+                                </div>
+                                <div class="pt-1">
+                                    <a id="prevMapsBtn" href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[11px] font-semibold text-amber-300 transition">
+                                        <i class="fa-solid fa-map-location-dot"></i>
+                                        <span>Buka di Google Maps</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Kolom 2: Kontak & WhatsApp -->
+                            <div class="space-y-2.5">
+                                <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-headset text-xs"></i>
+                                    <span>Saluran Bantuan &amp; WhatsApp</span>
+                                </div>
+                                <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                    <i class="fa-solid fa-phone text-amber-400 shrink-0"></i>
+                                    <span id="prevPhone">(0291) 438-999 / +62 812-3456-7890</span>
+                                </div>
+                                <div class="flex items-center gap-2.5 text-xs text-slate-200">
+                                    <i class="fa-solid fa-envelope text-amber-400 shrink-0"></i>
+                                    <span id="prevEmail">layanan@sdwumroh.co.id</span>
+                                </div>
+                                <div class="pt-1">
+                                    <a id="prevWaLink" href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-md shadow-emerald-950/40 transition">
+                                        <i class="fa-brands fa-whatsapp text-sm"></i>
+                                        <span>Tes Hubungi CS (<span id="prevWaDisplay">+62 812-3456-7890</span>)</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Kolom 3: 4 Media Sosial -->
+                            <div class="space-y-2.5">
+                                <div class="text-[11px] font-extrabold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-share-nodes text-xs"></i>
+                                    <span>4 Media Sosial Resmi</span>
+                                </div>
+                                <p class="text-[11px] text-purple-200/80">Ikon tombol yang tampil di footer publik &amp; link keluar:</p>
+                                <div class="flex items-center gap-2.5 pt-1">
+                                    <a id="prevIg" href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-gradient-to-tr hover:from-amber-500 hover:to-rose-500 hover:text-white transition flex items-center justify-center text-sm shadow-xs" title="Instagram">
+                                        <i class="fa-brands fa-instagram"></i>
+                                    </a>
+                                    <a id="prevFb" href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-blue-600 hover:text-white transition flex items-center justify-center text-sm shadow-xs" title="Facebook">
+                                        <i class="fa-brands fa-facebook"></i>
+                                    </a>
+                                    <a id="prevYt" href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-rose-600 hover:text-white transition flex items-center justify-center text-sm shadow-xs" title="YouTube">
+                                        <i class="fa-brands fa-youtube"></i>
+                                    </a>
+                                    <a id="prevTt" href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-slate-900 hover:text-white transition flex items-center justify-center text-sm shadow-xs" title="TikTok">
+                                        <i class="fa-brands fa-tiktok"></i>
+                                    </a>
+                                </div>
+                                <div class="grid grid-cols-2 gap-1.5 pt-1 text-[10px] text-purple-200 font-mono">
+                                    <span class="truncate"><i class="fa-brands fa-instagram text-rose-300 mr-1"></i><span id="prevIgHandle">@sdwumroh.official</span></span>
+                                    <span class="truncate"><i class="fa-brands fa-facebook text-blue-300 mr-1"></i><span id="prevFbHandle">SDW Umroh Official</span></span>
+                                    <span class="truncate"><i class="fa-brands fa-youtube text-red-300 mr-1"></i><span id="prevYtHandle">SDW Umroh TV</span></span>
+                                    <span class="truncate"><i class="fa-brands fa-tiktok text-slate-300 mr-1"></i><span id="prevTtHandle">@sdwumroh</span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Main Form Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- Card 1: Alamat Kantor Pusat & Navigasi -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-4">
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                                <div class="w-8 h-8 rounded-xl bg-purple-50 text-sdw-pine flex items-center justify-center text-sm font-bold">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">1. Kantor Pusat &amp; Alamat Resmi</h3>
+                                    <p class="text-[11px] text-slate-500">Alamat fisik kantor yang tertera di dokumen legalitas dan footer.</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Nama Perusahaan / Instansi Resmi</label>
+                                    <input type="text" id="cntCompanyName" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="Contoh: PT Sahabat Dhuha Wisata (SDW UMROH)">
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Alamat Fisik (Jalan, Nomor, Gedung/Kawasan) <span class="text-rose-500">*</span></label>
+                                    <textarea id="cntAddressLine" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs leading-relaxed" placeholder="Contoh: Jl. Raya Kudus - Jepara KM 5"></textarea>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Kota, Kabupaten, Provinsi &amp; Kode Pos <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="cntCityProvincePostal" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="Contoh: Kabupaten Kudus, Jawa Tengah 59333">
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block font-bold text-slate-700">Tautan / URL Google Maps</label>
+                                        <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testSocialLink('maps')" class="text-[11px] text-sdw-pine hover:underline font-bold">Uji Link Maps &rarr;</button>
+                                    </div>
+                                    <input type="url" id="cntGoogleMapsUrl" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-mono" placeholder="https://maps.google.com/?q=...">
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Jam Operasional Pelayanan Kantor</label>
+                                    <input type="text" id="cntOperationalHours" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="Contoh: Senin – Jumat: 08:30 – 17:00 WIB | Sabtu: 08:30 – 14:00 WIB">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Saluran WhatsApp, Hotline & Telepon -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-4">
+                            <div class="flex items-center gap-2.5 border-b border-slate-100 pb-3">
+                                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-sm font-bold">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">2. WhatsApp CS Khidmat &amp; Hotline</h3>
+                                    <p class="text-[11px] text-slate-500">Nomor kontak utama untuk konsultasi calon jamaah dan hotline.</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Nomor WhatsApp Resmi (Tampilan Publik) <span class="text-rose-500">*</span></label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-emerald-600">
+                                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                                        </div>
+                                        <input type="text" id="cntWhatsappNumber" class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs font-extrabold" placeholder="Contoh: +62 812-3456-7890">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Format Bersih (Auto 62)</label>
+                                        <input type="text" id="cntWhatsappClean" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none text-xs font-mono" placeholder="6281234567890" readonly>
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Tes Tautan Chat</label>
+                                        <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testWhatsappLink()" class="w-full py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold border border-emerald-200 transition cursor-pointer text-xs flex items-center justify-center gap-1.5">
+                                            <i class="fa-solid fa-paper-plane text-[11px]"></i>
+                                            <span>Tes Kirim WA</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Template Pesan Pembuka Otomatis WhatsApp</label>
+                                    <textarea id="cntWhatsappTemplate" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-600 text-xs leading-relaxed" placeholder="Contoh: Assalamualaikum CS SDW UMROH, saya ingin konsultasi pendaftaran paket umroh."></textarea>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Telepon Kantor (PSTN)</label>
+                                        <input type="text" id="cntPhoneOffice" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="Contoh: (0291) 438-999">
+                                    </div>
+                                    <div>
+                                        <label class="block font-bold text-slate-700 mb-1">Hotline Darurat 24 Jam</label>
+                                        <input type="text" id="cntHotline24h" class="w-full px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="Contoh: +62 812-3456-7890">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1">Email Resmi Pelayanan &amp; Korespondensi <span class="text-rose-500">*</span></label>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                            <i class="fa-solid fa-envelope text-xs"></i>
+                                        </div>
+                                        <input type="email" id="cntEmailOfficial" class="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-sdw-pine text-xs font-semibold" placeholder="layanan@sdwumroh.co.id">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: 4 Saluran Media Sosial Resmi (Full Width Grid 4 Kolom) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-4">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3 flex-wrap gap-2">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-xl bg-purple-50 text-sdw-pine flex items-center justify-center text-sm font-bold">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">3. Empat (4) Saluran Media Sosial Resmi</h3>
+                                    <p class="text-[11px] text-slate-500">Ikon dan tautan profil publik yang tampil pada baris bawah footer website.</p>
+                                </div>
+                            </div>
+                            <span class="text-xs text-slate-400 font-medium">Instagram &bull; Facebook &bull; YouTube &bull; TikTok</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                            <!-- Medsos 1: Instagram -->
+                            <div class="p-4 rounded-xl border border-pink-100 bg-pink-50/30 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2 font-black text-pink-700">
+                                        <i class="fa-brands fa-instagram text-base"></i>
+                                        <span>Instagram</span>
+                                    </div>
+                                    <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testSocialLink('instagram')" class="text-[10.5px] font-bold text-pink-600 hover:underline">Tes Link &rarr;</button>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">URL Profil Lengkap</label>
+                                    <input type="url" id="cntInstagramUrl" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pink-500 text-xs font-mono" placeholder="https://instagram.com/sdwumroh.official">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">Username / Handle</label>
+                                    <input type="text" id="cntInstagramHandle" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pink-500 text-xs font-semibold" placeholder="@sdwumroh.official">
+                                </div>
+                            </div>
+
+                            <!-- Medsos 2: Facebook -->
+                            <div class="p-4 rounded-xl border border-blue-100 bg-blue-50/30 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2 font-black text-blue-700">
+                                        <i class="fa-brands fa-facebook text-base"></i>
+                                        <span>Facebook</span>
+                                    </div>
+                                    <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testSocialLink('facebook')" class="text-[10.5px] font-bold text-blue-600 hover:underline">Tes Link &rarr;</button>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">URL Halaman / Fanpage</label>
+                                    <input type="url" id="cntFacebookUrl" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-500 text-xs font-mono" placeholder="https://facebook.com/sdwumrohofficial">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">Nama Halaman</label>
+                                    <input type="text" id="cntFacebookName" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-500 text-xs font-semibold" placeholder="SDW Umroh Official">
+                                </div>
+                            </div>
+
+                            <!-- Medsos 3: YouTube -->
+                            <div class="p-4 rounded-xl border border-rose-100 bg-rose-50/30 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2 font-black text-rose-700">
+                                        <i class="fa-brands fa-youtube text-base"></i>
+                                        <span>YouTube</span>
+                                    </div>
+                                    <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testSocialLink('youtube')" class="text-[10.5px] font-bold text-rose-600 hover:underline">Tes Link &rarr;</button>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">URL Channel Resmi</label>
+                                    <input type="url" id="cntYoutubeUrl" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-rose-500 text-xs font-mono" placeholder="https://youtube.com/@sdwumroh">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">Nama Channel</label>
+                                    <input type="text" id="cntYoutubeName" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-rose-500 text-xs font-semibold" placeholder="SDW Umroh TV &amp; Manasik">
+                                </div>
+                            </div>
+
+                            <!-- Medsos 4: TikTok -->
+                            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2 font-black text-slate-900">
+                                        <i class="fa-brands fa-tiktok text-base"></i>
+                                        <span>TikTok</span>
+                                    </div>
+                                    <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.testSocialLink('tiktok')" class="text-[10.5px] font-bold text-slate-700 hover:underline">Tes Link &rarr;</button>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">URL Profil TikTok</label>
+                                    <input type="url" id="cntTiktokUrl" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-slate-800 text-xs font-mono" placeholder="https://tiktok.com/@sdwumroh">
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-slate-700 mb-1 text-[11px]">Username / Handle</label>
+                                    <input type="text" id="cntTiktokHandle" class="w-full px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-slate-800 text-xs font-semibold" placeholder="@sdwumroh">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Action Bar -->
+                    <div class="flex items-center justify-end gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-2xs">
+                        <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.renderContactSocial()" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold hover:bg-slate-50 text-xs transition cursor-pointer">
+                            Batal / Reset Input
+                        </button>
+                        <button type="button" onclick="SDW_ADMIN_CONTACT_SOCIAL.saveContactSocial()" class="px-6 py-2.5 rounded-xl bg-purple-900 hover:bg-[#3E165B] text-white font-black text-xs shadow-md shadow-purple-950/20 transition flex items-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                            <span>Simpan Perubahan Kontak &amp; Medsos</span>
+                        </button>
                     </div>
                 </div>
 
@@ -6963,6 +7302,7 @@
     <script src="js/admin/admin-crm.js?v=2.8.0"></script>
     <script src="js/admin/admin-packages.js?v=1.0.0"></script>
     <script src="js/admin/admin-profile.js?v=1.0.0"></script>
+    <script src="js/admin/admin-contact-social.js?v=2.8.0"></script>
     <script src="js/admin/admin-departures.js?v=1.0.0"></script>
     <script src="js/admin/admin-hotels.js?v=1.0.0"></script>
     <script src="js/admin/admin-airlines.js?v=1.0.0"></script>
