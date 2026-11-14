@@ -43,7 +43,7 @@ it('Header menu menggunakan nama "Profil" dan bersih dari "Tentang Kami"', () =>
 });
 
 it('Dropdown Profil TIDAK LAGI memuat link aplikasi teknis / admin backoffice', () => {
-    const profilDropdownRegex = /<!-- Dropdown 4: Profil Lembaga[\s\S]*?<div class="nav-dropdown-menu">([\s\S]*?)<\/div>/;
+    const profilDropdownRegex = /(?:<!-- Nav Item 2: Profil|<!-- Dropdown.*?Profil)[\s\S]*?<div class="nav-dropdown-menu">([\s\S]*?)<\/div>/;
     const match = componentsJs.match(profilDropdownRegex);
     assert(match, 'Profil dropdown block must exist');
     const dropdownHtml = match[1];
@@ -51,6 +51,32 @@ it('Dropdown Profil TIDAK LAGI memuat link aplikasi teknis / admin backoffice', 
     assert(!dropdownHtml.includes('Portal Staf Backoffice'), 'Must NOT contain Portal Staf Backoffice');
     assert(!dropdownHtml.includes('/app'), 'Dropdown profil must not link to /app');
     assert(!dropdownHtml.includes('/admin'), 'Dropdown profil must not link to /admin');
+});
+
+it('Header menu diatur dengan urutan: Beranda -> Profil -> Paket -> Layanan -> Panduan', () => {
+    const berandaPos = componentsJs.indexOf('<span>Beranda</span>');
+    const profilPos = componentsJs.indexOf('<span>Profil</span>');
+    const paketPos = componentsJs.indexOf('<span>Paket</span>');
+    const layananPos = componentsJs.indexOf('<span>Layanan</span>');
+    const panduanPos = componentsJs.indexOf('<span>Panduan</span>');
+
+    assert(berandaPos !== -1, 'Beranda menu must exist');
+    assert(profilPos !== -1, 'Profil menu must exist');
+    assert(paketPos !== -1, 'Paket menu must exist');
+    assert(layananPos !== -1, 'Layanan menu must exist');
+    assert(panduanPos !== -1, 'Panduan menu must exist');
+
+    assert(berandaPos < profilPos, 'Beranda must come before Profil');
+    assert(profilPos < paketPos, 'Profil must be between Beranda and Paket');
+    assert(paketPos < layananPos, 'Paket must come before Layanan');
+    assert(layananPos < panduanPos, 'Layanan must come before Panduan');
+});
+
+it('Nama menu disederhanakan: "Paket" (bukan Pilihan Paket) dan "Panduan" (bukan Panduan & Ziarah)', () => {
+    assert(componentsJs.includes('<span>Paket</span>'), 'Must contain <span>Paket</span>');
+    assert(componentsJs.includes('<span>Panduan</span>'), 'Must contain <span>Panduan</span>');
+    assert(!componentsJs.includes('<span>Pilihan Paket</span>'), 'Must NOT contain <span>Pilihan Paket</span> in top nav');
+    assert(!componentsJs.includes('<span>Panduan &amp; Ziarah</span>'), 'Must NOT contain <span>Panduan &amp; Ziarah</span> in top nav');
 });
 
 it('Dropdown Profil mengarahkan ke 4 URL halaman mandiri (Multi-Page ala MTs YASUA)', () => {

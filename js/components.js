@@ -105,17 +105,55 @@
                 </a>
             </div>
 
-            <!-- Desktop Nav Menu (5 Items: Beranda + 4 Dropdown Groups) -->
+            <!-- Desktop Nav Menu (5 Items: Beranda, Profil, Paket, Layanan, Panduan) -->
             <div class="hidden lg:flex items-center gap-6 lg:gap-7 xl:gap-9 text-xs font-bold">
-                <!-- Nav Item: Beranda -->
+                <!-- Nav Item 1: Beranda -->
                 <a href="/" class="nav-link-item ${isBeranda ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-1.5 transition py-1">
                     <span>Beranda</span>
                 </a>
 
-                <!-- Dropdown 1: Pilihan Paket -->
+                <!-- Nav Item 2: Profil (Multi-Page Architecture adopted from MTs YASUA) -->
+                <div class="nav-dropdown-group py-3">
+                    <a href="/tentang" class="nav-link-item ${isProfil ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
+                        <span>Profil</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
+                    </a>
+                    <div class="nav-dropdown-menu">
+                        <a href="/tentang" class="nav-dropdown-item ${key === 'tentang' ? 'bg-purple-50' : ''}">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-compass text-sdw-pine"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Profil, Visi &amp; Misi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Landasan nilai &amp; komitmen ibadah</div>
+                            </div>
+                        </a>
+                        <a href="/sambutan" class="nav-dropdown-item ${key === 'sambutan' ? 'bg-purple-50' : ''}">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-tie text-amber-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Sambutan Direktur Utama</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Arah &amp; komitmen khidmat pimpinan</div>
+                            </div>
+                        </a>
+                        <a href="/muthawwif" class="nav-dropdown-item ${key === 'muthawwif' ? 'bg-purple-50' : ''}">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-users-rays text-purple-700"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Dewan Pembimbing &amp; Muthawwif</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Asatidz alumni UIM &amp; tim medis</div>
+                            </div>
+                        </a>
+                        <a href="/legalitas" class="nav-dropdown-item ${key === 'legalitas' ? 'bg-purple-50' : ''}">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-certificate text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Legalitas &amp; Kemitraan Resmi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Izin PPIU Kemenag &amp; Akreditasi A</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Nav Item 3: Paket -->
                 <div class="nav-dropdown-group py-3">
                     <a href="/paket" class="nav-link-item ${isPaket ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
-                        <span>Pilihan Paket</span>
+                        <span>Paket</span>
                         <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
                     </a>
                     <div class="nav-dropdown-menu">
@@ -157,7 +195,7 @@
                     </div>
                 </div>
 
-                <!-- Dropdown 2: Layanan -->
+                <!-- Nav Item 4: Layanan -->
                 <div class="nav-dropdown-group py-3">
                     <a href="/jadwal" class="nav-link-item ${isLayanan ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
                         <span>Layanan</span>
@@ -188,10 +226,10 @@
                     </div>
                 </div>
 
-                <!-- Dropdown 3: Panduan & Ziarah -->
+                <!-- Nav Item 5: Panduan -->
                 <div class="nav-dropdown-group py-3">
                     <a href="/ziarah" class="nav-link-item ${isPanduan ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
-                        <span>Panduan &amp; Ziarah</span>
+                        <span>Panduan</span>
                         <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
                     </a>
                     <div class="nav-dropdown-menu">
@@ -228,44 +266,6 @@
                             <div>
                                 <div class="font-extrabold text-xs text-sdw-pine">Galeri Dokumentasi</div>
                                 <div class="text-[10px] text-slate-500 font-medium">Momen ibadah jamaah SDW</div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Dropdown 4: Profil Lembaga (Multi-Page Architecture adopted from MTs YASUA) -->
-                <div class="nav-dropdown-group py-3">
-                    <a href="/tentang" class="nav-link-item ${isProfil ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
-                        <span>Profil</span>
-                        <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
-                    </a>
-                    <div class="nav-dropdown-menu">
-                        <a href="/tentang" class="nav-dropdown-item ${key === 'tentang' ? 'bg-purple-50' : ''}">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-compass text-sdw-pine"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Profil, Visi &amp; Misi</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Landasan nilai &amp; komitmen ibadah</div>
-                            </div>
-                        </a>
-                        <a href="/sambutan" class="nav-dropdown-item ${key === 'sambutan' ? 'bg-purple-50' : ''}">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-tie text-amber-600"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Sambutan Direktur Utama</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Arah &amp; komitmen khidmat pimpinan</div>
-                            </div>
-                        </a>
-                        <a href="/muthawwif" class="nav-dropdown-item ${key === 'muthawwif' ? 'bg-purple-50' : ''}">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-users-rays text-purple-700"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Dewan Pembimbing &amp; Muthawwif</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Asatidz alumni UIM &amp; tim medis</div>
-                            </div>
-                        </a>
-                        <a href="/legalitas" class="nav-dropdown-item ${key === 'legalitas' ? 'bg-purple-50' : ''}">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-certificate text-emerald-600"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Legalitas &amp; Kemitraan Resmi</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Izin PPIU Kemenag &amp; Akreditasi A</div>
                             </div>
                         </a>
                     </div>
@@ -314,8 +314,26 @@
                     <a href="/" class="flex items-center gap-3 p-2.5 rounded-xl ${isBeranda ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
                         <i class="fa-solid fa-kaaba text-sdw-pine w-4 text-center"></i> Beranda
                     </a>
+
+                    <!-- Profil Submenu Links for Mobile (Placed right after Beranda) -->
+                    <div class="pt-1.5 pb-1.5 border-y border-slate-100 my-1 space-y-0.5">
+                        <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2.5 block mb-1">Profil Lembaga</span>
+                        <a href="/tentang" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'tentang' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
+                            <i class="fa-solid fa-compass text-sdw-pine w-4 text-center"></i> Profil, Visi &amp; Misi
+                        </a>
+                        <a href="/sambutan" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'sambutan' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
+                            <i class="fa-solid fa-user-tie text-amber-600 w-4 text-center"></i> Sambutan Direktur
+                        </a>
+                        <a href="/muthawwif" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'muthawwif' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
+                            <i class="fa-solid fa-users-rays text-purple-700 w-4 text-center"></i> Dewan Muthawwif
+                        </a>
+                        <a href="/legalitas" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'legalitas' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
+                            <i class="fa-solid fa-certificate text-emerald-600 w-4 text-center"></i> Legalitas &amp; Kemitraan
+                        </a>
+                    </div>
+
                     <a href="/paket" class="flex items-center gap-3 p-2.5 rounded-xl ${isPaket ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
-                        <i class="fa-solid fa-cubes text-sdw-pine w-4 text-center"></i> Pilihan Paket Umroh
+                        <i class="fa-solid fa-cubes text-sdw-pine w-4 text-center"></i> Paket Umroh
                     </a>
                     <a href="/jadwal" class="flex items-center gap-3 p-2.5 rounded-xl ${key === 'jadwal' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
                         <i class="fa-solid fa-calendar-check text-emerald-600 w-4 text-center"></i> Jadwal Kloter
@@ -335,22 +353,6 @@
                     <a href="/kiblat" class="flex items-center gap-3 p-2.5 rounded-xl ${key === 'kiblat' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
                         <i class="fa-solid fa-compass text-indigo-600 w-4 text-center"></i> Kompas Kiblat
                     </a>
-                    <!-- Profil Submenu Links for Mobile -->
-                    <div class="pt-1.5 pb-1.5 border-y border-slate-100 my-1 space-y-0.5">
-                        <span class="text-[10px] font-black uppercase tracking-wider text-slate-400 px-2.5 block mb-1">Profil Lembaga</span>
-                        <a href="/tentang" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'tentang' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
-                            <i class="fa-solid fa-compass text-sdw-pine w-4 text-center"></i> Profil, Visi &amp; Misi
-                        </a>
-                        <a href="/sambutan" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'sambutan' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
-                            <i class="fa-solid fa-user-tie text-amber-600 w-4 text-center"></i> Sambutan Direktur
-                        </a>
-                        <a href="/muthawwif" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'muthawwif' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
-                            <i class="fa-solid fa-users-rays text-purple-700 w-4 text-center"></i> Dewan Muthawwif
-                        </a>
-                        <a href="/legalitas" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'legalitas' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
-                            <i class="fa-solid fa-certificate text-emerald-600 w-4 text-center"></i> Legalitas &amp; Kemitraan
-                        </a>
-                    </div>
                     <a href="/faq" class="flex items-center gap-3 p-2.5 rounded-xl ${key === 'faq' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
                         <i class="fa-solid fa-circle-question text-purple-700 w-4 text-center"></i> Tanya Jawab (FAQ)
                     </a>
