@@ -1054,12 +1054,12 @@
         </div>
     </section>
 
-    <!-- ==================== JARINGAN MITRA SYIAR & PERWAKILAN CABANG (INSPIRED BY PPTQ ROUDLOTUL MUBAROKAH) ==================== -->
-    <section id="mitra-syiar-home" class="py-14 sm:py-20 bg-gradient-to-r from-[#072416] via-[#0E3A25] to-[#061F13] text-white border-y border-emerald-900/60 relative overflow-hidden">
-        <!-- Ambient Atmospheric Islamic Geometric Texture -->
+    <!-- ==================== JARINGAN MITRA SYIAR & PERWAKILAN CABANG (SDW ROYAL PURPLE THEME) ==================== -->
+    <section id="mitra-syiar-home" class="pt-16 pb-20 sm:pt-20 sm:pb-24 bg-gradient-to-r from-[#170322] via-[#2F0B46] to-[#1C0428] text-white border-y border-purple-900/80 relative overflow-hidden">
+        <!-- Ambient Atmospheric Islamic Geometric Texture & Purple/Gold Orbs -->
         <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
         <div class="absolute -top-32 -right-32 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-purple-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <!-- Header Section (Format Persis PPTQ ROUDLOTUL MUBAROKAH) -->
@@ -1073,7 +1073,7 @@
                             JARINGAN MITRA SYIAR &amp; PERWAKILAN CABANG
                         </h2>
                     </div>
-                    <p class="text-xs sm:text-sm text-emerald-100/80 mt-2 font-medium">
+                    <p class="text-xs sm:text-sm text-purple-100/80 mt-2 font-medium">
                         Menampilkan <span id="homeMitraCountText" class="font-bold text-amber-300">6</span> koordinator daerah &amp; perwakilan resmi yang bergeser pelan secara kontinu (Arahkan kursor untuk jeda)
                     </p>
                 </div>
@@ -1086,7 +1086,7 @@
                     <button type="button" id="btnMitraHomeNext" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 active:scale-95 text-white flex items-center justify-center transition border border-white/20 cursor-pointer shadow-xs" title="Geser ke Kanan" aria-label="Geser ke Kanan">
                         <i class="fa-solid fa-chevron-right text-xs"></i>
                     </button>
-                    <a href="legalitas.html#mitraSyiarSection" class="px-5 py-2.5 rounded-full bg-white text-[#0E3A25] hover:bg-emerald-50 active:scale-95 font-extrabold text-xs transition shadow-md flex items-center gap-2 whitespace-nowrap cursor-pointer ml-1">
+                    <a href="legalitas.html#mitraSyiarSection" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 hover:from-amber-500 hover:to-amber-400 text-slate-950 active:scale-95 font-black text-xs transition shadow-lg flex items-center gap-2 whitespace-nowrap cursor-pointer ml-1">
                         <span>Lihat Semua Mitra</span>
                         <i class="fa-solid fa-arrow-right text-[10px]"></i>
                     </a>
@@ -1095,7 +1095,7 @@
 
             <!-- Continuous Smooth Scrolling Carousel Track -->
             <div class="relative overflow-hidden group">
-                <div id="homeMitraTrack" class="flex gap-5 overflow-x-auto scroll-smooth py-3 px-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <div id="homeMitraTrack" class="flex gap-4 sm:gap-5 overflow-x-auto scroll-smooth py-3 px-1" style="scrollbar-width: none; -ms-overflow-style: none;">
                     <!-- Kartu dirender dinamis via JavaScript dari local storage / initial state -->
                 </div>
             </div>
@@ -1103,7 +1103,7 @@
     </section>
 
     <!-- ==================== LEAD MAGNET & CONSULTATION BAR ==================== -->
-    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mb-16 relative z-20">
+    <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 -mb-16 relative z-20">
         <div class="bg-sdw-leadmagnet rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl border-2 border-sdw-gold/40 text-white relative overflow-hidden">
             <!-- Ambient Golden Glow behind form -->
             <div class="absolute -right-20 -bottom-20 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -1661,34 +1661,35 @@
                 const badgeLabel = m.badge || `${m.city.replace(/Kota |Kab\. /g, '')}`;
 
                 return `
-                <div class="w-64 sm:w-72 shrink-0 bg-white rounded-3xl p-3 sm:p-3.5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group text-slate-900 border border-emerald-900/10">
-                    <div class="space-y-2.5">
-                        <div class="relative aspect-4/3 rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 shadow-2xs">
+                <div class="w-52 sm:w-60 shrink-0 bg-white rounded-3xl p-3 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group text-slate-900 border border-purple-100/80">
+                    <div class="space-y-2">
+                        <!-- Compact Photo Frame -->
+                        <div class="relative h-32 sm:h-36 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 shadow-2xs">
                             <img src="${photoSrc}" alt="${m.name}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
-                            <div class="absolute bottom-2.5 left-2.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-[10px] font-black text-amber-300 tracking-wide border border-white/20 shadow-md flex items-center gap-1.5">
-                                <i class="fa-solid fa-location-dot text-amber-400 text-[9px]"></i>
+                            <div class="absolute bottom-2 left-2 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md text-[9px] font-black text-amber-300 tracking-wide border border-white/20 shadow-md flex items-center gap-1">
+                                <i class="fa-solid fa-location-dot text-amber-400 text-[8.5px]"></i>
                                 <span>${badgeLabel}</span>
                             </div>
                         </div>
 
                         <div>
-                            <h3 class="font-black text-slate-900 text-sm leading-snug truncate group-hover:text-sdw-pine transition" title="${m.name}">
+                            <h3 class="font-black text-slate-900 text-xs sm:text-[13px] leading-snug truncate group-hover:text-sdw-pine transition" title="${m.name}">
                                 ${m.name}
                             </h3>
-                            <p class="text-xs font-bold text-amber-800 truncate mt-0.5" title="${m.institution || ''}">
+                            <p class="text-[11px] font-bold text-amber-800 truncate mt-0.5" title="${m.institution || ''}">
                                 ${m.institution || m.category}
                             </p>
-                            <p class="text-[11px] text-slate-500 flex items-center gap-1.5 mt-1 truncate">
-                                <i class="fa-solid fa-map-pin text-amber-600 shrink-0 text-[10px]"></i>
+                            <p class="text-[10px] text-slate-500 flex items-center gap-1 mt-0.5 truncate">
+                                <i class="fa-solid fa-map-pin text-amber-600 shrink-0 text-[9px]"></i>
                                 <span>${m.city}, ${m.province || ''}</span>
                             </p>
                         </div>
                     </div>
 
-                    <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[10.5px]">
-                        <span class="font-mono text-sdw-pine font-bold text-[10px]">SK: ${m.sk_number ? m.sk_number.substring(0, 16) : '-'}</span>
-                        <a href="https://wa.me/${cleanPhone}?text=${waText}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-600 transition">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                    <div class="pt-2 mt-2 border-t border-slate-100 flex items-center justify-between text-[10px]">
+                        <span class="font-mono text-sdw-pine font-bold text-[9px] truncate max-w-[90px]" title="${m.sk_number || '-'}">SK: ${m.sk_number ? m.sk_number.substring(0, 14) : '-'}</span>
+                        <a href="https://wa.me/${cleanPhone}?text=${waText}" target="_blank" rel="noopener" class="px-2 py-0.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[10.5px] transition flex items-center gap-1">
+                            <i class="fa-brands fa-whatsapp text-xs"></i>
                             <span>Hubungi</span>
                         </a>
                     </div>
@@ -1696,7 +1697,7 @@
                 `;
             }).join('');
 
-            // Continuous Gentle Scrolling with Pause on Hover
+            // Continuous Gentle Scrolling with Pause on Hover (Slightly Faster & Smoother)
             let isPaused = false;
             let scrollInterval = null;
 
@@ -1713,7 +1714,7 @@
                     if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 2) {
                         track.scrollLeft = 0;
                     }
-                }, 30);
+                }, 20); // 20ms interval for smoother, slightly faster flow
             }
 
             startContinuousScroll();
@@ -1723,12 +1724,12 @@
             const nextBtn = document.getElementById('btnMitraHomeNext');
             if (prevBtn) {
                 prevBtn.addEventListener('click', () => {
-                    track.scrollBy({ left: -280, behavior: 'smooth' });
+                    track.scrollBy({ left: -240, behavior: 'smooth' });
                 });
             }
             if (nextBtn) {
                 nextBtn.addEventListener('click', () => {
-                    track.scrollBy({ left: 280, behavior: 'smooth' });
+                    track.scrollBy({ left: 240, behavior: 'smooth' });
                 });
             }
         }

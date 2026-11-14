@@ -28,10 +28,10 @@ function test(name, fn) {
     }
 }
 
-test('1. index.html memuat section #mitra-syiar-home dengan tema background hijau institusi', () => {
+test('1. index.html memuat section #mitra-syiar-home dengan tema background royal purple SDW', () => {
     assert(indexHtml.includes('id="mitra-syiar-home"'), 'Harus memiliki section id="mitra-syiar-home"');
     assert(indexHtml.includes('JARINGAN MITRA SYIAR &amp; PERWAKILAN CABANG'), 'Harus memuat judul JARINGAN MITRA SYIAR & PERWAKILAN CABANG');
-    assert(indexHtml.includes('bg-gradient-to-r from-[#072416] via-[#0E3A25] to-[#061F13]'), 'Harus berlatar belakang gradasi hijau tua elegan');
+    assert(indexHtml.includes('from-[#170322] via-[#2F0B46] to-[#1C0428]'), 'Harus berlatar belakang gradasi royal purple elegan');
 });
 
 test('2. Seksi Mitra memuat sub-headline kontinu scroll persis seperti referensi PPTQ ROUDLOTUL MUBAROKAH', () => {
@@ -58,6 +58,10 @@ test('5. index.html mengimplementasikan logika JavaScript continuous auto-scroll
     assert(indexHtml.includes("initMitraSyiarHomeCarousel();"), 'Harus dipanggil saat DOMContentLoaded');
 });
 
+test('6. Seksi Lead Magnet memiliki margin pemisah yang cukup sehingga tidak tumpang tindih', () => {
+    assert(indexHtml.includes('mt-12 sm:mt-16'), 'Lead magnet harus memiliki margin top agar tidak tumpang tindih dengan carousel mitra');
+});
+
 console.log(`\n======================================================`);
-console.log(`Pengujian Selesai: ${passCount} / 5 Berhasil (100%)`);
+console.log(`Pengujian Selesai: ${passCount} / 6 Berhasil (100%)`);
 console.log(`======================================================\n`);
