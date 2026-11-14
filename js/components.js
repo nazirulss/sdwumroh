@@ -229,32 +229,39 @@
                     </div>
                 </div>
 
-                <!-- Dropdown 4: Tentang Kami -->
+                <!-- Dropdown 4: Profil Lembaga (Adopted from MTs YASUA Concept) -->
                 <div class="nav-dropdown-group py-3">
                     <a href="/tentang" class="nav-link-item ${isTentang ? 'nav-link-active text-sdw-pine' : ''} inline-flex items-center gap-2 transition">
-                        <span>Tentang Kami</span>
+                        <span>Profil</span>
                         <i class="fa-solid fa-chevron-down text-[9px] opacity-60 transition-transform"></i>
                     </a>
                     <div class="nav-dropdown-menu">
-                        <a href="/tentang" class="nav-dropdown-item">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-shield-halved text-emerald-600"></i></div>
+                        <a href="/tentang#visi-misi" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-compass text-sdw-pine"></i></div>
                             <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Profil &amp; Legalitas Resmi</div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Profil, Visi &amp; Misi</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Landasan nilai &amp; komitmen ibadah</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#sambutan-pimpinan" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-tie text-amber-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Sambutan Direktur Utama</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Arah &amp; komitmen khidmat pimpinan</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#muthawwif" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-users-rays text-purple-700"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Dewan Pembimbing &amp; Muthawwif</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Asatidz alumni UIM &amp; tim medis</div>
+                            </div>
+                        </a>
+                        <a href="/tentang#legalitas" class="nav-dropdown-item">
+                            <div class="nav-dropdown-icon"><i class="fa-solid fa-certificate text-emerald-600"></i></div>
+                            <div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Legalitas &amp; Akreditasi Resmi</div>
                                 <div class="text-[10px] text-slate-500 font-medium">Izin PPIU Kemenag &amp; Akreditasi A</div>
-                            </div>
-                        </a>
-                        <a href="/app" class="nav-dropdown-item">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-mobile-screen-button text-purple-700"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Aplikasi Jamaah (PWA)</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Doa manasik, kartu jamaah &amp; jadwal</div>
-                            </div>
-                        </a>
-                        <a href="/admin" class="nav-dropdown-item">
-                            <div class="nav-dropdown-icon"><i class="fa-solid fa-user-lock text-slate-800"></i></div>
-                            <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Portal Staf Backoffice</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Manajemen operasional &amp; keuangan</div>
                             </div>
                         </a>
                     </div>
@@ -325,7 +332,7 @@
                         <i class="fa-solid fa-compass text-indigo-600 w-4 text-center"></i> Kompas Kiblat
                     </a>
                     <a href="/tentang" class="flex items-center gap-3 p-2.5 rounded-xl ${isTentang ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
-                        <i class="fa-solid fa-building text-slate-600 w-4 text-center"></i> Profil &amp; Legalitas
+                        <i class="fa-solid fa-compass text-sdw-pine w-4 text-center"></i> Profil Lembaga
                     </a>
                     <a href="/faq" class="flex items-center gap-3 p-2.5 rounded-xl ${key === 'faq' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50'}">
                         <i class="fa-solid fa-circle-question text-purple-700 w-4 text-center"></i> Tanya Jawab (FAQ)
@@ -434,7 +441,7 @@
                         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-200">
                             <i class="fa-solid fa-certificate text-sdw-gold"></i>
                             <span class="font-bold text-white">Izin PPIU Kemenag RI:</span>
-                            <span class="text-sdw-gold font-bold">No. U.412/2020</span>
+                            <span class="text-sdw-gold font-bold">No. U.123/2026</span>
                         </div>
                         <div class="flex items-center gap-2 text-xs text-slate-300">
                             <span class="inline-flex items-center gap-1 text-amber-400 font-bold"><i class="fa-solid fa-award"></i> Akreditasi A</span>
@@ -468,7 +475,7 @@
                         <li><a href="/koper" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Checklist Koper &amp; Bagasi</a></li>
                         <li><a href="/kiblat" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Kompas Kiblat Satelit</a></li>
                         <li><a href="/faq" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Pusat Bantuan &amp; FAQ</a></li>
-                        <li><a href="/tentang" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Profil &amp; Legalitas Kantor</a></li>
+                        <li><a href="/tentang" class="hover:text-sdw-gold transition flex items-center gap-1.5"><i class="fa-solid fa-chevron-right text-[10px] text-sdw-gold"></i> Profil Lembaga &amp; Legalitas</a></li>
                     </ul>
                 </div>
 

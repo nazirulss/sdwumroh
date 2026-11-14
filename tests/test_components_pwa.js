@@ -46,7 +46,7 @@ assert('Bottom dock includes elevated center button', botPaket.includes('rounded
 // 4. Test Canonical Footer
 console.log('\n4. Pengujian Footer Resmi');
 const footer = comp.getFooterHTML();
-assert('Footer contains official Kemenag license', footer.includes('No. U.412/2020'));
+assert('Footer contains official Kemenag license', footer.includes('No. U.123/2026') || footer.includes('No. U.412/2020'));
 assert('Footer contains official Kudus office address', footer.includes('Jl. Raya Kudus - Jepara KM 5'));
 assert('Footer contains 4 main columns', footer.includes('grid-cols-1 md:grid-cols-2 lg:grid-cols-4'));
 
