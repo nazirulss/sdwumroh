@@ -567,74 +567,159 @@
 
                 <!-- ==================== TAB 1: DASHBOARD EKSEKUTIF ==================== -->
                 <div id="tab-dashboard" class="admin-tab-container space-y-6">
-                    <!-- Header Banner -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                        <div>
-                            <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Ringkasan Operasional Harian</h1>
-                            <p class="text-xs text-slate-500 mt-0.5">Monitoring komprehensif pendaftaran, antrean verifikasi, dan kesiapan kloter.</p>
+                    <!-- Section 1: Greeting & Live Clock Banner (Asnawiyyah Style) -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-1">
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <h1 id="dashGreetingName" class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                                Selamat Bertugas, Super Administrator
+                            </h1>
+                            <span id="dashRoleBadge" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-black border bg-emerald-50 text-emerald-700 border-emerald-200">
+                                ● Full Access
+                            </span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button type="button" id="dashSyncBadge" onclick="SDW_ADMIN.openSyncStatusModal()" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition cursor-pointer" title="Periksa status koneksi Google Sheets & antrean sinkronisasi">
+                        <div class="flex items-center gap-3 text-xs font-mono font-bold text-slate-500 shrink-0">
+                            <div class="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs text-slate-600 flex items-center gap-2">
+                                <i class="fa-regular fa-clock text-emerald-600"></i>
+                                <span id="dashLiveDateTime">WIB (UTC+7) • Sab, 14 Nov 2026 • 09.00.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section 2: Time-range Filter Bar & Quick Refresh -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="text-xs font-black text-slate-800 tracking-tight mr-1">Overall Data</span>
+                            <div id="dashPeriodFilterContainer" class="inline-flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100/80 border border-slate-200/70 text-xs">
+                                <button type="button" data-dash-period="TODAY" onclick="SDW_ADMIN.setDashboardPeriod('TODAY')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs transition cursor-pointer border border-slate-200/70">
+                                    Hari Ini
+                                </button>
+                                <button type="button" data-dash-period="7D" onclick="SDW_ADMIN.setDashboardPeriod('7D')" class="px-3 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow-xs transition cursor-pointer">
+                                    7 Hari
+                                </button>
+                                <button type="button" data-dash-period="30D" onclick="SDW_ADMIN.setDashboardPeriod('30D')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs transition cursor-pointer border border-slate-200/70">
+                                    30 Hari
+                                </button>
+                                <button type="button" data-dash-period="90D" onclick="SDW_ADMIN.setDashboardPeriod('90D')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs transition cursor-pointer border border-slate-200/70">
+                                    90 Hari
+                                </button>
+                                <button type="button" data-dash-period="ALL" onclick="SDW_ADMIN.setDashboardPeriod('ALL')" class="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs transition cursor-pointer border border-slate-200/70">
+                                    Semua
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 self-end sm:self-auto">
+                            <!-- Live DB sync badge -->
+                            <button type="button" id="dashSyncBadge" onclick="SDW_ADMIN.openSyncStatusModal()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-bold transition cursor-pointer shadow-2xs" title="Periksa status koneksi Google Sheets & antrean sinkronisasi">
                                 <span id="dashSyncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                <span id="dashSyncText">22 Sheet Database Live</span>
+                                <span id="dashSyncText">Live DB Synced</span>
+                            </button>
+                            <!-- Refresh Button -->
+                            <button type="button" id="dashBtnRefresh" onclick="SDW_ADMIN.refreshDashboardData()" class="w-9 h-9 rounded-xl bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center text-xs transition cursor-pointer shadow-2xs" title="Muat Ulang Data Analitik">
+                                <i class="fa-solid fa-arrows-rotate"></i>
                             </button>
                         </div>
                     </div>
 
-                    <!-- KPI Metric Cards -->
+                    <!-- Section 3: 4 Vibrant Gradient KPI Cards (Asnawiyyah Style) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-2">
-                            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                                <span>Total Jamaah Terdaftar</span>
-                                <div class="w-7 h-7 rounded-lg bg-purple-50 text-sdw-pine flex items-center justify-center text-xs">
+                        <!-- Card 1: Emerald/Teal (Total Jamaah Terdaftar) -->
+                        <div class="p-5 rounded-3xl bg-linear-to-br from-emerald-600 to-teal-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-emerald-100">Total Jamaah Terdaftar</span>
+                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
                                     <i class="fa-solid fa-users"></i>
                                 </div>
                             </div>
-                            <div id="kpi-total-pilgrims" class="text-2xl font-black text-sdw-pine font-mono">45</div>
-                            <div class="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+6 jamaah minggu ini</span>
+                            <div>
+                                <div class="flex items-baseline gap-1.5">
+                                    <span id="kpi-total-pilgrims" class="text-3xl font-black font-mono">142</span>
+                                    <span class="text-sm font-bold text-emerald-100">Jamaah</span>
+                                    <span class="text-xs font-black text-emerald-200 ml-0.5">↑</span>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
+                                <span class="text-emerald-100 font-medium">Kloter Aktif &amp; Binaan</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-registrations')" class="px-2.5 py-1 rounded-full bg-white text-emerald-800 font-bold text-[10.5px] hover:bg-emerald-50 transition shadow-2xs cursor-pointer">
+                                    Data Induk
+                                </button>
                             </div>
                         </div>
 
-                        <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-2">
-                            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                                <span>Prospek Aktif (Leads)</span>
-                                <div class="w-7 h-7 rounded-lg bg-amber-50 text-amber-700 flex items-center justify-center text-xs">
-                                    <i class="fa-solid fa-filter-circle-dollar"></i>
+                        <!-- Card 2: Sapphire Blue / Indigo (Kapasitas Seat Kloter) -->
+                        <div class="p-5 rounded-3xl bg-linear-to-br from-blue-600 via-indigo-600 to-indigo-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-blue-100">Kapasitas Seat Kloter</span>
+                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-plane-departure"></i>
                                 </div>
                             </div>
-                            <div id="kpi-active-leads" class="text-2xl font-black text-amber-700 font-mono">4</div>
-                            <div class="text-[11px] text-amber-800 font-bold">
-                                2 prospek prioritas tinggi (HIGH)
+                            <div>
+                                <div class="flex items-baseline gap-1.5">
+                                    <span id="kpi-seat-occupancy" class="text-3xl font-black font-mono">88%</span>
+                                    <span class="text-sm font-bold text-blue-100">Terisi</span>
+                                    <span class="text-xs font-black text-blue-200 ml-0.5">↑</span>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
+                                <span class="text-blue-100 font-medium">Target 5 Kloter Musim 1448H</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-departures')" class="px-2.5 py-1 rounded-full bg-white text-blue-800 font-bold text-[10.5px] hover:bg-blue-50 transition shadow-2xs cursor-pointer">
+                                    Jadwal Kloter
+                                </button>
                             </div>
                         </div>
 
-                        <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-2">
-                            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                                <span>Menunggu Verifikasi</span>
-                                <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs">
-                                    <i class="fa-solid fa-clock-rotate-left"></i>
+                        <!-- Card 3: Deep Magenta / Coral / Raspberry (Muthawwif & Pembina) -->
+                        <div class="p-5 rounded-3xl bg-linear-to-br from-rose-500 via-pink-600 to-rose-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-rose-100">Muthawwif &amp; Pembina</span>
+                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-user-tie"></i>
                                 </div>
                             </div>
-                            <div id="kpi-pending-docs" class="text-2xl font-black text-rose-600 font-mono">3 Dokumen</div>
-                            <div class="text-[11px] text-rose-700 font-bold">
-                                Paspor &amp; sertifikat vaksin
+                            <div>
+                                <div class="flex items-baseline gap-1.5">
+                                    <span id="kpi-active-muthawwif" class="text-3xl font-black font-mono">18</span>
+                                    <span class="text-sm font-bold text-rose-100">Petugas</span>
+                                    <span class="text-xs font-black text-rose-200 ml-0.5">↑</span>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
+                                <span class="text-rose-100 font-medium">Petugas Bersertifikat Kemenag</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-operations')" class="px-2.5 py-1 rounded-full bg-white text-rose-800 font-bold text-[10.5px] hover:bg-rose-50 transition shadow-2xs cursor-pointer">
+                                    Tim Lapangan
+                                </button>
                             </div>
                         </div>
 
-                        <div class="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs space-y-2">
-                            <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                                <span>Penerimaan Finansial</span>
-                                <div class="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center text-xs">
-                                    <i class="fa-solid fa-vault"></i>
+                        <!-- Card 4: Sunset Orange / Warm Amber (Verifikasi Dokumen & Visa) -->
+                        <div class="p-5 rounded-3xl bg-linear-to-br from-amber-500 to-orange-600 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-amber-100">Verifikasi Dokumen &amp; Visa</span>
+                                <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
+                                    <i class="fa-solid fa-passport"></i>
                                 </div>
                             </div>
-                            <div id="kpi-total-revenue" class="text-2xl font-black text-emerald-700 font-mono">Rp 1.48 M</div>
-                            <div class="text-[11px] text-slate-500 font-medium">
-                                Terverifikasi via BSI &amp; Muamalat
+                            <div>
+                                <div class="flex items-baseline gap-1.5">
+                                    <span id="kpi-docs-accuracy" class="text-3xl font-black font-mono">98.5%</span>
+                                    <span class="text-xs font-black text-amber-200 ml-0.5">↑</span>
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-white/20 flex items-center justify-between text-[11px]">
+                                <span class="text-amber-100 font-medium">Paspor &amp; Biometrik Siap</span>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-docs')" class="px-2.5 py-1 rounded-full bg-white text-amber-800 font-bold text-[10.5px] hover:bg-amber-50 transition shadow-2xs cursor-pointer">
+                                    98.5% Valid
+                                </button>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Hidden Backwards Compatibility KPI Elements for Other Scripts -->
+                    <div class="hidden" aria-hidden="true">
+                        <span id="kpi-active-leads">4</span>
+                        <span id="kpi-pending-docs">3 Dokumen</span>
+                        <span id="kpi-total-revenue">Rp 1.48 Miliar</span>
                     </div>
 
                     <!-- Operational Alerts Notice -->

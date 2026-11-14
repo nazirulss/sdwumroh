@@ -304,21 +304,117 @@
         modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
-    // 4. Executive Dashboard
+    // 4. Executive Dashboard (Asnawiyyah Vibrant Canvas & KPI)
+    let dashboardPeriod = '7D';
+
+    const ROLE_ACCESS_BADGES = {
+        'SUPER_ADMIN': { text: '● Full Access', class: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+        'ADMIN': { text: '● Administrator', class: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+        'DIRECTOR': { text: '● Dewan Direksi', class: 'bg-amber-50 text-amber-800 border-amber-200' },
+        'FINANCE': { text: '● Otoritas Keuangan', class: 'bg-purple-50 text-purple-700 border-purple-200' },
+        'OPERATIONS': { text: '● Operasional Kloter', class: 'bg-sky-50 text-sky-700 border-sky-200' },
+        'SALES': { text: '● Konsultan Sales', class: 'bg-teal-50 text-teal-700 border-teal-200' },
+        'MUTHAWWIF': { text: '● Muthawwif & TL', class: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+        'PILGRIM': { text: '● Portal Jamaah', class: 'bg-slate-100 text-slate-700 border-slate-200' }
+    };
+
+    function updateDashboardClock() {
+        if (typeof document === 'undefined') return;
+        const clockEl = document.getElementById('dashLiveDateTime');
+        if (!clockEl) return;
+
+        const now = new Date();
+        const days = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        const dayName = days[now.getDay()];
+        const dateNum = now.getDate();
+        const monthName = months[now.getMonth()];
+        const yearNum = now.getFullYear();
+        const timeStr = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, '.');
+
+        clockEl.innerText = `WIB (UTC+7) • ${dayName}, ${dateNum} ${monthName} ${yearNum} • ${timeStr}`;
+    }
+
+    function setDashboardPeriod(period) {
+        dashboardPeriod = period;
+        admin.dashboardPeriod = period;
+
+        if (typeof document !== 'undefined') {
+            const buttons = document.querySelectorAll('[data-dash-period]');
+            buttons.forEach(btn => {
+                const p = btn.getAttribute('data-dash-period');
+                if (p === period) {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-sky-600 text-white font-bold text-xs shadow-xs transition cursor-pointer";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-600 font-bold text-xs transition cursor-pointer border border-slate-200/70";
+                }
+            });
+        }
+
+        renderDashboard();
+    }
+
+    function refreshDashboardData() {
+        const refreshBtn = document.getElementById('dashBtnRefresh');
+        if (refreshBtn) {
+            refreshBtn.classList.add('animate-spin');
+            setTimeout(() => refreshBtn.classList.remove('animate-spin'), 600);
+        }
+        renderDashboard();
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('Data analitik dashboard berhasil diperbarui.', 'info');
+        }
+    }
+
     function renderDashboard() {
         if (typeof document === 'undefined') return;
+
+        // 1. Update Greeting & Status Otoritas
+        const greetingNameEl = document.getElementById('dashGreetingName');
+        const roleBadgeEl = document.getElementById('dashRoleBadge');
+
+        const session = (typeof admin.getAdminSession === 'function' ? admin.getAdminSession() : null) || admin.currentUser;
+        const currentRole = (session && session.role ? session.role : admin.currentRole || 'SUPER_ADMIN').toUpperCase();
+        const badgeConfig = ROLE_ACCESS_BADGES[currentRole] || ROLE_ACCESS_BADGES['SUPER_ADMIN'];
+
+        if (greetingNameEl) {
+            const rawName = session && session.name ? session.name : 'Super Administrator';
+            const shortName = rawName.split(' ')[0] || rawName;
+            greetingNameEl.innerText = `Selamat Bertugas, ${shortName}`;
+        }
+        if (roleBadgeEl) {
+            roleBadgeEl.innerText = badgeConfig.text;
+            roleBadgeEl.className = `inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-black border ${badgeConfig.class}`;
+        }
+
+        // 2. Update Live Clock
+        updateDashboardClock();
+
+        // 3. Update 4 Kartu KPI Gradien
         const totalPilgrimsEl = document.getElementById('kpi-total-pilgrims');
+        const seatOccupancyEl = document.getElementById('kpi-seat-occupancy');
+        const activeMuthawwifEl = document.getElementById('kpi-active-muthawwif');
+        const docsAccuracyEl = document.getElementById('kpi-docs-accuracy');
+
+        // Backward compatibility elements jika ada modul lain yang mencari ID lama
         const activeLeadsEl = document.getElementById('kpi-active-leads');
         const pendingDocsEl = document.getElementById('kpi-pending-docs');
         const totalRevenueEl = document.getElementById('kpi-total-revenue');
 
+        const regsCount = admin.registrationsData.length + 42;
         const pendingDocsCount = admin.docsQueue.filter(d => d.status === 'UNDER_REVIEW').length;
 
-        if (totalPilgrimsEl) totalPilgrimsEl.innerText = admin.registrationsData.length + 42;
+        if (totalPilgrimsEl) totalPilgrimsEl.innerText = regsCount;
+        if (seatOccupancyEl) seatOccupancyEl.innerText = '88%';
+        if (activeMuthawwifEl) activeMuthawwifEl.innerText = '18';
+        if (docsAccuracyEl) docsAccuracyEl.innerText = '98.5%';
+
         if (activeLeadsEl) activeLeadsEl.innerText = admin.leadsData.length;
         if (pendingDocsEl) pendingDocsEl.innerText = `${pendingDocsCount} Dokumen`;
         if (totalRevenueEl) totalRevenueEl.innerText = "Rp 1.48 Miliar";
 
+        // 4. Update Recent Registrations Table
         const recentTbody = document.getElementById('dashboard-recent-regs-tbody');
         if (recentTbody) {
             recentTbody.innerHTML = admin.registrationsData.slice(0, 5).map(r => `
@@ -572,6 +668,8 @@
         const jEl = document.getElementById('adminJakartaClock');
         if (mEl) mEl.innerText = makkahTimeStr.replace(/\./g, ':');
         if (jEl) jEl.innerText = jakartaTimeStr.replace(/\./g, ':');
+
+        updateDashboardClock();
     }
 
     // Attach to admin
@@ -594,6 +692,10 @@
     admin.updateHeaderProfileUI = updateHeaderProfileUI;
     admin.toggleUserProfileDropdown = toggleUserProfileDropdown;
     admin.logout = logout;
+    admin.updateDashboardClock = updateDashboardClock;
+    admin.setDashboardPeriod = setDashboardPeriod;
+    admin.refreshDashboardData = refreshDashboardData;
+    admin.dashboardPeriod = dashboardPeriod;
 
     return admin;
 });

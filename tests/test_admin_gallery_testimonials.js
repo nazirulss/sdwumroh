@@ -137,7 +137,8 @@
     test('sw.js melakukan precache admin-gallery.js dan cache version bumped', () => {
         const swJs = fs.readFileSync(path.resolve(__dirname, '..', 'sw.js'), 'utf8');
         assert.ok(swJs.includes('/js/admin/admin-gallery.js'), 'admin-gallery.js belum di-precache di sw.js');
-        assert.ok(/sdw-umroh-pwa-v6[0-9]/.test(swJs), 'Versi cache sw.js tidak sesuai pola v6x');
+        const cacheMatch = swJs.match(/sdw-umroh-pwa-v(\d+)/);
+        assert.ok(cacheMatch && parseInt(cacheMatch[1], 10) >= 63, 'Versi cache sw.js minimal v63');
     });
 
     console.log(`\n📊 Ringkasan Pengujian: ${passedTests}/${totalTests} Test Berhasil.`);
