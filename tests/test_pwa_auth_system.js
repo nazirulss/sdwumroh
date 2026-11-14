@@ -224,13 +224,14 @@ async function runTest(name, fn) {
   console.log('\n4. Pengujian Navbar Publik (js/components.js)');
   const compJs = fs.readFileSync(path.join(process.cwd(), 'js', 'components.js'), 'utf8');
 
-  await runTest('Navbar desktop memuat tombol Akun Jamaah mengarah ke /app?view=auth', () => {
-    assert(compJs.includes('href="/app?view=auth"'), 'Missing /app?view=auth link in components.js');
-    assert(compJs.includes('Akun Jamaah'), 'Missing text Akun Jamaah in desktop navbar');
+  await runTest('Navbar publik bersih dari tombol login (koreksi estetika web publik)', () => {
+    assert(!compJs.includes('title="Masuk atau Daftar Akun Jamaah"'), 'Tombol login masih ada di navbar desktop publik');
   });
 
-  await runTest('Mobile drawer menu memuat tautan Akun Jamaah (Masuk / Daftar)', () => {
-    assert(compJs.includes('Akun Jamaah (Masuk / Daftar)'), 'Missing drawer link in components.js');
+  await runTest('Header publik memuat tombol Hotline 24 Jam dan jam AST/WIB', () => {
+    assert(compJs.includes('Hotline 24 Jam'), 'Missing Hotline 24 Jam in components.js');
+    assert(compJs.includes('makkahClock'), 'Missing makkahClock in components.js');
+    assert(compJs.includes('jakartaClock'), 'Missing jakartaClock in components.js');
   });
 
   // 5. Audit js/pwa.js Subview Router Registration

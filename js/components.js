@@ -277,12 +277,6 @@
                     <span class="inline sm:hidden">CS</span>
                 </a>
 
-                <!-- Tombol Akun Jamaah (Masuk / Daftar) -->
-                <a href="/app?view=auth" class="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full bg-sdw-pine text-white text-xs font-bold transition shadow-xs cursor-pointer hover:bg-purple-900 active:scale-95 border border-purple-800" title="Masuk atau Daftar Akun Jamaah">
-                    <i class="fa-solid fa-circle-user text-amber-300 text-sm"></i>
-                    <span class="hidden md:inline">Akun Jamaah</span>
-                </a>
-
                 <!-- Mobile Hamburger Button -->
                 <button type="button" onclick="SDW_COMPONENTS.toggleMobileNav(true)" class="nav-mobile-toggle lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-base transition cursor-pointer" aria-label="Buka Menu Navigasi">
                     <i class="fa-solid fa-bars"></i>
@@ -340,11 +334,8 @@
             </div>
 
             <div class="pt-4 border-t border-slate-100 space-y-2">
-                <a href="/app?view=auth" class="w-full py-2.5 rounded-xl bg-sdw-pine text-white font-black text-xs text-center flex items-center justify-center gap-2 shadow-xs cursor-pointer hover:bg-purple-900 transition">
-                    <i class="fa-solid fa-circle-user text-amber-300"></i> Akun Jamaah (Masuk / Daftar)
-                </a>
-                <a href="/app" class="w-full py-2.5 rounded-xl bg-purple-100 text-sdw-pine font-black text-xs text-center flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-mobile-screen-button"></i> Buka Aplikasi Jamaah (PWA)
+                <a href="/app" class="w-full py-2.5 rounded-xl bg-sdw-pine text-white font-black text-xs text-center flex items-center justify-center gap-2 shadow-xs cursor-pointer hover:bg-purple-900 transition">
+                    <i class="fa-solid fa-mobile-screen-button text-amber-300"></i> Buka Aplikasi Jamaah (PWA)
                 </a>
                 <a href="/admin" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-black text-xs text-center flex items-center justify-center gap-2">
                     <i class="fa-solid fa-user-shield"></i> Portal Admin
