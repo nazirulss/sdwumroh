@@ -1054,6 +1054,54 @@
         </div>
     </section>
 
+    <!-- ==================== JARINGAN MITRA SYIAR & PERWAKILAN CABANG (INSPIRED BY PPTQ ROUDLOTUL MUBAROKAH) ==================== -->
+    <section id="mitra-syiar-home" class="py-14 sm:py-20 bg-gradient-to-r from-[#072416] via-[#0E3A25] to-[#061F13] text-white border-y border-emerald-900/60 relative overflow-hidden">
+        <!-- Ambient Atmospheric Islamic Geometric Texture -->
+        <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#F59E0B_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none"></div>
+        <div class="absolute -top-32 -right-32 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Header Section (Format Persis PPTQ ROUDLOTUL MUBAROKAH) -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+                <div>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-lg border border-amber-400/30 shrink-0">
+                            <i class="fa-solid fa-users-viewfinder"></i>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight uppercase">
+                            JARINGAN MITRA SYIAR &amp; PERWAKILAN CABANG
+                        </h2>
+                    </div>
+                    <p class="text-xs sm:text-sm text-emerald-100/80 mt-2 font-medium">
+                        Menampilkan <span id="homeMitraCountText" class="font-bold text-amber-300">6</span> koordinator daerah &amp; perwakilan resmi yang bergeser pelan secara kontinu (Arahkan kursor untuk jeda)
+                    </p>
+                </div>
+
+                <!-- Navigation Controls (Prev, Next, and "Lihat Semua Mitra →") -->
+                <div class="flex items-center gap-2.5 self-start md:self-end">
+                    <button type="button" id="btnMitraHomePrev" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 active:scale-95 text-white flex items-center justify-center transition border border-white/20 cursor-pointer shadow-xs" title="Geser ke Kiri" aria-label="Geser ke Kiri">
+                        <i class="fa-solid fa-chevron-left text-xs"></i>
+                    </button>
+                    <button type="button" id="btnMitraHomeNext" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/25 active:scale-95 text-white flex items-center justify-center transition border border-white/20 cursor-pointer shadow-xs" title="Geser ke Kanan" aria-label="Geser ke Kanan">
+                        <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                    <a href="legalitas.html#mitraSyiarSection" class="px-5 py-2.5 rounded-full bg-white text-[#0E3A25] hover:bg-emerald-50 active:scale-95 font-extrabold text-xs transition shadow-md flex items-center gap-2 whitespace-nowrap cursor-pointer ml-1">
+                        <span>Lihat Semua Mitra</span>
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Continuous Smooth Scrolling Carousel Track -->
+            <div class="relative overflow-hidden group">
+                <div id="homeMitraTrack" class="flex gap-5 overflow-x-auto scroll-smooth py-3 px-1" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Kartu dirender dinamis via JavaScript dari local storage / initial state -->
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- ==================== LEAD MAGNET & CONSULTATION BAR ==================== -->
     <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mb-16 relative z-20">
         <div class="bg-sdw-leadmagnet rounded-3xl p-6 sm:p-10 lg:p-12 shadow-2xl border-2 border-sdw-gold/40 text-white relative overflow-hidden">
@@ -1511,6 +1559,180 @@
             }
         }
 
+        // Mitra Syiar Home Carousel (Inspired by PPTQ ROUDLOTUL MUBAROKAH)
+        function initMitraSyiarHomeCarousel() {
+            const track = document.getElementById('homeMitraTrack');
+            const countText = document.getElementById('homeMitraCountText');
+            if (!track) return;
+
+            const defaultMitra = [
+                {
+                    id: 'MTR-001',
+                    name: "KH. Syamsul Ma'arif",
+                    institution: "Pondok Pesantren Al-Falah",
+                    category: "KORDA",
+                    badge: "Korda Demak",
+                    city: "Kab. Demak",
+                    province: "Jawa Tengah",
+                    phone: "6281234567801",
+                    sk_number: "SK-SDW/MTR-DMK/2023/007",
+                    photo: "assets/direktur-utama.jpg"
+                },
+                {
+                    id: 'MTR-002',
+                    name: "H. Irfan Fauzi, S.E.",
+                    institution: "Kantor Cabang Resmi Semarang",
+                    category: "CABANG_RESMI",
+                    badge: "Cabang Semarang",
+                    city: "Kota Semarang",
+                    province: "Jawa Tengah",
+                    phone: "6281234567802",
+                    sk_number: "SK-SDW/CAB-SMG/2024/012",
+                    photo: "assets/direktur-utama.jpg"
+                },
+                {
+                    id: 'MTR-003',
+                    name: "H. M. Zaini Dahlan",
+                    institution: "Majelis Ibadah Barakah",
+                    category: "KORDA",
+                    badge: "Korda Surabaya",
+                    city: "Kota Surabaya",
+                    province: "Jawa Timur",
+                    phone: "6281234567803",
+                    sk_number: "SK-SDW/MTR-SBY/2023/019",
+                    photo: "assets/direktur-utama.jpg"
+                },
+                {
+                    id: 'MTR-004',
+                    name: "Ust. Asep Saepudin, M.Pd.",
+                    institution: "Pondok Tahfidz Al-Hidayah",
+                    category: "MITRA_PESANTREN",
+                    badge: "Mitra Bandung",
+                    city: "Kota Bandung",
+                    province: "Jawa Barat",
+                    phone: "6281234567804",
+                    sk_number: "SK-SDW/MTR-BDG/2024/025",
+                    photo: "assets/direktur-utama.jpg"
+                },
+                {
+                    id: 'MTR-005',
+                    name: "H. Nuruddin, Lc.",
+                    institution: "Kantor Wilayah Sulawesi Selatan",
+                    category: "CABANG_RESMI",
+                    badge: "Cabang Makassar",
+                    city: "Kota Makassar",
+                    province: "Sulawesi Selatan",
+                    phone: "6281234567805",
+                    sk_number: "SK-SDW/CAB-MKS/2024/031",
+                    photo: "assets/direktur-utama.jpg"
+                },
+                {
+                    id: 'MTR-006',
+                    name: "Ust. H. Farhan Ramadhan",
+                    institution: "Korda Khusus Jabodetabek",
+                    category: "KORDA",
+                    badge: "Korda Jakarta",
+                    city: "Jakarta Selatan",
+                    province: "DKI Jakarta",
+                    phone: "6281234567806",
+                    sk_number: "SK-SDW/MTR-JKT/2023/001",
+                    photo: "assets/direktur-utama.jpg"
+                }
+            ];
+
+            let list = defaultMitra;
+            try {
+                const raw = localStorage.getItem('sdw_profile_legality');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (parsed && Array.isArray(parsed.mitra_syiar) && parsed.mitra_syiar.length > 0) {
+                        list = parsed.mitra_syiar.filter(m => (m.status || 'AKTIF').toUpperCase() === 'AKTIF');
+                        if (list.length === 0) list = defaultMitra;
+                    }
+                }
+            } catch (_) {}
+
+            if (countText) countText.textContent = list.length;
+
+            track.innerHTML = list.map(m => {
+                const cleanPhone = String(m.phone || '').replace(/[^0-9]/g, '');
+                const waText = encodeURIComponent(`Assalamualaikum ${m.name}, saya ingin konsultasi pendaftaran umroh SDW di ${m.city}.`);
+                const photoSrc = m.photo || 'assets/direktur-utama.jpg';
+                const badgeLabel = m.badge || `${m.city.replace(/Kota |Kab\. /g, '')}`;
+
+                return `
+                <div class="w-64 sm:w-72 shrink-0 bg-white rounded-3xl p-3 sm:p-3.5 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between group text-slate-900 border border-emerald-900/10">
+                    <div class="space-y-2.5">
+                        <div class="relative aspect-4/3 rounded-2xl overflow-hidden bg-slate-900 border border-slate-100 shadow-2xs">
+                            <img src="${photoSrc}" alt="${m.name}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+                            <div class="absolute bottom-2.5 left-2.5 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md text-[10px] font-black text-amber-300 tracking-wide border border-white/20 shadow-md flex items-center gap-1.5">
+                                <i class="fa-solid fa-location-dot text-amber-400 text-[9px]"></i>
+                                <span>${badgeLabel}</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 class="font-black text-slate-900 text-sm leading-snug truncate group-hover:text-sdw-pine transition" title="${m.name}">
+                                ${m.name}
+                            </h3>
+                            <p class="text-xs font-bold text-amber-800 truncate mt-0.5" title="${m.institution || ''}">
+                                ${m.institution || m.category}
+                            </p>
+                            <p class="text-[11px] text-slate-500 flex items-center gap-1.5 mt-1 truncate">
+                                <i class="fa-solid fa-map-pin text-amber-600 shrink-0 text-[10px]"></i>
+                                <span>${m.city}, ${m.province || ''}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[10.5px]">
+                        <span class="font-mono text-sdw-pine font-bold text-[10px]">SK: ${m.sk_number ? m.sk_number.substring(0, 16) : '-'}</span>
+                        <a href="https://wa.me/${cleanPhone}?text=${waText}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:text-emerald-600 transition">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>Hubungi</span>
+                        </a>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // Continuous Gentle Scrolling with Pause on Hover
+            let isPaused = false;
+            let scrollInterval = null;
+
+            track.addEventListener('mouseenter', () => { isPaused = true; });
+            track.addEventListener('mouseleave', () => { isPaused = false; });
+            track.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+            track.addEventListener('touchend', () => { isPaused = false; });
+
+            function startContinuousScroll() {
+                if (scrollInterval) clearInterval(scrollInterval);
+                scrollInterval = setInterval(() => {
+                    if (document.hidden || isPaused) return;
+                    track.scrollLeft += 1;
+                    if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 2) {
+                        track.scrollLeft = 0;
+                    }
+                }, 30);
+            }
+
+            startContinuousScroll();
+
+            // Arrow Controls
+            const prevBtn = document.getElementById('btnMitraHomePrev');
+            const nextBtn = document.getElementById('btnMitraHomeNext');
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    track.scrollBy({ left: -280, behavior: 'smooth' });
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    track.scrollBy({ left: 280, behavior: 'smooth' });
+                });
+            }
+        }
+
         // Initialize components
         document.addEventListener('DOMContentLoaded', () => {
             handleNavbarScroll();
@@ -1519,6 +1741,7 @@
             if (typeof SDW_DEPARTURES !== 'undefined') SDW_DEPARTURES.init('departures-table-body');
             if (typeof SDW_ESTIMATOR !== 'undefined') SDW_ESTIMATOR.init();
             initDynamicTestimonials();
+            initMitraSyiarHomeCarousel();
         });
         handleNavbarScroll();
         initHeroRotatingText();
