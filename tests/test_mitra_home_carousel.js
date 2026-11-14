@@ -62,6 +62,12 @@ test('6. Seksi Lead Magnet memiliki margin pemisah yang cukup sehingga tidak tum
     assert(indexHtml.includes('mt-12 sm:mt-16'), 'Lead magnet harus memiliki margin top agar tidak tumpang tindih dengan carousel mitra');
 });
 
+test('7. Foto mitra menggunakan rasio persegi (aspect-square / 1:1) dan infinite loop seamless', () => {
+    assert(indexHtml.includes('aspect-square'), 'Frame foto harus menggunakan class aspect-square (rasio 1:1 / 2:2)');
+    assert(indexHtml.includes('loopList = [...list, ...list]'), 'Harus menduplikasi list untuk seamless infinite scroll');
+    assert(indexHtml.includes('halfScroll = track.scrollWidth / 2'), 'Harus me-reset scroll saat mencapai setengah lebar tanpa loncatan visual');
+});
+
 console.log(`\n======================================================`);
-console.log(`Pengujian Selesai: ${passCount} / 6 Berhasil (100%)`);
+console.log(`Pengujian Selesai: ${passCount} / 7 Berhasil (100%)`);
 console.log(`======================================================\n`);
