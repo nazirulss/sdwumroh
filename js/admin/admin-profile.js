@@ -667,6 +667,7 @@
     // =========================================================================
     function renderLegality() {
         renderLegalityDocsTable();
+        renderMitraSyiarTable();
         renderPartnersTable();
     }
 
@@ -788,6 +789,217 @@
         renderLegalityDocsTable();
         if (typeof admin.showToast === 'function') {
             admin.showToast('Dokumen izin berhasil dihapus.');
+        }
+    }
+
+    // =========================================================================
+    // MITRA SYIAR & PERWAKILAN CABANG DAERAH (KOORDINATOR LAPANGAN)
+    // =========================================================================
+    function renderMitraSyiarTable() {
+        const tbody = document.getElementById('profMitraSyiarTableBody');
+        if (!tbody) return;
+
+        const data = admin.profileLegalityData;
+        const list = (data && Array.isArray(data.mitra_syiar)) ? data.mitra_syiar : [];
+
+        if (list.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="p-6 text-center text-xs text-slate-400">Belum ada mitra syiar atau kantor cabang terdaftar.</td></tr>';
+            return;
+        }
+
+        const categoryLabels = {
+            'KORDA': '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">KORDA</span>',
+            'CABANG_RESMI': '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-purple-100 text-sdw-pine border border-purple-200">CABANG RESMI</span>',
+            'MITRA_PESANTREN': '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-200">PESANTREN / MAJELIS</span>',
+            'AGEN_SYIAR': '<span class="px-2 py-0.5 rounded text-[10px] font-black bg-blue-100 text-blue-900 border border-blue-200">AGEN SYIAR</span>'
+        };
+
+        tbody.innerHTML = list.map(m => `
+            <tr class="hover:bg-slate-50 transition">
+                <td class="p-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0 shadow-xs">
+                            <img src="${admin.escapeHtml(m.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(m.name)}" class="w-full h-full object-cover">
+                        </div>
+                        <div>
+                            <span class="font-black text-slate-900 block text-xs">${admin.escapeHtml(m.name)}</span>
+                            <span class="text-[10.5px] text-slate-500 font-medium">${admin.escapeHtml(m.institution || '')}</span>
+                        </div>
+                    </div>
+                </td>
+                <td class="p-3">
+                    ${categoryLabels[m.category] || `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-700">${admin.escapeHtml(m.category)}</span>`}
+                </td>
+                <td class="p-3">
+                    <span class="font-bold text-slate-800 text-xs block">${admin.escapeHtml(m.city)}</span>
+                    <span class="text-[10px] text-slate-500">${admin.escapeHtml(m.province || '')}</span>
+                </td>
+                <td class="p-3 font-mono font-bold text-[11px] text-sdw-pine">
+                    ${admin.escapeHtml(m.sk_number || '-')}
+                </td>
+                <td class="p-3">
+                    <a href="https://wa.me/${String(m.phone).replace(/[^0-9]/g, '')}" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-[11px] transition">
+                        <i class="fa-brands fa-whatsapp text-emerald-600"></i>
+                        <span>${admin.escapeHtml(m.phone || '-')}</span>
+                    </a>
+                </td>
+                <td class="p-3 text-center">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-purple-50 text-sdw-pine">
+                        ${admin.escapeHtml(String(m.jamaah_served || '0'))} Jamaah
+                    </span>
+                </td>
+                <td class="p-3">
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${m.status === 'AKTIF' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}">
+                        ${admin.escapeHtml(m.status || 'AKTIF')}
+                    </span>
+                </td>
+                <td class="p-3 text-right whitespace-nowrap">
+                    <button type="button" onclick="SDW_ADMIN_PROFILE.openMitraSyiarModal('${m.id}')" class="p-1.5 rounded-lg text-slate-500 hover:text-sdw-pine hover:bg-purple-50 transition cursor-pointer mr-1" title="Edit Mitra Syiar">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button type="button" onclick="SDW_ADMIN_PROFILE.deleteMitraSyiar('${m.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer" title="Hapus Mitra Syiar">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    function openMitraSyiarModal(mitraId) {
+        const modal = document.getElementById('modalMitraSyiarForm');
+        const title = document.getElementById('modalMitraSyiarTitle');
+        const form = document.getElementById('formMitraSyiar');
+        if (!modal || !form) return;
+
+        form.reset();
+        document.getElementById('mitraFormId').value = mitraId || '';
+        document.getElementById('mitraFormPhotoPreview').src = 'assets/direktur-utama.jpg';
+        document.getElementById('mitraFormPhoto').value = '';
+
+        if (mitraId && admin.profileLegalityData && Array.isArray(admin.profileLegalityData.mitra_syiar)) {
+            const m = admin.profileLegalityData.mitra_syiar.find(item => item.id === mitraId);
+            if (m) {
+                if (title) title.innerText = 'Edit Data Mitra Syiar & Cabang';
+                document.getElementById('mitraFormName').value = m.name || '';
+                document.getElementById('mitraFormInstitution').value = m.institution || '';
+                document.getElementById('mitraFormCategory').value = m.category || 'KORDA';
+                document.getElementById('mitraFormStatus').value = m.status || 'AKTIF';
+                document.getElementById('mitraFormCity').value = m.city || '';
+                document.getElementById('mitraFormProvince').value = m.province || '';
+                document.getElementById('mitraFormAddress').value = m.address || '';
+                document.getElementById('mitraFormPhone').value = m.phone || '';
+                document.getElementById('mitraFormSkNumber').value = m.sk_number || '';
+                document.getElementById('mitraFormJoinedYear').value = m.joined_year || '2022';
+                document.getElementById('mitraFormJamaahServed').value = m.jamaah_served || 0;
+                if (m.photo) {
+                    document.getElementById('mitraFormPhotoPreview').src = m.photo;
+                    document.getElementById('mitraFormPhoto').value = m.photo;
+                }
+            }
+        } else {
+            if (title) title.innerText = 'Tambah Mitra Syiar & Cabang Daerah';
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function handleMitraPhotoUpload(input) {
+        if (!input || !input.files || input.files.length === 0) return;
+        const file = input.files[0];
+        const statusEl = document.getElementById('mitraFormPhotoStatus');
+        if (statusEl) statusEl.innerText = 'Mengompresi foto...';
+
+        optimizeImageFile(file, 600, 600, 0.88, function (err, compressedDataUrl) {
+            if (err) {
+                if (statusEl) statusEl.innerText = 'Gagal memproses gambar: ' + err.message;
+                return;
+            }
+            const previewEl = document.getElementById('mitraFormPhotoPreview');
+            const hiddenEl = document.getElementById('mitraFormPhoto');
+            if (previewEl) previewEl.src = compressedDataUrl;
+            if (hiddenEl) hiddenEl.value = compressedDataUrl;
+            if (statusEl) statusEl.innerText = 'Foto berhasil diunggah & dikompresi!';
+            if (typeof admin.showToast === 'function') {
+                admin.showToast('Foto mitra berhasil diunggah.');
+            }
+        });
+    }
+
+    function submitMitraSyiarForm(e) {
+        if (e && typeof e.preventDefault === 'function') e.preventDefault();
+
+        const id = document.getElementById('mitraFormId').value;
+        const name = document.getElementById('mitraFormName').value.trim();
+        const institution = document.getElementById('mitraFormInstitution').value.trim();
+        const category = document.getElementById('mitraFormCategory').value;
+        const status = document.getElementById('mitraFormStatus').value;
+        const city = document.getElementById('mitraFormCity').value.trim();
+        const province = document.getElementById('mitraFormProvince').value.trim();
+        const address = document.getElementById('mitraFormAddress').value.trim();
+        const phone = document.getElementById('mitraFormPhone').value.trim();
+        const sk_number = document.getElementById('mitraFormSkNumber').value.trim();
+        const joined_year = document.getElementById('mitraFormJoinedYear').value.trim();
+        const jamaah_served = parseInt(document.getElementById('mitraFormJamaahServed').value, 10) || 0;
+        const photo = document.getElementById('mitraFormPhoto').value || document.getElementById('mitraFormPhotoPreview').src || 'assets/direktur-utama.jpg';
+
+        if (!admin.profileLegalityData) admin.profileLegalityData = { documents: [], partners: [], mitra_syiar: [] };
+        if (!Array.isArray(admin.profileLegalityData.mitra_syiar)) admin.profileLegalityData.mitra_syiar = [];
+
+        if (id) {
+            const existing = admin.profileLegalityData.mitra_syiar.find(m => m.id === id);
+            if (existing) {
+                existing.name = name;
+                existing.institution = institution;
+                existing.category = category;
+                existing.status = status;
+                existing.city = city;
+                existing.province = province;
+                existing.address = address;
+                existing.phone = phone;
+                existing.sk_number = sk_number;
+                existing.joined_year = joined_year;
+                existing.jamaah_served = jamaah_served;
+                existing.photo = photo;
+            }
+        } else {
+            const newId = `MTR-${(admin.profileLegalityData.mitra_syiar.length + 1).toString().padStart(3, '0')}`;
+            admin.profileLegalityData.mitra_syiar.push({
+                id: newId,
+                name,
+                institution,
+                category,
+                status,
+                city,
+                province,
+                address,
+                phone,
+                sk_number,
+                joined_year,
+                jamaah_served,
+                photo
+            });
+        }
+
+        const modal = document.getElementById('modalMitraSyiarForm');
+        if (modal) {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        renderMitraSyiarTable();
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('Data mitra syiar & cabang berhasil disimpan.');
+        }
+    }
+
+    function deleteMitraSyiar(mitraId) {
+        if (!confirm('Apakah Anda yakin ingin menghapus data mitra syiar ini?')) return;
+        if (!admin.profileLegalityData || !Array.isArray(admin.profileLegalityData.mitra_syiar)) return;
+        admin.profileLegalityData.mitra_syiar = admin.profileLegalityData.mitra_syiar.filter(m => m.id !== mitraId);
+        renderMitraSyiarTable();
+        if (typeof admin.showToast === 'function') {
+            admin.showToast('Data mitra syiar berhasil dihapus.');
         }
     }
 
@@ -1045,6 +1257,11 @@
         openDocumentModal,
         submitDocumentForm,
         deleteDocument,
+        renderMitraSyiarTable,
+        openMitraSyiarModal,
+        submitMitraSyiarForm,
+        deleteMitraSyiar,
+        handleMitraPhotoUpload,
         openPartnerModal,
         submitPartnerForm,
         deletePartner,

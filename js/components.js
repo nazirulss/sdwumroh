@@ -143,8 +143,8 @@
                         <a href="/legalitas" class="nav-dropdown-item ${key === 'legalitas' ? 'bg-purple-50' : ''}">
                             <div class="nav-dropdown-icon"><i class="fa-solid fa-certificate text-emerald-600"></i></div>
                             <div>
-                                <div class="font-extrabold text-xs text-sdw-pine">Legalitas &amp; Kemitraan Resmi</div>
-                                <div class="text-[10px] text-slate-500 font-medium">Izin PPIU Kemenag &amp; Akreditasi A</div>
+                                <div class="font-extrabold text-xs text-sdw-pine">Legalitas &amp; Jaringan Mitra</div>
+                                <div class="text-[10px] text-slate-500 font-medium">Izin PPIU Kemenag &amp; Mitra Syiar Daerah</div>
                             </div>
                         </a>
                     </div>
@@ -328,7 +328,7 @@
                             <i class="fa-solid fa-users-rays text-purple-700 w-4 text-center"></i> Dewan Muthawwif
                         </a>
                         <a href="/legalitas" class="flex items-center gap-3 p-2 rounded-xl text-xs ${key === 'legalitas' ? 'bg-purple-50 text-sdw-pine font-black' : 'hover:bg-slate-50 font-bold'}">
-                            <i class="fa-solid fa-certificate text-emerald-600 w-4 text-center"></i> Legalitas &amp; Kemitraan
+                            <i class="fa-solid fa-certificate text-emerald-600 w-4 text-center"></i> Legalitas &amp; Jaringan Mitra
                         </a>
                     </div>
 

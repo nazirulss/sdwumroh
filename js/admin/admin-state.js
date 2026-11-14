@@ -530,6 +530,98 @@
                 { id: 'PTR-004', name: 'Dar Al Iman InterContinental Madinah', category: 'PERHOTELAN', role: 'Akomodasi Bintang 5 Pelataran Depan Pintu 25', status: 'KONTRAK BLOK ROOM', logo: 'fa-hotel' },
                 { id: 'PTR-005', name: 'Bank Syariah Indonesia (BSI)', category: 'PERBANKAN', role: 'Bank Kustodian Rekening Escrow Penampungan Jamaah', status: 'PKS PERBANKAN', logo: 'fa-building-columns' },
                 { id: 'PTR-006', name: 'AMPHURI', category: 'ASOSIASI', role: 'Advokasi Hukum, Perlindungan Konsumen & Sertifikasi', status: 'ANGGOTA AKTIF', logo: 'fa-handshake' }
+            ],
+            mitra_syiar: [
+                {
+                    id: 'MTR-001',
+                    name: 'KH. Syamsul Ma\'arif',
+                    institution: 'Pondok Pesantren Al-Falah & Korda Demak',
+                    category: 'KORDA',
+                    city: 'Kab. Demak',
+                    province: 'Jawa Tengah',
+                    address: 'Jl. Raya Demak - Kudus KM 4.5, Pilangwetan, Kec. Kebonagung, Demak',
+                    phone: '6281234567801',
+                    sk_number: 'SK-SDW/MTR-DMK/2023/007',
+                    joined_year: '2021',
+                    jamaah_served: 340,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                },
+                {
+                    id: 'MTR-002',
+                    name: 'H. Irfan Fauzi, S.E.',
+                    institution: 'Kantor Perwakilan Resmi Kota Semarang',
+                    category: 'CABANG_RESMI',
+                    city: 'Kota Semarang',
+                    province: 'Jawa Tengah',
+                    address: 'Ruko Pandanaran City Center Blok B-12, Semarang',
+                    phone: '6281234567802',
+                    sk_number: 'SK-SDW/CAB-SMG/2024/012',
+                    joined_year: '2022',
+                    jamaah_served: 425,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                },
+                {
+                    id: 'MTR-003',
+                    name: 'H. M. Zaini Dahlan',
+                    institution: 'Majelis Ibadah Barakah — Korda Surabaya & Sidoarjo',
+                    category: 'KORDA',
+                    city: 'Kota Surabaya',
+                    province: 'Jawa Timur',
+                    address: 'Jl. Gayungsari Timur No. 88, Menanggal, Surabaya',
+                    phone: '6281234567803',
+                    sk_number: 'SK-SDW/MTR-SBY/2023/019',
+                    joined_year: '2022',
+                    jamaah_served: 310,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                },
+                {
+                    id: 'MTR-004',
+                    name: 'Ust. Asep Saepudin, M.Pd.',
+                    institution: 'Pondok Tahfidz Al-Hidayah — Korda Priangan Timur',
+                    category: 'MITRA_PESANTREN',
+                    city: 'Kota Bandung',
+                    province: 'Jawa Barat',
+                    address: 'Jl. Soekarno Hatta No. 420, Buahbatu, Bandung',
+                    phone: '6281234567804',
+                    sk_number: 'SK-SDW/MTR-BDG/2024/025',
+                    joined_year: '2023',
+                    jamaah_served: 180,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                },
+                {
+                    id: 'MTR-005',
+                    name: 'H. Nuruddin, Lc.',
+                    institution: 'Kantor Perwakilan Wilayah Sulawesi Selatan',
+                    category: 'CABANG_RESMI',
+                    city: 'Kota Makassar',
+                    province: 'Sulawesi Selatan',
+                    address: 'Jl. Sultan Alauddin No. 105, Rappocini, Makassar',
+                    phone: '6281234567805',
+                    sk_number: 'SK-SDW/CAB-MKS/2024/031',
+                    joined_year: '2024',
+                    jamaah_served: 150,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                },
+                {
+                    id: 'MTR-006',
+                    name: 'Ust. H. Farhan Ramadhan',
+                    institution: 'Korda Khusus Jabodetabek & Banten',
+                    category: 'KORDA',
+                    city: 'Jakarta Selatan',
+                    province: 'DKI Jakarta',
+                    address: 'Gedung Sahabat Dhuha Wisata Lt. 2, Jl. Tebet Barat Dalam Raya, Jakarta Selatan',
+                    phone: '6281234567806',
+                    sk_number: 'SK-SDW/MTR-JKT/2023/001',
+                    joined_year: '2021',
+                    jamaah_served: 620,
+                    photo: 'assets/direktur-utama.jpg',
+                    status: 'AKTIF'
+                }
             ]
         };
     }

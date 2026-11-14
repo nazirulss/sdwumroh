@@ -90,7 +90,7 @@ it('Dropdown Profil mengarahkan ke 4 URL halaman mandiri (Multi-Page ala MTs YAS
     assert(componentsJs.includes('Dewan Pembimbing &amp; Muthawwif'), 'Must contain Dewan Pembimbing & Muthawwif');
     
     assert(componentsJs.includes('href="/legalitas"'), 'Must link to /legalitas');
-    assert(componentsJs.includes('Legalitas &amp; Kemitraan Resmi'), 'Must contain Legalitas & Kemitraan Resmi');
+    assert(componentsJs.includes('Legalitas &amp; Jaringan Mitra') || componentsJs.includes('Legalitas &amp; Kemitraan Resmi'), 'Must contain Legalitas & Jaringan Mitra');
 });
 
 // 2. Pengujian Halaman 1: Profil, Visi & Misi (tentang.html)

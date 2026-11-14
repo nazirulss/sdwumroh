@@ -40,18 +40,18 @@
                 <span><i class="fa-solid fa-chevron-right text-[10px] opacity-60"></i></span>
                 <a href="/tentang" class="hover:text-white transition">Profil</a>
                 <span><i class="fa-solid fa-chevron-right text-[10px] opacity-60"></i></span>
-                <span class="text-white font-bold">Legalitas &amp; Kemitraan Resmi</span>
+                <span class="text-white font-bold">Legalitas &amp; Jaringan Mitra</span>
             </nav>
 
             <div class="max-w-3xl">
                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-sdw-gold text-xs font-bold mb-3">
-                    <i class="fa-solid fa-certificate"></i> Kredibilitas, Legalitas &amp; Kemitraan Resmi
+                    <i class="fa-solid fa-certificate"></i> Kredibilitas, Legalitas &amp; Jaringan Mitra
                 </span>
                 <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight text-white mb-3">
-                    Legalitas Resmi PPIU &amp; <span class="text-gold-gradient">Jejaring Kemitraan</span>
+                    Legalitas Resmi PPIU &amp; <span class="text-gold-gradient">Jaringan Mitra Syiar</span>
                 </h1>
                 <p class="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl font-medium">
-                    Keabsahan izin operasional resmi dari Kementerian Agama RI, sertifikat Akreditasi A, serta nota kesepahaman (MOU) kemitraan maskapai penerbangan, hotel Haramain, dan perbankan syariah terpercaya.
+                    Keabsahan izin operasional resmi dari Kementerian Agama RI, Akreditasi A Unggul, serta jejaring kantor perwakilan cabang, koordinator daerah (Korda), dan kemitraan strategis perhotelan &amp; maskapai.
                 </p>
             </div>
         </div>
@@ -115,7 +115,62 @@
             </div>
         </section>
 
-        <!-- Section 2: Katalog Kemitraan & Nota Kesepahaman (MOU) (Format MTs YASUA /mou) -->
+        <!-- Section 2: Jaringan Kantor Cabang & Mitra Syiar Daerah (Korda) -->
+        <section class="space-y-8" id="mitraSyiarSection">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-700 uppercase tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
+                        <i class="fa-solid fa-users-viewfinder text-amber-600"></i> Jaringan Tim &amp; Perwakilan Lapangan
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-black text-sdw-pine mt-2 tracking-tight">
+                        Kantor Cabang Resmi &amp; Mitra Syiar Daerah
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
+                        Didukung oleh para Koordinator Daerah (Korda), pimpinan pesantren, dan kantor perwakilan ber-SK resmi yang siap melayani konsultasi serta manasik jamaah di berbagai wilayah.
+                    </p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"></i>
+                        <input type="text" id="filterMitraSearch" placeholder="Cari kota / koordinator..." class="pl-8 pr-3 py-2 bg-white rounded-xl border border-slate-200 text-xs text-slate-700 focus:outline-hidden focus:border-purple-400 shadow-2xs w-48 sm:w-56">
+                    </div>
+                    <select id="filterMitraProvince" class="px-3 py-2 bg-white rounded-xl border border-slate-200 text-xs font-bold text-slate-700 focus:outline-hidden focus:border-purple-400 shadow-2xs">
+                        <option value="SEMUA">Semua Wilayah</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Jawa Barat">Jawa Barat</option>
+                        <option value="DKI Jakarta">DKI Jakarta</option>
+                        <option value="Sulawesi Selatan">Sulawesi Selatan</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Mitra Syiar Cards Grid Container -->
+            <div id="mitraSyiarCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Rendered dynamically via JavaScript or initial fallback -->
+            </div>
+
+            <!-- Banner Ajakan Kemitraan Baru -->
+            <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-amber-500 via-amber-400 to-yellow-400 text-slate-950 shadow-lg flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="space-y-1.5 text-center md:text-left">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-slate-950/10 text-slate-950 text-[11px] font-black uppercase tracking-wider">
+                        <i class="fa-solid fa-handshake"></i> Sinergi Syiar Dakwah Baitullah
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">Ingin Menjadi Mitra Syiar &amp; Koordinator di Kota Anda?</h3>
+                    <p class="text-xs sm:text-sm text-slate-900/80 font-medium max-w-xl">
+                        Terbuka bagi pimpinan pondok pesantren, asatidz majelis taklim, dan penggerak komunitas yang ingin berkhidmat membina jamaah umroh secara amanah dan terikat SK resmi PPIU.
+                    </p>
+                </div>
+                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20Admin%20SDW,%20saya%20ingin%20konsultasi%20syarat%20menjadi%20Mitra%20Syiar%20/%20Korda." target="_blank" rel="noopener" class="px-6 py-3.5 rounded-2xl bg-slate-950 hover:bg-slate-900 text-amber-300 font-black text-xs sm:text-sm shadow-xl transition flex items-center gap-2 shrink-0 cursor-pointer active:scale-95">
+                    <i class="fa-brands fa-whatsapp text-lg text-emerald-400"></i>
+                    <span>Gabung Jadi Mitra Syiar</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 3: Katalog Kemitraan & Nota Kesepahaman (MOU) (Format MTs YASUA /mou) -->
         <section class="space-y-8">
             <div class="text-center max-w-2xl mx-auto">
                 <span class="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-700 uppercase tracking-wider bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
@@ -281,7 +336,208 @@
 
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR ==================== -->
     <div id="app-bottom-bar" data-active="tentang"></div>
-    <script src="js/components.js?v=2.8.0"></script>
+    <script src="js/components.js?v=2.9.0"></script>
+    <script>
+        (function() {
+            const defaultMitra = [
+                {
+                    id: 'MTR-001',
+                    name: "KH. Syamsul Ma'arif",
+                    institution: "Pondok Pesantren Al-Falah & Korda Demak",
+                    category: "KORDA",
+                    city: "Kab. Demak",
+                    province: "Jawa Tengah",
+                    address: "Jl. Raya Demak - Kudus KM 4.5, Pilangwetan, Kec. Kebonagung, Demak",
+                    phone: "6281234567801",
+                    sk_number: "SK-SDW/MTR-DMK/2023/007",
+                    joined_year: "2021",
+                    jamaah_served: 340,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                },
+                {
+                    id: 'MTR-002',
+                    name: "H. Irfan Fauzi, S.E.",
+                    institution: "Kantor Perwakilan Resmi Kota Semarang",
+                    category: "CABANG_RESMI",
+                    city: "Kota Semarang",
+                    province: "Jawa Tengah",
+                    address: "Ruko Pandanaran City Center Blok B-12, Semarang",
+                    phone: "6281234567802",
+                    sk_number: "SK-SDW/CAB-SMG/2024/012",
+                    joined_year: "2022",
+                    jamaah_served: 425,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                },
+                {
+                    id: 'MTR-003',
+                    name: "H. M. Zaini Dahlan",
+                    institution: "Majelis Ibadah Barakah — Korda Surabaya & Sidoarjo",
+                    category: "KORDA",
+                    city: "Kota Surabaya",
+                    province: "Jawa Timur",
+                    address: "Jl. Gayungsari Timur No. 88, Menanggal, Surabaya",
+                    phone: "6281234567803",
+                    sk_number: "SK-SDW/MTR-SBY/2023/019",
+                    joined_year: "2022",
+                    jamaah_served: 310,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                },
+                {
+                    id: 'MTR-004',
+                    name: "Ust. Asep Saepudin, M.Pd.",
+                    institution: "Pondok Tahfidz Al-Hidayah — Korda Priangan Timur",
+                    category: "MITRA_PESANTREN",
+                    city: "Kota Bandung",
+                    province: "Jawa Barat",
+                    address: "Jl. Soekarno Hatta No. 420, Buahbatu, Bandung",
+                    phone: "6281234567804",
+                    sk_number: "SK-SDW/MTR-BDG/2024/025",
+                    joined_year: "2023",
+                    jamaah_served: 180,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                },
+                {
+                    id: 'MTR-005',
+                    name: "H. Nuruddin, Lc.",
+                    institution: "Kantor Perwakilan Wilayah Sulawesi Selatan",
+                    category: "CABANG_RESMI",
+                    city: "Kota Makassar",
+                    province: "Sulawesi Selatan",
+                    address: "Jl. Sultan Alauddin No. 105, Rappocini, Makassar",
+                    phone: "6281234567805",
+                    sk_number: "SK-SDW/CAB-MKS/2024/031",
+                    joined_year: "2024",
+                    jamaah_served: 150,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                },
+                {
+                    id: 'MTR-006',
+                    name: "Ust. H. Farhan Ramadhan",
+                    institution: "Korda Khusus Jabodetabek & Banten",
+                    category: "KORDA",
+                    city: "Jakarta Selatan",
+                    province: "DKI Jakarta",
+                    address: "Gedung Sahabat Dhuha Wisata Lt. 2, Jl. Tebet Barat Dalam Raya, Jakarta Selatan",
+                    phone: "6281234567806",
+                    sk_number: "SK-SDW/MTR-JKT/2023/001",
+                    joined_year: "2021",
+                    jamaah_served: 620,
+                    photo: "assets/direktur-utama.jpg",
+                    status: "AKTIF"
+                }
+            ];
+
+            function getMitraList() {
+                try {
+                    const raw = localStorage.getItem('sdw_profile_legality');
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (parsed && Array.isArray(parsed.mitra_syiar) && parsed.mitra_syiar.length > 0) {
+                            return parsed.mitra_syiar;
+                        }
+                    }
+                } catch (_) {}
+                return defaultMitra;
+            }
+
+            const categoryLabels = {
+                'KORDA': '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-900 border border-amber-300">Korda Resmi</span>',
+                'CABANG_RESMI': '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-purple-100 text-sdw-pine border border-purple-200">Kantor Cabang</span>',
+                'MITRA_PESANTREN': '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-900 border border-emerald-200">Mitra Pesantren</span>',
+                'AGEN_SYIAR': '<span class="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-900 border border-blue-200">Agen Syiar</span>'
+            };
+
+            function renderMitraCards() {
+                const container = document.getElementById('mitraSyiarCardsGrid');
+                if (!container) return;
+
+                const query = (document.getElementById('filterMitraSearch')?.value || '').toLowerCase().trim();
+                const province = document.getElementById('filterMitraProvince')?.value || 'SEMUA';
+
+                const list = getMitraList();
+                const filtered = list.filter(m => {
+                    const matchProv = (province === 'SEMUA') || (m.province && m.province.toLowerCase() === province.toLowerCase());
+                    const matchQuery = !query || 
+                        (m.name && m.name.toLowerCase().includes(query)) ||
+                        (m.city && m.city.toLowerCase().includes(query)) ||
+                        (m.institution && m.institution.toLowerCase().includes(query)) ||
+                        (m.province && m.province.toLowerCase().includes(query));
+                    return matchProv && matchQuery;
+                });
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="col-span-full py-12 text-center bg-white rounded-3xl border border-slate-200 p-6 space-y-2">
+                            <i class="fa-solid fa-location-dot text-3xl text-slate-300 mb-1"></i>
+                            <h4 class="font-black text-slate-800 text-sm">Tidak Ditemukan Perwakilan di Wilayah Ini</h4>
+                            <p class="text-xs text-slate-500 max-w-md mx-auto">Silakan pilih wilayah lain atau hubungi pusat untuk mendaftar menjadi perwakilan di kota Anda.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(m => {
+                    const cleanPhone = String(m.phone || '').replace(/[^0-9]/g, '');
+                    const waText = encodeURIComponent(`Assalamualaikum ${m.name}, saya ingin konsultasi pendaftaran umroh SDW di ${m.city}.`);
+                    const photoSrc = m.photo || 'assets/direktur-utama.jpg';
+
+                    return `
+                    <div class="p-6 rounded-3xl bg-white border border-purple-100 shadow-md space-y-4 hover:shadow-xl transition flex flex-col justify-between group">
+                        <div class="space-y-3">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="w-14 h-14 rounded-2xl overflow-hidden border-2 border-amber-400 bg-slate-900 shrink-0 shadow-xs">
+                                    <img src="${photoSrc}" alt="${m.name}" class="w-full h-full object-cover">
+                                </div>
+                                <div>
+                                    ${categoryLabels[m.category] || `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">${m.category}</span>`}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-slate-900 text-base leading-snug group-hover:text-sdw-pine transition">${m.name}</h3>
+                                <p class="text-xs font-bold text-amber-700 mt-0.5">${m.institution || ''}</p>
+                            </div>
+                            <div class="space-y-1.5 pt-1 text-xs text-slate-600">
+                                <div class="flex items-start gap-2">
+                                    <i class="fa-solid fa-location-dot text-amber-600 mt-0.5 shrink-0 text-[11px]"></i>
+                                    <span>${m.city}, ${m.province}</span>
+                                </div>
+                                <div class="flex items-start gap-2 text-[11px] text-slate-500">
+                                    <i class="fa-solid fa-building text-slate-400 mt-0.5 shrink-0 text-[10px]"></i>
+                                    <span class="line-clamp-2">${m.address}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-[10.5px] font-mono text-sdw-pine pt-0.5">
+                                    <i class="fa-solid fa-certificate text-emerald-600 shrink-0"></i>
+                                    <span class="font-bold">SK: ${m.sk_number || '-'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <div class="text-[10px] text-slate-400 font-bold">
+                                Terbina: <span class="text-sdw-pine font-black">${m.jamaah_served || 0}+ Jamaah</span>
+                            </div>
+                            <a href="https://wa.me/${cleanPhone}?text=${waText}" target="_blank" rel="noopener" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer active:scale-95">
+                                <i class="fa-brands fa-whatsapp text-sm"></i>
+                                <span>Hubungi Korda</span>
+                            </a>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+            }
+
+            document.getElementById('filterMitraSearch')?.addEventListener('input', renderMitraCards);
+            document.getElementById('filterMitraProvince')?.addEventListener('change', renderMitraCards);
+
+            document.addEventListener('DOMContentLoaded', renderMitraCards);
+            renderMitraCards();
+        })();
+    </script>
 </body>
 
 </html>

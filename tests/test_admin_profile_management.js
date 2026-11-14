@@ -293,6 +293,71 @@ test('13. sw.js mem-precache admin-profile.js dan cache version naik ke minimal 
     assert(swJs.includes("'/js/admin/admin-profile.js'"));
 });
 
+// -----------------------------------------------------------------------------
+// 6. UJI INTEGRASI GOLONGAN MITRA SYIAR & CABANG DAERAH
+// -----------------------------------------------------------------------------
+test('14. profileLegalityData memuat default dataset mitra_syiar yang lengkap', () => {
+    const legData = adminState.getDefaultProfileLegalityData();
+    assert(Array.isArray(legData.mitra_syiar), 'mitra_syiar harus berupa Array');
+    assert(legData.mitra_syiar.length >= 6, 'mitra_syiar harus memiliki minimal 6 perwakilan');
+
+    const m = legData.mitra_syiar[0];
+    assert(m.id && m.name && m.category && m.city && m.province && m.sk_number && m.phone);
+    assert(m.category === 'KORDA' || m.category === 'CABANG_RESMI' || m.category === 'MITRA_PESANTREN');
+});
+
+test('15. admin.html memiliki tabel manajemen Mitra Syiar dan modal form upload foto', () => {
+    assert(adminHtml.includes('id="profMitraSyiarTableBody"'), 'admin.html harus memiliki tabel profMitraSyiarTableBody');
+    assert(adminHtml.includes('id="modalMitraSyiarForm"'), 'admin.html harus memiliki modal modalMitraSyiarForm');
+    assert(adminHtml.includes('id="mitraFormPhotoFileInput"'), 'admin.html harus memiliki file input foto mitra');
+    assert(adminHtml.includes('SDW_ADMIN_PROFILE.openMitraSyiarModal'), 'admin.html harus memanggil openMitraSyiarModal');
+});
+
+test('16. Controller menyediakan operasi CRUD dan upload foto untuk Mitra Syiar', () => {
+    assert(typeof profileController.renderMitraSyiarTable === 'function');
+    assert(typeof profileController.openMitraSyiarModal === 'function');
+    assert(typeof profileController.submitMitraSyiarForm === 'function');
+    assert(typeof profileController.deleteMitraSyiar === 'function');
+    assert(typeof profileController.handleMitraPhotoUpload === 'function');
+
+    adminState.profileLegalityData = adminState.getDefaultProfileLegalityData();
+    const initCount = adminState.profileLegalityData.mitra_syiar.length;
+
+    // Simulate Add Mitra
+    document.getElementById('mitraFormId').value = '';
+    document.getElementById('mitraFormName').value = 'KH. Ahmad Dahlan';
+    document.getElementById('mitraFormInstitution').value = 'Pesantren Baitul Hikmah Solo';
+    document.getElementById('mitraFormCategory').value = 'KORDA';
+    document.getElementById('mitraFormStatus').value = 'AKTIF';
+    document.getElementById('mitraFormCity').value = 'Kota Surakarta';
+    document.getElementById('mitraFormProvince').value = 'Jawa Tengah';
+    document.getElementById('mitraFormAddress').value = 'Jl. Slamet Riyadi No. 120';
+    document.getElementById('mitraFormPhone').value = '6281234567899';
+    document.getElementById('mitraFormSkNumber').value = 'SK-SDW/MTR-SLO/2024/040';
+    document.getElementById('mitraFormJoinedYear').value = '2024';
+    document.getElementById('mitraFormJamaahServed').value = 95;
+
+    profileController.submitMitraSyiarForm();
+    assert(adminState.profileLegalityData.mitra_syiar.length === initCount + 1);
+    const addedMitra = adminState.profileLegalityData.mitra_syiar[adminState.profileLegalityData.mitra_syiar.length - 1];
+    assert(addedMitra.name === 'KH. Ahmad Dahlan');
+
+    // Simulate Delete Mitra
+    profileController.deleteMitraSyiar(addedMitra.id);
+    assert(adminState.profileLegalityData.mitra_syiar.length === initCount);
+});
+
+test('17. legalitas.html dan js/components.js memuat nama "Legalitas & Jaringan Mitra" dan seksi Mitra Syiar', () => {
+    const legalitasHtml = fs.readFileSync(path.join(root, 'legalitas.html'), 'utf8');
+    const componentsJs = fs.readFileSync(path.join(root, 'js/components.js'), 'utf8');
+
+    assert(componentsJs.includes('Legalitas &amp; Jaringan Mitra'), 'Navbar harus memuat "Legalitas & Jaringan Mitra"');
+    assert(legalitasHtml.includes('id="mitraSyiarSection"'), 'legalitas.html harus memuat id="mitraSyiarSection"');
+    assert(legalitasHtml.includes('id="mitraSyiarCardsGrid"'), 'legalitas.html harus memuat id="mitraSyiarCardsGrid"');
+    assert(legalitasHtml.includes('filterMitraSearch'), 'legalitas.html harus memuat filter pencarian mitra');
+    assert(legalitasHtml.includes('filterMitraProvince'), 'legalitas.html harus memuat filter provinsi mitra');
+});
+
 console.log(`\n======================================================`);
-console.log(`Pengujian Selesai: ${passCount} / 13 Berhasil (100%)`);
+console.log(`Pengujian Selesai: ${passCount} / 17 Berhasil (100%)`);
 console.log(`======================================================\n`);
