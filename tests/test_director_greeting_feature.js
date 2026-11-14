@@ -67,7 +67,9 @@ runTest('3. index.html memuat section komitmen pimpinan dengan foto, kutipan, da
 // 4. Verifikasi Precache PWA Service Worker
 runTest('4. sw.js mem-precache foto direktur dan menaikkan cache version ke v79+', () => {
     assert(swJs.includes('/assets/direktur-utama.jpg'), 'sw.js tidak mem-precache /assets/direktur-utama.jpg');
-    assert(swJs.includes('v79'), 'Cache version di sw.js belum v79');
+    const versionMatch = swJs.match(/sdw-umroh-pwa-v(\d+)/);
+    const v = versionMatch ? parseInt(versionMatch[1], 10) : 0;
+    assert(v >= 79, 'Cache version di sw.js harus minimal v79');
 });
 
 console.log(`\n======================================================`);
