@@ -431,8 +431,8 @@
                         <span id="headerBreadcrumbCurrent" class="font-black text-slate-800">Dashboard Utama</span>
                     </div>
 
-                    <!-- Global Search Trigger Pill (Alt+F / Ctrl+K) -->
-                    <button type="button" onclick="SDW_ADMIN.openGlobalSearch()" class="flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-400 text-xs font-medium transition cursor-pointer border border-slate-200/80 w-44 sm:w-56 md:w-64 shrink-0 shadow-2xs">
+                    <!-- Global Search Trigger Pill (Alt+F / Ctrl+K) - Asnawiyyah Style Spacious Input -->
+                    <button type="button" onclick="SDW_ADMIN.openGlobalSearch()" class="flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-400 text-xs font-medium transition cursor-pointer border border-slate-200/80 w-52 sm:w-64 md:w-80 lg:w-96 shrink-0 shadow-2xs">
                         <span class="flex items-center gap-2 truncate">
                             <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
                             <span class="truncate">Cari menu &amp; modul...</span>
@@ -443,8 +443,8 @@
 
                 <!-- Sisi Kanan: Action Pills, Clocks, Web Publik, & Asnawiyyah Session Profile Capsule -->
                 <div class="flex items-center gap-2.5 sm:gap-3.5 shrink-0">
-                    <!-- Dual Time Clocks (Makkah & Jakarta) -->
-                    <div class="hidden 2xl:flex items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono">
+                    <!-- Dual Time Clocks (Disimpan tersembunyi untuk backend interval/compatibility) -->
+                    <div class="hidden items-center gap-3 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-mono" aria-hidden="true">
                         <div class="text-right">
                             <span class="text-[9.5px] font-bold text-amber-700 block">🇸🇦 Makkah (AST)</span>
                             <span id="adminMakkahClock" class="font-bold text-slate-800">--:--:--</span>
@@ -456,10 +456,10 @@
                         </div>
                     </div>
 
-                    <!-- Live Sync Engine Status Pill -->
-                    <button type="button" id="adminSyncButton" onclick="SDW_ADMIN.openSyncStatusModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition cursor-pointer" title="Klik untuk status sinkronisasi & antrean database">
+                    <!-- Live Sync Engine Status Pill (Compact Ring Indicator) -->
+                    <button type="button" id="adminSyncButton" onclick="SDW_ADMIN.openSyncStatusModal()" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-emerald-200/90 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs transition cursor-pointer" title="Klik untuk status sinkronisasi & antrean database">
                         <span id="adminSyncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        <span id="adminSyncText">Live DB Synced</span>
+                        <span id="adminSyncText" class="hidden xl:inline">Live DB Synced</span>
                     </button>
 
                     <!-- Tombol Pill Web Publik Asnawiyyah Style -->
@@ -624,7 +624,7 @@
                     <!-- Section 3: 4 Vibrant Gradient KPI Cards (Asnawiyyah Style) -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <!-- Card 1: Emerald/Teal (Total Jamaah Terdaftar) -->
-                        <div class="p-5 rounded-3xl bg-linear-to-br from-emerald-600 to-teal-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                        <div class="p-5 rounded-3xl bg-gradient-to-br from-emerald-600 to-teal-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #059669 0%, #0f766e 100%);">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold text-emerald-100">Total Jamaah Terdaftar</span>
                                 <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
@@ -647,7 +647,7 @@
                         </div>
 
                         <!-- Card 2: Sapphire Blue / Indigo (Kapasitas Seat Kloter) -->
-                        <div class="p-5 rounded-3xl bg-linear-to-br from-blue-600 via-indigo-600 to-indigo-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                        <div class="p-5 rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-indigo-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #2563eb 0%, #4338ca 100%);">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold text-blue-100">Kapasitas Seat Kloter</span>
                                 <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
@@ -670,7 +670,7 @@
                         </div>
 
                         <!-- Card 3: Deep Magenta / Coral / Raspberry (Muthawwif & Pembina) -->
-                        <div class="p-5 rounded-3xl bg-linear-to-br from-rose-500 via-pink-600 to-rose-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                        <div class="p-5 rounded-3xl bg-gradient-to-br from-rose-500 via-pink-600 to-rose-700 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f43f5e 0%, #be185d 100%);">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold text-rose-100">Muthawwif &amp; Pembina</span>
                                 <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">
@@ -693,7 +693,7 @@
                         </div>
 
                         <!-- Card 4: Sunset Orange / Warm Amber (Verifikasi Dokumen & Visa) -->
-                        <div class="p-5 rounded-3xl bg-linear-to-br from-amber-500 to-orange-600 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                        <div class="p-5 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-600 text-white shadow-lg flex flex-col justify-between space-y-4 hover:shadow-xl hover:-translate-y-0.5 transition-all" style="background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);">
                             <div class="flex items-center justify-between">
                                 <span class="text-xs font-bold text-amber-100">Verifikasi Dokumen &amp; Visa</span>
                                 <div class="w-8 h-8 rounded-xl bg-white/15 backdrop-blur-xs text-white flex items-center justify-center text-xs">

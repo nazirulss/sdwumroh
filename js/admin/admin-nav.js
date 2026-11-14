@@ -534,8 +534,15 @@
 
         if (greetingNameEl) {
             const rawName = session && session.name ? session.name : 'Super Administrator';
-            const shortName = rawName.split(' ')[0] || rawName;
-            greetingNameEl.innerText = `Selamat Bertugas, ${shortName}`;
+            let displayName = rawName;
+            if (rawName.toLowerCase().includes('super')) {
+                displayName = 'Administrator';
+            } else if (rawName.startsWith('H. ')) {
+                displayName = rawName.replace(/^H\.\s*/, '').split(' ')[0] || rawName;
+            } else {
+                displayName = rawName.split(' ')[0] || rawName;
+            }
+            greetingNameEl.innerText = `Selamat Bertugas, ${displayName}`;
         }
         if (roleBadgeEl) {
             roleBadgeEl.innerText = badgeConfig.text;
