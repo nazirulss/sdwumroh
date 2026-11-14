@@ -36,6 +36,7 @@
         'tab-dashboard': 'Dashboard Utama',
         'tab-crm': 'Manajemen Prospek CRM',
         'tab-packages': 'Katalog Paket Umroh',
+        'tab-profile': 'Profil Lembaga & Identitas Institusi',
         'tab-departures': 'Jadwal Kloter Keberangkatan',
         'tab-hotels': 'Master Data Hotel Haramain',
         'tab-airlines': 'Maskapai & Bandara Transit',
@@ -242,6 +243,7 @@
         if (tabId === 'tab-dashboard' && typeof renderDashboard === 'function') renderDashboard();
         if (tabId === 'tab-crm' && typeof admin.renderCRM === 'function') admin.renderCRM();
         if (tabId === 'tab-packages' && typeof admin.renderPackages === 'function') admin.renderPackages();
+        if (tabId === 'tab-profile' && typeof admin.renderProfileManagement === 'function') admin.renderProfileManagement();
         if (tabId === 'tab-departures' && typeof admin.renderDepartures === 'function') admin.renderDepartures();
         if (tabId === 'tab-hotels' && typeof admin.renderHotels === 'function') admin.renderHotels();
         if (tabId === 'tab-airlines' && typeof admin.renderAirlines === 'function') admin.renderAirlines();

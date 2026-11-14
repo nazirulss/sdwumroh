@@ -49,15 +49,19 @@
         CONTACTS: 'sdw_admin_contacts',
         USERS: 'sdw_admin_users',
         ROLES: 'sdw_admin_roles',
-        RBAC_MATRIX: 'sdw_admin_rbac_matrix'
+        RBAC_MATRIX: 'sdw_admin_rbac_matrix',
+        PROFILE_INSTITUTION: 'sdw_admin_profile_institution',
+        PROFILE_DIRECTOR: 'sdw_admin_profile_director',
+        PROFILE_GUIDES: 'sdw_admin_profile_guides',
+        PROFILE_LEGALITY: 'sdw_admin_profile_legality'
     };
 
     // 2. RBAC Permissions Mapping untuk Menu Admin
     const ADMIN_PERMISSIONS = {
-        'SUPER_ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
-        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'SUPER_ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'ADMIN': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'MANAGER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
+        'OWNER': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-profile', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-docs', 'tab-registrations', 'tab-finance', 'tab-operations', 'tab-certificates', 'tab-badal-certificates', 'tab-users', 'tab-roles', 'tab-audit'],
         'SALES': ['tab-dashboard', 'tab-crm', 'tab-packages', 'tab-departures', 'tab-hotels', 'tab-airlines', 'tab-gallery', 'tab-articles', 'tab-faq', 'tab-registrations'],
         'DOCUMENT_OFFICER': ['tab-dashboard', 'tab-docs', 'tab-registrations'],
         'FINANCE': ['tab-dashboard', 'tab-registrations', 'tab-finance', 'tab-audit'],
@@ -94,6 +98,7 @@
         faqSubtab: 'faq',
         faqViewMode: 'table',
         helpdeskViewMode: 'table',
+        profileSubtab: 'institution', // 'institution', 'director', 'guides', 'legality'
         usersFilter: { role: 'ALL', search: '', status: 'ALL' },
         docsFilter: { search: '', type: 'ALL', status: 'ALL' },
         regsFilter: { search: '', package: 'ALL', status: 'ALL' },
@@ -130,6 +135,10 @@
         roomsData: [],
         logisticsData: [],
         manasikData: [],
+        profileInstitutionData: null,
+        profileDirectorData: null,
+        profileGuidesData: null,
+        profileLegalityData: null,
         // Sync engine state
         syncQueue: [],
         syncHistory: [],
@@ -401,6 +410,130 @@
         });
     }
 
+    function getDefaultProfileInstitutionData() {
+        return {
+            kpi: {
+                ppiu_no: 'U.123/2026',
+                ppiu_year: '2026',
+                ppiu_label: 'IZIN PPIU KEMENAG',
+                ppiu_status: 'Resmi Terdaftar',
+                akreditasi_grade: 'Peringkat A (Unggul)',
+                akreditasi_label: 'AKREDITASI MUTU',
+                akreditasi_org: 'Lembaga Sertifikasi Umroh Mandiri',
+                legal_name: 'PT Sahabat Dhuha Wisata',
+                legal_label: 'BADAN HUKUM',
+                legal_sk: 'AHU-0012938.AH.01.01.TAHUN 2026',
+                afiliasi_name: 'AMPHURI & IATA',
+                afiliasi_label: 'AFILIASI RESMI',
+                afiliasi_detail: 'ID: 15-4-9981 / Asosiasi PPIU Resmi'
+            },
+            visi: 'Menjadi biro perjalanan ibadah umroh dan haji khusus terdepan di Indonesia yang amanah, profesional, dan berkhidmat melayani jamaah dengan standar kenyamanan hotel pelataran ring-1 serta bimbingan ibadah bersanad yang menenteramkan kalbu.',
+            misi: [
+                'Menyelenggarakan perjalanan umroh dengan kepastian seat pesawat, kepastian jadwal, dan transparansi fasilitas tanpa biaya tersembunyi.',
+                'Menyediakan akomodasi hotel bintang 5 di pelataran utama Masjidil Haram dan Masjid Nabawi demi kemudahan mobilitas ibadah jamaah.',
+                'Memberikan bimbingan manasik komprehensif, bersanad, dan intensif oleh asatidz berkompeten alumni universitas terkemuka di Timur Tengah.',
+                'Mengedepankan pelayanan ramah lansia, pendampingan medis profesional, dan sistem penanganan bagasi satu pintu yang aman.',
+                'Memanfaatkan ekosistem teknologi modern (One Journey, One Platform) untuk memudahkan pelacakan dokumen, jadwal kloter, dan komunikasi jamaah.'
+            ],
+            sejarah_timeline: [
+                {
+                    phase: 'Fase 1 (2018 - 2020)',
+                    title: 'Perintisan & Komitmen Khidmat',
+                    desc: 'Berawal dari inisiatif kelompok bimbingan manasik alumni Timur Tengah yang berdedikasi melayani jamaah dengan transparansi biaya penuh dan bimbingan sunnah.'
+                },
+                {
+                    phase: 'Fase 2 (2021 - 2023)',
+                    title: 'Pengukuhan Badan Hukum & Lisensi',
+                    desc: 'Transformasi menjadi perseroan resmi PT Sahabat Dhuha Wisata, penataan SOP operasional, serta pengajuan izin Penyelenggara Perjalanan Ibadah Umroh (PPIU).'
+                },
+                {
+                    phase: 'Fase 3 (2024 - 2025)',
+                    title: 'Akreditasi A & Kemitraan Strategis',
+                    desc: 'Meraih predikat Akreditasi A Unggul, penguncian kontrak jangka panjang dengan Saudia & Garuda Indonesia, serta hotel pelataran Ring-1 di Haramain.'
+                },
+                {
+                    phase: 'Fase 4 (2026 - Sekarang)',
+                    title: 'Ekosistem Digital One Journey',
+                    desc: 'Peluncuran platform digital terpadu PWA SDW Umroh, portal manajemen kloter real-time, dan bimbingan ibadah mandiri yang terintegrasi penuh.'
+                }
+            ],
+            direksi: [
+                { name: 'H. Muhammad Syarif', role: 'Direktur Utama', title: 'Direktur Utama PT Sahabat Dhuha Wisata', photo: 'assets/direktur-utama.jpg' },
+                { name: 'Hj. Siti Rahmawati, S.E.', role: 'Direktur Keuangan', title: 'Direktur Keuangan & Kustodian Escrow', photo: 'assets/direktur-utama.jpg' },
+                { name: 'Ust. H. Ahmad Fauzan, Lc., M.Ag.', role: 'Direktur Bimbingan Ibadah', title: 'Ketua Dewan Pembimbing Syariah', photo: 'assets/direktur-utama.jpg' },
+                { name: 'H. Bambang Irawan, S.T.', role: 'Direktur Operasional', title: 'Direktur Operasional & Pelayanan Haramain', photo: 'assets/direktur-utama.jpg' }
+            ]
+        };
+    }
+
+    function getDefaultProfileDirectorData() {
+        return {
+            name: 'H. Muhammad Syarif',
+            role: 'Direktur Utama PT Sahabat Dhuha Wisata',
+            photo: 'assets/direktur-utama.jpg',
+            headline: 'Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia',
+            subheadline: 'Komitmen Pimpinan PT Sahabat Dhuha Wisata untuk Perjalanan Ibadah yang Amanah, Khidmat & Menenteramkan.',
+            quote: 'Di SDW UMROH, kami memandang perjalanan ke Baitullah bukan sekadar perniagaan tiket dan hotel, melainkan sebuah amanah suci yang agung. Setiap tetes keringat tabungan jamaah kami jaga dengan kepastian fasilitas, transparansi penuh tanpa biaya siluman, dan bimbingan manasik bersanad yang menenteramkan kalbu.',
+            message_paragraphs: [
+                'Assalamu’alaikum Warahmatullahi Wabarakatuh. Segala puji bagi Allah SWT, Tuhan semesta alam, yang telah memanggil hamba-hamba pilihan-Nya untuk berziarah ke Baitullah Al-Haram di Makkah Al-Mukarramah dan berziarah ke makam Rasulullah SAW di Madinah Al-Munawwarah. Shalawat serta salam semoga senantiasa tercurahkan kepada junjungan kita Nabi Muhammad SAW.',
+                'Menjadi pelayan bagi Dhuyufurrahman (Tamu-Tamu Allah) adalah sebuah kehormatan agung sekaligus amanah yang sangat berat di hadapan Allah SWT. Oleh karena itu, sejak pertama kali PT Sahabat Dhuha Wisata (SDW UMROH) didirikan, kami meletakkan satu prinsip yang tidak pernah kami kompromikan: "Melayani Jamaah Layaknya Keluarga Sendiri".',
+                'Kami menyadari bahwa bagi sebagian besar jamaah, perjalanan umroh adalah buah dari doa bertahun-tahun dan ikhtiar menabung rupiah demi rupiah. Rasa syukur dan kepercayaan tersebut kami jawab dengan kepastian nyata: tiket maskapai yang terkunci, hotel bintang lima yang berada tepat di pelataran Ka\'bah dan Nabawi, serta makanan bergizi cita rasa nusantara.',
+                'Semoga Allah SWT senantiasa meridhoi setiap niat suci kita, menganugerahkan kelancaran dalam perjalanan, dan menerima seluruh ibadah jamaah menjadi Umroh yang Maqbul dan Mabrur. Amin Ya Rabbal Alamin.'
+            ],
+            pillars: [
+                { title: 'Pasti Seat & Jadwal', desc: 'Kontrak penerbangan langsung terkunci dengan Saudia Airlines & Garuda Indonesia tanpa transit berbelit.', icon: 'fa-plane-circle-check' },
+                { title: 'Pasti Hotel Ring-1', desc: 'Akomodasi hotel bintang 5 tepat di pelataran Masjidil Haram & Nabawi untuk kemudahan ibadah lansia.', icon: 'fa-hotel' },
+                { title: 'Pasti Bimbingan Syariah', desc: 'Didampingi penuh oleh Asatidz alumni Universitas Islam Madinah yang berakhlak dan berpengalaman.', icon: 'fa-book-quran' },
+                { title: 'Transparansi Penuh', desc: 'Tidak ada biaya siluman, perlengkapan koper eksklusif lengkap, dan perlindungan asuransi resmi.', icon: 'fa-shield-halved' }
+            ],
+            license_badge: 'VERIFIED PPIU NO. U.123/2026',
+            show_on_home: true
+        };
+    }
+
+    function getDefaultProfileGuidesData() {
+        return {
+            lead_advisor: {
+                name: 'Ust. H. Ahmad Fauzan, Lc., M.Ag.',
+                role: 'Ketua Dewan Pembimbing Syariah & Muthawwif Utama',
+                credentials: 'Alumni Universitas Islam Madinah (Fakultas Syariah) • Pemegang Sanad Manasik 4 Mazhab',
+                bio: 'Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Aktif mengajar hadits dan fiqh ibadah, serta konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW.',
+                photo: 'assets/direktur-utama.jpg',
+                badge: 'Ketua Pembimbing Syariah'
+            },
+            ratio_pilgrim: 35,
+            guides: [
+                { id: 'GD-001', name: 'Ust. Muhammad Ridwan, Lc.', role: 'Muthawwif Senior Makkah', university: 'Al-Azhar University, Kairo', experience: '8 Tahun', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' },
+                { id: 'GD-002', name: 'Ust. Dr. H. Syarif Hidayat, M.A.', role: 'Muthawwif Senior Madinah', university: 'UIM Madinah (Kajian Hadits)', experience: '11 Tahun', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' },
+                { id: 'GD-003', name: 'Ust. Abdullah Faqih, S.Th.I.', role: 'Pembimbing Manasik Daerah', university: 'UIN Walisongo Semarang', experience: '6 Tahun', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' },
+                { id: 'GD-004', name: 'dr. Hj. Siti Fatimah, Sp.PD', role: 'Dokter Spesialis Kloter', university: 'FK Universitas Indonesia', experience: '9 Tahun Medis Haji', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' },
+                { id: 'GD-005', name: 'H. Ruslan Abdullah', role: 'Koordinator Handling Bandara Jeddah', university: 'Al-Azhar Handling Division', experience: '12 Tahun Lapangan', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' },
+                { id: 'GD-006', name: 'Ustzh. Nurul Hikmah, Lc.', role: 'Pembimbing Khusus Jamaah Wanita', university: 'Universitas Al-Ahgaff Yaman', experience: '7 Tahun', photo: 'assets/direktur-utama.jpg', status: 'AKTIF' }
+            ]
+        };
+    }
+
+    function getDefaultProfileLegalityData() {
+        return {
+            documents: [
+                { id: 'LEG-001', title: 'Izin Operasional PPIU Kemenag RI', number: 'No. U.123 Tahun 2026', issuer: 'Kementerian Agama Republik Indonesia', validity: '2026 - 2031', status: 'AKTIF', type: 'Surat Keputusan Menteri Agama' },
+                { id: 'LEG-002', title: 'Sertifikat Akreditasi Mutu PPIU', number: 'Sertifikat No. 448/AKR-PPIU/2026', issuer: 'Komite Akreditasi Nasional (KAN)', validity: '2026 - 2030', status: 'AKTIF', type: 'Peringkat A (Unggul)' },
+                { id: 'LEG-003', title: 'Nomor Induk Berusaha (NIB) Berbasis Risiko', number: 'NIB: 9120003418291', issuer: 'Kementerian Investasi / BKPM RI', validity: 'Berlaku Selamanya', status: 'AKTIF', type: 'KBLI 79121 (Penyelenggara Umroh/Haji)' },
+                { id: 'LEG-004', title: 'SK Pengesahan Badan Hukum Perseroan', number: 'AHU-0012938.AH.01.01.TAHUN 2026', issuer: 'Kemenkumham Republik Indonesia', validity: 'Permanen', status: 'AKTIF', type: 'Akta Notaris Perseroan Terbatas' },
+                { id: 'LEG-005', title: 'Sertifikat Keanggotaan Penuh AMPHURI', number: 'Anggota No. 892/DPP-AMPHURI/2026', issuer: 'Dewan Pengurus Pusat AMPHURI', validity: '2026 - 2027', status: 'AKTIF', type: 'Asosiasi Resmi PPIU Terdaftar' },
+                { id: 'LEG-006', title: 'Lisensi Keagenan Internasional IATA', number: 'IATA Numeric Code: 15-4-9981', issuer: 'International Air Transport Association', validity: 'Tahunan (Verified)', status: 'AKTIF', type: 'Tiket & Reservasi Maskapai Global' }
+            ],
+            partners: [
+                { id: 'PTR-001', name: 'Saudia Airlines', category: 'MASKAPAI', role: 'Official Flight Partner Direct Jeddah/Madinah', status: 'MOU AKTIF 1448H', logo: 'fa-plane' },
+                { id: 'PTR-002', name: 'Garuda Indonesia', category: 'MASKAPAI', role: 'Flag Carrier Umroh Eksekutif Reguler & VIP', status: 'MOU AKTIF 1448H', logo: 'fa-plane-departure' },
+                { id: 'PTR-003', name: 'Swissôtel Al Maqam Makkah', category: 'PERHOTELAN', role: 'Akomodasi Bintang 5 Pelataran Clock Tower', status: 'KONTRAK BLOK ROOM', logo: 'fa-hotel' },
+                { id: 'PTR-004', name: 'Dar Al Iman InterContinental Madinah', category: 'PERHOTELAN', role: 'Akomodasi Bintang 5 Pelataran Depan Pintu 25', status: 'KONTRAK BLOK ROOM', logo: 'fa-hotel' },
+                { id: 'PTR-005', name: 'Bank Syariah Indonesia (BSI)', category: 'PERBANKAN', role: 'Bank Kustodian Rekening Escrow Penampungan Jamaah', status: 'PKS PERBANKAN', logo: 'fa-building-columns' },
+                { id: 'PTR-006', name: 'AMPHURI', category: 'ASOSIASI', role: 'Advokasi Hukum, Perlindungan Konsumen & Sertifikasi', status: 'ANGGOTA AKTIF', logo: 'fa-handshake' }
+            ]
+        };
+    }
+
     // 6. Data Store Initializer
     function initDataStore() {
         if (typeof localStorage === 'undefined') return;
@@ -666,6 +799,43 @@
             state.manasikData = getDefaultManasikData();
             persistStorage(STORAGE_KEYS.MANASIK, state.manasikData);
         }
+
+        // 11. Profile Stores (Institution, Director, Guides, Legality)
+        try {
+            const savedInst = localStorage.getItem(STORAGE_KEYS.PROFILE_INSTITUTION);
+            if (savedInst) state.profileInstitutionData = JSON.parse(savedInst);
+        } catch (_) {}
+        if (!state.profileInstitutionData) {
+            state.profileInstitutionData = getDefaultProfileInstitutionData();
+            persistStorage(STORAGE_KEYS.PROFILE_INSTITUTION, state.profileInstitutionData);
+        }
+
+        try {
+            const savedDir = localStorage.getItem(STORAGE_KEYS.PROFILE_DIRECTOR);
+            if (savedDir) state.profileDirectorData = JSON.parse(savedDir);
+        } catch (_) {}
+        if (!state.profileDirectorData) {
+            state.profileDirectorData = getDefaultProfileDirectorData();
+            persistStorage(STORAGE_KEYS.PROFILE_DIRECTOR, state.profileDirectorData);
+        }
+
+        try {
+            const savedGuides = localStorage.getItem(STORAGE_KEYS.PROFILE_GUIDES);
+            if (savedGuides) state.profileGuidesData = JSON.parse(savedGuides);
+        } catch (_) {}
+        if (!state.profileGuidesData) {
+            state.profileGuidesData = getDefaultProfileGuidesData();
+            persistStorage(STORAGE_KEYS.PROFILE_GUIDES, state.profileGuidesData);
+        }
+
+        try {
+            const savedLeg = localStorage.getItem(STORAGE_KEYS.PROFILE_LEGALITY);
+            if (savedLeg) state.profileLegalityData = JSON.parse(savedLeg);
+        } catch (_) {}
+        if (!state.profileLegalityData) {
+            state.profileLegalityData = getDefaultProfileLegalityData();
+            persistStorage(STORAGE_KEYS.PROFILE_LEGALITY, state.profileLegalityData);
+        }
     }
 
     // Attach to admin object
@@ -682,12 +852,17 @@
     admin.getDefaultRoomsData = getDefaultRoomsData;
     admin.getDefaultLogisticsData = getDefaultLogisticsData;
     admin.getDefaultManasikData = getDefaultManasikData;
+    admin.getDefaultProfileInstitutionData = getDefaultProfileInstitutionData;
+    admin.getDefaultProfileDirectorData = getDefaultProfileDirectorData;
+    admin.getDefaultProfileGuidesData = getDefaultProfileGuidesData;
+    admin.getDefaultProfileLegalityData = getDefaultProfileLegalityData;
     admin.initDataStore = initDataStore;
 
     // Direct state delegations for transparent backward compatibility
     const stateKeys = [
         'leadsData', 'packagesData', 'departuresData', 'hotelsData', 'galleryData', 'testimonialsData', 'articlesData', 'ziarahData', 'airlinesData', 'airportsData', 'faqData', 'contactsData', 'usersData', 'rolesData', 'rbacMatrix', 'registrationsData', 'paymentsData', 'tripsData', 'docsQueue',
         'auditLogs', 'manifestData', 'roomsData', 'logisticsData', 'manasikData',
+        'profileInstitutionData', 'profileDirectorData', 'profileGuidesData', 'profileLegalityData', 'profileSubtab',
         'syncQueue', 'syncHistory', 'isSyncing', 'currentTab', 'currentRole',
         'activeKloterId', 'operationsSubtab', 'crmFilter', 'packagesFilter', 'departuresFilter', 'hotelsFilter', 'galleryFilter', 'testimonialsFilter', 'gallerySubtab', 'galleryViewMode', 'testimonialsViewMode',
         'articlesFilter', 'ziarahFilter', 'articlesSubtab', 'articlesViewMode', 'ziarahViewMode', 'airlinesFilter', 'airportsFilter', 'airlinesSubtab', 'airlinesViewMode', 'airportsViewMode', 'faqFilter', 'helpdeskFilter', 'faqSubtab', 'faqViewMode', 'helpdeskViewMode', 'usersFilter', 'docsFilter',

@@ -325,6 +325,13 @@
                         </span>
                         <span id="badgePackageCount" class="nav-badge hidden"></span>
                     </button>
+                    <button type="button" data-admin-tab="tab-profile" onclick="SDW_ADMIN.switchTab('tab-profile')" class="nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer" title="Profil Lembaga &amp; Identitas">
+                        <span class="flex items-center gap-2.5 min-w-0">
+                            <i class="fa-solid fa-building-columns nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0"></i>
+                            <span class="nav-label whitespace-nowrap truncate">Profil Lembaga</span>
+                        </span>
+                        <span class="nav-badge px-1.5 py-0.5 rounded text-[9.5px] font-bold bg-amber-400 text-purple-950 shrink-0 ml-1.5">PPIU</span>
+                    </button>
                     <button type="button" data-admin-tab="tab-gallery" onclick="SDW_ADMIN.switchTab('tab-gallery')" class="nav-item-btn w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-white/85 hover:text-white hover:bg-white/10 transition whitespace-nowrap cursor-pointer" title="Galeri &amp; Testimoni">
                         <span class="flex items-center gap-2.5 min-w-0">
                             <i class="fa-solid fa-photo-film nav-icon text-purple-200/80 group-hover:text-white w-5 text-center text-sm shrink-0"></i>
@@ -2830,6 +2837,533 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TAB: MANAJEMEN PROFIL LEMBAGA ==================== -->
+                <div id="tab-profile" class="admin-tab-container hidden space-y-5">
+                    <!-- Header Section -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h1 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">Manajemen Profil Lembaga &amp; Identitas Institusi</h1>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10.5px] font-extrabold bg-amber-100 text-amber-900 border border-amber-200">Akreditasi A &amp; PPIU</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-0.5">Kelola visi-misi, sambutan pimpinan, susunan dewan pembimbing (asatidz &amp; tim medis), serta dokumen legalitas resmi &amp; mitra MOU.</p>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <div class="relative inline-block text-left group">
+                                <button type="button" class="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 cursor-pointer shadow-2xs">
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-sdw-pine"></i>
+                                    <span>Pratinjau Halaman Publik</span>
+                                    <i class="fa-solid fa-chevron-down text-[9px] opacity-60 ml-0.5"></i>
+                                </button>
+                                <div class="hidden group-hover:block absolute right-0 mt-1 w-52 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-50 text-xs">
+                                    <a href="/tentang" target="_blank" class="flex items-center gap-2 px-3.5 py-2 hover:bg-purple-50 text-slate-700 font-bold">
+                                        <i class="fa-solid fa-compass text-sdw-pine w-4 text-center"></i> Profil, Visi &amp; Misi
+                                    </a>
+                                    <a href="/sambutan" target="_blank" class="flex items-center gap-2 px-3.5 py-2 hover:bg-purple-50 text-slate-700 font-bold">
+                                        <i class="fa-solid fa-user-tie text-amber-600 w-4 text-center"></i> Sambutan Direktur
+                                    </a>
+                                    <a href="/muthawwif" target="_blank" class="flex items-center gap-2 px-3.5 py-2 hover:bg-purple-50 text-slate-700 font-bold">
+                                        <i class="fa-solid fa-users-rays text-purple-700 w-4 text-center"></i> Dewan Pembimbing
+                                    </a>
+                                    <a href="/legalitas" target="_blank" class="flex items-center gap-2 px-3.5 py-2 hover:bg-purple-50 text-slate-700 font-bold">
+                                        <i class="fa-solid fa-certificate text-emerald-600 w-4 text-center"></i> Legalitas &amp; MOU
+                                    </a>
+                                </div>
+                            </div>
+                            <button type="button" onclick="SDW_ADMIN_PROFILE.saveAll()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                <i class="fa-solid fa-floppy-disk text-amber-300"></i>
+                                <span>Simpan Semua Perubahan</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Subtab Navigation Switcher (4 Sub-Tabs) -->
+                    <div class="flex flex-wrap items-center gap-2 p-1.5 bg-slate-100/80 rounded-2xl w-fit border border-slate-200/60">
+                        <button type="button" id="btnSubtabProfileInst" onclick="SDW_ADMIN_PROFILE.switchSubtab('institution')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-sdw-pine text-white shadow-xs transition cursor-pointer">
+                            <i class="fa-solid fa-compass mr-1.5 text-amber-300"></i>
+                            <span>1. Visi, Misi &amp; Kredensial</span>
+                        </button>
+                        <button type="button" id="btnSubtabProfileDirector" onclick="SDW_ADMIN_PROFILE.switchSubtab('director')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+                            <i class="fa-solid fa-user-tie mr-1.5 text-amber-600"></i>
+                            <span>2. Sambutan Pimpinan</span>
+                        </button>
+                        <button type="button" id="btnSubtabProfileGuides" onclick="SDW_ADMIN_PROFILE.switchSubtab('guides')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+                            <i class="fa-solid fa-users-rays mr-1.5 text-purple-700"></i>
+                            <span>3. Dewan Pembimbing</span>
+                        </button>
+                        <button type="button" id="btnSubtabProfileLegality" onclick="SDW_ADMIN_PROFILE.switchSubtab('legality')" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-600 hover:bg-slate-200 transition cursor-pointer">
+                            <i class="fa-solid fa-certificate mr-1.5 text-emerald-600"></i>
+                            <span>4. Legalitas &amp; MOU Kemitraan</span>
+                        </button>
+                    </div>
+
+                    <!-- ==================== SUBTAB 1: VISI, MISI & KREDENSIAL ==================== -->
+                    <div id="secProfileInstitution" class="space-y-5">
+                        <!-- KPI Strip (4 Credential Cards Editor) -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">4 Metrik Kredensial Lembaga (Header Cards)</h3>
+                                    <p class="text-[11px] text-slate-500">Nilai yang langsung tampil pada strip atas halaman Profil &amp; Legalitas Resmi.</p>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-sdw-pine">Live Sync</span>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Card 1: PPIU -->
+                                <div class="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200/80">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 block">Metrik 1: Izin PPIU</span>
+                                    <input type="text" id="profInstKpiPpiuNo" class="w-full mt-1.5 px-3 py-1.5 bg-white rounded-xl border border-amber-300 text-xs font-bold text-slate-800" placeholder="No. SK PPIU">
+                                    <input type="text" id="profInstKpiPpiuYear" class="w-full mt-1 px-3 py-1 bg-white rounded-xl border border-amber-300 text-[11px] text-slate-600" placeholder="Tahun Izin">
+                                </div>
+                                <!-- Card 2: Akreditasi -->
+                                <div class="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200/80">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-800 block">Metrik 2: Akreditasi Mutu</span>
+                                    <input type="text" id="profInstKpiAkredGrade" class="w-full mt-1.5 px-3 py-1.5 bg-white rounded-xl border border-emerald-300 text-xs font-bold text-slate-800" placeholder="Peringkat Akreditasi">
+                                    <input type="text" id="profInstKpiAkredOrg" class="w-full mt-1 px-3 py-1 bg-white rounded-xl border border-emerald-300 text-[11px] text-slate-600" placeholder="Lembaga Sertifikasi">
+                                </div>
+                                <!-- Card 3: Badan Hukum -->
+                                <div class="p-3.5 rounded-2xl bg-purple-50/60 border border-purple-200/80">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-800 block">Metrik 3: Badan Hukum PT</span>
+                                    <input type="text" id="profInstKpiLegalName" class="w-full mt-1.5 px-3 py-1.5 bg-white rounded-xl border border-purple-300 text-xs font-bold text-slate-800" placeholder="Nama Perseroan">
+                                    <input type="text" id="profInstKpiLegalSk" class="w-full mt-1 px-3 py-1 bg-white rounded-xl border border-purple-300 text-[11px] text-slate-600" placeholder="SK Kemenkumham">
+                                </div>
+                                <!-- Card 4: Afiliasi -->
+                                <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-200/80">
+                                    <span class="text-[10px] font-extrabold uppercase tracking-wider text-blue-800 block">Metrik 4: Afiliasi Resmi</span>
+                                    <input type="text" id="profInstKpiAfiliasiName" class="w-full mt-1.5 px-3 py-1.5 bg-white rounded-xl border border-blue-300 text-xs font-bold text-slate-800" placeholder="Nama Asosiasi">
+                                    <input type="text" id="profInstKpiAfiliasiDetail" class="w-full mt-1 px-3 py-1 bg-white rounded-xl border border-blue-300 text-[11px] text-slate-600" placeholder="Keterangan Keanggotaan">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visi & Misi Editor -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                            <!-- Visi -->
+                            <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <i class="fa-solid fa-compass text-amber-500 text-sm"></i>
+                                        <h3 class="text-sm font-black text-slate-900">Visi Lembaga</h3>
+                                    </div>
+                                    <p class="text-[11px] text-slate-500 mb-3">Panduan arah masa depan dan komitmen pelayanan ibadah haji &amp; umroh.</p>
+                                    <textarea id="profInstVisi" rows="6" class="w-full p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-xs font-medium text-slate-800 leading-relaxed focus:bg-white focus:border-sdw-pine transition" placeholder="Tulis visi lembaga..."></textarea>
+                                </div>
+                                <div class="text-[10px] text-slate-400 mt-2">Dianjurkan 1-2 kalimat ringkas, padat, dan menenteramkan jamaah.</div>
+                            </div>
+
+                            <!-- Misi List Repeater -->
+                            <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fa-solid fa-list-check text-emerald-600 text-sm"></i>
+                                        <h3 class="text-sm font-black text-slate-900">Butir Misi Operasional</h3>
+                                    </div>
+                                    <button type="button" onclick="SDW_ADMIN_PROFILE.addMisiItem()" class="px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine text-xs font-bold transition cursor-pointer flex items-center gap-1">
+                                        <i class="fa-solid fa-plus text-xs"></i>
+                                        <span>Tambah Misi</span>
+                                    </button>
+                                </div>
+                                <p class="text-[11px] text-slate-500 mb-3">Pilar langkah nyata pelayanan ibadah yang ditampilkan dalam bentuk checklist.</p>
+                                <div id="profInstMisiList" class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Linimasa Sejarah 4 Fase -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Linimasa Tonggak Sejarah Lembaga (4 Fase)</h3>
+                                    <p class="text-[11px] text-slate-500">Sejarah perkembangan sejak rintisan awal hingga era platform digital terpadu.</p>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-900">4 Fase</span>
+                            </div>
+                            <div id="profInstTimelineList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Dewan Direksi & Manajemen -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Dewan Direksi &amp; Manajemen PT Sahabat Dhuha Wisata</h3>
+                                    <p class="text-[11px] text-slate-500">Susunan pengurus dan pimpinan yang tertera pada profil perseroan.</p>
+                                </div>
+                                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800">4 Direksi</span>
+                            </div>
+                            <div id="profInstDireksiList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== SUBTAB 2: SAMBUTAN PIMPINAN ==================== -->
+                    <div id="secProfileDirector" class="hidden space-y-5">
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                            <!-- Left: Profil & Foto Pimpinan (4 cols) -->
+                            <div class="lg:col-span-4 bg-white rounded-3xl p-5 border border-slate-200 shadow-soft space-y-4">
+                                <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+                                    <i class="fa-solid fa-id-card-clip text-amber-600 text-sm"></i>
+                                    <h3 class="text-sm font-black text-slate-900">Identitas &amp; Foto Resmi</h3>
+                                </div>
+
+                                <!-- Photo Preview -->
+                                <div class="text-center">
+                                    <div class="relative w-40 h-48 mx-auto rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-lg bg-slate-900 group">
+                                        <img id="profDirPhotoPreview" src="assets/direktur-utama.jpg" alt="Foto Direktur" class="w-full h-full object-cover object-top">
+                                        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <span class="text-[10px] text-white font-bold px-2 py-1 bg-black/60 rounded">Rasio 4:5</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3 text-left">
+                                        <label class="block text-[11px] font-bold text-slate-600 mb-1">Path / URL Foto Portrait:</label>
+                                        <input type="text" id="profDirPhotoUrl" oninput="document.getElementById('profDirPhotoPreview').src = this.value" class="w-full px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 focus:bg-white" placeholder="assets/direktur-utama.jpg">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Lengkap &amp; Gelar:</label>
+                                    <input type="text" id="profDirName" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800" placeholder="H. Muhammad Syarif">
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Jabatan Resmi:</label>
+                                    <input type="text" id="profDirRole" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700" placeholder="Direktur Utama PT Sahabat Dhuha Wisata">
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Badge Verifikasi Lisensi:</label>
+                                    <input type="text" id="profDirBadge" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-emerald-700 font-bold" placeholder="VERIFIED PPIU NO. U.123/2026">
+                                </div>
+
+                                <!-- Toggle Show on Homepage -->
+                                <div class="p-3 rounded-2xl bg-amber-50/70 border border-amber-200/80 flex items-center justify-between">
+                                    <div>
+                                        <span class="text-xs font-extrabold text-amber-950 block">Widget di Beranda</span>
+                                        <span class="text-[10px] text-amber-800">Tampilkan foto &amp; sambutan di atas katalog beranda.</span>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="profDirShowOnHome" class="sr-only peer" checked>
+                                        <div class="w-10 h-5 bg-slate-200 peer-focus:outline-hidden rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Right: Headline, Quote, & Full Message (8 cols) -->
+                            <div class="lg:col-span-8 bg-white rounded-3xl p-5 border border-slate-200 shadow-soft space-y-4">
+                                <div class="flex items-center gap-2 pb-3 border-b border-slate-100">
+                                    <i class="fa-solid fa-quote-left text-amber-600 text-sm"></i>
+                                    <h3 class="text-sm font-black text-slate-900">Naskah Sambutan &amp; Komitmen Khidmat</h3>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Judul / Headline Sambutan:</label>
+                                    <input type="text" id="profDirHeadline" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-black text-slate-900" placeholder='"Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia"'>
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Sub-Headline Narasi:</label>
+                                    <input type="text" id="profDirSubheadline" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600" placeholder="Komitmen Pimpinan PT Sahabat Dhuha Wisata...">
+                                </div>
+
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Kutipan Emas (Gold Quote):</label>
+                                    <textarea id="profDirQuote" rows="3" class="w-full p-3 bg-amber-50/50 rounded-2xl border border-amber-200 text-xs font-medium text-slate-800 leading-relaxed" placeholder="Kutipan ringkas yang tampil di beranda dan header sambutan..."></textarea>
+                                </div>
+
+                                <div>
+                                    <div class="flex items-center justify-between mb-1">
+                                        <label class="block text-[11px] font-bold text-slate-600">Paragraf Naskah Sambutan Lengkap:</label>
+                                        <button type="button" onclick="SDW_ADMIN_PROFILE.addMessageParagraph()" class="text-xs font-bold text-sdw-pine hover:underline cursor-pointer">+ Tambah Paragraf</button>
+                                    </div>
+                                    <div id="profDirParagraphsList" class="space-y-2.5 max-h-60 overflow-y-auto pr-1">
+                                        <!-- Rendered dynamically -->
+                                    </div>
+                                </div>
+
+                                <!-- 4 Pilar Pengasuhan -->
+                                <div class="pt-2 border-t border-slate-100">
+                                    <h4 class="text-xs font-black text-slate-800 mb-2">4 Pilar Utama Pengasuhan &amp; Pendampingan Ibadah</h4>
+                                    <div id="profDirPillarsList" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <!-- Rendered dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== SUBTAB 3: DEWAN PEMBIMBING ==================== -->
+                    <div id="secProfileGuides" class="hidden space-y-5">
+                        <!-- Top: Lead Advisor & Ratio -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Pembimbing Utama (Penasihat Syariah) &amp; Rasio Kloter</h3>
+                                    <p class="text-[11px] text-slate-500">Profil figur pembimbing utama dan standar rasio muthawwif per jamaah.</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-bold text-slate-600">Standar Rasio:</span>
+                                    <div class="flex items-center gap-1.5 px-3 py-1 bg-purple-50 rounded-xl border border-purple-200">
+                                        <span class="text-xs font-extrabold text-sdw-pine">1 :</span>
+                                        <input type="number" id="profGuidesRatio" class="w-12 px-1.5 py-0.5 bg-white rounded-lg border border-purple-300 text-xs font-black text-center text-sdw-pine" value="35">
+                                        <span class="text-[10px] text-slate-500 font-bold">Jamaah</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Lengkap &amp; Gelar:</label>
+                                    <input type="text" id="profLeadName" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800" placeholder="Ust. H. Ahmad Fauzan, Lc., M.Ag.">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Peran / Jabatan Syariah:</label>
+                                    <input type="text" id="profLeadRole" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700" placeholder="Ketua Dewan Pembimbing Syariah">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Kredensial &amp; Almamater:</label>
+                                    <input type="text" id="profLeadCredentials" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700" placeholder="Alumni UIM Madinah (Fakultas Syariah)">
+                                </div>
+                                <div class="md:col-span-3">
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Biografi Khidmat Singkat:</label>
+                                    <textarea id="profLeadBio" rows="2" class="w-full p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-700" placeholder="Riwayat bimbingan ibadah..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Master Table Asatidz & Tim Pendamping -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-3">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Katalog Asatidz, Muthawwif &amp; Tim Medis</h3>
+                                    <p class="text-[11px] text-slate-500">Daftar personil pembimbing ibadah Makkah/Madinah, dokter spesialis, dan koordinator handling bandara.</p>
+                                </div>
+                                <button type="button" onclick="SDW_ADMIN_PROFILE.openGuideModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus text-amber-300"></i>
+                                    <span>+ Tambah Personil Pembimbing</span>
+                                </button>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                                <table class="w-full text-left text-xs border-collapse">
+                                    <thead class="bg-slate-50 text-slate-700 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                        <tr>
+                                            <th class="p-3">Personil</th>
+                                            <th class="p-3">Peran / Penugasan</th>
+                                            <th class="p-3">Almamater / Keilmuan</th>
+                                            <th class="p-3">Pengalaman</th>
+                                            <th class="p-3">Status</th>
+                                            <th class="p-3 text-right">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profGuidesTableBody" class="divide-y divide-slate-100 text-slate-700">
+                                        <!-- Rendered dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ==================== SUBTAB 4: LEGALITAS & KEMITRAAN MOU ==================== -->
+                    <div id="secProfileLegality" class="hidden space-y-5">
+                        <!-- Table 1: Dokumen Legalitas Resmi -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-3">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Dokumen Perizinan &amp; Lisensi Resmi Pemerintah</h3>
+                                    <p class="text-[11px] text-slate-500">Izin PPIU Kemenag RI, Sertifikat Akreditasi A, NIB, Pengesahan Kemenkumham, serta Lisensi IATA &amp; AMPHURI.</p>
+                                </div>
+                                <button type="button" onclick="SDW_ADMIN_PROFILE.openDocumentModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus text-amber-300"></i>
+                                    <span>+ Tambah Dokumen Izin</span>
+                                </button>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                                <table class="w-full text-left text-xs border-collapse">
+                                    <thead class="bg-slate-50 text-slate-700 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                        <tr>
+                                            <th class="p-3">Nama Dokumen</th>
+                                            <th class="p-3">Nomor Registrasi / SK</th>
+                                            <th class="p-3">Instansi Penerbit</th>
+                                            <th class="p-3">Masa Berlaku</th>
+                                            <th class="p-3">Status</th>
+                                            <th class="p-3 text-right">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profLegalityDocsTableBody" class="divide-y divide-slate-100 text-slate-700">
+                                        <!-- Rendered dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Table 2: Mitra Kerjasama Strategis (MOU) -->
+                        <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-soft">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-slate-100 gap-3">
+                                <div>
+                                    <h3 class="text-sm font-black text-slate-900">Mitra Kerjasama Strategis (MOU) &amp; Afiliasi Industri</h3>
+                                    <p class="text-[11px] text-slate-500">Jejaring maskapai internasional, hotel ring-1 pelataran Haramain, bank kustodian escrow, dan asosiasi resmi.</p>
+                                </div>
+                                <button type="button" onclick="SDW_ADMIN_PROFILE.openPartnerModal()" class="px-4 py-2 rounded-xl bg-sdw-pine hover:bg-emerald-800 text-white font-bold text-xs transition shadow-sm cursor-pointer flex items-center gap-1.5">
+                                    <i class="fa-solid fa-plus text-amber-300"></i>
+                                    <span>+ Tambah Mitra Kerjasama</span>
+                                </button>
+                            </div>
+
+                            <div class="overflow-x-auto rounded-2xl border border-slate-200">
+                                <table class="w-full text-left text-xs border-collapse">
+                                    <thead class="bg-slate-50 text-slate-700 font-extrabold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                                        <tr>
+                                            <th class="p-3">Nama Mitra</th>
+                                            <th class="p-3">Kategori</th>
+                                            <th class="p-3">Ruang Lingkup Kerjasama</th>
+                                            <th class="p-3">Status Kontrak / MOU</th>
+                                            <th class="p-3 text-right">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="profPartnersTableBody" class="divide-y divide-slate-100 text-slate-700">
+                                        <!-- Rendered dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modals for Profile Management -->
+                <!-- Modal Guide -->
+                <div id="modalGuideForm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-2xs hidden items-center justify-center p-4">
+                    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <h3 id="modalGuideTitle" class="text-sm font-black text-slate-900">Tambah Personil Pembimbing</h3>
+                            <button type="button" onclick="document.getElementById('modalGuideForm').classList.add('hidden')" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs text-slate-600 cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <form id="formGuide" onsubmit="SDW_ADMIN_PROFILE.submitGuideForm(event)" class="space-y-3">
+                            <input type="hidden" id="guideFormId">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Lengkap &amp; Gelar:</label>
+                                <input type="text" id="guideFormName" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800" placeholder="Ust. Ahmad Fauzi, Lc.">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Peran Penugasan:</label>
+                                <input type="text" id="guideFormRole" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="Muthawwif Senior Makkah">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Almamater / Riwayat Studi:</label>
+                                <input type="text" id="guideFormUniversity" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="UIM Madinah / Al-Azhar Kairo">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Pengalaman:</label>
+                                    <input type="text" id="guideFormExperience" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="8 Tahun">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Status:</label>
+                                    <select id="guideFormStatus" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800">
+                                        <option value="AKTIF">AKTIF</option>
+                                        <option value="KLOTER_BERJALAN">KLOTER BERJALAN</option>
+                                        <option value="CUTI">CUTI</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                                <button type="button" onclick="document.getElementById('modalGuideForm').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer">Batal</button>
+                                <button type="submit" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-emerald-800 cursor-pointer shadow-xs">Simpan Personil</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal Document -->
+                <div id="modalDocumentForm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-2xs hidden items-center justify-center p-4">
+                    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <h3 id="modalDocumentTitle" class="text-sm font-black text-slate-900">Tambah Dokumen Legalitas</h3>
+                            <button type="button" onclick="document.getElementById('modalDocumentForm').classList.add('hidden')" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs text-slate-600 cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <form id="formDocument" onsubmit="SDW_ADMIN_PROFILE.submitDocumentForm(event)" class="space-y-3">
+                            <input type="hidden" id="docFormId">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Dokumen:</label>
+                                <input type="text" id="docFormTitle" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800" placeholder="Izin Operasional PPIU Kemenag">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Nomor Registrasi / SK:</label>
+                                <input type="text" id="docFormNumber" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-mono text-slate-800" placeholder="No. U.123 Tahun 2026">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Instansi Penerbit:</label>
+                                <input type="text" id="docFormIssuer" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="Kementerian Agama Republik Indonesia">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Masa Berlaku:</label>
+                                    <input type="text" id="docFormValidity" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="2026 - 2031">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Status Validitas:</label>
+                                    <select id="docFormStatus" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800">
+                                        <option value="AKTIF">AKTIF</option>
+                                        <option value="DALAM_PEMBARUAN">DALAM PEMBARUAN</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                                <button type="button" onclick="document.getElementById('modalDocumentForm').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer">Batal</button>
+                                <button type="submit" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-emerald-800 cursor-pointer shadow-xs">Simpan Dokumen</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal Partner -->
+                <div id="modalPartnerForm" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-2xs hidden items-center justify-center p-4">
+                    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <h3 id="modalPartnerTitle" class="text-sm font-black text-slate-900">Tambah Mitra Kerjasama (MOU)</h3>
+                            <button type="button" onclick="document.getElementById('modalPartnerForm').classList.add('hidden')" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-xs text-slate-600 cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <form id="formPartner" onsubmit="SDW_ADMIN_PROFILE.submitPartnerForm(event)" class="space-y-3">
+                            <input type="hidden" id="partnerFormId">
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Mitra / Instansi:</label>
+                                <input type="text" id="partnerFormName" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800" placeholder="Saudia Airlines / Swissôtel">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori Mitra:</label>
+                                <select id="partnerFormCategory" class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-slate-800">
+                                    <option value="MASKAPAI">MASKAPAI</option>
+                                    <option value="PERHOTELAN">PERHOTELAN</option>
+                                    <option value="PERBANKAN">PERBANKAN</option>
+                                    <option value="ASOSIASI">ASOSIASI</option>
+                                    <option value="LOGISTIK">LOGISTIK &amp; TRANSPORTASI</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Ruang Lingkup Kerjasama:</label>
+                                <input type="text" id="partnerFormRole" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-800" placeholder="Official Flight Partner Direct Jeddah">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-bold text-slate-600 mb-1">Status MOU / Kontrak:</label>
+                                <input type="text" id="partnerFormStatus" required class="w-full px-3 py-2 bg-slate-50 rounded-xl border border-slate-200 text-xs font-bold text-emerald-700" placeholder="MOU AKTIF 1448H">
+                            </div>
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2">
+                                <button type="button" onclick="document.getElementById('modalPartnerForm').classList.add('hidden')" class="px-4 py-2 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 cursor-pointer">Batal</button>
+                                <button type="submit" class="px-4 py-2 rounded-xl bg-sdw-pine text-white text-xs font-bold hover:bg-emerald-800 cursor-pointer shadow-xs">Simpan Mitra</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -6251,6 +6785,7 @@
     <script src="js/admin/admin-nav.js?v=2.8.0"></script>
     <script src="js/admin/admin-crm.js?v=2.8.0"></script>
     <script src="js/admin/admin-packages.js?v=1.0.0"></script>
+    <script src="js/admin/admin-profile.js?v=1.0.0"></script>
     <script src="js/admin/admin-departures.js?v=1.0.0"></script>
     <script src="js/admin/admin-hotels.js?v=1.0.0"></script>
     <script src="js/admin/admin-airlines.js?v=1.0.0"></script>
