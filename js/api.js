@@ -125,6 +125,64 @@
                         data: (typeof MOCK_DATA !== 'undefined' ? MOCK_DATA.departures : []),
                         source: 'mock'
                     });
+                } else if (action === 'getAllProfileData') {
+                    let inst = null, dir = null, gds = null, leg = null;
+                    try {
+                        const rawInst = localStorage.getItem('sdw_admin_profile_institution');
+                        if (rawInst) inst = JSON.parse(rawInst);
+                        const rawDir = localStorage.getItem('sdw_admin_profile_director');
+                        if (rawDir) dir = JSON.parse(rawDir);
+                        const rawGds = localStorage.getItem('sdw_admin_profile_guides');
+                        if (rawGds) gds = JSON.parse(rawGds);
+                        const rawLeg = localStorage.getItem('sdw_admin_profile_legality');
+                        if (rawLeg) leg = JSON.parse(rawLeg);
+                    } catch (_) {}
+                    resolve({
+                        success: true,
+                        data: {
+                            institution: inst,
+                            director: dir,
+                            guides: gds,
+                            legality: leg,
+                            mitra_syiar: (leg && leg.mitra_syiar) || []
+                        },
+                        source: 'mock'
+                    });
+                } else if (action === 'getProfileInstitution') {
+                    let inst = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_profile_institution');
+                        if (raw) inst = JSON.parse(raw);
+                    } catch (_) {}
+                    resolve({ success: true, data: inst, source: 'mock' });
+                } else if (action === 'getProfileDirector') {
+                    let dir = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_profile_director');
+                        if (raw) dir = JSON.parse(raw);
+                    } catch (_) {}
+                    resolve({ success: true, data: dir, source: 'mock' });
+                } else if (action === 'getProfileGuides') {
+                    let gds = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_profile_guides');
+                        if (raw) gds = JSON.parse(raw);
+                    } catch (_) {}
+                    resolve({ success: true, data: gds, source: 'mock' });
+                } else if (action === 'getProfileLegality') {
+                    let leg = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_profile_legality');
+                        if (raw) leg = JSON.parse(raw);
+                    } catch (_) {}
+                    resolve({ success: true, data: leg, source: 'mock' });
+                } else if (action === 'getProfileMitraSyiar') {
+                    let leg = null;
+                    try {
+                        const raw = localStorage.getItem('sdw_admin_profile_legality');
+                        if (raw) leg = JSON.parse(raw);
+                    } catch (_) {}
+                    resolve({ success: true, data: (leg && leg.mitra_syiar) || [], source: 'mock' });
                 } else {
                     resolve({ success: true, data: null, source: 'mock' });
                 }
@@ -135,7 +193,7 @@
     function handleMockPost(action, payload) {
         return new Promise((resolve) => {
             setTimeout(() => {
-                if (action === 'uploadCertificatePhoto' || action === 'uploadPilgrimPhoto') {
+                if (action === 'uploadCertificatePhoto' || action === 'uploadPilgrimPhoto' || action === 'uploadProfilePhoto') {
                     const mockFileId = '1mock_photo_' + Date.now();
                     const mockDriveUrl = 'https://lh3.googleusercontent.com/d/' + mockFileId;
                     resolve({
@@ -145,11 +203,22 @@
                             fileId: mockFileId,
                             driveUrl: payload.photoBase64 || mockDriveUrl,
                             viewLink: mockDriveUrl,
+                            url: payload.photoBase64 || mockDriveUrl,
                             regId: payload.regId,
                             status: 'PHOTO_UPLOADED',
                             entity: 'DB_Pilgrim_Documents'
                         },
-                        message: "Pasfoto berhasil diunggah (Simulasi Drive & Spreadsheet)",
+                        message: "Foto berhasil diunggah (Simulasi Drive & Spreadsheet)",
+                        source: 'mock'
+                    });
+                    return;
+                }
+
+                if (action === 'saveAllProfileData' || action === 'saveProfileInstitution' || action === 'saveProfileDirector' || action === 'saveProfileGuide' || action === 'saveProfileLegalityDoc' || action === 'saveProfileMitraSyiar' || action === 'deleteProfileGuide' || action === 'deleteProfileLegalityDoc' || action === 'deleteProfileMitraSyiar') {
+                    resolve({
+                        success: true,
+                        message: "Data profil berhasil disimpan (Simulasi Database)",
+                        data: payload,
                         source: 'mock'
                     });
                     return;

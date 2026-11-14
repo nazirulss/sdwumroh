@@ -76,6 +76,81 @@ var AUTHORITATIVE_SCHEMAS_ = {
     "catatan",
     "created_at",
     "updated_at"
+  ],
+  "DB_Profile_Institution": [
+    "id",
+    "ppiu_no",
+    "ppiu_year",
+    "akreditasi_grade",
+    "akreditasi_org",
+    "legal_name",
+    "legal_sk",
+    "afiliasi_name",
+    "afiliasi_detail",
+    "visi",
+    "misi_json",
+    "timeline_json",
+    "direksi_json",
+    "updated_at",
+    "updated_by"
+  ],
+  "DB_Profile_Director": [
+    "id",
+    "name",
+    "role",
+    "license_badge",
+    "photo_url",
+    "headline",
+    "subheadline",
+    "quote",
+    "paragraphs_json",
+    "pillars_json",
+    "show_on_home",
+    "updated_at",
+    "updated_by"
+  ],
+  "DB_Profile_Guides": [
+    "id",
+    "name",
+    "role",
+    "category",
+    "alma_mater",
+    "experience",
+    "status",
+    "photo_url",
+    "order_index",
+    "lead_advisor_flag",
+    "bio",
+    "created_at",
+    "updated_at"
+  ],
+  "DB_Profile_Legality": [
+    "id",
+    "category",
+    "name",
+    "issuer_partner",
+    "doc_number",
+    "validity_period",
+    "status",
+    "file_url",
+    "order_index",
+    "created_at",
+    "updated_at"
+  ],
+  "DB_Profile_Mitra_Syiar": [
+    "id",
+    "name",
+    "title_institution",
+    "role_label",
+    "region",
+    "city",
+    "sk_number",
+    "phone_wa",
+    "photo_url",
+    "status",
+    "order_index",
+    "created_at",
+    "updated_at"
   ]
 };
 
@@ -964,6 +1039,178 @@ function setupUsersAndRbacSheets() {
   Logger.log("=== SETUP SHEET DB_Users & DB_Role_Permissions SELESAI ===");
 }
 
+/**
+ * Setup dan standardisasi skema 5 Sheet Profil Lembaga:
+ * 1. DB_Profile_Institution (Visi, Misi, Kredensial, Sejarah, Direksi)
+ * 2. DB_Profile_Director (Foto, Sambutan, Quote, 4 Pilar Keunggulan)
+ * 3. DB_Profile_Guides (Dewan Pembimbing, Asatidz, Muthawwif, Tim Medis)
+ * 4. DB_Profile_Legality (SK PPIU Kemenag, Akreditasi, Kemenkumham, MOU Kemitraan)
+ * 5. DB_Profile_Mitra_Syiar (Jaringan Koordinator Mitra Syiar & Cabang Daerah)
+ */
+function setupProfileSheets() {
+  Logger.log("=== MEMULAI SETUP SHEET PROFIL LEMBAGA & MITRA SYIAR ===");
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (!ss) return;
+
+  var nowStr = new Date().toISOString();
+
+  // Helper local untuk memastikan sheet dan header canonical
+  function getOrInitProfileSheet(sheetName) {
+    var canonical = AUTHORITATIVE_SCHEMAS_[sheetName];
+    var sh = ss.getSheetByName(sheetName);
+    if (!sh) {
+      sh = ss.insertSheet(sheetName);
+      sh.getRange(1, 1, 1, canonical.length).setValues([canonical]);
+      sh.setFrozenRows(1);
+      sh.getRange(1, 1, 1, canonical.length)
+        .setBackground("#0F3D2E")
+        .setFontColor("#FFFFFF")
+        .setFontWeight("bold");
+      Logger.log("✓ Sheet " + sheetName + " berhasil dibuat.");
+    } else {
+      ensureHeadersMatch_(sh, canonical);
+    }
+    return { sheet: sh, canonical: canonical };
+  }
+
+  // 1. Setup DB_Profile_Institution
+  var inst = getOrInitProfileSheet("DB_Profile_Institution");
+  if (inst.sheet.getLastRow() <= 1) {
+    var defaultMisi = JSON.stringify([
+      "Menyelenggarakan perjalanan umroh dengan kepastian seat pesawat, kepastian jadwal, dan kepastian hotel bintang 5.",
+      "Menyediakan akomodasi hotel bintang 5 di pelataran utama Masjidil Haram dan Masjid Nabawi.",
+      "Memberikan bimbingan manasik komprehensif, bersanad, dan intensif oleh asatidz alumni Timur Tengah.",
+      "Menerapkan transparansi finansial dan perlindungan jamaah tanpa biaya tersembunyi melalui rekening escrow BSI.",
+      "Memanfaatkan ekosistem teknologi modern (One Journey, One Platform) untuk memonitor jadwal dan panduan ibadah."
+    ]);
+
+    var defaultTimeline = JSON.stringify([
+      { phase: "Fase 1 (2018 - 2020)", title: "Perintisan & Komitmen Khidmat", desc: "Berawal dari inisiatif kelompok bimbingan manasik alumni Timur Tengah yang berdedikasi melayani jamaah dengan transparansi biaya dan bimbingan intensif." },
+      { phase: "Fase 2 (2021 - 2023)", title: "Pengukuhan Badan Hukum & Lisensi", desc: "Transformasi menjadi perseroan resmi PT Sahabat Dhuha Wisata, penataan SOP operasional, serta pengajuan izin resmi PPIU Kemenag RI." },
+      { phase: "Fase 3 (2024 - 2025)", title: "Akreditasi A & Kemitraan Strategis", desc: "Meraih predikat Akreditasi A Unggul, penguncian kontrak jangka panjang dengan Saudia & Garuda Indonesia, serta hotel pelataran Haramain." },
+      { phase: "Fase 4 (2026 - Sekarang)", title: "Ekosistem Digital One Journey", desc: "Peluncuran platform digital terpadu PWA SDW Umroh, portal manajemen kloter real-time, dan bimbingan ibadah mandiri bersanad." }
+    ]);
+
+    var defaultDireksi = JSON.stringify([
+      { role: "Direktur Utama", name: "H. Muhammad Syarif", title: "Direktur Utama PT Sahabat Dhuha Wisata", photo: "assets/direktur-utama.jpg" },
+      { role: "Direktur Keuangan", name: "Hj. Siti Rahmawati, S.E.", title: "Direktur Keuangan & Kustodian Escrow", photo: "assets/hero-muthawwif.png" },
+      { role: "Direktur Bimbingan Ibadah", name: "Ust. H. Ahmad Fauzan, Lc., M.Ag.", title: "Ketua Dewan Pembimbing Syariah", photo: "assets/hero-muthawwif.png" },
+      { role: "Direktur Operasional", name: "H. Bambang Irawan, S.T.", title: "Direktur Operasional & Pelayanan Haramain", photo: "assets/hero-muthawwif.png" }
+    ]);
+
+    var seedInst = [
+      [
+        "PRF-INST-000001",
+        "U.123/2026",
+        "2026",
+        "Peringkat A (Unggul)",
+        "Lembaga Sertifikasi Umroh Mandiri",
+        "PT Sahabat Dhuha Wisata",
+        "AHU-0012938.AH.01.01.TAHUN 2026",
+        "AMPHURI & IATA",
+        "ID: 15-4-9981 / Asosiasi PPIU Resmi",
+        "Menjadi biro perjalanan ibadah umroh dan haji khusus terdepan di Indonesia yang amanah, profesional, dan berkhidmat melayani jamaah dengan standar kenyamanan hotel pelataran ring-1 serta bimbingan ibadah bersanad yang menenteramkan kalbu.",
+        defaultMisi,
+        defaultTimeline,
+        defaultDireksi,
+        nowStr,
+        "SYSTEM_INIT"
+      ]
+    ];
+    inst.sheet.getRange(2, 1, seedInst.length, inst.canonical.length).setValues(seedInst);
+  }
+  inst.sheet.autoResizeColumns(1, inst.canonical.length);
+
+  // 2. Setup DB_Profile_Director
+  var dir = getOrInitProfileSheet("DB_Profile_Director");
+  if (dir.sheet.getLastRow() <= 1) {
+    var defaultParagraphs = JSON.stringify([
+      "Assalamu’alaikum Warahmatullahi Wabarakatuh. Segala puji bagi Allah SWT, Tuhan semesta alam, yang telah memanggil hamba-hamba pilihan-Nya untuk berziarah ke Baitullah Al-Haram di Makkah Al-Mukarramah dan berziarah ke makam baginda Rasulullah SAW di Madinah Al-Munawwarah.",
+      "Menjadi pelayan bagi Dhuyufurrahman (Tamu-Tamu Allah) adalah sebuah kehormatan agung sekaligus amanah yang sangat berat di hadapan Allah SWT. Oleh karena itu, sejak pertama kali PT Sahabat Dhuha Wisata (SDW UMROH) didirikan, kami meletakkan satu komitmen mendasar: Kepastian Fasilitas, Transparansi Biaya, dan Kemurnian Ibadah Sesuai Tuntunan Sunnah.",
+      "Kami memahami betapa berharganya setiap tetes keringat dan doa yang dipanjatkan para jamaah untuk mengumpulkan bekal menuju Baitullah. Banyak di antara kita yang menanti bertahun-tahun untuk dapat bersujud di depan Ka'bah. Karena itu, kami tidak akan pernah berkompromi dengan mutu pelayanan. Kami mengunci kontrak hotel-hotel terbaik yang berjarak dekat dengan pelataran masjid, menggunakan maskapai penerbangan direct tanpa transit berlebih, dan mendampingkan asatidz pembimbing bersanad yang siap membimbing langkah demi langkah ibadah Anda.",
+      "Melalui platform digital dan aplikasi PWA SDW UMROH ini, kami berupaya menghadirkan kemudahan terpadu bagi keluarga jamaah: mulai dari kemudahan pendaftaran, pengecekan tabungan, jadwal manasik berkala, panduan doa offline, hingga pantauan kloter secara transparan.",
+      "Semoga Allah SWT meridhai setiap niat suci kita, menganugerahi kemudahan dalam perjalanan, dan menyambut kepulangan Bapak/Ibu sekalian dengan predikat umroh yang maqbullah dan mabrurah. Aamiin Ya Rabbal ‘Alamin."
+    ]);
+
+    var defaultPillars = JSON.stringify([
+      { title: "Bimbingan Manasik Bersanad", desc: "Didampingi asatidz alumni Timur Tengah dengan sanad keilmuan muttasil.", icon: "fa-book-quran" },
+      { title: "Hotel Bintang 5 Pelataran", desc: "Retaj Al Rayyan & Concorde Dar Al Khair berjarak jalan kaki dekat.", icon: "fa-hotel" },
+      { title: "Penerbangan Direct Saudia", desc: "Pasti terbang tanpa transit berlebih dengan jatah bagasi 2x23kg.", icon: "fa-plane-departure" },
+      { title: "Rasio Khidmat 1 : 35", desc: "Pendampingan intensif menjamin perhatian personal bagi lansia.", icon: "fa-users" }
+    ]);
+
+    var seedDir = [
+      [
+        "PRF-DIR-000001",
+        "H. Muhammad Syarif",
+        "Direktur Utama PT Sahabat Dhuha Wisata",
+        "Badan Verifikasi Lisensi Resmi",
+        "assets/direktur-utama.jpg",
+        "Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia",
+        "Komitmen Pimpinan PT Sahabat Dhuha Wisata untuk Perjalanan Ibadah yang Amanah, Khidmat & Menenteramkan.",
+        "Di SDW UMROH, kami memandang perjalanan ke Baitullah bukan sekadar perniagaan tiket dan hotel, melainkan sebuah amanah suci yang agung. Setiap tetes keringat tabungan jamaah kami jaga dengan kepastian fasilitas, transparansi penuh tanpa biaya siluman, dan bimbingan manasik bersanad yang menenteramkan kalbu.",
+        defaultParagraphs,
+        defaultPillars,
+        true,
+        nowStr,
+        "SYSTEM_INIT"
+      ]
+    ];
+    dir.sheet.getRange(2, 1, seedDir.length, dir.canonical.length).setValues(seedDir);
+  }
+  dir.sheet.autoResizeColumns(1, dir.canonical.length);
+
+  // 3. Setup DB_Profile_Guides
+  var gd = getOrInitProfileSheet("DB_Profile_Guides");
+  if (gd.sheet.getLastRow() <= 1) {
+    var seedGuides = [
+      ["GD-000001", "Ust. H. Ahmad Fauzan, Lc., M.Ag.", "Ketua Dewan Pembimbing Syariah & Muthawwif Utama", "MANASIK", "Alumni Universitas Islam Madinah (Fakultas Syariah)", "12 Tahun", "AKTIF", "assets/hero-muthawwif.png", 1, true, "Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW dengan sabar, santun, dan menentramkan.", nowStr, nowStr],
+      ["GD-000002", "Ust. Muhammad Ridwan, Lc.", "Muthawwif Senior Makkah", "MAKKAH", "Al-Azhar University, Cairo", "8 Tahun", "AKTIF", "assets/hero-muthawwif.png", 2, false, "Spesialis bimbingan tawaf, sa'i, dan qiyamullail di pelataran Ka'bah dengan sanad bacaan doa ma'tsurat.", nowStr, nowStr],
+      ["GD-000003", "Ust. Dr. H. Syarif Hidayat, M.A.", "Muthawwif Senior Madinah & Ziarah Rawdah", "MADINAH", "Universitas Islam Madinah (S2 Ushul Fiqh)", "10 Tahun", "AKTIF", "assets/hero-muthawwif.png", 3, false, "Menguasai tata kelola perizinan Tasreh Rawdah Syarifah dan sejarah sirah nabawiyah di Kota Madinah.", nowStr, nowStr],
+      ["GD-000004", "dr. H. Farhan Zulkarnain, Sp.PD", "Koordinator Tim Medis Kloter", "MEDIS", "FK Universitas Indonesia (Spesialis Penyakit Dalam)", "7 Tahun", "AKTIF", "assets/hero-muthawwif.png", 4, false, "Dokter spesialis pendamping kloter yang siaga 24 jam memantau kesehatan jamaah risti dan lansia.", nowStr, nowStr],
+      ["GD-000005", "Ust. H. Abdullah Mansyur, Lc.", "Pembimbing Manasik Teori & Praktik", "MANASIK", "LIPIA Jakarta (Fakultas Syariah)", "9 Tahun", "AKTIF", "assets/hero-muthawwif.png", 5, false, "Instruktur manasik bersanad yang membimbing pemantapan fiqih umroh sejak di tanah air.", nowStr, nowStr],
+      ["GD-000006", "Ust. Ahmad Baehaqi, S.Th.I", "Muthawwif Ziarah Makkah & Madinah", "MAKKAH", "UIN Syarif Hidayatullah Jakarta", "6 Tahun", "AKTIF", "assets/hero-muthawwif.png", 6, false, "Muthawwif edukatif yang memandu napak tilas sejarah Jabal Nur, Jabal Tsur, dan Badar.", nowStr, nowStr],
+      ["GD-000007", "dr. Hj. Siti Maryam, Sp.KO", "Dokter Kloter & Konsultan Jamaah Lansia", "MEDIS", "FK Undip Semarang", "8 Tahun", "AKTIF", "assets/hero-muthawwif.png", 7, false, "Dokter pendamping medis spesialis kebugaran fisik jamaah selama rangkaian thawaf dan sa'i.", nowStr, nowStr]
+    ];
+    gd.sheet.getRange(2, 1, seedGuides.length, gd.canonical.length).setValues(seedGuides);
+  }
+  gd.sheet.autoResizeColumns(1, gd.canonical.length);
+
+  // 4. Setup DB_Profile_Legality
+  var leg = getOrInitProfileSheet("DB_Profile_Legality");
+  if (leg.sheet.getLastRow() <= 1) {
+    var seedLegality = [
+      ["LEG-000001", "LEGALITAS", "SK Izin PPIU Kementerian Agama RI", "Kementerian Agama Republik Indonesia", "No. 123 Tahun 2021", "Berlaku Aktif", "AKTIF", "assets/sk-ppiu.pdf", 1, nowStr, nowStr],
+      ["LEG-000002", "LEGALITAS", "Sertifikat Akreditasi A BAN-PPIU", "Badan Akreditasi Nasional PPIU", "SK-BAN-PPIU/098/2024", "2024 - 2029", "AKTIF", "assets/sertifikat-akreditasi.pdf", 2, nowStr, nowStr],
+      ["LEG-000003", "LEGALITAS", "SK Pengesahan Badan Hukum Perseroan", "Kementerian Hukum dan HAM RI", "AHU-0012938.AH.01.01.2021", "Berlaku Permanen", "AKTIF", "assets/sk-kemenkumham.pdf", 3, nowStr, nowStr],
+      ["LEG-000004", "LEGALITAS", "Nomor Pokok Wajib Pajak (NPWP Badan)", "Direktorat Jenderal Pajak RI", "01.234.567.8-012.000", "Terdaftar Valid", "AKTIF", "assets/npwp-badan.pdf", 4, nowStr, nowStr],
+      ["LEG-000005", "MITRA_STRATEGIS", "MOU Penerbangan Reguler & Charter", "Saudia Airlines (SV) & Garuda Indonesia", "MOU-SDW-AIR/2024-001", "Musim 1448H", "AKTIF", "assets/mou-saudia.pdf", 5, nowStr, nowStr],
+      ["LEG-000006", "MITRA_STRATEGIS", "Kustodian Rekening Escrow Penampungan", "Bank Syariah Indonesia (BSI)", "MOU-BSI-ESCROW/8812/2023", "2023 - 2028", "AKTIF", "assets/mou-bsi.pdf", 6, nowStr, nowStr],
+      ["LEG-000007", "MITRA_STRATEGIS", "Kontrak Jaringan Hotel Ring-1 Pelataran", "Retaj Al Rayyan & Concorde Dar Al Khair", "KTR-HOTEL-HARAMAIN/2025", "Kontrak Jangka Panjang", "AKTIF", "assets/kontrak-hotel.pdf", 7, nowStr, nowStr]
+    ];
+    leg.sheet.getRange(2, 1, seedLegality.length, leg.canonical.length).setValues(seedLegality);
+  }
+  leg.sheet.autoResizeColumns(1, leg.canonical.length);
+
+  // 5. Setup DB_Profile_Mitra_Syiar
+  var mtr = getOrInitProfileSheet("DB_Profile_Mitra_Syiar");
+  if (mtr.sheet.getLastRow() <= 1) {
+    var seedMitra = [
+      ["MTR-000001", "H. M. Zaini Dahlan", "Majelis Ibadah Barakah", "Korda Surabaya", "Jawa Timur", "Kota Surabaya", "SK-SDW/MTR-SBY/2024", "6281234567891", "assets/direktur-utama.jpg", "AKTIF", 1, nowStr, nowStr],
+      ["MTR-000002", "Ust. Asep Saepudin, M.Pd.", "Pondok Tahfidz Al-Hidayah", "Mitra Bandung", "Jawa Barat", "Kota Bandung", "SK-SDW/MTR-BDG/2024", "6281234567892", "assets/direktur-utama.jpg", "AKTIF", 2, nowStr, nowStr],
+      ["MTR-000003", "H. Nuruddin, Lc.", "Kantor Wilayah Sulawesi Selatan", "Cabang Makassar", "Sulawesi Selatan", "Kota Makassar", "SK-SDW/CAB-MKS/2023", "6281234567893", "assets/direktur-utama.jpg", "AKTIF", 3, nowStr, nowStr],
+      ["MTR-000004", "Ust. H. Farhan Ramadhan", "Korda Khusus Jabodetabek", "Korda Jakarta", "DKI Jakarta", "Jakarta Selatan", "SK-SDW/MTR-JKT/2024", "6281234567894", "assets/direktur-utama.jpg", "AKTIF", 4, nowStr, nowStr],
+      ["MTR-000005", "H. Irfan Fauzi, S.E.", "Kantor Cabang Resmi Semarang", "Cabang Semarang", "Jawa Tengah", "Kota Semarang", "SK-SDW/CAB-SMG/2023", "6281234567895", "assets/direktur-utama.jpg", "AKTIF", 5, nowStr, nowStr],
+      ["MTR-000006", "Hj. Fatimah Azzahra", "Komunitas Hijrah Mulia", "Mitra Sidoarjo", "Jawa Timur", "Kab. Sidoarjo", "SK-SDW/MTR-SDA/2024", "6281234567896", "assets/direktur-utama.jpg", "AKTIF", 6, nowStr, nowStr]
+    ];
+    mtr.sheet.getRange(2, 1, seedMitra.length, mtr.canonical.length).setValues(seedMitra);
+  }
+  mtr.sheet.autoResizeColumns(1, mtr.canonical.length);
+
+  Logger.log("✓ 5 Sheet Profil Lembaga & Mitra Syiar berhasil disinkronkan.");
+  Logger.log("=== SETUP SHEET PROFIL LEMBAGA & MITRA SYIAR SELESAI ===");
+}
+
 // ============================================================
 // MAIN ENTRY POINT
 // ============================================================
@@ -985,7 +1232,7 @@ function initializeSdwUmrohInfrastructure() {
     Logger.log("Semua 22 master sheet sudah ada. Memeriksa konsistensi kolom skema...");
   }
 
-  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, faq, kontak, piagam badal, pengguna, dan RBAC selalu ter-update ke standar resmi terbaru
+  // Pastikan skema kolom paket, kloter, hotel, galeri, artikel, ziarah, maskapai, bandara, faq, kontak, piagam badal, pengguna, profil, dan RBAC selalu ter-update ke standar resmi terbaru
   setupPackagesCatalogSheet();
   setupDeparturesCatalogSheet();
   setupHotelsSheet();
@@ -995,10 +1242,11 @@ function initializeSdwUmrohInfrastructure() {
   setupFaqAndHelpdeskSheets();
   setupBadalCertificatesSheet();
   setupUsersAndRbacSheets();
+  setupProfileSheets();
 
   Logger.log("=== SDW UMROH STEP INITIALIZATION COMPLETE ===");
   return {
     success: true,
-    message: "22 Master Sheet SDW UMROH berhasil divalidasi dan diinisialisasi."
+    message: "Master Sheet SDW UMROH (termasuk 5 Sheet Profil & Mitra) berhasil divalidasi dan diinisialisasi."
   };
 }

@@ -33,6 +33,11 @@ Dokumen ini mendefinisikan struktur 22 sheet Google Spreadsheet yang berfungsi s
 | 20 | `DB_Announcements` | Siaran & Pengumuman | `ANN-000001` | Broadcast info untuk jamaah/staf | 
 | 21 | `DB_Notifications` | Notifikasi Pengguna | `NTF-000001` | Notifikasi in-app / push alert | 
 | 22 | `DB_Audit_Logs` | Jejak Audit Sistem | `AUD-000001` | Log jejak kepatuhan, mutasi, dan aktor | 
+| 23 | `DB_Profile_Institution` | Profil Lembaga & Identitas | `PRF-INST-000001` | Metrik kredensial lembaga, visi, butir misi operasional, lini masa tonggak sejarah, dan dewan direksi | 
+| 24 | `DB_Profile_Director` | Sambutan Pimpinan | `PRF-DIR-000001` | Identitas, foto resmi, headline, subheadline, kutipan emas, naskah sambutan lengkap, dan 4 pilar keunggulan | 
+| 25 | `DB_Profile_Guides` | Dewan Pembimbing & Muthawwif | `GD-000001` | Pembimbing utama syariah, rasio pembimbing, katalog asatidz, muthawwif senior, dan tim medis kloter | 
+| 26 | `DB_Profile_Legality` | Legalitas & MOU Kemitraan | `LEG-000001` | Izin operasional PPIU Kemenag, sertifikat akreditasi BAN-PPIU, SK Kemenkumham, MOU maskapai & bank syariah | 
+| 27 | `DB_Profile_Mitra_Syiar` | Jaringan Mitra & Cabang | `MTR-000001` | Koordinator mitra syiar daerah, pondok pesantren, majelis ta'lim, dan perwakilan cabang resmi | 
 
 ## 2. DETAIL HEADER & ATRIBUT PER SHEET
 
@@ -185,3 +190,89 @@ Dokumen ini mendefinisikan struktur 22 sheet Google Spreadsheet yang berfungsi s
 * **Columns:** `id`, `timestamp`, `actor`, `action`, `entity`, `entity_id`, `before`, `after`, `reason`
 
 * **Rule:** Log ini bersifat *append-only* (tidak boleh diedit/dihapus oleh operasi aplikasi).
+
+### `DB_Profile_Institution`
+
+* **Primary Key:** `PRF-INST-000001`
+* **Columns (15 Kolom):**
+  1. `id` — Primary Key (contoh: `PRF-INST-000001`)
+  2. `ppiu_no` — Nomor Izin Resmi PPIU Kemenag (contoh: `U.123/2026`)
+  3. `ppiu_year` — Tahun Lisensi PPIU (contoh: `2026`)
+  4. `akreditasi_grade` — Peringkat Akreditasi (contoh: `Peringkat A (Unggul)`)
+  5. `akreditasi_org` — Badan Penilai Akreditasi (contoh: `Lembaga Sertifikasi Umroh Mandiri`)
+  6. `legal_name` — Nama Badan Hukum Perseroan (contoh: `PT Sahabat Dhuha Wisata`)
+  7. `legal_sk` — Nomor SK Kemenkumham RI (contoh: `AHU-0012938.AH.01.01.TAHUN 2026`)
+  8. `afiliasi_name` — Asosiasi & Afiliasi Resmi (contoh: `AMPHURI & IATA`)
+  9. `afiliasi_detail` — Nomor ID Keanggotaan Asosiasi
+  10. `visi` — Rumusan Teks Visi Resmi Lembaga
+  11. `misi_json` — Array JSON Butir Misi Operasional Lembaga
+  12. `timeline_json` — Array JSON Lini Masa Tonggak Sejarah (4 Fase)
+  13. `direksi_json` — Array JSON Dewan Direksi & Manajemen Perseroan
+  14. `updated_at` — Waktu Pembaruan Terakhir (ISO 8601)
+  15. `updated_by` — Nama / Peran Aktor Pembaru
+
+### `DB_Profile_Director`
+
+* **Primary Key:** `PRF-DIR-000001`
+* **Columns (12 Kolom):**
+  1. `id` — Primary Key (contoh: `PRF-DIR-000001`)
+  2. `name` — Nama Lengkap & Gelar Pimpinan (contoh: `H. Muhammad Syarif`)
+  3. `role` — Jabatan Struktural Resmi (contoh: `Direktur Utama PT Sahabat Dhuha Wisata`)
+  4. `license_badge` — Lencana Verifikasi Lisensi (contoh: `Badan Verifikasi Lisensi Resmi`)
+  5. `photo_url` — URL / Path Foto Portrait Resmi Pimpinan
+  6. `headline` — Judul / Headline Naskah Sambutan
+  7. `subheadline` — Sub-headline Narasi Komitmen
+  8. `quote` — Kutipan Emas (Gold Quote) Pimpinan
+  9. `paragraphs_json` — Array JSON Paragraf Naskah Sambutan Lengkap
+  10. `pillars_json` — Array JSON 4 Pilar Keunggulan Khidmat
+  11. `show_on_home` — Boolean (TRUE / FALSE) Tampil di Halaman Beranda Utama
+  12. `updated_at` — Waktu Pembaruan Terakhir
+
+### `DB_Profile_Guides`
+
+* **Primary Key:** `GD-000001`
+* **Columns (12 Kolom):**
+  1. `id` — Primary Key (contoh: `GD-000001`)
+  2. `name` — Nama Lengkap & Gelar Keagamaan
+  3. `role` — Peran / Penugasan Syariah
+  4. `category` — Kategori Penugasan (`MAKKAH`, `MADINAH`, `MEDIS`, `MANASIK`)
+  5. `alma_mater` — Almamater / Basis Keilmuan
+  6. `experience` — Pengalaman Bertugas (contoh: `8 Tahun`)
+  7. `status` — Status Keaktifan (`AKTIF`, `CUTI`, `INAKTIF`)
+  8. `photo_url` — URL / Path Foto Profil Personil
+  9. `order_index` — Urutan Tampil
+  10. `lead_advisor_flag` — Boolean penanda Pembimbing Utama (Penasihat Syariah)
+  11. `bio` — Biografi Khidmat Singkat
+  12. `updated_at` — Waktu Pembaruan Terakhir
+
+### `DB_Profile_Legality`
+
+* **Primary Key:** `LEG-000001`
+* **Columns (10 Kolom):**
+  1. `id` — Primary Key (contoh: `LEG-000001`)
+  2. `category` — Kategori (`LEGALITAS`, `MITRA_STRATEGIS`)
+  3. `name` — Nama Dokumen / Kerjasama Mitra
+  4. `issuer_partner` — Instansi Penerbit / Nama Mitra Korporat
+  5. `doc_number` — Nomor Surat Keputusan / Nomor Kontrak MOU
+  6. `validity_period` — Masa Berlaku Dokumen
+  7. `status` — Status Dokumen (`AKTIF`, `DALAM_PEMBARUAN`, `BERAKHIR`)
+  8. `file_url` — Tautan Berkas / Dokumen PDF atau Gambar
+  9. `order_index` — Urutan Tampil
+  10. `updated_at` — Waktu Pembaruan Terakhir
+
+### `DB_Profile_Mitra_Syiar`
+
+* **Primary Key:** `MTR-000001`
+* **Columns (12 Kolom):**
+  1. `id` — Primary Key (contoh: `MTR-000001`)
+  2. `name` — Nama Koordinator / Tokoh Mitra Syiar
+  3. `title_institution` — Nama Lembaga / Majelis / Cabang Daerah
+  4. `role_label` — Label Jabatan (contoh: `Korda Surabaya`, `Cabang Makassar`)
+  5. `region` — Wilayah Provinsi (`Jawa Timur`, `Jawa Barat`, `DKI Jakarta`, `Sulawesi Selatan`, `Jawa Tengah`, dll.)
+  6. `city` — Kota / Kabupaten Operasional
+  7. `sk_number` — Nomor Surat Keputusan Penugasan Resmi SDW
+  8. `phone_wa` — Nomor Kontak WhatsApp Resmi
+  9. `photo_url` — URL / Path Foto Mitra (Rasio 1:1 Persegi)
+  10. `status` — Status Keaktifan (`AKTIF`, `INAKTIF`)
+  11. `order_index` — Urutan Tampil pada Slider & Direktori
+  12. `updated_at` — Waktu Pembaruan Terakhir

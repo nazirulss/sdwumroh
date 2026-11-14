@@ -617,6 +617,7 @@
         if (!admin.profileGuidesData) admin.profileGuidesData = { guides: [] };
         if (!Array.isArray(admin.profileGuidesData.guides)) admin.profileGuidesData.guides = [];
 
+        let targetId = id;
         if (id) {
             const existing = admin.profileGuidesData.guides.find(g => g.id === id);
             if (existing) {
@@ -628,9 +629,9 @@
                 if (photo) existing.photo = photo;
             }
         } else {
-            const newId = `GD-${(admin.profileGuidesData.guides.length + 1).toString().padStart(3, '0')}`;
+            targetId = `GD-${(admin.profileGuidesData.guides.length + 1).toString().padStart(3, '0')}`;
             admin.profileGuidesData.guides.push({
-                id: newId,
+                id: targetId,
                 name,
                 role,
                 university,
@@ -638,6 +639,14 @@
                 status,
                 photo: photo || 'assets/direktur-utama.jpg'
             });
+        }
+
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_GUIDES, admin.profileGuidesData);
+        }
+        const savedGuide = admin.profileGuidesData.guides.find(g => g.id === targetId);
+        if (typeof admin.enqueueMutation === 'function' && savedGuide) {
+            admin.enqueueMutation('saveProfileGuide', savedGuide, 'DB_Profile_Guides', savedGuide.id);
         }
 
         const modal = document.getElementById('modalGuideForm');
@@ -656,6 +665,12 @@
         if (!confirm('Apakah Anda yakin ingin menghapus data personil ini?')) return;
         if (!admin.profileGuidesData || !Array.isArray(admin.profileGuidesData.guides)) return;
         admin.profileGuidesData.guides = admin.profileGuidesData.guides.filter(g => g.id !== guideId);
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_GUIDES, admin.profileGuidesData);
+        }
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('deleteProfileGuide', { id: guideId }, 'DB_Profile_Guides', guideId);
+        }
         renderGuidesTable();
         if (typeof admin.showToast === 'function') {
             admin.showToast('Data personil berhasil dihapus.');
@@ -748,6 +763,7 @@
         if (!admin.profileLegalityData) admin.profileLegalityData = { documents: [], partners: [] };
         if (!Array.isArray(admin.profileLegalityData.documents)) admin.profileLegalityData.documents = [];
 
+        let targetId = id;
         if (id) {
             const existing = admin.profileLegalityData.documents.find(d => d.id === id);
             if (existing) {
@@ -758,9 +774,9 @@
                 existing.status = status;
             }
         } else {
-            const newId = `LEG-${(admin.profileLegalityData.documents.length + 1).toString().padStart(3, '0')}`;
+            targetId = `LEG-${(admin.profileLegalityData.documents.length + 1).toString().padStart(3, '0')}`;
             admin.profileLegalityData.documents.push({
-                id: newId,
+                id: targetId,
                 title,
                 number,
                 issuer,
@@ -768,6 +784,14 @@
                 status,
                 type: 'Dokumen Perizinan Resmi'
             });
+        }
+
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        const savedDoc = admin.profileLegalityData.documents.find(d => d.id === targetId);
+        if (typeof admin.enqueueMutation === 'function' && savedDoc) {
+            admin.enqueueMutation('saveProfileLegalityDoc', savedDoc, 'DB_Profile_Legality', savedDoc.id);
         }
 
         const modal = document.getElementById('modalDocumentForm');
@@ -786,6 +810,12 @@
         if (!confirm('Apakah Anda yakin ingin menghapus dokumen ini?')) return;
         if (!admin.profileLegalityData || !Array.isArray(admin.profileLegalityData.documents)) return;
         admin.profileLegalityData.documents = admin.profileLegalityData.documents.filter(d => d.id !== docId);
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('deleteProfileLegalityDoc', { id: docId }, 'DB_Profile_Legality', docId);
+        }
         renderLegalityDocsTable();
         if (typeof admin.showToast === 'function') {
             admin.showToast('Dokumen izin berhasil dihapus.');
@@ -946,6 +976,7 @@
         if (!admin.profileLegalityData) admin.profileLegalityData = { documents: [], partners: [], mitra_syiar: [] };
         if (!Array.isArray(admin.profileLegalityData.mitra_syiar)) admin.profileLegalityData.mitra_syiar = [];
 
+        let targetId = id;
         if (id) {
             const existing = admin.profileLegalityData.mitra_syiar.find(m => m.id === id);
             if (existing) {
@@ -963,9 +994,9 @@
                 existing.photo = photo;
             }
         } else {
-            const newId = `MTR-${(admin.profileLegalityData.mitra_syiar.length + 1).toString().padStart(3, '0')}`;
+            targetId = `MTR-${(admin.profileLegalityData.mitra_syiar.length + 1).toString().padStart(3, '0')}`;
             admin.profileLegalityData.mitra_syiar.push({
-                id: newId,
+                id: targetId,
                 name,
                 institution,
                 category,
@@ -979,6 +1010,14 @@
                 jamaah_served,
                 photo
             });
+        }
+
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        const savedMitra = admin.profileLegalityData.mitra_syiar.find(m => m.id === targetId);
+        if (typeof admin.enqueueMutation === 'function' && savedMitra) {
+            admin.enqueueMutation('saveProfileMitraSyiar', savedMitra, 'DB_Profile_Mitra_Syiar', savedMitra.id);
         }
 
         const modal = document.getElementById('modalMitraSyiarForm');
@@ -997,6 +1036,12 @@
         if (!confirm('Apakah Anda yakin ingin menghapus data mitra syiar ini?')) return;
         if (!admin.profileLegalityData || !Array.isArray(admin.profileLegalityData.mitra_syiar)) return;
         admin.profileLegalityData.mitra_syiar = admin.profileLegalityData.mitra_syiar.filter(m => m.id !== mitraId);
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('deleteProfileMitraSyiar', { id: mitraId }, 'DB_Profile_Mitra_Syiar', mitraId);
+        }
         renderMitraSyiarTable();
         if (typeof admin.showToast === 'function') {
             admin.showToast('Data mitra syiar berhasil dihapus.');
@@ -1079,6 +1124,7 @@
         if (!admin.profileLegalityData) admin.profileLegalityData = { documents: [], partners: [] };
         if (!Array.isArray(admin.profileLegalityData.partners)) admin.profileLegalityData.partners = [];
 
+        let targetId = id;
         if (id) {
             const existing = admin.profileLegalityData.partners.find(p => p.id === id);
             if (existing) {
@@ -1088,15 +1134,31 @@
                 existing.status = status;
             }
         } else {
-            const newId = `PTR-${(admin.profileLegalityData.partners.length + 1).toString().padStart(3, '0')}`;
+            targetId = `PTR-${(admin.profileLegalityData.partners.length + 1).toString().padStart(3, '0')}`;
             admin.profileLegalityData.partners.push({
-                id: newId,
+                id: targetId,
                 name,
                 category,
                 role,
                 status,
                 logo: 'fa-handshake'
             });
+        }
+
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        const savedPartner = admin.profileLegalityData.partners.find(p => p.id === targetId);
+        if (typeof admin.enqueueMutation === 'function' && savedPartner) {
+            admin.enqueueMutation('saveProfileLegalityDoc', {
+                id: savedPartner.id,
+                title: savedPartner.name,
+                category: savedPartner.category,
+                issuer: savedPartner.role,
+                validity: savedPartner.status,
+                status: savedPartner.status,
+                type: 'Mitra Kerjasama (MOU)'
+            }, 'DB_Profile_Legality', savedPartner.id);
         }
 
         const modal = document.getElementById('modalPartnerForm');
@@ -1115,6 +1177,12 @@
         if (!confirm('Apakah Anda yakin ingin menghapus data mitra ini?')) return;
         if (!admin.profileLegalityData || !Array.isArray(admin.profileLegalityData.partners)) return;
         admin.profileLegalityData.partners = admin.profileLegalityData.partners.filter(p => p.id !== partnerId);
+        if (typeof admin.persistStorage === 'function') {
+            admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('deleteProfileLegalityDoc', { id: partnerId }, 'DB_Profile_Legality', partnerId);
+        }
         renderPartnersTable();
         if (typeof admin.showToast === 'function') {
             admin.showToast('Data mitra kerjasama berhasil dihapus.');
@@ -1222,6 +1290,24 @@
         // 4. Gather Subtab 4: Legality
         if (admin.profileLegalityData && typeof admin.persistStorage === 'function') {
             admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+        }
+
+        // Dual-persistence: Enqueue batch mutation and trigger cloud sync
+        const profilePayload = {
+            institution: admin.profileInstitutionData,
+            director: admin.profileDirectorData,
+            guides: admin.profileGuidesData,
+            legality: admin.profileLegalityData
+        };
+
+        if (typeof admin.enqueueMutation === 'function') {
+            admin.enqueueMutation('saveAllProfileData', profilePayload, 'DB_Profile_Institution', 'PRF-ALL');
+        }
+
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+            SDW_API.post('saveAllProfileData', profilePayload).catch(function(err) {
+                console.warn('[SDW_PROFILE] Background cloud save error:', err);
+            });
         }
 
         if (typeof admin.showToast === 'function') {

@@ -88,11 +88,12 @@
         admin.showToast('⏳ Menarik data live terbaru dari Google Spreadsheet...');
 
         try {
-            const [leadsRes, regsRes, paysRes, manifestRes] = await Promise.allSettled([
+            const [leadsRes, regsRes, paysRes, manifestRes, profileRes] = await Promise.allSettled([
                 SDW_API.get('getLeads'),
                 SDW_API.get('getRegistrations'),
                 SDW_API.get('getPayments'),
-                SDW_API.get('getManifest')
+                SDW_API.get('getManifest'),
+                SDW_API.get('getAllProfileData')
             ]);
 
             let pulledCount = 0;
@@ -123,6 +124,30 @@
                 }
             }
 
+            if (profileRes.status === 'fulfilled' && profileRes.value && profileRes.value.success && profileRes.value.data) {
+                const pData = profileRes.value.data;
+                if (pData.institution) {
+                    admin.profileInstitutionData = pData.institution;
+                    admin.persistStorage(admin.STORAGE_KEYS.PROFILE_INSTITUTION, admin.profileInstitutionData);
+                    pulledCount += 1;
+                }
+                if (pData.director) {
+                    admin.profileDirectorData = pData.director;
+                    admin.persistStorage(admin.STORAGE_KEYS.PROFILE_DIRECTOR, admin.profileDirectorData);
+                    pulledCount += 1;
+                }
+                if (pData.guides) {
+                    admin.profileGuidesData = pData.guides;
+                    admin.persistStorage(admin.STORAGE_KEYS.PROFILE_GUIDES, admin.profileGuidesData);
+                    pulledCount += 1;
+                }
+                if (pData.legality) {
+                    admin.profileLegalityData = pData.legality;
+                    admin.persistStorage(admin.STORAGE_KEYS.PROFILE_LEGALITY, admin.profileLegalityData);
+                    pulledCount += 1;
+                }
+            }
+
             const nowIso = new Date().toISOString();
             admin.lastSyncTimestamp = nowIso;
             admin.persistStorage(admin.STORAGE_KEYS.LAST_SYNC, admin.lastSyncTimestamp);
@@ -133,6 +158,7 @@
             if (typeof admin.renderFinance === 'function') admin.renderFinance();
             if (typeof admin.renderOperations === 'function') admin.renderOperations();
             if (typeof admin.renderCertificates === 'function') admin.renderCertificates();
+            if (typeof admin.renderProfileManagement === 'function' && admin.currentTab === 'tab-profile') admin.renderProfileManagement();
 
             admin.showToast(`✅ Berhasil menarik ${pulledCount} entri live dari Google Spreadsheet!`);
             console.info(`[SDW_SYNC] pullCloudDatabase selesai. Total entri termuat: ${pulledCount}`);
