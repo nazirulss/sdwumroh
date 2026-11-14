@@ -2894,6 +2894,26 @@
     }
   };
 
+  // ==================== APP PROFILE INSTITUTION MODAL (4-PILLAR EMBED) ====================
+  window.openAppProfileModal = function (options = { syncHistory: true }) {
+    const modal = document.getElementById('modalAppProfileSheet');
+    if (!modal) return;
+    modal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+    if (options && options.syncHistory && typeof syncUrlView === 'function') {
+      syncUrlView('profil-lembaga');
+    }
+  };
+
+  window.closeAppProfileModal = function (options = { syncHistory: true }) {
+    const modal = document.getElementById('modalAppProfileSheet');
+    if (modal) modal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+    if (options && options.syncHistory && typeof clearUrlView === 'function') {
+      clearUrlView();
+    }
+  };
+
   // ==================== IN-APP ROUTER & URL HISTORY SYNC ENGINE ====================
   function syncUrlView(viewName) {
     if (typeof window === 'undefined' || !window.history || !window.history.pushState) return;
@@ -2943,7 +2963,8 @@
     'wartaDetailModal',
     'ibadahHubModal',
     'settingsModal',
-    'notificationModal'
+    'notificationModal',
+    'modalAppProfileSheet'
   ];
 
   const IN_APP_SUBVIEW_NAMES = ['paket', 'booking', 'hotel', 'koper', 'kiblat', 'ziarah', 'galeri', 'sertifikat', 'ibadah', 'live', 'auth'];
@@ -3188,15 +3209,25 @@
     'calendar': (opts) => APP_VIEW_MAP['kalender'](opts),
     'agenda': (opts) => APP_VIEW_MAP['kalender'](opts),
 
-    'profil': (opts) => {
+    'akun': (opts) => {
       dismissSubViewsAndModals();
       if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.switchAppTab === 'function') {
         SDW_AUTH.switchAppTab('tab-profile', { syncUrl: false });
       }
     },
-    'profile': (opts) => APP_VIEW_MAP['profil'](opts),
-    'akun': (opts) => APP_VIEW_MAP['profil'](opts),
-    'account': (opts) => APP_VIEW_MAP['profil'](opts),
+    'account': (opts) => APP_VIEW_MAP['akun'](opts),
+    'profil': (opts) => APP_VIEW_MAP['akun'](opts),
+    'profile': (opts) => APP_VIEW_MAP['akun'](opts),
+
+    'profil-lembaga': (opts) => {
+      dismissSubViewsAndModals();
+      if (typeof window.openAppProfileModal === 'function') {
+        window.openAppProfileModal({ syncHistory: false });
+      }
+    },
+    'profil_lembaga': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
+    'lembaga': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
+    'tentang-kami': (opts) => APP_VIEW_MAP['profil-lembaga'](opts),
 
     // 3. Ibadah Super Hub Full-Screen SPA (Sesuai Konsep Asnawiyyah)
     'ibadah': (opts) => {

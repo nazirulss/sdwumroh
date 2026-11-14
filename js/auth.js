@@ -177,7 +177,7 @@
                 'tab-jamaah': 'beranda',
                 'tab-berita': 'berita',
                 'tab-kalender': 'kalender',
-                'tab-profile': 'profil'
+                'tab-profile': 'akun'
             };
             const viewName = tabViewMap[tabId];
             if (viewName === 'beranda') {

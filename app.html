@@ -142,7 +142,7 @@
 
                 <button type="button" data-perm-tab="tab-profile" onclick="SDW_AUTH.switchAppTab('tab-profile')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold text-sdw-charcoal hover:bg-slate-100 transition cursor-pointer text-left">
                     <i class="fa-solid fa-id-card text-sm text-sdw-gold w-5 text-center"></i>
-                    <span>Profil &amp; Kartu Jamaah</span>
+                    <span>Akun &amp; Kartu Jamaah</span>
                 </button>
 
                 <div class="pt-3 border-t border-slate-100 space-y-2">
@@ -284,13 +284,13 @@
                             <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Live Ka'bah</span>
                         </button>
 
-                        <!-- 8. CS Khidmat 24/7 -->
-                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20layanan%20jamaah." target="_blank" rel="noopener noreferrer" class="flex flex-col items-center text-center w-full group transition active:scale-95">
-                            <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300 border border-emerald-100/80">
-                                <i class="fa-brands fa-whatsapp text-2xl"></i>
+                        <!-- 8. Profil Lembaga (4 Pilar Web Publik) -->
+                        <button type="button" onclick="window.openAppProfileModal()" class="flex flex-col items-center text-center w-full group transition active:scale-95 cursor-pointer">
+                            <div class="w-12 h-12 bg-purple-50 text-sdw-pine rounded-2xl flex items-center justify-center text-xl shadow-xs group-hover:bg-sdw-pine group-hover:text-white transition-all duration-300 border border-purple-100/80">
+                                <i class="fa-solid fa-landmark text-xl"></i>
                             </div>
-                            <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">CS Khidmat</span>
-                        </a>
+                            <span class="text-[10.5px] mt-1.5 font-bold text-slate-700 text-center leading-tight block w-full">Profil</span>
+                        </button>
                     </div>
                 </div>
 
@@ -644,7 +644,7 @@
                         </div>
                         <div>
                             <div class="flex items-center gap-2">
-                                <h2 class="font-black text-sm sm:text-base text-sdw-pine">Profil &amp; Kartu Jamaah</h2>
+                                <h2 class="font-black text-sm sm:text-base text-sdw-pine">Akun &amp; Kartu Jamaah</h2>
                                 <span id="jamaah-badge-status" class="px-2 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">
                                     Aktif
                                 </span>
@@ -2990,6 +2990,134 @@
         </main>
     </div>
 
+    <!-- ==================== MODAL: PROFIL LEMBAGA PT SAHABAT DHUHA WISATA (4 PILAR WEB PUBLIK) ==================== -->
+    <div id="modalAppProfileSheet" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300">
+        <!-- Backdrop click listener -->
+        <div class="absolute inset-0" onclick="window.closeAppProfileModal()"></div>
+
+        <!-- Sheet Dialog Panel -->
+        <div class="relative w-full max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-purple-100 overflow-hidden max-h-[92vh] flex flex-col z-10 animate-in fade-in slide-in-from-bottom duration-300">
+            <!-- Header Modal -->
+            <div class="bg-gradient-to-r from-[#240833] via-[#3E165B] to-[#551C7A] text-white p-5 relative shrink-0">
+                <button type="button" onclick="window.closeAppProfileModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center transition cursor-pointer border border-white/20" aria-label="Tutup Profil">
+                    <i class="fa-solid fa-xmark text-sm"></i>
+                </button>
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-amber-400/20 text-amber-300 flex items-center justify-center text-2xl border border-amber-400/30 shrink-0">
+                        <i class="fa-solid fa-landmark"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[9.5px] font-black uppercase tracking-wider text-amber-300 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/30">Profil Lembaga</span>
+                            <span class="text-[9.5px] font-extrabold text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-full border border-emerald-400/30">Akreditasi A</span>
+                        </div>
+                        <h3 class="font-black text-base text-white mt-1 leading-snug">PT Sahabat Dhuha Wisata</h3>
+                        <p class="text-[11px] text-purple-200/90">Izin PPIU No. 123/2021 Kemenag RI &bull; One Journey, One Platform</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scrollable Content: 4 Pilar Profil -->
+            <div class="p-5 overflow-y-auto space-y-3 divide-y divide-slate-100">
+                <!-- Pengantar Singkat -->
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Mengenal lebih dekat ekosistem, legalitas, kepemimpinan, dan bimbingan ibadah terpercaya bersama PT Sahabat Dhuha Wisata:
+                </p>
+
+                <!-- Pilar 1: Profil & Visi Misi -->
+                <div class="pt-3">
+                    <a href="tentang.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">1. Profil &amp; Visi Misi Lembaga</h4>
+                                <p class="text-[11px] text-slate-500 line-clamp-1">Visi, misi, 5 nilai khidmat, rekam jejak &amp; fasilitas jamaah</p>
+                            </div>
+                        </div>
+                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Pilar 2: Sambutan Direktur -->
+                <div class="pt-3">
+                    <a href="sambutan.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">2. Sambutan Direktur Utama</h4>
+                                <p class="text-[11px] text-slate-500 line-clamp-1">Pesan resmi &amp; komitmen pimpinan H. Muhammad Syarif</p>
+                            </div>
+                        </div>
+                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Pilar 3: Dewan Pembimbing & Muthawwif -->
+                <div class="pt-3">
+                    <a href="muthawwif.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">3. Dewan Pembimbing &amp; Muthawwif</h4>
+                                <p class="text-[11px] text-slate-500 line-clamp-1">Asatidz pembimbing bersanad, rasio 1:35 &amp; tim medis kloter</p>
+                            </div>
+                        </div>
+                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Pilar 4: Legalitas & Jaringan Mitra -->
+                <div class="pt-3">
+                    <a href="legalitas.html" class="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/70 border border-slate-200/80 hover:border-purple-200 transition group cursor-pointer">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-xl bg-purple-100 text-sdw-pine group-hover:bg-sdw-pine group-hover:text-amber-300 flex items-center justify-center text-lg transition-colors shrink-0">
+                                <i class="fa-solid fa-certificate"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-bold text-slate-800 group-hover:text-sdw-pine transition">4. Legalitas &amp; Jaringan Mitra</h4>
+                                <p class="text-[11px] text-slate-500 line-clamp-1">Izin PPIU Kemenag, MOU maskapai, serta Jaringan Mitra Syiar</p>
+                            </div>
+                        </div>
+                        <div class="w-7 h-7 rounded-lg bg-white flex items-center justify-center text-slate-400 group-hover:text-sdw-pine group-hover:translate-x-0.5 transition shadow-2xs shrink-0">
+                            <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Banner Bantuan Layanan CS Khidmat 24/7 -->
+                <div class="pt-3">
+                    <div class="p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl shrink-0 shadow-xs">
+                                <i class="fa-brands fa-whatsapp"></i>
+                            </div>
+                            <div>
+                                <h5 class="text-xs font-black text-emerald-950">Bantuan &amp; Konsultasi (CS Khidmat)</h5>
+                                <p class="text-[10.5px] text-emerald-800">Konsultasi pendaftaran, paket, atau jadwal manasik</p>
+                            </div>
+                        </div>
+                        <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20butuh%20bantuan%20layanan%20jamaah." target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition active:scale-95 shrink-0">
+                            <span>Chat</span>
+                            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== NATIVE MOBILE BOTTOM NAVIGATION BAR (ASNAWIYYAH 5-TAB STYLE) ==================== -->
     <nav id="mobile-bottom-nav" class="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] pt-2 px-2 transition-transform duration-300">
         <div class="grid grid-cols-5 items-center text-center max-w-md mx-auto">
@@ -3025,12 +3153,12 @@
                 <span class="text-[9.5px] font-semibold mt-1">Kalender</span>
             </button>
 
-            <!-- 5. Profil (Kartu Jamaah & Pengaturan) -->
-            <button type="button" data-bottom-tab="tab-profile" onclick="SDW_AUTH.switchAppTab('tab-profile')" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer active:scale-95" aria-label="Profil Jamaah &amp; Kartu Digital">
+            <!-- 5. Akun (Kartu Jamaah & Pengaturan) -->
+            <button type="button" data-bottom-tab="tab-profile" onclick="SDW_AUTH.switchAppTab('tab-profile')" class="flex flex-col items-center justify-center py-1 transition group text-slate-500 hover:text-sdw-pine cursor-pointer active:scale-95" aria-label="Akun Jamaah &amp; Kartu Digital">
                 <div class="w-8 h-8 flex items-center justify-center rounded-xl transition text-slate-500 group-hover:text-sdw-pine group-hover:bg-purple-50">
                     <i class="fa-solid fa-circle-user text-sm"></i>
                 </div>
-                <span class="text-[9.5px] font-semibold mt-1">Profil</span>
+                <span class="text-[9.5px] font-semibold mt-1">Akun</span>
             </button>
         </div>
     </nav>
