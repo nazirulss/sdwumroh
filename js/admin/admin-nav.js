@@ -355,6 +355,160 @@
         renderDashboard();
     }
 
+    // Dataset Analitik Asnawiyyah Style untuk Visualisasi Dashboard
+    const DASHBOARD_CHART_DATA = {
+        '7D': {
+            badge: '7 Hari',
+            avgNote: 'Rata-rata 18 Pendaftaran/Hari',
+            bars: [
+                { label: '05-18', reg: 180, settled: 45, isActive: false },
+                { label: '05-19', reg: 210, settled: 55, isActive: false },
+                { label: '05-20', reg: 195, settled: 50, isActive: false },
+                { label: '05-21', reg: 260, settled: 70, isActive: true },
+                { label: '05-22', reg: 225, settled: 60, isActive: false },
+                { label: '05-23', reg: 190, settled: 48, isActive: false },
+                { label: '05-24', reg: 175, settled: 42, isActive: false }
+            ],
+            donut: { ready: 65.4, review: 23.1, pending: 11.5, overall: '98.5%' }
+        },
+        'TODAY': {
+            badge: 'Hari Ini',
+            avgNote: 'Rata-rata 6 Pendaftaran/Sesi',
+            bars: [
+                { label: '08:00', reg: 85, settled: 25, isActive: false },
+                { label: '10:00', reg: 140, settled: 45, isActive: false },
+                { label: '12:00', reg: 110, settled: 35, isActive: false },
+                { label: '14:00', reg: 240, settled: 65, isActive: true },
+                { label: '16:00', reg: 170, settled: 48, isActive: false },
+                { label: '18:00', reg: 130, settled: 38, isActive: false },
+                { label: '20:00', reg: 90, settled: 28, isActive: false }
+            ],
+            donut: { ready: 70.0, review: 20.0, pending: 10.0, overall: '99.0%' }
+        },
+        '30D': {
+            badge: '30 Hari',
+            avgNote: 'Rata-rata 72 Pendaftaran/Minggu',
+            bars: [
+                { label: 'Mgg 1', reg: 190, settled: 50, isActive: false },
+                { label: 'Mgg 2', reg: 240, settled: 65, isActive: false },
+                { label: 'Mgg 3', reg: 220, settled: 58, isActive: false },
+                { label: 'Mgg 4', reg: 280, settled: 75, isActive: true },
+                { label: 'Mgg 5', reg: 260, settled: 70, isActive: false },
+                { label: 'Mgg 6', reg: 230, settled: 62, isActive: false },
+                { label: 'Mgg 7', reg: 210, settled: 55, isActive: false }
+            ],
+            donut: { ready: 64.2, review: 24.3, pending: 11.5, overall: '98.2%' }
+        },
+        '90D': {
+            badge: '90 Hari',
+            avgNote: 'Rata-rata 260 Pendaftaran/Bulan',
+            bars: [
+                { label: 'Bln 1', reg: 210, settled: 55, isActive: false },
+                { label: 'Bln 2', reg: 270, settled: 72, isActive: false },
+                { label: 'Bln 3', reg: 250, settled: 68, isActive: true },
+                { label: 'Bln 4', reg: 310, settled: 85, isActive: false },
+                { label: 'Bln 5', reg: 280, settled: 75, isActive: false },
+                { label: 'Bln 6', reg: 240, settled: 65, isActive: false },
+                { label: 'Bln 7', reg: 220, settled: 60, isActive: false }
+            ],
+            donut: { ready: 62.0, review: 25.5, pending: 12.5, overall: '97.5%' }
+        },
+        'ALL': {
+            badge: 'Semua Data',
+            avgNote: 'Total Musim 1448H: 142 Jamaah Terdaftar',
+            bars: [
+                { label: '1445H', reg: 180, settled: 50, isActive: false },
+                { label: '1446H', reg: 230, settled: 65, isActive: false },
+                { label: '1447H', reg: 270, settled: 75, isActive: false },
+                { label: '1448H', reg: 340, settled: 90, isActive: true },
+                { label: 'Q1', reg: 280, settled: 76, isActive: false },
+                { label: 'Q2', reg: 260, settled: 70, isActive: false },
+                { label: 'Q3', reg: 290, settled: 80, isActive: false }
+            ],
+            donut: { ready: 65.4, review: 23.1, pending: 11.5, overall: '98.5%' }
+        }
+    };
+
+    function renderDashboardActivityChart(period) {
+        if (typeof document === 'undefined') return;
+        const currentPeriod = period || dashboardPeriod || '7D';
+        const data = DASHBOARD_CHART_DATA[currentPeriod] || DASHBOARD_CHART_DATA['7D'];
+
+        const badgeEl = document.getElementById('dashChartPeriodBadge');
+        if (badgeEl) badgeEl.innerText = data.badge;
+
+        const avgNoteEl = document.getElementById('dashChartAvgNote');
+        if (avgNoteEl) avgNoteEl.innerText = data.avgNote;
+
+        const container = document.getElementById('dashActivityBarsContainer');
+        if (!container) return;
+
+        const maxScale = 400;
+        const chartHeightPx = 145;
+
+        container.innerHTML = data.bars.map((item) => {
+            const rawHeight = Math.round((item.reg / maxScale) * chartHeightPx);
+            const heightPx = Math.max(28, Math.min(chartHeightPx, rawHeight));
+
+            return `
+                <div class="flex flex-col items-center group relative cursor-pointer" title="${item.label}: ${item.reg} Registrasi, ${item.settled} Pelunasan">
+                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-150 absolute -top-14 bg-slate-900/95 text-white text-[10px] py-1.5 px-2.5 rounded-xl pointer-events-none whitespace-nowrap shadow-xl z-30 flex flex-col gap-0.5">
+                        <div class="font-bold text-slate-300 border-b border-slate-700 pb-0.5">${item.label}</div>
+                        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-sky-400"></span> <strong>${item.reg}</strong> Registrasi</div>
+                        <div class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> <strong>${item.settled}</strong> Pelunasan</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-2xs -mb-2 z-10 group-hover:scale-125 transition-transform"></div>
+                        <div class="w-6 sm:w-7 bg-sky-400 group-hover:bg-sky-500 rounded-t-xl transition-all duration-300 shadow-2xs" style="height: ${heightPx}px;"></div>
+                    </div>
+                    <div class="mt-2 text-center">
+                        ${item.isActive 
+                            ? `<span class="px-1.5 py-0.5 rounded-md bg-sky-100 text-sky-700 font-extrabold text-[10.5px] border border-sky-200">${item.label}</span>`
+                            : `<span class="text-[10px] sm:text-[11px] font-semibold text-slate-400 group-hover:text-slate-700">${item.label}</span>`
+                        }
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderDashboardDonutChart(period) {
+        if (typeof document === 'undefined') return;
+        const currentPeriod = period || dashboardPeriod || '7D';
+        const data = DASHBOARD_CHART_DATA[currentPeriod] || DASHBOARD_CHART_DATA['7D'];
+        const donut = data.donut;
+
+        const centerPctEl = document.getElementById('dashDonutCenterPct');
+        const pctReadyEl = document.getElementById('dashPctReady');
+        const pctReviewEl = document.getElementById('dashPctReview');
+        const pctPendingEl = document.getElementById('dashPctPending');
+
+        if (centerPctEl) centerPctEl.innerText = donut.overall;
+        if (pctReadyEl) pctReadyEl.innerText = `${donut.ready}%`;
+        if (pctReviewEl) pctReviewEl.innerText = `${donut.review}%`;
+        if (pctPendingEl) pctPendingEl.innerText = `${donut.pending}%`;
+
+        const circumference = 389.56;
+        const orangeArc = document.getElementById('dashDonutArcOrange');
+        const cyanArc = document.getElementById('dashDonutArcCyan');
+
+        if (orangeArc) {
+            const orangeFraction = donut.review / 100;
+            const orangeDash = circumference * orangeFraction;
+            orangeArc.setAttribute('stroke-dasharray', `${orangeDash} ${circumference}`);
+            orangeArc.setAttribute('stroke-dashoffset', '0');
+        }
+
+        if (cyanArc) {
+            const cyanFraction = donut.ready / 100;
+            const cyanDash = circumference * cyanFraction;
+            const orangeFraction = donut.review / 100;
+            const offset = -(circumference * orangeFraction);
+            cyanArc.setAttribute('stroke-dasharray', `${cyanDash} ${circumference}`);
+            cyanArc.setAttribute('stroke-dashoffset', `${offset}`);
+        }
+    }
+
     function refreshDashboardData() {
         const refreshBtn = document.getElementById('dashBtnRefresh');
         if (refreshBtn) {
@@ -414,7 +568,11 @@
         if (pendingDocsEl) pendingDocsEl.innerText = `${pendingDocsCount} Dokumen`;
         if (totalRevenueEl) totalRevenueEl.innerText = "Rp 1.48 Miliar";
 
-        // 4. Update Recent Registrations Table
+        // 4. Update Visualisasi Charts Asnawiyyah Style
+        renderDashboardActivityChart(dashboardPeriod);
+        renderDashboardDonutChart(dashboardPeriod);
+
+        // 5. Update Recent Registrations Table
         const recentTbody = document.getElementById('dashboard-recent-regs-tbody');
         if (recentTbody) {
             recentTbody.innerHTML = admin.registrationsData.slice(0, 5).map(r => `
@@ -696,6 +854,9 @@
     admin.setDashboardPeriod = setDashboardPeriod;
     admin.refreshDashboardData = refreshDashboardData;
     admin.dashboardPeriod = dashboardPeriod;
+    admin.renderDashboardActivityChart = renderDashboardActivityChart;
+    admin.renderDashboardDonutChart = renderDashboardDonutChart;
+    admin.DASHBOARD_CHART_DATA = DASHBOARD_CHART_DATA;
 
     return admin;
 });

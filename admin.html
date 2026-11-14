@@ -722,6 +722,108 @@
                         <span id="kpi-total-revenue">Rp 1.48 Miliar</span>
                     </div>
 
+                    <!-- Visualisasi Charts: Aktivitas Harian (2/3) & Rasio Kesiapan (1/3) Asnawiyyah Style -->
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+                        <!-- 1. Left Card (lg:col-span-8): Aktivitas Registrasi & Keberangkatan -->
+                        <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 flex flex-col justify-between space-y-4">
+                            <!-- Header & Legends -->
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                    <h3 class="font-extrabold text-sm text-slate-900 flex items-center gap-2">
+                                        <span>Aktivitas Kehadiran &amp; Registrasi Harian</span>
+                                    </h3>
+                                    <p class="text-[11px] text-slate-400">Volume pendaftaran jamaah &amp; pelunasan seat terverifikasi</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center gap-2.5 text-[11px] font-semibold text-slate-500">
+                                        <span class="inline-flex items-center gap-1.5">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span> Pelunasan
+                                        </span>
+                                        <span class="inline-flex items-center gap-1.5">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-sky-400"></span> Registrasi
+                                        </span>
+                                    </div>
+                                    <span id="dashChartPeriodBadge" class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 font-bold text-[10.5px]">7 Hari</span>
+                                </div>
+                            </div>
+
+                            <!-- Chart Canvas / Column Visuals (Asnawiyyah Style) -->
+                            <div class="relative pt-6 pb-2">
+                                <!-- Dashed Grid Guidelines (Y-Axis) -->
+                                <div class="absolute inset-0 flex flex-col justify-between pointer-events-none text-[10px] text-slate-400 font-mono pr-2" aria-hidden="true">
+                                    <div class="border-b border-dashed border-slate-200/70 pb-1 flex justify-between"><span>400</span></div>
+                                    <div class="border-b border-dashed border-slate-200/70 pb-1 flex justify-between"><span>300</span></div>
+                                    <div class="border-b border-dashed border-slate-200/70 pb-1 flex justify-between"><span>200</span></div>
+                                    <div class="border-b border-dashed border-slate-200/70 pb-1 flex justify-between"><span>100</span></div>
+                                    <div class="border-b border-slate-200 flex justify-between"><span>0</span></div>
+                                </div>
+
+                                <!-- Dynamic Bars Container (Rendered by JS) -->
+                                <div id="dashActivityBarsContainer" class="relative h-48 sm:h-52 flex items-end justify-between px-4 sm:px-8 z-10">
+                                    <!-- Rendered dynamically by renderDashboardActivityChart() -->
+                                </div>
+                            </div>
+
+                            <!-- Footer Card Note -->
+                            <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px]">
+                                <span class="inline-flex items-center gap-1.5 text-slate-400">
+                                    <i class="fa-solid fa-circle-info text-slate-300"></i>
+                                    <span>Data diperbarui real-time melalui cloud sync otomatis</span>
+                                </span>
+                                <span id="dashChartAvgNote" class="font-bold text-slate-700">Rata-rata 18 Pendaftaran/Hari</span>
+                            </div>
+                        </div>
+
+                        <!-- 2. Right Card (lg:col-span-4): Rasio Dokumen & Kesiapan Seat -->
+                        <div class="lg:col-span-4 bg-white rounded-3xl border border-slate-200/90 shadow-xs p-5 flex flex-col justify-between space-y-4">
+                            <!-- Header & Option Menu -->
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h3 class="font-extrabold text-sm text-slate-900">Rasio Disiplin &amp; Akurasi</h3>
+                                    <p class="text-[11px] text-slate-400">Distribusi Rasio Dokumen &amp; Validasi Seat</p>
+                                </div>
+                                <button type="button" onclick="SDW_ADMIN.switchTab('tab-docs')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg hover:bg-slate-100 transition cursor-pointer" title="Kelola Dokumen Lengkap">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </button>
+                            </div>
+
+                            <!-- Donut Chart SVG Container -->
+                            <div class="flex flex-col items-center justify-center my-auto py-2">
+                                <div class="relative w-44 h-44 flex items-center justify-center">
+                                    <!-- SVG Donut Ring with Crisp Gradients -->
+                                    <svg class="w-full h-full -rotate-90 transform" viewBox="0 0 160 160">
+                                        <!-- Track background circle -->
+                                        <circle cx="80" cy="80" r="62" stroke="#f1f5f9" stroke-width="16" fill="transparent" />
+                                        <!-- Donut Arc 1: Amber/Orange (Pelunasan & Verifikasi) -->
+                                        <circle id="dashDonutArcOrange" cx="80" cy="80" r="62" stroke="#f97316" stroke-width="16" stroke-linecap="round" fill="transparent"
+                                            stroke-dasharray="389.5" stroke-dashoffset="120" class="transition-all duration-700" />
+                                        <!-- Donut Arc 2: Cyan/Sky Blue (Dokumen Lengkap Siap) -->
+                                        <circle id="dashDonutArcCyan" cx="80" cy="80" r="62" stroke="#0ea5e9" stroke-width="16" stroke-linecap="round" fill="transparent"
+                                            stroke-dasharray="389.5" stroke-dashoffset="200" class="transition-all duration-700" />
+                                    </svg>
+                                    <!-- Center Metric -->
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center text-center pointer-events-none">
+                                        <span id="dashDonutCenterPct" class="text-3xl font-black text-slate-900 font-mono tracking-tight leading-none">98.5%</span>
+                                        <span id="dashDonutCenterLabel" class="text-[10.5px] font-bold text-slate-400 uppercase tracking-wider mt-1">Kesiapan</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Footer Breakdown Legend (Identik Asnawiyyah) -->
+                            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                                <span class="inline-flex items-center gap-1.5 font-semibold text-slate-600">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span> Siap: <strong id="dashPctReady" class="text-slate-800 ml-0.5">65.4%</strong>
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 font-semibold text-slate-600">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Review: <strong id="dashPctReview" class="text-slate-800 ml-0.5">23.1%</strong>
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 font-semibold text-slate-600">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Sisa: <strong id="dashPctPending" class="text-slate-800 ml-0.5">11.5%</strong>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Operational Alerts Notice -->
                     <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200/80 flex items-start gap-3 text-xs text-amber-900">
                         <div class="w-7 h-7 rounded-lg bg-amber-200/80 text-amber-800 flex items-center justify-center text-sm shrink-0 mt-0.5">
