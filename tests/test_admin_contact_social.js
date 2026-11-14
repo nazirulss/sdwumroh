@@ -114,7 +114,7 @@ console.log('  ✓ js/components.js terhubung dinamis ke database kontak & medso
 console.log('\n[TEST 11] Verifikasi sw.js...');
 const swJs = fs.readFileSync(path.resolve(__dirname, '../sw.js'), 'utf8');
 assert(swJs.includes('/js/admin/admin-contact-social.js'), 'sw.js harus mem-precache admin-contact-social.js');
-assert(swJs.includes('v90'), 'sw.js harus menggunakan cache version v90');
+assert(swJs.includes('v90') || swJs.includes('v91'), 'sw.js harus menggunakan cache version v90 atau v91');
 console.log('  ✓ sw.js precache & versioning valid');
 
 console.log('\n============================================================');

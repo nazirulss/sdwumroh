@@ -2984,7 +2984,7 @@
       almaMater: 'Al-Azhar University, Cairo',
       experience: '8 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'G-02',
@@ -2994,7 +2994,7 @@
       almaMater: 'Universitas Islam Madinah (S2 Ushul Fiqh)',
       experience: '10 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'G-03',
@@ -3004,7 +3004,7 @@
       almaMater: 'FK Universitas Indonesia (Spesialis Penyakit Dalam)',
       experience: '7 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'G-04',
@@ -3014,7 +3014,7 @@
       almaMater: 'LIPIA Jakarta (Fakultas Syariah)',
       experience: '9 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'G-05',
@@ -3024,7 +3024,7 @@
       almaMater: 'UIN Syarif Hidayatullah Jakarta',
       experience: '6 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'G-06',
@@ -3034,7 +3034,7 @@
       almaMater: 'FK Undip Semarang',
       experience: '8 Tahun',
       status: 'AKTIF',
-      photo: 'assets/hero-muthawwif.png'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     }
   ];
 
@@ -3068,7 +3068,7 @@
       <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-2.5">
         <div class="flex items-center gap-3">
           <div class="w-12 h-12 rounded-xl overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
-            <img src="${g.photo || 'assets/hero-muthawwif.png'}" alt="${g.name}" class="w-full h-full object-cover" onerror="this.src='assets/hero-muthawwif.png'">
+            <img src="${g.photo || 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'}" alt="${g.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'">
           </div>
           <div>
             <h5 class="text-xs font-black text-slate-800 leading-snug">${g.name}</h5>
@@ -3105,7 +3105,7 @@
       role: 'Korda Surabaya',
       sk_number: 'SK-SDW/MTR-SBY/2024',
       phone: '081234567891',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'MTR-002',
@@ -3116,7 +3116,7 @@
       role: 'Mitra Bandung',
       sk_number: 'SK-SDW/MTR-BDG/2024',
       phone: '081234567892',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'MTR-003',
@@ -3127,7 +3127,7 @@
       role: 'Cabang Makassar',
       sk_number: 'SK-SDW/CAB-MKS/2023',
       phone: '081234567893',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'MTR-004',
@@ -3138,7 +3138,7 @@
       role: 'Korda Jakarta',
       sk_number: 'SK-SDW/MTR-JKT/2024',
       phone: '081234567894',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'MTR-005',
@@ -3149,7 +3149,7 @@
       role: 'Cabang Semarang',
       sk_number: 'SK-SDW/CAB-SMG/2023',
       phone: '081234567895',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     },
     {
       id: 'MTR-006',
@@ -3160,7 +3160,7 @@
       role: 'Mitra Sidoarjo',
       sk_number: 'SK-SDW/MTR-SDA/2024',
       phone: '081234567896',
-      photo: 'assets/direktur-utama.jpg'
+      photo: 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'
     }
   ];
 
@@ -3202,7 +3202,7 @@
         <div class="p-3.5 rounded-2xl bg-slate-50 hover:bg-purple-50/50 border border-slate-200/80 hover:border-purple-200 transition space-y-3">
           <div class="flex items-start gap-3">
             <div class="w-16 h-16 rounded-2xl aspect-square overflow-hidden bg-purple-100 border border-purple-200/80 shrink-0">
-              <img src="${m.photo || 'assets/direktur-utama.jpg'}" alt="${m.name}" class="w-full h-full object-cover" onerror="this.src='assets/direktur-utama.jpg'">
+              <img src="${m.photo || 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'}" alt="${m.name}" class="w-full h-full object-cover" onerror="this.src='https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0'">
             </div>
             <div class="space-y-1 min-w-0 flex-1">
               <div class="flex items-center gap-1.5 flex-wrap">

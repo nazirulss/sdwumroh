@@ -24,6 +24,7 @@
     'use strict';
 
     const admin = adminState || window.SDW_ADMIN || {};
+    const DEFAULT_PROFILE_PHOTO = 'https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0';
 
     let currentEditingGuideId = null;
     let currentEditingDocId = null;
@@ -37,7 +38,7 @@
 
         if (typeof FileReader === 'undefined') {
             // Environment without FileReader (e.g. headless unit testing)
-            callback('assets/direktur-utama.jpg');
+            callback(DEFAULT_PROFILE_PHOTO);
             return;
         }
 
@@ -369,7 +370,7 @@
         container.innerHTML = direksi.map((dir, idx) => `
             <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2 text-center">
                 <div class="relative w-14 h-14 rounded-2xl overflow-hidden border-2 border-purple-200 bg-slate-200 mx-auto group shadow-xs">
-                    <img id="direksiPhotoPreview_${idx}" src="${admin.escapeHtml(dir.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(dir.name)}" class="w-full h-full object-cover">
+                    <img id="direksiPhotoPreview_${idx}" src="${admin.escapeHtml(dir.photo || DEFAULT_PROFILE_PHOTO)}" alt="${admin.escapeHtml(dir.name)}" class="w-full h-full object-cover">
                     <button type="button" onclick="document.getElementById('direksiPhotoInput_${idx}').click()" class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-[9px] font-bold cursor-pointer" title="Ganti Foto">
                         <i class="fa-solid fa-camera mb-0.5"></i>
                         <span>Ganti</span>
@@ -409,8 +410,8 @@
         const badgeEl = document.getElementById('profDirBadge');
         const showOnHome = document.getElementById('profDirShowOnHome');
 
-        if (photoPreview) photoPreview.src = data.photo || 'assets/direktur-utama.jpg';
-        if (photoUrl) photoUrl.value = data.photo || 'assets/direktur-utama.jpg';
+        if (photoPreview) photoPreview.src = data.photo || DEFAULT_PROFILE_PHOTO;
+        if (photoUrl) photoUrl.value = data.photo || DEFAULT_PROFILE_PHOTO;
         if (nameEl) nameEl.value = data.name || '';
         if (roleEl) roleEl.value = data.role || '';
         if (badgeEl) badgeEl.value = data.license_badge || '';
@@ -514,7 +515,7 @@
         if (credEl) credEl.value = lead.credentials || '';
         if (bioEl) bioEl.value = lead.bio || '';
         if (ratioEl) ratioEl.value = data.ratio_pilgrim || 35;
-        if (leadPhotoPreview) leadPhotoPreview.src = lead.photo || 'assets/direktur-utama.jpg';
+        if (leadPhotoPreview) leadPhotoPreview.src = lead.photo || DEFAULT_PROFILE_PHOTO;
 
         // Table
         renderGuidesTable();
@@ -539,7 +540,7 @@
                     <td class="p-3">
                         <div class="flex items-center gap-2.5">
                             <div class="w-8 h-8 rounded-full overflow-hidden bg-purple-100 flex items-center justify-center text-sdw-pine font-black text-xs shrink-0 border border-purple-200">
-                                <img src="${admin.escapeHtml(g.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(g.name)}" class="w-full h-full object-cover">
+                                <img src="${admin.escapeHtml(g.photo || DEFAULT_PROFILE_PHOTO)}" alt="${admin.escapeHtml(g.name)}" class="w-full h-full object-cover">
                             </div>
                             <div>
                                 <span class="font-extrabold text-slate-900 block">${admin.escapeHtml(g.name)}</span>
@@ -589,12 +590,12 @@
                 document.getElementById('guideFormUniversity').value = g.university || '';
                 document.getElementById('guideFormExperience').value = g.experience || '';
                 document.getElementById('guideFormStatus').value = g.status || 'AKTIF';
-                if (preview) preview.src = g.photo || 'assets/direktur-utama.jpg';
+                if (preview) preview.src = g.photo || DEFAULT_PROFILE_PHOTO;
                 if (hiddenPhoto) hiddenPhoto.value = g.photo || '';
             }
         } else {
             if (title) title.innerText = 'Tambah Personil Pembimbing';
-            if (preview) preview.src = 'assets/direktur-utama.jpg';
+            if (preview) preview.src = DEFAULT_PROFILE_PHOTO;
             if (hiddenPhoto) hiddenPhoto.value = '';
         }
 
@@ -612,7 +613,7 @@
         const experience = document.getElementById('guideFormExperience').value.trim();
         const status = document.getElementById('guideFormStatus').value;
         const photoEl = document.getElementById('guideFormPhoto');
-        const photo = (photoEl && photoEl.value) ? photoEl.value.trim() : 'assets/direktur-utama.jpg';
+        const photo = (photoEl && photoEl.value) ? photoEl.value.trim() : DEFAULT_PROFILE_PHOTO;
 
         if (!admin.profileGuidesData) admin.profileGuidesData = { guides: [] };
         if (!Array.isArray(admin.profileGuidesData.guides)) admin.profileGuidesData.guides = [];
@@ -637,7 +638,7 @@
                 university,
                 experience,
                 status,
-                photo: photo || 'assets/direktur-utama.jpg'
+                photo: photo || DEFAULT_PROFILE_PHOTO
             });
         }
 
@@ -849,7 +850,7 @@
                 <td class="p-3">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0 shadow-xs">
-                            <img src="${admin.escapeHtml(m.photo || 'assets/direktur-utama.jpg')}" alt="${admin.escapeHtml(m.name)}" class="w-full h-full object-cover">
+                            <img src="${admin.escapeHtml(m.photo || DEFAULT_PROFILE_PHOTO)}" alt="${admin.escapeHtml(m.name)}" class="w-full h-full object-cover">
                         </div>
                         <div>
                             <span class="font-black text-slate-900 block text-xs">${admin.escapeHtml(m.name)}</span>
@@ -903,7 +904,7 @@
 
         form.reset();
         document.getElementById('mitraFormId').value = mitraId || '';
-        document.getElementById('mitraFormPhotoPreview').src = 'assets/direktur-utama.jpg';
+        document.getElementById('mitraFormPhotoPreview').src = DEFAULT_PROFILE_PHOTO;
         document.getElementById('mitraFormPhoto').value = '';
 
         if (mitraId && admin.profileLegalityData && Array.isArray(admin.profileLegalityData.mitra_syiar)) {
@@ -971,7 +972,7 @@
         const sk_number = document.getElementById('mitraFormSkNumber').value.trim();
         const joined_year = document.getElementById('mitraFormJoinedYear').value.trim();
         const jamaah_served = parseInt(document.getElementById('mitraFormJamaahServed').value, 10) || 0;
-        const photo = document.getElementById('mitraFormPhoto').value || document.getElementById('mitraFormPhotoPreview').src || 'assets/direktur-utama.jpg';
+        const photo = document.getElementById('mitraFormPhoto').value || document.getElementById('mitraFormPhotoPreview').src || DEFAULT_PROFILE_PHOTO;
 
         if (!admin.profileLegalityData) admin.profileLegalityData = { documents: [], partners: [], mitra_syiar: [] };
         if (!Array.isArray(admin.profileLegalityData.mitra_syiar)) admin.profileLegalityData.mitra_syiar = [];

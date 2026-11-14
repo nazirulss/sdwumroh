@@ -4494,7 +4494,10 @@ function doPost(e) {
     }
 
     // C. SINGLE ACTION DISPATCH
-    const res = processSingleMutation_(ss, action, payload, payload.actor || "ADMIN");
+    const rawPayload = (payload && payload.payload && typeof payload.payload === 'object')
+      ? Object.assign({}, payload, payload.payload)
+      : payload;
+    const res = processSingleMutation_(ss, action, rawPayload, payload.actor || rawPayload.actor || "ADMIN");
     return createResponse(true, res);
 
   } catch (err) {
@@ -4553,7 +4556,11 @@ function getProfileFolder_() {
 }
 
 function uploadProfilePhoto_(payload, actor) {
-  if (!payload || !payload.photoBase64) {
+  const p = (payload && payload.payload && typeof payload.payload === 'object')
+    ? Object.assign({}, payload, payload.payload)
+    : (payload || {});
+
+  if (!p || !p.photoBase64) {
     throw new Error("Data foto base64 wajib disertakan");
   }
 
@@ -4561,26 +4568,26 @@ function uploadProfilePhoto_(payload, actor) {
     const folder = getProfileFolder_();
     if (!folder) {
       return {
-        url: payload.photoBase64,
+        url: p.photoBase64,
         simulated: true,
         message: "Drive folder tidak tersedia, menggunakan data URL lokal"
       };
     }
 
-    const base64Parts = payload.photoBase64.split(",");
+    const base64Parts = p.photoBase64.split(",");
     const rawData = base64Parts.length > 1 ? base64Parts[1] : base64Parts[0];
-    const mimeMatch = payload.photoBase64.match(/data:([^;]+);/);
+    const mimeMatch = p.photoBase64.match(/data:([^;]+);/);
     const contentType = mimeMatch ? mimeMatch[1] : "image/jpeg";
     const bytes = Utilities.base64Decode(rawData);
-    const ext = contentType.indexOf("png") !== -1 ? ".png" : ".jpg";
-    const fileName = (payload.fileName || ("PROFILE_PHOTO_" + Date.now())).replace(/\.[^/.]+$/, "") + ext;
+    const ext = contentType.indexOf("png") !== -1 ? ".png" : (contentType.indexOf("webp") !== -1 ? ".webp" : ".jpg");
+    const fileName = (p.fileName || ("PROFILE_PHOTO_" + Date.now())).replace(/\.[^/.]+$/, "") + ext;
 
     const blob = Utilities.newBlob(bytes, contentType, fileName);
     const file = folder.createFile(blob);
     file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
     const fileId = file.getId();
-    const driveUrl = "https://lh3.googleusercontent.com/d/" + fileId;
+    const driveUrl = "https://lh3.googleusercontent.com/d/" + fileId + "=s0";
     const viewUrl = file.getUrl();
 
     if (actor) {
@@ -4596,7 +4603,7 @@ function uploadProfilePhoto_(payload, actor) {
   } catch (err) {
     Logger.log("uploadProfilePhoto_ error: " + err.message);
     return {
-      url: payload.photoBase64,
+      url: p.photoBase64,
       error: err.message
     };
   }

@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-const CACHE_NAME = 'sdw-umroh-pwa-v90';
-const RUNTIME_CACHE = 'sdw-runtime-v90';
+const CACHE_NAME = 'sdw-umroh-pwa-v91';
+const RUNTIME_CACHE = 'sdw-runtime-v91';
 
 const PRECACHE_URLS = [
   '/',
@@ -138,10 +138,12 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(event.request.url);
 
-  // Strategy A: Stale-While-Revalidate for Third-Party CDN (Fonts & FontAwesome)
+  // Strategy A: Stale-While-Revalidate for Third-Party CDN (Fonts, FontAwesome, & Google Drive Media CDN)
   const isCdn = url.hostname.includes('fonts.googleapis.com') ||
                 url.hostname.includes('fonts.gstatic.com') ||
-                url.hostname.includes('cdnjs.cloudflare.com');
+                url.hostname.includes('cdnjs.cloudflare.com') ||
+                url.hostname.includes('lh3.googleusercontent.com') ||
+                url.hostname.includes('drive.google.com');
 
   if (isCdn) {
     event.respondWith(

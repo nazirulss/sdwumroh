@@ -1146,10 +1146,10 @@ function setupProfileSheets() {
     ]);
 
     var defaultDireksi = JSON.stringify([
-      { role: "Direktur Utama", name: "H. Muhammad Syarif", title: "Direktur Utama PT Sahabat Dhuha Wisata", photo: "assets/direktur-utama.jpg" },
-      { role: "Direktur Keuangan", name: "Hj. Siti Rahmawati, S.E.", title: "Direktur Keuangan & Kustodian Escrow", photo: "assets/hero-muthawwif.png" },
-      { role: "Direktur Bimbingan Ibadah", name: "Ust. H. Ahmad Fauzan, Lc., M.Ag.", title: "Ketua Dewan Pembimbing Syariah", photo: "assets/hero-muthawwif.png" },
-      { role: "Direktur Operasional", name: "H. Bambang Irawan, S.T.", title: "Direktur Operasional & Pelayanan Haramain", photo: "assets/hero-muthawwif.png" }
+      { role: "Direktur Utama", name: "H. Muhammad Syarif", title: "Direktur Utama PT Sahabat Dhuha Wisata", photo: "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0" },
+      { role: "Direktur Keuangan", name: "Hj. Siti Rahmawati, S.E.", title: "Direktur Keuangan & Kustodian Escrow", photo: "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0" },
+      { role: "Direktur Bimbingan Ibadah", name: "Ust. H. Ahmad Fauzan, Lc., M.Ag.", title: "Ketua Dewan Pembimbing Syariah", photo: "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0" },
+      { role: "Direktur Operasional", name: "H. Bambang Irawan, S.T.", title: "Direktur Operasional & Pelayanan Haramain", photo: "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0" }
     ]);
 
     var seedInst = [
@@ -1199,7 +1199,7 @@ function setupProfileSheets() {
         "H. Muhammad Syarif",
         "Direktur Utama PT Sahabat Dhuha Wisata",
         "Badan Verifikasi Lisensi Resmi",
-        "assets/direktur-utama.jpg",
+        "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0",
         "Melayani Setiap Langkah Jamaah Sebagai Tamu Allah yang Mulia",
         "Komitmen Pimpinan PT Sahabat Dhuha Wisata untuk Perjalanan Ibadah yang Amanah, Khidmat & Menenteramkan.",
         "Di SDW UMROH, kami memandang perjalanan ke Baitullah bukan sekadar perniagaan tiket dan hotel, melainkan sebuah amanah suci yang agung. Setiap tetes keringat tabungan jamaah kami jaga dengan kepastian fasilitas, transparansi penuh tanpa biaya siluman, dan bimbingan manasik bersanad yang menenteramkan kalbu.",
@@ -1218,13 +1218,13 @@ function setupProfileSheets() {
   var gd = getOrInitProfileSheet("DB_Profile_Guides");
   if (gd.sheet.getLastRow() <= 1) {
     var seedGuides = [
-      ["GD-000001", "Ust. H. Ahmad Fauzan, Lc., M.Ag.", "Ketua Dewan Pembimbing Syariah & Muthawwif Utama", "MANASIK", "Alumni Universitas Islam Madinah (Fakultas Syariah)", "12 Tahun", "AKTIF", "assets/hero-muthawwif.png", 1, true, "Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW dengan sabar, santun, dan menentramkan.", nowStr, nowStr],
-      ["GD-000002", "Ust. Muhammad Ridwan, Lc.", "Muthawwif Senior Makkah", "MAKKAH", "Al-Azhar University, Cairo", "8 Tahun", "AKTIF", "assets/hero-muthawwif.png", 2, false, "Spesialis bimbingan tawaf, sa'i, dan qiyamullail di pelataran Ka'bah dengan sanad bacaan doa ma'tsurat.", nowStr, nowStr],
-      ["GD-000003", "Ust. Dr. H. Syarif Hidayat, M.A.", "Muthawwif Senior Madinah & Ziarah Rawdah", "MADINAH", "Universitas Islam Madinah (S2 Ushul Fiqh)", "10 Tahun", "AKTIF", "assets/hero-muthawwif.png", 3, false, "Menguasai tata kelola perizinan Tasreh Rawdah Syarifah dan sejarah sirah nabawiyah di Kota Madinah.", nowStr, nowStr],
-      ["GD-000004", "dr. H. Farhan Zulkarnain, Sp.PD", "Koordinator Tim Medis Kloter", "MEDIS", "FK Universitas Indonesia (Spesialis Penyakit Dalam)", "7 Tahun", "AKTIF", "assets/hero-muthawwif.png", 4, false, "Dokter spesialis pendamping kloter yang siaga 24 jam memantau kesehatan jamaah risti dan lansia.", nowStr, nowStr],
-      ["GD-000005", "Ust. H. Abdullah Mansyur, Lc.", "Pembimbing Manasik Teori & Praktik", "MANASIK", "LIPIA Jakarta (Fakultas Syariah)", "9 Tahun", "AKTIF", "assets/hero-muthawwif.png", 5, false, "Instruktur manasik bersanad yang membimbing pemantapan fiqih umroh sejak di tanah air.", nowStr, nowStr],
-      ["GD-000006", "Ust. Ahmad Baehaqi, S.Th.I", "Muthawwif Ziarah Makkah & Madinah", "MAKKAH", "UIN Syarif Hidayatullah Jakarta", "6 Tahun", "AKTIF", "assets/hero-muthawwif.png", 6, false, "Muthawwif edukatif yang memandu napak tilas sejarah Jabal Nur, Jabal Tsur, dan Badar.", nowStr, nowStr],
-      ["GD-000007", "dr. Hj. Siti Maryam, Sp.KO", "Dokter Kloter & Konsultan Jamaah Lansia", "MEDIS", "FK Undip Semarang", "8 Tahun", "AKTIF", "assets/hero-muthawwif.png", 7, false, "Dokter pendamping medis spesialis kebugaran fisik jamaah selama rangkaian thawaf dan sa'i.", nowStr, nowStr]
+      ["GD-000001", "Ust. H. Ahmad Fauzan, Lc., M.Ag.", "Ketua Dewan Pembimbing Syariah & Muthawwif Utama", "MANASIK", "Alumni Universitas Islam Madinah (Fakultas Syariah)", "12 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 1, true, "Berpengalaman membimbing ribuan jamaah umroh dan haji khusus sejak tahun 2014. Konsisten memastikan seluruh rangkaian manasik jamaah sesuai tuntunan sunnah Rasulullah SAW dengan sabar, santun, dan menentramkan.", nowStr, nowStr],
+      ["GD-000002", "Ust. Muhammad Ridwan, Lc.", "Muthawwif Senior Makkah", "MAKKAH", "Al-Azhar University, Cairo", "8 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 2, false, "Spesialis bimbingan tawaf, sa'i, dan qiyamullail di pelataran Ka'bah dengan sanad bacaan doa ma'tsurat.", nowStr, nowStr],
+      ["GD-000003", "Ust. Dr. H. Syarif Hidayat, M.A.", "Muthawwif Senior Madinah & Ziarah Rawdah", "MADINAH", "Universitas Islam Madinah (S2 Ushul Fiqh)", "10 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 3, false, "Menguasai tata kelola perizinan Tasreh Rawdah Syarifah dan sejarah sirah nabawiyah di Kota Madinah.", nowStr, nowStr],
+      ["GD-000004", "dr. H. Farhan Zulkarnain, Sp.PD", "Koordinator Tim Medis Kloter", "MEDIS", "FK Universitas Indonesia (Spesialis Penyakit Dalam)", "7 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 4, false, "Dokter spesialis pendamping kloter yang siaga 24 jam memantau kesehatan jamaah risti dan lansia.", nowStr, nowStr],
+      ["GD-000005", "Ust. H. Abdullah Mansyur, Lc.", "Pembimbing Manasik Teori & Praktik", "MANASIK", "LIPIA Jakarta (Fakultas Syariah)", "9 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 5, false, "Instruktur manasik bersanad yang membimbing pemantapan fiqih umroh sejak di tanah air.", nowStr, nowStr],
+      ["GD-000006", "Ust. Ahmad Baehaqi, S.Th.I", "Muthawwif Ziarah Makkah & Madinah", "MAKKAH", "UIN Syarif Hidayatullah Jakarta", "6 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 6, false, "Muthawwif edukatif yang memandu napak tilas sejarah Jabal Nur, Jabal Tsur, dan Badar.", nowStr, nowStr],
+      ["GD-000007", "dr. Hj. Siti Maryam, Sp.KO", "Dokter Kloter & Konsultan Jamaah Lansia", "MEDIS", "FK Undip Semarang", "8 Tahun", "AKTIF", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", 7, false, "Dokter pendamping medis spesialis kebugaran fisik jamaah selama rangkaian thawaf dan sa'i.", nowStr, nowStr]
     ];
     gd.sheet.getRange(2, 1, seedGuides.length, gd.canonical.length).setValues(seedGuides);
   }
@@ -1250,12 +1250,12 @@ function setupProfileSheets() {
   var mtr = getOrInitProfileSheet("DB_Profile_Mitra_Syiar");
   if (mtr.sheet.getLastRow() <= 1) {
     var seedMitra = [
-      ["MTR-000001", "H. M. Zaini Dahlan", "Majelis Ibadah Barakah", "Korda Surabaya", "Jawa Timur", "Kota Surabaya", "SK-SDW/MTR-SBY/2024", "6281234567891", "assets/direktur-utama.jpg", "AKTIF", 1, nowStr, nowStr],
-      ["MTR-000002", "Ust. Asep Saepudin, M.Pd.", "Pondok Tahfidz Al-Hidayah", "Mitra Bandung", "Jawa Barat", "Kota Bandung", "SK-SDW/MTR-BDG/2024", "6281234567892", "assets/direktur-utama.jpg", "AKTIF", 2, nowStr, nowStr],
-      ["MTR-000003", "H. Nuruddin, Lc.", "Kantor Wilayah Sulawesi Selatan", "Cabang Makassar", "Sulawesi Selatan", "Kota Makassar", "SK-SDW/CAB-MKS/2023", "6281234567893", "assets/direktur-utama.jpg", "AKTIF", 3, nowStr, nowStr],
-      ["MTR-000004", "Ust. H. Farhan Ramadhan", "Korda Khusus Jabodetabek", "Korda Jakarta", "DKI Jakarta", "Jakarta Selatan", "SK-SDW/MTR-JKT/2024", "6281234567894", "assets/direktur-utama.jpg", "AKTIF", 4, nowStr, nowStr],
-      ["MTR-000005", "H. Irfan Fauzi, S.E.", "Kantor Cabang Resmi Semarang", "Cabang Semarang", "Jawa Tengah", "Kota Semarang", "SK-SDW/CAB-SMG/2023", "6281234567895", "assets/direktur-utama.jpg", "AKTIF", 5, nowStr, nowStr],
-      ["MTR-000006", "Hj. Fatimah Azzahra", "Komunitas Hijrah Mulia", "Mitra Sidoarjo", "Jawa Timur", "Kab. Sidoarjo", "SK-SDW/MTR-SDA/2024", "6281234567896", "assets/direktur-utama.jpg", "AKTIF", 6, nowStr, nowStr]
+      ["MTR-000001", "H. M. Zaini Dahlan", "Majelis Ibadah Barakah", "Korda Surabaya", "Jawa Timur", "Kota Surabaya", "SK-SDW/MTR-SBY/2024", "6281234567891", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 1, nowStr, nowStr],
+      ["MTR-000002", "Ust. Asep Saepudin, M.Pd.", "Pondok Tahfidz Al-Hidayah", "Mitra Bandung", "Jawa Barat", "Kota Bandung", "SK-SDW/MTR-BDG/2024", "6281234567892", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 2, nowStr, nowStr],
+      ["MTR-000003", "H. Nuruddin, Lc.", "Kantor Wilayah Sulawesi Selatan", "Cabang Makassar", "Sulawesi Selatan", "Kota Makassar", "SK-SDW/CAB-MKS/2023", "6281234567893", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 3, nowStr, nowStr],
+      ["MTR-000004", "Ust. H. Farhan Ramadhan", "Korda Khusus Jabodetabek", "Korda Jakarta", "DKI Jakarta", "Jakarta Selatan", "SK-SDW/MTR-JKT/2024", "6281234567894", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 4, nowStr, nowStr],
+      ["MTR-000005", "H. Irfan Fauzi, S.E.", "Kantor Cabang Resmi Semarang", "Cabang Semarang", "Jawa Tengah", "Kota Semarang", "SK-SDW/CAB-SMG/2023", "6281234567895", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 5, nowStr, nowStr],
+      ["MTR-000006", "Hj. Fatimah Azzahra", "Komunitas Hijrah Mulia", "Mitra Sidoarjo", "Jawa Timur", "Kab. Sidoarjo", "SK-SDW/MTR-SDA/2024", "6281234567896", "https://lh3.googleusercontent.com/d/1NYlhSZYdSl3EsuNyBWdmXVikh8CojLSX=s0", "AKTIF", 6, nowStr, nowStr]
     ];
     mtr.sheet.getRange(2, 1, seedMitra.length, mtr.canonical.length).setValues(seedMitra);
   }
