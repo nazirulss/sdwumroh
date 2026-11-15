@@ -792,26 +792,42 @@ function sendLoginOtp_(ss, payload, actor) {
     + '</div>';
 
   try {
-    if (typeof MailApp !== 'undefined') {
-      MailApp.sendEmail({
-        to: email,
-        subject: emailSubject,
-        htmlBody: emailHtml
+    if (typeof GmailApp !== 'undefined') {
+      GmailApp.sendEmail(email, emailSubject, "Kode OTP Masuk Portal SDW UMROH: " + otpCode, {
+        htmlBody: emailHtml,
+        name: "SDW UMROH"
       });
       emailSent = true;
     }
-  } catch (err) {
-    emailError = err.message;
-    Logger.log("MailApp.sendEmail error: " + err.message);
+  } catch (gErr) {
+    emailError = gErr.message;
+    Logger.log("GmailApp.sendEmail error: " + gErr.message);
+    try {
+      if (typeof MailApp !== 'undefined') {
+        MailApp.sendEmail({
+          to: email,
+          subject: emailSubject,
+          htmlBody: emailHtml,
+          name: "SDW UMROH"
+        });
+        emailSent = true;
+      }
+    } catch (mErr) {
+      emailError = (emailError ? emailError + " | " : "") + mErr.message;
+      Logger.log("MailApp.sendEmail error: " + mErr.message);
+    }
   }
 
-  logAudit_(actor || "SYSTEM", "SEND_LOGIN_OTP", "DB_Users", foundUser.id, null, { email: email, sent: emailSent }, "Pengiriman kode OTP login ke " + email);
+  logAudit_(actor || "SYSTEM", "SEND_LOGIN_OTP", "DB_Users", foundUser.id, null, { email: email, sent: emailSent, error: emailError }, "Pengiriman kode OTP login ke " + email);
 
   return {
     success: true,
-    message: "Kode OTP 6 digit telah dikirimkan ke email " + email + ". Silakan periksa kotak masuk atau spam.",
+    message: emailSent 
+      ? ("Kode OTP 6 digit telah dikirimkan ke email " + email + ". Silakan periksa kotak masuk atau spam.")
+      : ("Pemberitahuan: Layanan pengiriman email Google Apps Script memerlukan otorisasi (" + (emailError || 'Izin email belum aktif') + ")."),
     email: email,
     emailSent: emailSent,
+    emailError: emailError,
     debugOtpHint: (emailSent ? null : otpCode)
   };
 }
@@ -1038,4 +1054,18 @@ function quickLoginByEmail_(ss, payload, actor) {
     permissions: permissions,
     token: token
   };
+}
+
+/**
+ * 4. Fungsi Aktivasi & Otorisasi Pengiriman Email OTP
+ * Jalankan fungsi ini 1 kali dari Script Editor Google Apps Script untuk menyetujui izin pengiriman email (Review Permissions)
+ */
+function aktivasiIzinKirimEmailOtp() {
+  const userEmail = Session.getActiveUser().getEmail() || "admin@sdwumroh.com";
+  MailApp.sendEmail(
+    userEmail,
+    "Aktivasi Otorisasi Pengiriman Email OTP SDW UMROH",
+    "Alhamdulillah, izin pengiriman email OTP (script.send_mail) untuk SDW UMROH telah berhasil diaktifkan secara resmi!"
+  );
+  Logger.log("Email otorisasi berhasil dikirim ke: " + userEmail);
 }

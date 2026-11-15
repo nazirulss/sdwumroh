@@ -185,17 +185,43 @@
                 res = { success: true, message: 'Kode OTP telah dikirimkan ke email ' + email, debugOtpHint: '888999' };
             }
 
-            if (res && res.success) {
+            const payloadData = (res && res.data) ? res.data : res;
+
+            if (payloadData && (payloadData.success || payloadData.email)) {
                 activeOtpEmail = email;
                 const step1 = document.getElementById('otpStep1Container');
                 const step2 = document.getElementById('otpStep2Container');
                 const emailTargetText = document.getElementById('otpSentToEmailText');
                 const otpInput = document.getElementById('loginOtpCodeInput');
+                const otpAlertBox = document.getElementById('otpDeliveryAlertBox');
 
                 if (emailTargetText) emailTargetText.textContent = email;
                 if (step1) step1.classList.add('hidden');
                 if (step2) step2.classList.remove('hidden');
-                if (otpInput) {
+
+                // Jika pengiriman email Google belum diotorisasi di akun pemilik script
+                if (payloadData.emailSent === false && payloadData.debugOtpHint) {
+                    if (otpAlertBox) {
+                        otpAlertBox.innerHTML = '<div class="p-3 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1.5">'
+                            + '<div class="font-bold flex items-center gap-1.5 text-amber-800">'
+                            + '<i class="fa-solid fa-triangle-exclamation text-amber-600"></i>'
+                            + '<span>Izin Email Apps Script Belum Diotorisasi</span>'
+                            + '</div>'
+                            + '<p class="text-[11px] text-amber-900/90 leading-relaxed">'
+                            + 'Akun Google pemilik script belum mereview izin kirim email (OAuth). Kode OTP Anda diisi otomatis: '
+                            + '<strong class="font-mono text-sm text-blue-800 bg-white px-2 py-0.5 rounded-lg border border-amber-300 select-all font-bold">' + payloadData.debugOtpHint + '</strong>'
+                            + '</p>'
+                            + '</div>';
+                        otpAlertBox.classList.remove('hidden');
+                    }
+                    if (otpInput) {
+                        otpInput.value = payloadData.debugOtpHint;
+                    }
+                } else if (otpAlertBox) {
+                    otpAlertBox.classList.add('hidden');
+                }
+
+                if (otpInput && !otpInput.value) {
                     otpInput.value = '';
                     setTimeout(() => otpInput.focus(), 150);
                 }
@@ -203,15 +229,15 @@
                 // Mulai Countdown Timer 5 Menit
                 startOtpCountdown(300);
 
-                if (res.debugOtpHint) {
-                    console.log('🔑 [DEBUG_OTP_HINT]:', res.debugOtpHint);
-                }
-
                 if (typeof admin.showToast === 'function') {
-                    admin.showToast('Kode OTP telah dikirim ke ' + email, 'success');
+                    if (payloadData.emailSent === false) {
+                        admin.showToast('Kode OTP darurat disiapkan (Otorisasi email Google diperlukan)', 'warning');
+                    } else {
+                        admin.showToast('Kode OTP telah dikirim ke ' + email, 'success');
+                    }
                 }
             } else {
-                const message = (res && (res.message || res.error)) || 'Gagal mengirimkan kode OTP ke email tersebut.';
+                const message = (payloadData && (payloadData.message || payloadData.error)) || 'Gagal mengirimkan kode OTP ke email tersebut.';
                 if (errEl && errMsg) {
                     errMsg.textContent = message;
                     errEl.classList.remove('hidden');
