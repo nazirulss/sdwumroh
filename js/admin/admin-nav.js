@@ -19,16 +19,18 @@
 
     admin = admin || {};
 
-    // 0. User Profiles for Asnawiyyah Session Capsule
+    // 0. User Profiles for Asnawiyyah Session Capsule (Template Default DB_Users)
     const USER_ROLE_PROFILES = {
-        'SUPER_ADMIN': { name: 'Super Admin', shortRole: '(Super Admin)', desc: 'Super Administrator', initial: 'SU', email: 'admin@sdwumroh.com', bg: 'bg-teal-700 text-white' },
-        'ADMIN': { name: 'H. Ahmad Fauzi', shortRole: '(Admin)', desc: 'Administrator Backoffice', initial: 'AF', email: 'ops@sdwumroh.com', bg: 'bg-emerald-700 text-white' },
+        'SUPER_ADMIN': { name: 'Admin Sistem', shortRole: '(Admin)', desc: 'Super Administrator', initial: 'AS', email: 'admin@sdwumroh.com', bg: 'bg-emerald-700 text-white' },
+        'ADMIN': { name: 'Admin Sistem', shortRole: '(Admin)', desc: 'Administrator Backoffice', initial: 'AS', email: 'admin@sdwumroh.com', bg: 'bg-emerald-700 text-white' },
         'DIRECTOR': { name: 'H. M. Syarif', shortRole: '(Direktur)', desc: 'Direktur Utama', initial: 'MS', email: 'syarif@sdwumroh.com', bg: 'bg-orange-700 text-white' },
-        'FINANCE': { name: 'Hj. Fatimah Zahra', shortRole: '(Finance)', desc: 'Keuangan & Kasir', initial: 'FZ', email: 'finance@sdwumroh.com', bg: 'bg-purple-700 text-white' },
-        'OPERATIONS': { name: 'Agus Pratama', shortRole: '(Operasional)', desc: 'Staf Operasional', initial: 'AP', email: 'operasional@sdwumroh.com', bg: 'bg-sky-700 text-white' },
-        'SALES': { name: 'Budi Santoso', shortRole: '(Sales)', desc: 'Sales Consultant', initial: 'BS', email: 'sales@sdwumroh.com', bg: 'bg-teal-700 text-white' },
-        'MUTHAWWIF': { name: 'Ust. Dr. Abdullah', shortRole: '(Muthawwif)', desc: 'Muthawwif & TL', initial: 'AB', email: 'muthawwif@sdwumroh.com', bg: 'bg-indigo-700 text-white' },
-        'PILGRIM': { name: 'Siti Aisyah', shortRole: '(Jamaah)', desc: 'Akun Jamaah Umroh', initial: 'SA', email: 'aisyah@gmail.com', bg: 'bg-slate-700 text-white' }
+        'FINANCE': { name: 'Finance Officer', shortRole: '(Finance)', desc: 'Keuangan & Kasir', initial: 'FO', email: 'finance@sdwumroh.com', bg: 'bg-purple-700 text-white' },
+        'OPERATIONS': { name: 'Staf Operasional', shortRole: '(Operasional)', desc: 'Staf Operasional', initial: 'OP', email: 'ops@sdwumroh.com', bg: 'bg-sky-700 text-white' },
+        'DOCUMENT_OFFICER': { name: 'Document Officer', shortRole: '(Dokumen)', desc: 'Petugas Visa & Dokumen', initial: 'DO', email: 'docs@sdwumroh.com', bg: 'bg-cyan-700 text-white' },
+        'TOUR_LEADER': { name: 'Ust. Ahmad Fauzi Ridwan', shortRole: '(Tour Leader)', desc: 'Koordinator Lapangan', initial: 'AF', email: 'fauzi@sdwumroh.com', bg: 'bg-indigo-700 text-white' },
+        'MUTHAWWIF': { name: 'Ust. DR. H. Salman, Lc.', shortRole: '(Muthawwif)', desc: 'Pembimbing Ibadah', initial: 'SM', email: 'salman@sdwumroh.com', bg: 'bg-amber-700 text-white' },
+        'SALES': { name: 'Senior Sales Consultant', shortRole: '(Sales)', desc: 'Konsultan Pemasaran', initial: 'SL', email: 'sales@sdwumroh.com', bg: 'bg-teal-700 text-white' },
+        'PILGRIM': { name: 'Jamaah Terdaftar', shortRole: '(Jamaah)', desc: 'Akun Jamaah Umroh', initial: 'JM', email: 'jamaah@sdwumroh.com', bg: 'bg-slate-700 text-white' }
     };
 
     // Breadcrumb Mapping Asnawiyyah Style
@@ -64,8 +66,23 @@
 
     function updateHeaderProfileUI(role) {
         if (typeof document === 'undefined') return;
-        const r = (role || admin.currentRole || 'SUPER_ADMIN').toUpperCase();
-        const profile = USER_ROLE_PROFILES[r] || USER_ROLE_PROFILES['ADMIN'];
+        const session = (typeof admin.getAdminSession === 'function' ? admin.getAdminSession() : null) || admin.currentUser;
+        const r = (role || (session && session.role) || admin.currentRole || 'ADMIN').toUpperCase();
+        const fallbackProfile = USER_ROLE_PROFILES[r] || USER_ROLE_PROFILES['ADMIN'];
+
+        // Ambil data autentikasi real dari sesi aktif jika ada
+        const userName = (session && session.name) ? session.name : fallbackProfile.name;
+        const userEmail = (session && session.email) ? session.email : fallbackProfile.email;
+        const userRole = (session && session.role) ? session.role : r;
+
+        // Generate inisial 2 huruf dinamis dari nama pengguna asli (abaikan gelar depan jika ada)
+        const parts = userName.split(' ').filter(p => p.trim().length > 0 && !['H.', 'Hj.', 'DR.', 'Dr.', 'Ust.', 'Ustadz', 'KH.', 'K.H.'].includes(p));
+        const userInitial = parts.length >= 2 
+            ? (parts[0][0] + parts[1][0]).toUpperCase()
+            : (parts.length === 1 ? parts[0].substring(0, 2).toUpperCase() : userName.substring(0, 2).toUpperCase());
+
+        const roleDesc = fallbackProfile.desc || `${userRole} Backoffice`;
+        const shortRole = `(${userRole})`;
 
         // Header Elements
         const headerAvatar = document.getElementById('headerUserAvatar');
@@ -74,12 +91,12 @@
         const headerRoleDesc = document.getElementById('headerUserRoleDesc');
 
         if (headerAvatar) {
-            headerAvatar.innerText = profile.initial;
-            headerAvatar.className = `w-9 h-9 rounded-xl ${profile.bg} font-black text-xs flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform`;
+            headerAvatar.innerText = userInitial;
+            headerAvatar.className = `w-9 h-9 rounded-xl ${fallbackProfile.bg} font-black text-xs flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform`;
         }
-        if (headerName) headerName.innerText = profile.name;
-        if (headerRoleShort) headerRoleShort.innerText = profile.shortRole;
-        if (headerRoleDesc) headerRoleDesc.innerText = profile.desc;
+        if (headerName) headerName.innerText = userName;
+        if (headerRoleShort) headerRoleShort.innerText = shortRole;
+        if (headerRoleDesc) headerRoleDesc.innerText = roleDesc;
 
         // Dropdown Elements
         const dropAvatar = document.getElementById('dropdownUserAvatar');
@@ -88,12 +105,24 @@
         const dropRoleBadge = document.getElementById('dropdownRoleBadge');
 
         if (dropAvatar) {
-            dropAvatar.innerText = profile.initial;
-            dropAvatar.className = `w-10 h-10 rounded-xl ${profile.bg} font-black text-sm flex items-center justify-center shadow-2xs`;
+            dropAvatar.innerText = userInitial;
+            dropAvatar.className = `w-10 h-10 rounded-xl ${fallbackProfile.bg} font-black text-sm flex items-center justify-center shadow-2xs`;
         }
-        if (dropName) dropName.innerText = profile.name;
-        if (dropEmail) dropEmail.innerText = profile.email;
-        if (dropRoleBadge) dropRoleBadge.innerText = r.replace('_', ' ');
+        if (dropName) dropName.innerText = userName;
+        if (dropEmail) dropEmail.innerText = userEmail;
+        if (dropRoleBadge) dropRoleBadge.innerText = userRole.replace('_', ' ');
+
+        // Update session capsule text
+        const badgeText = document.getElementById('headerRoleBadgeText');
+        if (badgeText) {
+            badgeText.textContent = userName + ' (' + userRole + ')';
+        }
+
+        // Update dashboard greeting text
+        const greetingNameEl = document.getElementById('dashGreetingName');
+        if (greetingNameEl) {
+            greetingNameEl.innerText = `Selamat Bertugas, ${userName}`;
+        }
 
         // Update all select with ID adminRoleSelector
         const roleSelectors = document.querySelectorAll('#adminRoleSelector');
@@ -600,16 +629,8 @@
         const badgeConfig = ROLE_ACCESS_BADGES[currentRole] || ROLE_ACCESS_BADGES['SUPER_ADMIN'];
 
         if (greetingNameEl) {
-            const rawName = session && session.name ? session.name : 'Super Administrator';
-            let displayName = rawName;
-            if (rawName.toLowerCase().includes('super')) {
-                displayName = 'Administrator';
-            } else if (rawName.startsWith('H. ')) {
-                displayName = rawName.replace(/^H\.\s*/, '').split(' ')[0] || rawName;
-            } else {
-                displayName = rawName.split(' ')[0] || rawName;
-            }
-            greetingNameEl.innerText = `Selamat Bertugas, ${displayName}`;
+            const rawName = session && session.name ? session.name : 'Administrator';
+            greetingNameEl.innerText = `Selamat Bertugas, ${rawName}`;
         }
         if (roleBadgeEl) {
             roleBadgeEl.innerText = badgeConfig.text;
