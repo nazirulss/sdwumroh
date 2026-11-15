@@ -146,7 +146,7 @@
 
         if (query) {
             regs = regs.filter(r => {
-                const name = (r.customer || r.name || r.full_name || '').toLowerCase();
+                const name = (r.customerName || r.customer || r.name || r.full_name || '').toLowerCase();
                 const id = (r.id || '').toLowerCase();
                 const pkg = (r.package || r.packageName || '').toLowerCase();
                 return name.includes(query) || id.includes(query) || pkg.includes(query);
@@ -168,8 +168,8 @@
         tbody.innerHTML = regs.map(r => {
             const cert = certStore[r.id] || null;
             const isIssued = (cert && cert.isIssued !== undefined) ? !!cert.isIssued : (r.isIssued === true || r.status === 'COMPLETED');
-            const displayName = (cert && cert.displayName) ? cert.displayName : (r.customer || r.name || r.full_name || 'Jamaah SDW');
-            const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departure || r.departure_date || '15 Jan 2027');
+            const displayName = (cert && cert.displayName) ? cert.displayName : (r.customerName || r.customer || r.name || r.full_name || 'Jamaah SDW');
+            const depDate = (cert && cert.departureDate) ? cert.departureDate : formatCleanDate(r.departureDate || r.departure || r.departure_date || '15 Jan 2027');
             const certNo = (cert && cert.certificateNo) ? cert.certificateNo : (r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`);
             
             // Prioritaskan photo live dari Spreadsheet/Drive jika valid, atau cert lokal jika berupa base64 baru
@@ -346,8 +346,8 @@
         const modal = document.getElementById('modalCertificateEditor');
 
         if (regIdInput) regIdInput.value = regId;
-        if (nameInput) nameInput.value = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || '';
-        if (dateInput) dateInput.value = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
+        if (nameInput) nameInput.value = cert.displayName || pilgrim.customerName || pilgrim.customer || pilgrim.name || pilgrim.full_name || '';
+        if (dateInput) dateInput.value = cert.departureDate || formatCleanDate(pilgrim.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
         if (certNoInput) certNoInput.value = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
 
         activeRawPhotoDataUrl = cert.rawPhotoUrl || cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || null;
@@ -922,8 +922,8 @@
         const pilgrim = regs.find(r => r.id === regId) || {};
         const cert = certStore[regId] || {};
 
-        const displayName = cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
-        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
+        const displayName = cert.displayName || pilgrim.customerName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh';
+        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
         const certNo = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
         const photoSrc = cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '';
 
@@ -1019,8 +1019,8 @@
                     isIssued: true,
                     issuedAt: new Date().toISOString(),
                     certificateNo: (certStore[r.id] && certStore[r.id].certificateNo) || `SDW/CERT/2027/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
-                    displayName: (certStore[r.id] && certStore[r.id].displayName) || (r.customer || r.name || r.full_name || 'Jamaah Umroh').toUpperCase(),
-                    departureDate: (certStore[r.id] && certStore[r.id].departureDate) || formatCleanDate(r.departure || r.departure_date || '15 Januari 2027'),
+                    displayName: (certStore[r.id] && certStore[r.id].displayName) || (r.customerName || r.customer || r.name || r.full_name || 'Jamaah Umroh').toUpperCase(),
+                    departureDate: (certStore[r.id] && certStore[r.id].departureDate) || formatCleanDate(r.departureDate || r.departure || r.departure_date || '15 Januari 2027'),
                     photoUrl: (certStore[r.id] && certStore[r.id].photoUrl) || r.photo || r.photoUrl || null
                 };
                 count++;
@@ -1043,8 +1043,8 @@
         const pilgrim = regs.find(r => r.id === regId) || {};
         const cert = certStore[regId] || {};
 
-        const displayName = (cert.displayName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh').toUpperCase();
-        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
+        const displayName = (cert.displayName || pilgrim.customerName || pilgrim.customer || pilgrim.name || pilgrim.full_name || 'Jamaah Umroh').toUpperCase();
+        const departureDate = cert.departureDate || formatCleanDate(pilgrim.departureDate || pilgrim.departure || pilgrim.departure_date || '15 Januari 2027');
         const certNo = cert.certificateNo || `SDW/CERT/2027/${String(regId).replace(/\D/g, '').padStart(3, '0')}`;
         const photoSrc = normalizePhotoUrl(cert.photoUrl || pilgrim.photo || pilgrim.photoUrl || '');
         const nameFontSize = cert.nameFontSize || 'auto';

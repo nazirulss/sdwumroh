@@ -438,15 +438,16 @@
 
         regs.forEach(r => {
             const cert = certStore[r.id] || {};
-            const cleanDep = normalizeDepartureDate(cert.departureDate || r.departure || r.departure_date || '27 Oktober 2026');
+            const cleanDep = normalizeDepartureDate(cert.departureDate || r.departureDate || r.departure || r.departure_date || '27 Oktober 2026');
             
-            // Validasi Status Terbit: hanya tampilkan jika Admin sudah menerbitkan (isIssued true) atau status COMPLETED di DB
-            const isIssued = (cert.isIssued !== undefined) ? !!cert.isIssued : (!!r.isIssued || r.status === 'COMPLETED');
+            // Validasi Status Terbit: tampilkan jika Admin sudah menerbitkan (isIssued true) atau status COMPLETED / CONFIRMED di DB
+            const isIssued = (cert.isIssued !== undefined) ? !!cert.isIssued : (!!r.isIssued || r.status === 'COMPLETED' || r.status === 'CONFIRMED');
             
             if (isIssued) {
+                const pilgrimName = cert.displayName || r.customerName || r.customer || r.name || r.full_name || r.pilgrim || r.nama || 'Jamaah Umroh';
                 list.push({
                     regId: r.id,
-                    name: cert.displayName || r.customer || r.name || r.full_name || 'Jamaah Umroh',
+                    name: pilgrimName,
                     departureDate: cleanDep,
                     certNo: cert.certificateNo || r.certificateNo || `SDW/CERT/2026/${String(r.id).replace(/\D/g, '').padStart(3, '0')}`,
                     photoUrl: normalizePhotoUrl(cert.photoUrl || r.photoUrl || r.photo || null),

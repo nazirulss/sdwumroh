@@ -16,6 +16,7 @@ function getRegistrations_(ss) {
   const customers = getSheetRowsAsObjects_(ss, "DB_Customers");
   const packages = getSheetRowsAsObjects_(ss, "DB_Packages");
   const departures = getSheetRowsAsObjects_(ss, "DB_Departures");
+  const docs = getSheetRowsAsObjects_(ss, "DB_Pilgrim_Documents");
 
   const custMap = {};
   customers.forEach(function(c) { custMap[c.id] = c; });
@@ -26,24 +27,47 @@ function getRegistrations_(ss) {
   const depMap = {};
   departures.forEach(function(d) { depMap[d.id] = d; });
 
+  const docPhotoMap = {};
+  docs.forEach(function(d) {
+    if (d.registration_id && (d.requirement_id === 'DCR-000004' || (d.file_name && String(d.file_name).toLowerCase().includes('pasfoto')))) {
+      const pUrl = d.file_ref_mock || d.file_url;
+      if (pUrl && pUrl !== '-' && !docPhotoMap[d.registration_id]) {
+        docPhotoMap[d.registration_id] = pUrl;
+      }
+    }
+  });
+
   return regs.map(function(reg) {
     const cust = custMap[reg.customer_id] || {};
     const pkg = pkgMap[reg.package_id] || {};
     const dep = depMap[reg.departure_id] || {};
+    const custFullName = cust.full_name || reg.customer_id;
+    const cleanDepDate = dep.departure_date ? formatDateSafe_(dep.departure_date) : '-';
+    const isCompleted = reg.status === 'COMPLETED' || reg.status === 'CONFIRMED';
+    const photo = docPhotoMap[reg.id] || null;
+    const certNumber = "SDW/CERT/2026/" + String(reg.id).replace(/\D/g, '').padStart(3, '0');
 
     return {
       id: reg.id,
       registrationNumber: reg.id,
       customerId: reg.customer_id,
-      customerName: cust.full_name || reg.customer_id,
+      customer: custFullName,
+      customerName: custFullName,
+      name: custFullName,
       nik: cust.nik || '-',
       gender: cust.gender || '-',
       phone: cust.phone || '-',
       email: cust.email || '-',
+      package: pkg.name || reg.package_id,
       packageId: reg.package_id,
       packageName: pkg.name || reg.package_id,
+      departure: cleanDepDate,
       departureId: reg.departure_id,
-      departureDate: dep.departure_date ? formatDateSafe_(dep.departure_date) : '-',
+      departureDate: cleanDepDate,
+      photoUrl: photo,
+      photo: photo,
+      isIssued: isCompleted,
+      certificateNo: certNumber,
       roomType: reg.room_type || 'QUAD',
       agreedPrice: Number(reg.agreed_price_snapshot) || 0,
       discount: Number(reg.discount_snapshot) || 0,
