@@ -55,6 +55,9 @@ function doGet(e) {
     if (action === 'getUsers') return createResponse(true, getUsers_(ss));
     if (action === 'getRolePermissions') return createResponse(true, getRolePermissions_(ss, e.parameter.role));
     if (action === 'adminLogin' || action === 'loginStaff') return createResponse(true, loginStaff_(ss, e.parameter, 'WEB_LOGIN'));
+    if (action === 'sendLoginOtp') return createResponse(true, sendLoginOtp_(ss, e.parameter, 'WEB_OTP'));
+    if (action === 'verifyLoginOtp') return createResponse(true, verifyLoginOtp_(ss, e.parameter, 'WEB_OTP'));
+    if (action === 'quickLoginByEmail') return createResponse(true, quickLoginByEmail_(ss, e.parameter, 'WEB_QUICK'));
 
     // 5. CRM & Prospek
     if (action === 'getLeads') return createResponse(true, getLeads_(ss, e.parameter));
@@ -180,6 +183,9 @@ function processSingleMutation_(ss, action, payload, actor) {
 
   // 1. Autentikasi & Akun Pengguna
   if (action === 'loginStaff' || action === 'adminLogin') return loginStaff_(ss, payload, actor);
+  if (action === 'sendLoginOtp') return sendLoginOtp_(ss, payload, actor);
+  if (action === 'verifyLoginOtp') return verifyLoginOtp_(ss, payload, actor);
+  if (action === 'quickLoginByEmail') return quickLoginByEmail_(ss, payload, actor);
   if (action === 'loginPilgrim' || action === 'checkAccount') return loginPilgrim_(ss, payload, actor);
   if (action === 'registerAccount' || action === 'registerPilgrimAccount' || action === 'registerPilgrim') {
     return registerPilgrim_(ss, payload, actor);

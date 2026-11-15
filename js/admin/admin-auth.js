@@ -2,9 +2,9 @@
  * ====================================================================
  * SDW UMROH — BACKOFFICE AUTHENTICATION & LOGIN CONTROLLER
  * File: js/admin/admin-auth.js
- * Version: 1.0.0
+ * Version: 2.5.1
  * Philosophy: ONE JOURNEY, ONE PLATFORM
- * Conforms to: Autentikasi Staf & Administrator Terpadu DB_Users
+ * Conforms to: Autentikasi Real Asnawiyyah (Email OTP & Login Cepat)
  * ====================================================================
  */
 
@@ -27,6 +27,9 @@
         TOKEN: 'sdw_admin_token'
     };
 
+    let activeOtpEmail = '';
+    let otpTimerInterval = null;
+
     // 1. Session Storage Helpers
     function getAdminSession() {
         try {
@@ -44,7 +47,7 @@
         return null;
     }
 
-    function setAdminSession(user, remember = false) {
+    function setAdminSession(user, remember = true) {
         if (!user) return;
         const session = {
             id: user.id || 'USR-000001',
@@ -54,7 +57,7 @@
             role: (user.role || 'ADMIN').toUpperCase(),
             status: user.status || 'ACTIVE',
             connected_entity: user.connected_entity || 'Semua Sistem',
-            token: 'SDW_ADM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8),
+            token: user.token || ('SDW_ADM_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8)),
             loggedInAt: new Date().toISOString()
         };
 
@@ -68,6 +71,7 @@
             if (remember && typeof localStorage !== 'undefined') {
                 localStorage.setItem(SESSION_KEYS.SESSION, raw);
                 localStorage.setItem(SESSION_KEYS.ROLE, session.role);
+                localStorage.setItem(SESSION_KEYS.TOKEN, session.token);
             }
         } catch (e) {
             console.warn('[SDW_AUTH] Gagal menyimpan session:', e);
@@ -81,6 +85,12 @@
         }
         if (typeof admin.applyRolePermissions === 'function') {
             admin.applyRolePermissions(session.role);
+        }
+
+        // Update session capsule text
+        const badgeText = document.getElementById('headerRoleBadgeText');
+        if (badgeText) {
+            badgeText.textContent = session.name + ' (' + session.role + ')';
         }
 
         return session;
@@ -102,126 +112,312 @@
         admin.currentUser = null;
     }
 
-    // 2. Local Users Resolver
-    function getAvailableUsers() {
-        if (typeof admin.getStoredUsers === 'function') {
-            return admin.getStoredUsers();
+    // 2. Tab Switcher Controller: OTP vs Quick
+    function switchLoginTab(tab) {
+        const btnOtp = document.getElementById('tabBtnLoginOtp');
+        const btnQuick = document.getElementById('tabBtnLoginQuick');
+        const contentOtp = document.getElementById('loginTabContentOtp');
+        const contentQuick = document.getElementById('loginTabContentQuick');
+        const errEl = document.getElementById('adminLoginError');
+
+        if (errEl) errEl.classList.add('hidden');
+
+        if (tab === 'quick') {
+            if (btnQuick) {
+                btnQuick.classList.add('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnQuick.classList.remove('text-slate-500');
+            }
+            if (btnOtp) {
+                btnOtp.classList.remove('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnOtp.classList.add('text-slate-500');
+            }
+            if (contentQuick) contentQuick.classList.remove('hidden');
+            if (contentOtp) contentOtp.classList.add('hidden');
+        } else {
+            if (btnOtp) {
+                btnOtp.classList.add('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnOtp.classList.remove('text-slate-500');
+            }
+            if (btnQuick) {
+                btnQuick.classList.remove('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnQuick.classList.add('text-slate-500');
+            }
+            if (contentOtp) contentOtp.classList.remove('hidden');
+            if (contentQuick) contentQuick.classList.add('hidden');
         }
-        if (typeof localStorage !== 'undefined') {
-            try {
-                const raw = localStorage.getItem('sdw_admin_users');
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-                }
-            } catch (_) {}
-        }
-        return [
-            { id: 'USR-000001', name: 'Super Administrator', email: 'admin@sdwumroh.com', phone: '6281234567890', role: 'SUPER_ADMIN', status: 'ACTIVE' },
-            { id: 'USR-000002', name: 'H. Ahmad Fauzi (Admin Operasional)', email: 'ops@sdwumroh.com', phone: '6281122334455', role: 'ADMIN', status: 'ACTIVE' },
-            { id: 'USR-000003', name: 'H. Muhammad Syarif (Direktur Utama)', email: 'syarif@sdwumroh.com', phone: '6281299887766', role: 'DIRECTOR', status: 'ACTIVE' },
-            { id: 'USR-000004', name: 'Hj. Fatimah Zahra (Finance & Kasir)', email: 'finance@sdwumroh.com', phone: '6281355667788', role: 'FINANCE', status: 'ACTIVE' },
-            { id: 'USR-000005', name: 'Ustadz Dr. Abdullah (Muthawwif Senior)', email: 'muthawwif@sdwumroh.com', phone: '6281788990011', role: 'MUTHAWWIF', status: 'ACTIVE' },
-            { id: 'USR-000006', name: 'Budi Santoso (Senior Sales Consultant)', email: 'sales@sdwumroh.com', phone: '6281566778899', role: 'SALES', status: 'ACTIVE' },
-            { id: 'USR-000007', name: 'Siti Aisyah (Akun Jamaah Umroh)', email: 'aisyah@gmail.com', phone: '6281233445566', role: 'PILGRIM', status: 'ACTIVE' }
-        ];
     }
 
-    // 3. Authenticate against DB_Users
-    async function loginAdminAsync(identifier, password, remember = false) {
-        identifier = String(identifier || '').trim().toLowerCase();
-        password = String(password || '').trim();
+    // 3. OTP Flow: Step 1 Send OTP
+    async function handleSendOtp() {
+        const emailInput = document.getElementById('loginOtpEmailInput');
+        const btn = document.getElementById('btnSendLoginOtp');
+        const errEl = document.getElementById('adminLoginError');
+        const errMsg = document.getElementById('adminLoginErrorMessage');
 
-        if (!identifier) {
-            return { success: false, message: 'Email / ID Pengguna / No. WhatsApp wajib diisi.' };
+        const email = emailInput ? String(emailInput.value || '').trim().toLowerCase() : '';
+        if (errEl) errEl.classList.add('hidden');
+
+        if (!email) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Silakan masukkan alamat email resmi Anda.';
+                errEl.classList.remove('hidden');
+            }
+            if (emailInput) emailInput.focus();
+            return;
         }
-        if (!password) {
-            return { success: false, message: 'Kata sandi keamanan wajib diisi.' };
+
+        const originalBtnHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Mengirim Kode OTP...';
         }
 
-        const users = getAvailableUsers();
-        const cleanIdentDigits = identifier.replace(/[^0-9]/g, '');
+        try {
+            let res = null;
+            if (typeof SDW_API !== 'undefined' && SDW_API.post) {
+                res = await SDW_API.post('sendLoginOtp', { email: email });
+            } else {
+                res = { success: true, message: 'Kode OTP telah dikirimkan ke email ' + email, debugOtpHint: '888999' };
+            }
 
-        let found = users.find(u => {
-            const email = String(u.email || '').toLowerCase().trim();
-            const id = String(u.id || '').toLowerCase().trim();
-            const phone = String(u.phone || '').replace(/[^0-9]/g, '');
-            return email === identifier || id === identifier || (cleanIdentDigits && cleanIdentDigits.length >= 6 && phone.endsWith(cleanIdentDigits));
-        });
+            if (res && res.success) {
+                activeOtpEmail = email;
+                const step1 = document.getElementById('otpStep1Container');
+                const step2 = document.getElementById('otpStep2Container');
+                const emailTargetText = document.getElementById('otpSentToEmailText');
+                const otpInput = document.getElementById('loginOtpCodeInput');
 
-        // Jika tidak ditemukan di lokal, coba panggil Google Apps Script API jika online
-        if (!found && typeof fetch !== 'undefined' && typeof APP_CONFIG !== 'undefined' && APP_CONFIG.appsScriptUrl) {
-            try {
-                const res = await fetch(`${APP_CONFIG.appsScriptUrl}?action=adminLogin&identifier=${encodeURIComponent(identifier)}&password=${encodeURIComponent(password)}`);
-                const json = await res.json();
-                if (json && json.success && json.data && json.data.user) {
-                    const session = setAdminSession(json.data.user, remember);
-                    if (typeof admin.logAdminAudit === 'function') {
-                        admin.logAdminAudit('USER_LOGIN', 'AUTH_PORTAL', json.data.user.id, `Pengguna ${json.data.user.name} berhasil login via Cloud DB_Users.`, 'INFO');
-                    }
-                    return { success: true, user: session };
-                } else if (json && json.message) {
-                    return { success: false, message: json.message };
+                if (emailTargetText) emailTargetText.textContent = email;
+                if (step1) step1.classList.add('hidden');
+                if (step2) step2.classList.remove('hidden');
+                if (otpInput) {
+                    otpInput.value = '';
+                    setTimeout(() => otpInput.focus(), 150);
                 }
-            } catch (err) {
-                console.warn('[SDW_AUTH] Cloud API login fallback gagal:', err);
+
+                // Mulai Countdown Timer 5 Menit
+                startOtpCountdown(300);
+
+                if (res.debugOtpHint) {
+                    console.log('🔑 [DEBUG_OTP_HINT]:', res.debugOtpHint);
+                }
+
+                if (typeof admin.showToast === 'function') {
+                    admin.showToast('Kode OTP telah dikirim ke ' + email, 'success');
+                }
+            } else {
+                const message = (res && (res.message || res.error)) || 'Gagal mengirimkan kode OTP ke email tersebut.';
+                if (errEl && errMsg) {
+                    errMsg.textContent = message;
+                    errEl.classList.remove('hidden');
+                }
+            }
+        } catch (err) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Terjadi kesalahan sistem: ' + err.message;
+                errEl.classList.remove('hidden');
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
             }
         }
-
-        if (!found) {
-            return {
-                success: false,
-                message: 'Akun dengan email / No. HP tersebut tidak ditemukan di master DB_Users.'
-            };
-        }
-
-        // Cek status keaktifan akun
-        if (String(found.status).toUpperCase() === 'INACTIVE') {
-            return {
-                success: false,
-                message: 'Akun Anda dinonaktifkan oleh administrator. Hubungi Super Administrator untuk memulihkan akses.'
-            };
-        }
-
-        // Validasi kata sandi (dukung password akun terdaftar atau default pass 'admin123' / 'sdw123' / '123456' / '1234')
-        const validPassword = found.password ?
-            (found.password === password) :
-            (password === 'admin123' || password === 'sdw123' || password === '123456' || password === '1234');
-
-        if (!validPassword) {
-            return {
-                success: false,
-                message: 'Kata sandi keamanan yang Anda masukkan salah. Gunakan default: admin123'
-            };
-        }
-
-        // Login Berhasil
-        const session = setAdminSession(found, remember);
-
-        if (typeof admin.logAdminAudit === 'function') {
-            admin.logAdminAudit('USER_LOGIN', 'AUTH_PORTAL', found.id, `Pengguna ${found.name} (${found.role}) berhasil masuk ke portal administrasi.`, 'INFO');
-        }
-
-        return { success: true, user: session };
     }
 
-    // 4. Modal UI Controls
+    function startOtpCountdown(seconds) {
+        if (otpTimerInterval) clearInterval(otpTimerInterval);
+        const countdownEl = document.getElementById('otpCountdownText');
+        const resendBtn = document.getElementById('btnResendOtp');
+
+        if (resendBtn) resendBtn.disabled = true;
+
+        let remaining = seconds;
+        function renderTimer() {
+            const m = Math.floor(remaining / 60);
+            const s = remaining % 60;
+            const str = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+            if (countdownEl) {
+                countdownEl.innerHTML = 'Berlaku: <strong class="text-amber-600 font-mono">' + str + '</strong>';
+            }
+            if (remaining <= 0) {
+                clearInterval(otpTimerInterval);
+                if (countdownEl) countdownEl.innerHTML = '<span class="text-rose-600 font-bold">Kadaluarsa</span>';
+                if (resendBtn) resendBtn.disabled = false;
+            }
+            remaining--;
+        }
+        renderTimer();
+        otpTimerInterval = setInterval(renderTimer, 1000);
+    }
+
+    function resetOtpStep() {
+        if (otpTimerInterval) clearInterval(otpTimerInterval);
+        const step1 = document.getElementById('otpStep1Container');
+        const step2 = document.getElementById('otpStep2Container');
+        const errEl = document.getElementById('adminLoginError');
+
+        if (errEl) errEl.classList.add('hidden');
+        if (step2) step2.classList.add('hidden');
+        if (step1) step1.classList.remove('hidden');
+
+        const emailInput = document.getElementById('loginOtpEmailInput');
+        if (emailInput) setTimeout(() => emailInput.focus(), 100);
+    }
+
+    // 4. OTP Flow: Step 2 Verify OTP
+    async function handleVerifyOtp() {
+        const otpInput = document.getElementById('loginOtpCodeInput');
+        const btn = document.getElementById('btnVerifyLoginOtp');
+        const errEl = document.getElementById('adminLoginError');
+        const errMsg = document.getElementById('adminLoginErrorMessage');
+
+        const otp = otpInput ? String(otpInput.value || '').trim().replace(/[^0-9]/g, '') : '';
+        if (errEl) errEl.classList.add('hidden');
+
+        if (!otp || otp.length < 6) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Masukkan 6 digit angka kode OTP secara lengkap.';
+                errEl.classList.remove('hidden');
+            }
+            if (otpInput) otpInput.focus();
+            return;
+        }
+
+        const originalBtnHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memverifikasi OTP...';
+        }
+
+        try {
+            let res = null;
+            if (typeof SDW_API !== 'undefined' && SDW_API.post) {
+                res = await SDW_API.post('verifyLoginOtp', { email: activeOtpEmail, otp: otp });
+            } else {
+                res = { success: true, data: { user: { id: 'USR-000001', name: 'Admin', role: 'ADMIN', email: activeOtpEmail } } };
+            }
+
+            const payloadData = (res && res.data) ? res.data : res;
+
+            if (payloadData && (payloadData.success !== false) && payloadData.user) {
+                const user = payloadData.user;
+                if (payloadData.permissions && admin.ROLE_PERMISSIONS) {
+                    admin.ROLE_PERMISSIONS[user.role] = payloadData.permissions;
+                }
+                const session = setAdminSession(user, true);
+
+                closeLoginModal();
+                if (typeof admin.showToast === 'function') {
+                    admin.showToast('Login berhasil! Selamat datang, ' + session.name, 'success');
+                }
+                if (typeof admin.switchTab === 'function') {
+                    admin.switchTab('tab-dashboard');
+                }
+            } else {
+                const message = (payloadData && (payloadData.message || payloadData.error)) || 'Kode OTP salah atau kadaluarsa.';
+                if (errEl && errMsg) {
+                    errMsg.textContent = message;
+                    errEl.classList.remove('hidden');
+                }
+            }
+        } catch (err) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Terjadi kesalahan sistem: ' + err.message;
+                errEl.classList.remove('hidden');
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
+            }
+        }
+    }
+
+    // 5. Method 2: Quick Login by Email (Tanpa OTP)
+    async function handleQuickLogin() {
+        const select = document.getElementById('quickLoginSelect');
+        const input = document.getElementById('quickLoginEmailInput');
+        const btn = document.getElementById('btnQuickLoginSubmit');
+        const errEl = document.getElementById('adminLoginError');
+        const errMsg = document.getElementById('adminLoginErrorMessage');
+
+        let email = input ? String(input.value || '').trim().toLowerCase() : '';
+        if (!email && select) {
+            email = String(select.value || '').trim().toLowerCase();
+        }
+
+        if (errEl) errEl.classList.add('hidden');
+
+        if (!email) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Silakan pilih atau ketikkan email staf terdaftar di DB_Users.';
+                errEl.classList.remove('hidden');
+            }
+            return;
+        }
+
+        const originalBtnHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memvalidasi Akun...';
+        }
+
+        try {
+            let res = null;
+            if (typeof SDW_API !== 'undefined' && SDW_API.post) {
+                res = await SDW_API.post('quickLoginByEmail', { email: email });
+            } else {
+                res = { success: true, data: { user: { id: 'USR-000001', name: 'Admin', role: 'ADMIN', email: email } } };
+            }
+
+            const payloadData = (res && res.data) ? res.data : res;
+
+            if (payloadData && (payloadData.success !== false) && payloadData.user) {
+                const user = payloadData.user;
+                if (payloadData.permissions && admin.ROLE_PERMISSIONS) {
+                    admin.ROLE_PERMISSIONS[user.role] = payloadData.permissions;
+                }
+                const session = setAdminSession(user, true);
+
+                closeLoginModal();
+                if (typeof admin.showToast === 'function') {
+                    admin.showToast('Login cepat berhasil! Selamat bertugas, ' + session.name, 'success');
+                }
+                if (typeof admin.switchTab === 'function') {
+                    admin.switchTab('tab-dashboard');
+                }
+            } else {
+                const message = (payloadData && (payloadData.message || payloadData.error)) || 'Email tersebut tidak terdaftar di sistem DB_Users.';
+                if (errEl && errMsg) {
+                    errMsg.textContent = message;
+                    errEl.classList.remove('hidden');
+                }
+            }
+        } catch (err) {
+            if (errEl && errMsg) {
+                errMsg.textContent = 'Terjadi kesalahan sistem: ' + err.message;
+                errEl.classList.remove('hidden');
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalBtnHtml;
+            }
+        }
+    }
+
+    // 6. Modal Controls
     function openLoginModal(options = {}) {
         if (typeof document === 'undefined') return;
         const modal = document.getElementById('modalAdminLogin');
         if (!modal) return;
 
-        const idInput = document.getElementById('adminLoginIdentifier');
-        const passInput = document.getElementById('adminLoginPassword');
+        resetOtpStep();
+        switchLoginTab('otp');
+
         const errEl = document.getElementById('adminLoginError');
-
-        if (idInput && !options.keepValues) idInput.value = '';
-        if (passInput && !options.keepValues) passInput.value = '';
         if (errEl) errEl.classList.add('hidden');
-
-        if (options.prefillRole) {
-            quickFillLogin(options.prefillRole);
-        }
 
         modal.classList.add('active', 'opacity-100', 'pointer-events-auto');
         modal.classList.remove('opacity-0', 'pointer-events-none');
@@ -232,9 +428,8 @@
             card.classList.add('scale-100');
         }
 
-        if (idInput) {
-            setTimeout(() => idInput.focus(), 150);
-        }
+        const emailInput = document.getElementById('loginOtpEmailInput');
+        if (emailInput) setTimeout(() => emailInput.focus(), 150);
     }
 
     function closeLoginModal() {
@@ -252,105 +447,6 @@
         }
     }
 
-    function toggleLoginPasswordVisibility() {
-        if (typeof document === 'undefined') return;
-        const passInput = document.getElementById('adminLoginPassword');
-        const eyeIcon = document.getElementById('adminLoginEyeIcon');
-        if (!passInput) return;
-
-        if (passInput.type === 'password') {
-            passInput.type = 'text';
-            if (eyeIcon) {
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            }
-        } else {
-            passInput.type = 'password';
-            if (eyeIcon) {
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        }
-    }
-
-    function quickFillLogin(roleKey) {
-        if (typeof document === 'undefined') return;
-        const users = getAvailableUsers();
-        const role = String(roleKey || 'SUPER_ADMIN').toUpperCase();
-        const user = users.find(u => String(u.role).toUpperCase() === role) || users[0];
-
-        const idInput = document.getElementById('adminLoginIdentifier');
-        const passInput = document.getElementById('adminLoginPassword');
-        const errEl = document.getElementById('adminLoginError');
-
-        if (idInput && user) {
-            idInput.value = user.email || user.phone || user.id;
-            idInput.classList.add('bg-emerald-50', 'ring-2', 'ring-emerald-200');
-            setTimeout(() => idInput.classList.remove('bg-emerald-50', 'ring-2', 'ring-emerald-200'), 800);
-        }
-        if (passInput) {
-            passInput.value = 'admin123';
-            passInput.classList.add('bg-emerald-50', 'ring-2', 'ring-emerald-200');
-            setTimeout(() => passInput.classList.remove('bg-emerald-50', 'ring-2', 'ring-emerald-200'), 800);
-        }
-        if (errEl) errEl.classList.add('hidden');
-
-        const submitBtn = document.getElementById('btnAdminLoginSubmit');
-        if (submitBtn) submitBtn.focus();
-    }
-
-    async function handleAdminLogin(e) {
-        if (e && e.preventDefault) e.preventDefault();
-        if (typeof document === 'undefined') return;
-
-        const idInput = document.getElementById('adminLoginIdentifier');
-        const passInput = document.getElementById('adminLoginPassword');
-        const rememberChk = document.getElementById('adminLoginRemember');
-        const errEl = document.getElementById('adminLoginError');
-        const submitBtn = document.getElementById('btnAdminLoginSubmit');
-
-        const identifier = idInput ? idInput.value : '';
-        const password = passInput ? passInput.value : '';
-        const remember = rememberChk ? rememberChk.checked : false;
-
-        if (errEl) errEl.classList.add('hidden');
-
-        let originalBtnHtml = '';
-        if (submitBtn) {
-            originalBtnHtml = submitBtn.innerHTML;
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memverifikasi Kredensial...';
-        }
-
-        try {
-            const res = await loginAdminAsync(identifier, password, remember);
-            if (res.success) {
-                closeLoginModal();
-                if (typeof admin.showToast === 'function') {
-                    admin.showToast(`Selamat datang kembali, ${res.user.name}! Sesi aktif sebagai ${res.user.role.replace('_', ' ')}.`, 'success');
-                }
-                if (typeof admin.switchTab === 'function') {
-                    admin.switchTab('tab-dashboard');
-                }
-            } else {
-                if (errEl) {
-                    errEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-500"></i> ${admin.escapeHtml ? admin.escapeHtml(res.message) : res.message}`;
-                    errEl.classList.remove('hidden');
-                }
-            }
-        } catch (err) {
-            if (errEl) {
-                errEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1.5 text-rose-500"></i> Terjadi kesalahan sistem: ${err.message}`;
-                errEl.classList.remove('hidden');
-            }
-        } finally {
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnHtml;
-            }
-        }
-    }
-
     function checkAdminAuth(options = { autoPrompt: false }) {
         const session = getAdminSession();
         if (session && session.role) {
@@ -362,6 +458,10 @@
             if (typeof admin.applyRolePermissions === 'function') {
                 admin.applyRolePermissions(session.role);
             }
+            const badgeText = document.getElementById('headerRoleBadgeText');
+            if (badgeText) {
+                badgeText.textContent = session.name + ' (' + session.role + ')';
+            }
             return true;
         }
 
@@ -372,24 +472,16 @@
     }
 
     function switchAccount() {
-        openLoginModal({ prefillRole: null, keepValues: false });
+        openLoginModal();
     }
 
-    // 5. User Profile Modal Controls (Asnawiyyah "Profil Saya")
     function openProfileModal() {
         if (typeof document === 'undefined') return;
         const modal = document.getElementById('modalUserProfile');
         if (!modal) return;
 
         const session = getAdminSession() || admin.currentUser;
-        const role = (session && session.role ? session.role : admin.currentRole || 'SUPER_ADMIN').toUpperCase();
-        const profile = (admin.USER_ROLE_PROFILES && admin.USER_ROLE_PROFILES[role]) || {
-            name: session ? session.name : 'Super Administrator',
-            initial: 'SU',
-            email: session ? session.email : 'admin@sdwumroh.com',
-            desc: 'Super Administrator',
-            bg: 'bg-teal-700 text-white'
-        };
+        const role = (session && session.role ? session.role : admin.currentRole || 'ADMIN').toUpperCase();
 
         const avatarEl = document.getElementById('profileModalAvatar');
         const nameEl = document.getElementById('profileModalName');
@@ -398,73 +490,25 @@
         const phoneEl = document.getElementById('profileModalPhone');
         const idEl = document.getElementById('profileModalUserId');
         const entityEl = document.getElementById('profileModalConnectedEntity');
-        const lastActiveEl = document.getElementById('profileModalLastActive');
-        const newPassInput = document.getElementById('profileModalNewPassword');
-        const errEl = document.getElementById('profileModalError');
 
-        if (avatarEl) {
-            avatarEl.innerText = profile.initial;
-            avatarEl.className = `w-14 h-14 rounded-2xl ${profile.bg} font-black text-xl flex items-center justify-center shadow-md`;
-        }
-        if (nameEl) nameEl.innerText = session ? session.name : profile.name;
-        if (roleEl) roleEl.innerText = role.replace('_', ' ');
-        if (emailEl) emailEl.innerText = session ? session.email : profile.email;
-        if (phoneEl) phoneEl.innerText = session && session.phone ? session.phone : '+62 812-3456-7890';
-        if (idEl) idEl.innerText = session && session.id ? session.id : 'USR-000001';
-        if (entityEl) entityEl.innerText = session && session.connected_entity ? session.connected_entity : 'Semua Sistem & Otoritas Penuh';
-        if (lastActiveEl) lastActiveEl.innerText = session && session.loggedInAt ? new Date(session.loggedInAt).toLocaleString('id-ID') : 'Aktif Sekarang';
-        if (newPassInput) newPassInput.value = '';
-        if (errEl) errEl.classList.add('hidden');
+        if (avatarEl) avatarEl.textContent = (session && session.name ? session.name.substring(0, 2).toUpperCase() : 'AD');
+        if (nameEl) nameEl.textContent = session ? session.name : 'Administrator';
+        if (roleEl) roleEl.textContent = role;
+        if (emailEl) emailEl.textContent = session ? session.email : 'admin@sdwumroh.com';
+        if (phoneEl) phoneEl.textContent = (session && session.phone) ? session.phone : '-';
+        if (idEl) idEl.textContent = session ? session.id : 'USR-000001';
+        if (entityEl) entityEl.textContent = (session && session.connected_entity) ? session.connected_entity : 'Semua Sistem';
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
+        modal.classList.add('active', 'opacity-100', 'pointer-events-auto');
+        modal.classList.remove('opacity-0', 'pointer-events-none');
     }
 
     function closeProfileModal() {
         if (typeof document === 'undefined') return;
         const modal = document.getElementById('modalUserProfile');
         if (!modal) return;
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
-    }
-
-    function saveProfilePassword(event) {
-        if (event && event.preventDefault) event.preventDefault();
-        if (typeof document === 'undefined') return;
-
-        const passInput = document.getElementById('profileModalNewPassword');
-        const errEl = document.getElementById('profileModalError');
-        const newPass = passInput ? passInput.value.trim() : '';
-
-        if (!newPass || newPass.length < 6) {
-            if (errEl) {
-                errEl.innerText = 'Kata sandi baru minimal 6 karakter.';
-                errEl.classList.remove('hidden');
-            }
-            return;
-        }
-
-        const session = getAdminSession() || admin.currentUser;
-        const users = getAvailableUsers();
-        if (session && session.id) {
-            const user = users.find(u => u.id === session.id);
-            if (user) {
-                user.password = newPass;
-                if (typeof localStorage !== 'undefined') {
-                    localStorage.setItem('sdw_admin_users', JSON.stringify(users));
-                }
-            }
-        }
-
-        if (typeof admin.logAdminAudit === 'function') {
-            admin.logAdminAudit('CHANGE_PASSWORD', 'USER_PROFILE', session ? session.id : 'USR-000001', 'Pengguna berhasil memperbarui kata sandi mandiri.', 'INFO');
-        }
-
-        if (typeof admin.showToast === 'function') {
-            admin.showToast('Kata sandi berhasil diperbarui dengan aman.', 'success');
-        }
-
-        closeProfileModal();
+        modal.classList.remove('active', 'opacity-100', 'pointer-events-auto');
+        modal.classList.add('opacity-0', 'pointer-events-none');
     }
 
     // Attach to admin namespace
@@ -472,33 +516,28 @@
     admin.getAdminSession = getAdminSession;
     admin.setAdminSession = setAdminSession;
     admin.clearAdminSession = clearAdminSession;
-    admin.loginAdminAsync = loginAdminAsync;
     admin.openLoginModal = openLoginModal;
     admin.closeLoginModal = closeLoginModal;
-    admin.toggleLoginPasswordVisibility = toggleLoginPasswordVisibility;
-    admin.quickFillLogin = quickFillLogin;
-    admin.handleAdminLogin = handleAdminLogin;
     admin.checkAdminAuth = checkAdminAuth;
     admin.switchAccount = switchAccount;
     admin.openProfileModal = openProfileModal;
     admin.closeProfileModal = closeProfileModal;
-    admin.saveProfilePassword = saveProfilePassword;
 
     return {
         SESSION_KEYS,
         getAdminSession,
         setAdminSession,
         clearAdminSession,
-        loginAdminAsync,
         openLoginModal,
         closeLoginModal,
-        toggleLoginPasswordVisibility,
-        quickFillLogin,
-        handleAdminLogin,
         checkAdminAuth,
         switchAccount,
         openProfileModal,
         closeProfileModal,
-        saveProfilePassword
+        switchLoginTab,
+        handleSendOtp,
+        handleVerifyOtp,
+        resetOtpStep,
+        handleQuickLogin
     };
 });
