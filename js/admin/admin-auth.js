@@ -72,6 +72,11 @@
                 localStorage.setItem(SESSION_KEYS.SESSION, raw);
                 localStorage.setItem(SESSION_KEYS.ROLE, session.role);
                 localStorage.setItem(SESSION_KEYS.TOKEN, session.token);
+                localStorage.setItem('sdw_last_user', JSON.stringify({
+                    name: session.name,
+                    email: session.email,
+                    role: session.role
+                }));
             }
         } catch (e) {
             console.warn('[SDW_AUTH] Gagal menyimpan session:', e);
@@ -334,17 +339,67 @@
         }
     }
 
-    // 5. Method 2: Quick Login by Email (Tanpa OTP)
-    async function handleQuickLogin() {
-        const select = document.getElementById('quickLoginSelect');
-        const input = document.getElementById('quickLoginEmailInput');
-        const btn = document.getElementById('btnQuickLoginSubmit');
+    // 5. Method 2: Quick Login by Email (1-Klik Akun Tanpa OTP)
+    function updateContinueAsCard() {
+        if (typeof document === 'undefined') return;
+        const avatarEl = document.getElementById('quickLoginAvatar');
+        const nameEl = document.getElementById('quickLoginName');
+        const emailEl = document.getElementById('quickLoginEmailDisplay');
+        const btnContinue = document.getElementById('btnContinueAsUser');
+
+        let user = null;
+        try {
+            if (typeof localStorage !== 'undefined') {
+                const raw = localStorage.getItem('sdw_last_user');
+                if (raw) user = JSON.parse(raw);
+            }
+        } catch (_) {}
+
+        if (!user || !user.email) {
+            user = {
+                name: 'H. Ahmad Fauzi (Admin)',
+                email: 'admin@sdwumroh.com',
+                role: 'ADMIN'
+            };
+        }
+
+        const initial = (user.name || 'Admin').split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase() || 'AF';
+        if (avatarEl) avatarEl.textContent = initial;
+        if (nameEl) nameEl.textContent = user.name;
+        if (emailEl) emailEl.textContent = user.email;
+        if (btnContinue) {
+            btnContinue.setAttribute('data-email', user.email);
+        }
+    }
+
+    function handleContinueAsClick() {
+        const btnContinue = document.getElementById('btnContinueAsUser');
+        const email = btnContinue ? (btnContinue.getAttribute('data-email') || 'admin@sdwumroh.com') : 'admin@sdwumroh.com';
+        handleQuickLogin(email);
+    }
+
+    function toggleOtherAccounts() {
+        const container = document.getElementById('containerOtherAccounts');
+        if (container) {
+            container.classList.toggle('hidden');
+        }
+    }
+
+    async function handleQuickLogin(explicitEmail) {
         const errEl = document.getElementById('adminLoginError');
         const errMsg = document.getElementById('adminLoginErrorMessage');
+        const btnContinue = document.getElementById('btnContinueAsUser');
 
-        let email = input ? String(input.value || '').trim().toLowerCase() : '';
-        if (!email && select) {
-            email = String(select.value || '').trim().toLowerCase();
+        let email = '';
+        if (typeof explicitEmail === 'string' && explicitEmail.trim()) {
+            email = explicitEmail.trim().toLowerCase();
+        } else {
+            const input = document.getElementById('quickLoginCustomEmailInput');
+            if (input && input.value) {
+                email = String(input.value).trim().toLowerCase();
+            } else if (btnContinue) {
+                email = btnContinue.getAttribute('data-email') || 'admin@sdwumroh.com';
+            }
         }
 
         if (errEl) errEl.classList.add('hidden');
@@ -357,10 +412,10 @@
             return;
         }
 
-        const originalBtnHtml = btn ? btn.innerHTML : '';
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memvalidasi Akun...';
+        const originalBtnHtml = btnContinue ? btnContinue.innerHTML : '';
+        if (btnContinue) {
+            btnContinue.disabled = true;
+            btnContinue.classList.add('opacity-75', 'cursor-wait');
         }
 
         try {
@@ -382,7 +437,7 @@
 
                 closeLoginModal();
                 if (typeof admin.showToast === 'function') {
-                    admin.showToast('Login cepat berhasil! Selamat bertugas, ' + session.name, 'success');
+                    admin.showToast('Login instan berhasil! Selamat bertugas, ' + session.name, 'success');
                 }
                 if (typeof admin.switchTab === 'function') {
                     admin.switchTab('tab-dashboard');
@@ -400,9 +455,9 @@
                 errEl.classList.remove('hidden');
             }
         } finally {
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalBtnHtml;
+            if (btnContinue) {
+                btnContinue.disabled = false;
+                btnContinue.classList.remove('opacity-75', 'cursor-wait');
             }
         }
     }
@@ -414,7 +469,8 @@
         if (!modal) return;
 
         resetOtpStep();
-        switchLoginTab('otp');
+        updateContinueAsCard();
+        switchLoginTab('quick'); // Default tab: 1-Klik Akun persis RMI NU Demak
 
         const errEl = document.getElementById('adminLoginError');
         if (errEl) errEl.classList.add('hidden');
@@ -427,9 +483,6 @@
             card.classList.remove('scale-95');
             card.classList.add('scale-100');
         }
-
-        const emailInput = document.getElementById('loginOtpEmailInput');
-        if (emailInput) setTimeout(() => emailInput.focus(), 150);
     }
 
     function closeLoginModal() {
@@ -538,6 +591,9 @@
     admin.switchAccount = switchAccount;
     admin.openProfileModal = openProfileModal;
     admin.closeProfileModal = closeProfileModal;
+    admin.updateContinueAsCard = updateContinueAsCard;
+    admin.handleContinueAsClick = handleContinueAsClick;
+    admin.toggleOtherAccounts = toggleOtherAccounts;
 
     return {
         SESSION_KEYS,
@@ -555,6 +611,9 @@
         handleSendOtp,
         handleVerifyOtp,
         resetOtpStep,
-        handleQuickLogin
+        handleQuickLogin,
+        updateContinueAsCard,
+        handleContinueAsClick,
+        toggleOtherAccounts
     };
 });
