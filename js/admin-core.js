@@ -53,14 +53,16 @@
         }
 
         // 2. Ambil Sesi & Role Tersimpan (Autentikasi Terpadu DB_Users)
+        let hasAuth = false;
         if (typeof admin.checkAdminAuth === 'function') {
-            admin.checkAdminAuth();
+            hasAuth = admin.checkAdminAuth({ autoPrompt: true });
         } else if (typeof APP_CONFIG !== 'undefined' && APP_CONFIG.storage) {
             let savedRole = null;
             if (typeof sessionStorage !== 'undefined') savedRole = sessionStorage.getItem(APP_CONFIG.storage.keys.adminRole);
             if (!savedRole && typeof localStorage !== 'undefined') savedRole = localStorage.getItem(APP_CONFIG.storage.keys.adminRole);
             if (savedRole && admin.ADMIN_PERMISSIONS && admin.ADMIN_PERMISSIONS[savedRole]) {
                 admin.currentRole = savedRole;
+                hasAuth = true;
             }
         }
 

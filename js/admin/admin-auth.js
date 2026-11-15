@@ -124,22 +124,22 @@
 
         if (tab === 'quick') {
             if (btnQuick) {
-                btnQuick.classList.add('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnQuick.classList.add('bg-white', 'text-blue-600', 'shadow-xs', 'font-bold');
                 btnQuick.classList.remove('text-slate-500');
             }
             if (btnOtp) {
-                btnOtp.classList.remove('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnOtp.classList.remove('bg-white', 'text-blue-600', 'shadow-xs', 'font-bold');
                 btnOtp.classList.add('text-slate-500');
             }
             if (contentQuick) contentQuick.classList.remove('hidden');
             if (contentOtp) contentOtp.classList.add('hidden');
         } else {
             if (btnOtp) {
-                btnOtp.classList.add('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnOtp.classList.add('bg-white', 'text-blue-600', 'shadow-xs', 'font-bold');
                 btnOtp.classList.remove('text-slate-500');
             }
             if (btnQuick) {
-                btnQuick.classList.remove('bg-white', 'text-sdw-pine', 'shadow-xs');
+                btnQuick.classList.remove('bg-white', 'text-blue-600', 'shadow-xs', 'font-bold');
                 btnQuick.classList.add('text-slate-500');
             }
             if (contentOtp) contentOtp.classList.remove('hidden');
@@ -447,7 +447,19 @@
         }
     }
 
-    function checkAdminAuth(options = { autoPrompt: false }) {
+    function handleCloseLoginModal() {
+        const session = getAdminSession();
+        if (session && session.role) {
+            closeLoginModal();
+        } else {
+            // Pengguna belum login, arahkan kembali ke web publik
+            if (typeof window !== 'undefined') {
+                window.location.href = 'index.html';
+            }
+        }
+    }
+
+    function checkAdminAuth(options = { autoPrompt: true }) {
         const session = getAdminSession();
         if (session && session.role) {
             admin.currentRole = session.role;
@@ -465,8 +477,11 @@
             return true;
         }
 
-        if (options.autoPrompt) {
-            openLoginModal();
+        // Jika belum ada sesi dan autoPrompt true, tampilkan popup login otomatis
+        if (options && options.autoPrompt !== false) {
+            setTimeout(() => {
+                openLoginModal();
+            }, 100);
         }
         return false;
     }
@@ -518,6 +533,7 @@
     admin.clearAdminSession = clearAdminSession;
     admin.openLoginModal = openLoginModal;
     admin.closeLoginModal = closeLoginModal;
+    admin.handleCloseLoginModal = handleCloseLoginModal;
     admin.checkAdminAuth = checkAdminAuth;
     admin.switchAccount = switchAccount;
     admin.openProfileModal = openProfileModal;
@@ -530,6 +546,7 @@
         clearAdminSession,
         openLoginModal,
         closeLoginModal,
+        handleCloseLoginModal,
         checkAdminAuth,
         switchAccount,
         openProfileModal,
