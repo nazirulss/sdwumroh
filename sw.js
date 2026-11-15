@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
-const CACHE_NAME = 'sdw-umroh-pwa-v92';
-const RUNTIME_CACHE = 'sdw-runtime-v92';
+const CACHE_NAME = 'sdw-umroh-pwa-v93';
+const RUNTIME_CACHE = 'sdw-runtime-v93';
 
 const PRECACHE_URLS = [
   '/',
