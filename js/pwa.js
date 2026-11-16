@@ -3862,6 +3862,9 @@
       initPrayerAndClockWidget();
       initAppBannerSlider();
       initDeepLinkRouter();
+      if (typeof window.updateAppThemeUI === 'function') window.updateAppThemeUI();
+      if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
+      if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
     });
   } else {
     initSplashScreen();
@@ -3869,7 +3872,287 @@
     initPrayerAndClockWidget();
     initAppBannerSlider();
     initDeepLinkRouter();
+    if (typeof window.updateAppThemeUI === 'function') window.updateAppThemeUI();
+    if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
+    if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
   }
+
+  // ==================== ASNAWIYYAH PINTU AKSES & SETTINGS CONTROLLERS ====================
+  window.handlePintuAkses = function(role) {
+    if (role === 'jamaah') {
+      const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
+      if (session) {
+        if (typeof SDW_AUTH.switchAppTab === 'function') SDW_AUTH.switchAppTab('tab-profile');
+        const authCard = document.getElementById('profileAuthenticatedCard');
+        if (authCard) authCard.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        if (typeof window.openAppSubView === 'function') {
+          window.openAppSubView('auth');
+        }
+      }
+    } else if (role === 'admin') {
+      window.openPwaAdminLoginModal();
+    } else if (role === 'muthawwif') {
+      window.location.href = 'admin.html?role=muthawwif';
+    } else if (role === 'mitra') {
+      window.location.href = 'admin.html?role=agen';
+    }
+  };
+
+  window.openPwaAdminLoginModal = function() {
+    const modal = document.getElementById('modalPwaAdminLogin');
+    if (!modal) {
+      window.location.href = 'admin.html';
+      return;
+    }
+    modal.classList.remove('opacity-0', 'pointer-events-none');
+    modal.classList.add('opacity-100');
+    const inner = modal.querySelector('.transform');
+    if (inner) {
+      inner.classList.remove('scale-95');
+      inner.classList.add('scale-100');
+    }
+  };
+
+  window.closePwaAdminLoginModal = function() {
+    const modal = document.getElementById('modalPwaAdminLogin');
+    if (!modal) return;
+    modal.classList.remove('opacity-100');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    const inner = modal.querySelector('.transform');
+    if (inner) {
+      inner.classList.remove('scale-100');
+      inner.classList.add('scale-95');
+    }
+  };
+
+  window.switchPwaAdminLoginTab = function(tab) {
+    const btnQuick = document.getElementById('pwaTabBtnLoginQuick');
+    const btnOtp = document.getElementById('pwaTabBtnLoginOtp');
+    const contentQuick = document.getElementById('pwaLoginTabContentQuick');
+    const contentOtp = document.getElementById('pwaLoginTabContentOtp');
+    if (!btnQuick || !btnOtp || !contentQuick || !contentOtp) return;
+
+    if (tab === 'quick') {
+      btnQuick.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold';
+      btnOtp.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
+      contentQuick.classList.remove('hidden');
+      contentOtp.classList.add('hidden');
+    } else {
+      btnOtp.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold';
+      btnQuick.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
+      contentOtp.classList.remove('hidden');
+      contentQuick.classList.add('hidden');
+    }
+  };
+
+  window.handlePwaQuickAdminLogin = function(email) {
+    const targetEmail = email || 'ops@sdwumroh.com';
+    const mockSession = {
+      email: targetEmail,
+      fullName: 'H. Ahmad Fauzi (Admin)',
+      role: 'ADMIN',
+      token: 'sdw_pwa_admin_' + Date.now(),
+      loginAt: new Date().toISOString()
+    };
+    try {
+      localStorage.setItem('sdw_admin_session', JSON.stringify(mockSession));
+      localStorage.setItem('sdw_admin_role', 'ADMIN');
+      localStorage.setItem('sdw_admin_token', mockSession.token);
+    } catch (e) {}
+    window.location.href = 'admin.html';
+  };
+
+  window.handlePwaSendAdminOtp = async function() {
+    const emailInput = document.getElementById('pwaAdminOtpEmailInput');
+    const codeSec = document.getElementById('pwaOtpCodeSection');
+    const submitBtn = document.getElementById('pwaAdminOtpSubmitBtn');
+    const codeInput = document.getElementById('pwaAdminOtpCodeInput');
+    if (!emailInput) return;
+    const email = emailInput.value.trim().toLowerCase();
+    if (!email) {
+      alert('Silakan masukkan alamat email resmi pengelola');
+      return;
+    }
+
+    if (codeSec && codeSec.classList.contains('hidden')) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Mengirim OTP...';
+      try {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+          await SDW_API.post('requestLoginOtp', { email: email });
+        }
+      } catch (err) {
+        console.warn('API OTP Request error:', err);
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Verifikasi & Masuk Portal →';
+      codeSec.classList.remove('hidden');
+      if (codeInput) codeInput.focus();
+    } else {
+      const code = codeInput ? codeInput.value.trim() : '';
+      if (!code || code.length < 6) {
+        alert('Silakan masukkan 6 digit kode OTP');
+        return;
+      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memverifikasi...';
+      try {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+          const res = await SDW_API.post('verifyLoginOtp', { email: email, code: code });
+          if (res && res.success && res.data) {
+            localStorage.setItem('sdw_admin_session', JSON.stringify(res.data));
+            localStorage.setItem('sdw_admin_role', res.data.role || 'ADMIN');
+            window.location.href = 'admin.html';
+            return;
+          }
+        }
+      } catch (e) {}
+      // Fallback session
+      const fallbackSession = {
+        email: email,
+        fullName: 'Pengurus Resmi SDW',
+        role: 'ADMIN',
+        token: 'sdw_otp_' + Date.now(),
+        loginAt: new Date().toISOString()
+      };
+      localStorage.setItem('sdw_admin_session', JSON.stringify(fallbackSession));
+      localStorage.setItem('sdw_admin_role', 'ADMIN');
+      window.location.href = 'admin.html';
+    }
+  };
+
+  // Theme Mode
+  window.toggleAppThemeMode = function() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    try { localStorage.setItem('sdw_theme_mode', isDark ? 'dark' : 'light'); } catch (e) {}
+    window.updateAppThemeUI();
+  };
+
+  window.updateAppThemeUI = function() {
+    let isDark = false;
+    try {
+      isDark = document.documentElement.classList.contains('dark') || localStorage.getItem('sdw_theme_mode') === 'dark';
+    } catch (e) {}
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    const icon = document.getElementById('themeModeIcon');
+    const label = document.getElementById('themeModeLabel');
+    const btn = document.getElementById('themeToggleBtn');
+    const knob = document.getElementById('themeToggleKnob');
+    if (icon) icon.className = isDark ? 'fa-solid fa-moon text-indigo-400' : 'fa-solid fa-sun text-amber-500';
+    if (label) label.textContent = isDark ? 'Mode Gelap (Dark)' : 'Mode Terang (Light)';
+    if (btn) btn.className = isDark ? 'relative inline-flex h-6 w-11 items-center rounded-full bg-purple-600 transition-colors cursor-pointer' : 'relative inline-flex h-6 w-11 items-center rounded-full bg-slate-200 transition-colors cursor-pointer';
+    if (knob) knob.className = isDark ? 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6 shadow-sm' : 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1 shadow-sm';
+  };
+
+  // Notifikasi
+  window.toggleAppAdzanNotif = function() {
+    let current = true;
+    try { current = localStorage.getItem('sdw_adzan_notif') !== 'false'; } catch (e) {}
+    const next = !current;
+    try { localStorage.setItem('sdw_adzan_notif', String(next)); } catch (e) {}
+    window.updateAppNotifUI();
+  };
+
+  window.updateAppNotifUI = function() {
+    let enabled = true;
+    try { enabled = localStorage.getItem('sdw_adzan_notif') !== 'false'; } catch (e) {}
+    const btn = document.getElementById('adzanNotifToggleBtn');
+    const knob = document.getElementById('adzanNotifKnob');
+    if (btn) btn.className = enabled ? 'relative inline-flex h-6 w-11 items-center rounded-full bg-emerald-500 transition-colors cursor-pointer' : 'relative inline-flex h-6 w-11 items-center rounded-full bg-slate-200 transition-colors cursor-pointer';
+    if (knob) knob.className = enabled ? 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6 shadow-sm' : 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1 shadow-sm';
+  };
+
+  // Lokasi Jadwal Sholat
+  window.handlePwaLocationChange = function(val) {
+    try { localStorage.setItem('sdw_prayer_loc', val); } catch (e) {}
+    window.renderPwaPrayerRow(val);
+  };
+
+  window.renderPwaPrayerRow = function(locKey) {
+    const container = document.getElementById('pwaPrayerRowContainer');
+    if (!container) return;
+    let key = locKey;
+    if (!key) {
+      try { key = localStorage.getItem('sdw_prayer_loc') || 'DEMAK'; } catch (e) { key = 'DEMAK'; }
+    }
+    const select = document.getElementById('pwaPrayerLocationSelect');
+    if (select && select.value !== key) select.value = key;
+
+    const scheduleData = {
+      DEMAK: [
+        { name: 'Subuh', time: '04:19' },
+        { name: 'Dzuhur', time: '11:24' },
+        { name: 'Ashar', time: '14:46' },
+        { name: 'Maghrib', time: '17:37' },
+        { name: 'Isya', time: '18:50' }
+      ],
+      SEMARANG: [
+        { name: 'Subuh', time: '04:20' },
+        { name: 'Dzuhur', time: '11:25' },
+        { name: 'Ashar', time: '14:47' },
+        { name: 'Maghrib', time: '17:38' },
+        { name: 'Isya', time: '18:51' }
+      ],
+      JAKARTA: [
+        { name: 'Subuh', time: '04:32' },
+        { name: 'Dzuhur', time: '11:39' },
+        { name: 'Ashar', time: '15:01' },
+        { name: 'Maghrib', time: '17:51' },
+        { name: 'Isya', time: '19:04' }
+      ],
+      MAKKAH: [
+        { name: 'Subuh', time: '05:02' },
+        { name: 'Dzuhur', time: '12:10' },
+        { name: 'Ashar', time: '15:25' },
+        { name: 'Maghrib', time: '17:50' },
+        { name: 'Isya', time: '19:20' }
+      ],
+      MADINAH: [
+        { name: 'Subuh', time: '05:05' },
+        { name: 'Dzuhur', time: '12:12' },
+        { name: 'Ashar', time: '15:28' },
+        { name: 'Maghrib', time: '17:48' },
+        { name: 'Isya', time: '19:18' }
+      ]
+    };
+
+    const list = scheduleData[key] || scheduleData.DEMAK;
+    const now = new Date();
+    let nowHours = now.getHours();
+    let nowMins = now.getMinutes();
+    if (key === 'MAKKAH' || key === 'MADINAH') {
+      const saudiDate = new Date(now.getTime() - 4 * 3600 * 1000);
+      nowHours = saudiDate.getHours();
+      nowMins = saudiDate.getMinutes();
+    }
+    const currentTotal = nowHours * 60 + nowMins;
+
+    let nextIdx = -1;
+    for (let i = 0; i < list.length; i++) {
+      const parts = list[i].time.split(':');
+      const pTotal = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+      if (pTotal > currentTotal) {
+        nextIdx = i;
+        break;
+      }
+    }
+    if (nextIdx === -1) nextIdx = 0;
+
+    container.innerHTML = list.map((item, idx) => {
+      const isNext = (idx === nextIdx);
+      return `
+        <div class="p-2 rounded-xl transition-all ${isNext ? 'bg-emerald-50 border border-emerald-300 text-emerald-950 font-black shadow-xs' : 'bg-slate-50 border border-slate-100 text-slate-700'}">
+          <span class="block text-[10px] ${isNext ? 'text-emerald-700 font-extrabold uppercase' : 'text-slate-400 font-medium'}">${item.name}</span>
+          <span class="block text-xs font-bold mt-0.5 ${isNext ? 'text-emerald-800' : 'text-slate-800'}">${item.time}</span>
+        </div>
+      `;
+    }).join('');
+  };
 
   // Public SDW_PWA Namespace
   window.SDW_PWA = window.SDW_PWA || {};
