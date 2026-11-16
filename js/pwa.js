@@ -3862,9 +3862,18 @@
       initPrayerAndClockWidget();
       initAppBannerSlider();
       initDeepLinkRouter();
-      if (typeof window.updateAppThemeUI === 'function') window.updateAppThemeUI();
       if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
       if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
+      try {
+        if (localStorage.getItem('sdw_pintu_akses_collapsed') === 'true') {
+          const c = document.getElementById('pwaPintuAksesContainer');
+          const ch = document.getElementById('pintuAksesChevron');
+          const tt = document.getElementById('pintuAksesToggleText');
+          if (c) c.classList.add('hidden');
+          if (ch) ch.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
+          if (tt) tt.textContent = 'Buka Pintu';
+        }
+      } catch (e) {}
     });
   } else {
     initSplashScreen();
@@ -3872,12 +3881,41 @@
     initPrayerAndClockWidget();
     initAppBannerSlider();
     initDeepLinkRouter();
-    if (typeof window.updateAppThemeUI === 'function') window.updateAppThemeUI();
     if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
     if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
+    try {
+      if (localStorage.getItem('sdw_pintu_akses_collapsed') === 'true') {
+        const c = document.getElementById('pwaPintuAksesContainer');
+        const ch = document.getElementById('pintuAksesChevron');
+        const tt = document.getElementById('pintuAksesToggleText');
+        if (c) c.classList.add('hidden');
+        if (ch) ch.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
+        if (tt) tt.textContent = 'Buka Pintu';
+      }
+    } catch (e) {}
   }
 
   // ==================== ASNAWIYYAH PINTU AKSES & SETTINGS CONTROLLERS ====================
+  window.togglePintuAksesDropdown = function() {
+    const container = document.getElementById('pwaPintuAksesContainer');
+    const chevron = document.getElementById('pintuAksesChevron');
+    const toggleText = document.getElementById('pintuAksesToggleText');
+    if (!container) return;
+
+    const isHidden = container.classList.contains('hidden');
+    if (isHidden) {
+      container.classList.remove('hidden');
+      if (chevron) chevron.className = 'fa-solid fa-chevron-up text-xs transition-transform duration-200';
+      if (toggleText) toggleText.textContent = 'Sembunyikan';
+      try { localStorage.setItem('sdw_pintu_akses_collapsed', 'false'); } catch (e) {}
+    } else {
+      container.classList.add('hidden');
+      if (chevron) chevron.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
+      if (toggleText) toggleText.textContent = 'Buka Pintu';
+      try { localStorage.setItem('sdw_pintu_akses_collapsed', 'true'); } catch (e) {}
+    }
+  };
+
   window.handlePintuAkses = function(role) {
     if (role === 'jamaah') {
       const session = (typeof SDW_AUTH !== 'undefined') ? SDW_AUTH.getPilgrimSession() : null;
