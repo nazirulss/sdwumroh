@@ -3896,6 +3896,98 @@
   }
 
   // ==================== ASNAWIYYAH PINTU AKSES & SETTINGS CONTROLLERS ====================
+  const PWA_ROLE_CONFIGS = {
+    jamaah: {
+      role: 'JAMAAH',
+      title: 'Masuk Akun Jamaah',
+      subtitle: 'Akses E-Pass Digital, Berkas Paspor & Riwayat Manasik',
+      icon: 'fa-solid fa-kaaba',
+      themeColor: 'emerald',
+      badgeText: 'AKUN RESMI JAMAAH',
+      descText: 'Masuk instan tanpa kata sandi menggunakan Akun Jamaah resmi yang telah terdaftar di database.',
+      defaultUser: {
+        name: 'Ahmad Jamaah Teladan',
+        email: 'ahmad@sdwumroh.com',
+        sub: 'REG-SDW-2701 • Paket Reguler 1448H',
+        initial: 'AJ'
+      },
+      otherList: [
+        { name: 'Khasan Munadi', email: 'khasan@gmail.com', sub: 'REG-SDW-2601 • 27 Okt 2026', initial: 'KM' },
+        { name: 'Mifnahah Mudakir', email: 'mifnahah@gmail.com', sub: 'REG-SDW-2602 • 27 Okt 2026', initial: 'MM' },
+        { name: 'Sanali Bajuri', email: 'sanali@gmail.com', sub: 'REG-SDW-2603 • 27 Okt 2026', initial: 'SB' },
+        { name: 'Ibu Fatimah Zahra', email: 'fatimah@sdwumroh.com', sub: 'REG-SDW-2702 • 15 Jan 2027', initial: 'FZ' }
+      ],
+      portalBtnText: 'Buka Status E-Pass Digital Jamaah',
+      actionType: 'jamaah'
+    },
+    admin: {
+      role: 'ADMIN',
+      title: 'Masuk Pengelola / Admin',
+      subtitle: 'Akses khusus operasional dan data center SDW UMROH',
+      icon: 'fa-solid fa-shield-halved',
+      themeColor: 'blue',
+      badgeText: 'AKUN RESMI PENGURUS',
+      descText: 'Masuk instan tanpa kata sandi menggunakan Akun Pengurus resmi yang terdaftar sebagai Administrator atau Staf Operasional.',
+      defaultUser: {
+        name: 'H. Ahmad Fauzi (Admin)',
+        email: 'ops@sdwumroh.com',
+        sub: 'Administrator Backoffice Pusat',
+        initial: 'AF'
+      },
+      otherList: [
+        { name: 'Staf Operasional', email: 'ops@sdwumroh.com', sub: 'Divisi Operasional & Lapangan', initial: 'OP' },
+        { name: 'Finance Officer', email: 'finance@sdwumroh.com', sub: 'Divisi Keuangan & Escrow', initial: 'FO' },
+        { name: 'Dokumen & Paspor', email: 'docs@sdwumroh.com', sub: 'Divisi Verifikasi Paspor', initial: 'DO' }
+      ],
+      portalBtnText: 'Buka Portal Admin Lengkap (admin.html)',
+      actionType: 'admin'
+    },
+    muthawwif: {
+      role: 'MUTHAWWIF',
+      title: 'Masuk Muthawwif & Pembimbing',
+      subtitle: 'Akses Petugas Lapangan, Absensi Kloter & Panduan Ibadah',
+      icon: 'fa-solid fa-hands-praying',
+      themeColor: 'amber',
+      badgeText: 'AKUN RESMI PETUGAS',
+      descText: 'Masuk instan tanpa kata sandi menggunakan Akun Pembimbing Ibadah & Tour Leader resmi SDW.',
+      defaultUser: {
+        name: 'Ust. H. Abdullah Mansur',
+        email: 'muthawwif@sdwumroh.com',
+        sub: 'Muthawwif Utama Kloter 1448H',
+        initial: 'AM'
+      },
+      otherList: [
+        { name: 'Ust. Farhan Siddiq', email: 'farhan@sdwumroh.com', sub: 'Pembimbing Ibadah Makkah', initial: 'FS' },
+        { name: 'Sdr. Rizky Ramadhan', email: 'tl@sdwumroh.com', sub: 'Tour Leader & Handling Bandara', initial: 'RR' }
+      ],
+      portalBtnText: 'Buka Portal Petugas & Kloter (admin.html)',
+      actionType: 'muthawwif'
+    },
+    mitra: {
+      role: 'AGEN',
+      title: 'Masuk Mitra & Agen Syiar',
+      subtitle: 'Akses Kemitraan, Komisi & Pemantauan Jamaah Binaan',
+      icon: 'fa-solid fa-handshake-angle',
+      themeColor: 'purple',
+      badgeText: 'AKUN RESMI MITRA SYIAR',
+      descText: 'Masuk instan tanpa kata sandi menggunakan Akun Mitra Cabang atau Agen Syiar resmi SDW.',
+      defaultUser: {
+        name: 'H. Bambang Irawan',
+        email: 'mitra@sdwumroh.com',
+        sub: 'Mitra Cabang Demak & Sekitarnya',
+        initial: 'BI'
+      },
+      otherList: [
+        { name: 'KBIH An-Nur Demak', email: 'kbih@sdwumroh.com', sub: 'Mitra Afiliasi KBIHU', initial: 'AN' },
+        { name: 'Agen Syiar Kudus', email: 'agenkudus@sdwumroh.com', sub: 'Perwakilan Daerah Kudus', initial: 'AK' }
+      ],
+      portalBtnText: 'Buka Portal Mitra Syiar (admin.html)',
+      actionType: 'mitra'
+    }
+  };
+
+  let activeRoleLoginType = 'admin';
+
   window.togglePintuAksesDropdown = function() {
     const container = document.getElementById('pwaPintuAksesContainer');
     const chevron = document.getElementById('pintuAksesChevron');
@@ -3923,26 +4015,118 @@
         if (typeof SDW_AUTH.switchAppTab === 'function') SDW_AUTH.switchAppTab('tab-profile');
         const authCard = document.getElementById('profileAuthenticatedCard');
         if (authCard) authCard.scrollIntoView({ behavior: 'smooth' });
-      } else {
-        if (typeof window.openAppSubView === 'function') {
-          window.openAppSubView('auth');
-        }
+        return;
       }
-    } else if (role === 'admin') {
-      window.openPwaAdminLoginModal();
-    } else if (role === 'muthawwif') {
-      window.location.href = 'admin.html?role=muthawwif';
-    } else if (role === 'mitra') {
-      window.location.href = 'admin.html?role=agen';
     }
+    window.openPwaRoleLoginModal(role);
   };
 
-  window.openPwaAdminLoginModal = function() {
+  window.openPwaRoleLoginModal = function(role) {
+    activeRoleLoginType = role || 'admin';
+    const cfg = PWA_ROLE_CONFIGS[activeRoleLoginType] || PWA_ROLE_CONFIGS.admin;
     const modal = document.getElementById('modalPwaAdminLogin');
     if (!modal) {
-      window.location.href = 'admin.html';
+      if (activeRoleLoginType === 'admin') window.location.href = 'admin.html';
       return;
     }
+
+    window.switchPwaRoleLoginTab('quick');
+
+    const iconWrap = document.getElementById('roleLoginIconWrap');
+    const icon = document.getElementById('roleLoginIcon');
+    const title = document.getElementById('roleLoginTitle');
+    const subtitle = document.getElementById('roleLoginSubtitle');
+    const infoBox = document.getElementById('roleLoginInfoBox');
+    const badge = document.getElementById('roleLoginBadge');
+    const desc = document.getElementById('roleLoginDesc');
+    const avatar = document.getElementById('roleLoginAvatar');
+    const sub = document.getElementById('roleLoginSub');
+    const name = document.getElementById('roleLoginName');
+    const email = document.getElementById('roleLoginEmail');
+    const portalLink = document.getElementById('roleLoginPortalLink');
+    const otpLabel = document.getElementById('roleLoginOtpLabel');
+    const otpSubmitBtn = document.getElementById('roleLoginOtpSubmitBtn');
+    const otpSec = document.getElementById('roleLoginOtpCodeSection');
+    const otpEmailInput = document.getElementById('roleLoginOtpEmailInput');
+    const otpCodeInput = document.getElementById('roleLoginOtpCodeInput');
+
+    if (otpSec) otpSec.classList.add('hidden');
+    if (otpCodeInput) otpCodeInput.value = '';
+    if (otpEmailInput) otpEmailInput.value = cfg.defaultUser.email;
+    if (otpSubmitBtn) {
+      otpSubmitBtn.disabled = false;
+      otpSubmitBtn.innerHTML = 'Kirim Kode OTP &rarr;';
+    }
+
+    if (title) title.textContent = cfg.title;
+    if (subtitle) subtitle.textContent = cfg.subtitle;
+    if (badge) badge.textContent = cfg.badgeText;
+    if (desc) desc.textContent = cfg.descText;
+    if (name) name.textContent = cfg.defaultUser.name;
+    if (email) email.textContent = cfg.defaultUser.email;
+    if (sub) sub.textContent = cfg.defaultUser.sub;
+    if (avatar) avatar.textContent = cfg.defaultUser.initial;
+    if (otpLabel) otpLabel.textContent = `Email Terdaftar (${cfg.role})`;
+
+    const color = cfg.themeColor;
+    if (iconWrap) {
+      iconWrap.className = `w-12 h-12 rounded-2xl flex items-center justify-center mx-auto text-xl border shadow-xs mb-3 bg-${color}-50 text-${color}-600 border-${color}-100/80`;
+    }
+    if (icon) icon.className = cfg.icon;
+    if (infoBox) {
+      infoBox.className = `p-4 rounded-2xl border space-y-3 text-left bg-${color}-50/70 border-${color}-100/90`;
+    }
+    if (badge) {
+      badge.className = `text-[11px] font-bold tracking-wider uppercase text-${color}-800`;
+    }
+    if (avatar) {
+      avatar.className = `w-10 h-10 rounded-full text-white flex items-center justify-center font-bold text-xs tracking-wider shrink-0 shadow-xs bg-${color}-600`;
+    }
+    if (otpSubmitBtn) {
+      otpSubmitBtn.className = `w-full py-3 px-4 rounded-xl text-white font-bold text-xs transition active:scale-95 cursor-pointer shadow-md shadow-${color}-500/20 bg-${color}-600 hover:bg-${color}-700`;
+    }
+
+    if (portalLink) {
+      portalLink.textContent = cfg.portalBtnText;
+      if (activeRoleLoginType === 'jamaah') {
+        portalLink.onclick = function() {
+          window.handleQuickRoleLogin('jamaah', cfg.defaultUser.email, cfg.defaultUser.name);
+        };
+        portalLink.removeAttribute('href');
+      } else if (activeRoleLoginType === 'muthawwif') {
+        portalLink.href = 'admin.html?role=muthawwif';
+        portalLink.onclick = null;
+      } else if (activeRoleLoginType === 'mitra') {
+        portalLink.href = 'admin.html?role=agen';
+        portalLink.onclick = null;
+      } else {
+        portalLink.href = 'admin.html';
+        portalLink.onclick = null;
+      }
+    }
+
+    const otherCont = document.getElementById('roleLoginOtherContainer');
+    if (otherCont) {
+      otherCont.classList.add('hidden');
+      otherCont.innerHTML = `
+        <span class="block text-[11px] font-bold text-slate-700">Pilihan Akun Resmi Lainnya:</span>
+        <div class="grid grid-cols-1 gap-1.5 max-h-48 overflow-y-auto pr-1">
+          ${cfg.otherList.map(item => `
+            <button type="button" onclick="window.handleQuickRoleLogin('${activeRoleLoginType}', '${item.email}', '${item.name}')" class="w-full p-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-left flex items-center justify-between text-xs transition cursor-pointer">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold flex items-center justify-center">${item.initial}</span>
+                <div>
+                  <span class="font-bold text-slate-800 block text-[11px]">${item.name}</span>
+                  <span class="text-[10px] text-slate-500 font-mono">${item.email}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-${color}-600">MASUK &rarr;</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
     modal.classList.remove('opacity-0', 'pointer-events-none');
     modal.classList.add('opacity-100');
     const inner = modal.querySelector('.transform');
@@ -3952,7 +4136,11 @@
     }
   };
 
-  window.closePwaAdminLoginModal = function() {
+  window.openPwaAdminLoginModal = function() {
+    window.openPwaRoleLoginModal('admin');
+  };
+
+  window.closePwaRoleLoginModal = function() {
     const modal = document.getElementById('modalPwaAdminLogin');
     if (!modal) return;
     modal.classList.remove('opacity-100');
@@ -3964,52 +4152,258 @@
     }
   };
 
-  window.switchPwaAdminLoginTab = function(tab) {
+  window.closePwaAdminLoginModal = window.closePwaRoleLoginModal;
+
+  window.switchPwaRoleLoginTab = function(tab) {
     const btnQuick = document.getElementById('pwaTabBtnLoginQuick');
     const btnOtp = document.getElementById('pwaTabBtnLoginOtp');
     const contentQuick = document.getElementById('pwaLoginTabContentQuick');
     const contentOtp = document.getElementById('pwaLoginTabContentOtp');
     if (!btnQuick || !btnOtp || !contentQuick || !contentOtp) return;
 
+    const cfg = PWA_ROLE_CONFIGS[activeRoleLoginType] || PWA_ROLE_CONFIGS.admin;
+    const color = cfg.themeColor;
+
     if (tab === 'quick') {
-      btnQuick.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold';
+      btnQuick.className = `py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-${color}-700 shadow-xs cursor-pointer font-bold`;
       btnOtp.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
       contentQuick.classList.remove('hidden');
       contentOtp.classList.add('hidden');
     } else {
-      btnOtp.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold';
+      btnOtp.className = `py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-${color}-700 shadow-xs cursor-pointer font-bold`;
       btnQuick.className = 'py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
       contentOtp.classList.remove('hidden');
       contentQuick.classList.add('hidden');
     }
   };
 
-  window.handlePwaQuickAdminLogin = function(email) {
-    const targetEmail = email || 'ops@sdwumroh.com';
-    const mockSession = {
+  window.switchPwaAdminLoginTab = window.switchPwaRoleLoginTab;
+
+  window.toggleRoleOtherAccounts = function() {
+    const otherCont = document.getElementById('roleLoginOtherContainer');
+    if (otherCont) otherCont.classList.toggle('hidden');
+  };
+
+  window.handleQuickRoleLogin = function(role, email, name) {
+    const r = role || activeRoleLoginType || 'admin';
+    const cfg = PWA_ROLE_CONFIGS[r] || PWA_ROLE_CONFIGS.admin;
+    const targetEmail = email || cfg.defaultUser.email;
+    const targetName = name || cfg.defaultUser.name;
+
+    if (r === 'jamaah') {
+      const pilgrimSession = {
+        fullName: targetName,
+        phone: '081234567890',
+        email: targetEmail,
+        regId: 'REG-SDW-2701',
+        packageTitle: 'Paket Reguler 1448H',
+        departureDate: '27 Oktober 2026',
+        roomType: 'QUAD',
+        flightInfo: 'Garuda Indonesia GA-980',
+        status: 'CONFIRMED',
+        totalPrice: 'Rp 29.500.000',
+        dpAmount: 'Rp 5.000.000',
+        loginMethod: 'QUICK_1CLICK',
+        loginAt: new Date().toISOString()
+      };
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.setPilgrimSession === 'function') {
+        SDW_AUTH.setPilgrimSession(pilgrimSession);
+        if (typeof SDW_AUTH.syncPilgrimUI === 'function') SDW_AUTH.syncPilgrimUI();
+        if (typeof SDW_AUTH.switchAppTab === 'function') SDW_AUTH.switchAppTab('tab-profile');
+      }
+      window.closePwaRoleLoginModal();
+      if (typeof window.backToAppHome === 'function') window.backToAppHome();
+      return;
+    }
+
+    const adminSession = {
       email: targetEmail,
-      fullName: 'H. Ahmad Fauzi (Admin)',
-      role: 'ADMIN',
-      token: 'sdw_pwa_admin_' + Date.now(),
+      fullName: targetName,
+      role: cfg.role,
+      token: 'sdw_' + r + '_' + Date.now(),
+      loginMethod: 'QUICK_1CLICK',
       loginAt: new Date().toISOString()
     };
     try {
-      localStorage.setItem('sdw_admin_session', JSON.stringify(mockSession));
-      localStorage.setItem('sdw_admin_role', 'ADMIN');
-      localStorage.setItem('sdw_admin_token', mockSession.token);
+      localStorage.setItem('sdw_admin_session', JSON.stringify(adminSession));
+      localStorage.setItem('sdw_admin_role', cfg.role);
+      localStorage.setItem('sdw_admin_token', adminSession.token);
     } catch (e) {}
-    window.location.href = 'admin.html';
+
+    window.closePwaRoleLoginModal();
+    if (r === 'muthawwif') {
+      window.location.href = 'admin.html?role=muthawwif';
+    } else if (r === 'mitra') {
+      window.location.href = 'admin.html?role=agen';
+    } else {
+      window.location.href = 'admin.html';
+    }
   };
 
-  window.handlePwaSendAdminOtp = async function() {
-    const emailInput = document.getElementById('pwaAdminOtpEmailInput');
-    const codeSec = document.getElementById('pwaOtpCodeSection');
-    const submitBtn = document.getElementById('pwaAdminOtpSubmitBtn');
-    const codeInput = document.getElementById('pwaAdminOtpCodeInput');
+  window.handlePwaQuickAdminLogin = function(email) {
+    window.handleQuickRoleLogin('admin', email);
+  };
+
+  window.handlePwaSendRoleOtp = async function() {
+    const emailInput = document.getElementById('roleLoginOtpEmailInput');
+    const codeSec = document.getElementById('roleLoginOtpCodeSection');
+    const submitBtn = document.getElementById('roleLoginOtpSubmitBtn');
+    const codeInput = document.getElementById('roleLoginOtpCodeInput');
     if (!emailInput) return;
     const email = emailInput.value.trim().toLowerCase();
     if (!email) {
-      alert('Silakan masukkan alamat email resmi pengelola');
+      alert('Silakan masukkan alamat email terdaftar');
+      return;
+    }
+
+    const r = activeRoleLoginType || 'admin';
+    const cfg = PWA_ROLE_CONFIGS[r] || PWA_ROLE_CONFIGS.admin;
+
+    if (codeSec && codeSec.classList.contains('hidden')) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Mengirim OTP...';
+      try {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+          await SDW_API.post('requestLoginOtp', { email: email });
+        }
+      } catch (err) {
+        console.warn('API OTP Request error:', err);
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Verifikasi & Masuk →';
+      codeSec.classList.remove('hidden');
+      if (codeInput) codeInput.focus();
+    } else {
+      const code = codeInput ? codeInput.value.trim() : '';
+      if (!code || code.length < 6) {
+        alert('Silakan masukkan 6 digit kode OTP');
+        return;
+      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Memverifikasi...';
+
+      let verifiedUser = null;
+      try {
+        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
+          const res = await SDW_API.post('verifyLoginOtp', { email: email, code: code });
+          if (res && res.success && res.data) {
+            verifiedUser = res.data;
+          }
+        }
+      } catch (e) {}
+
+      if (!verifiedUser) {
+        verifiedUser = {
+          email: email,
+          fullName: email.split('@')[0].toUpperCase(),
+          role: cfg.role,
+          token: 'sdw_otp_' + Date.now()
+        };
+      }
+
+      if (r === 'jamaah') {
+        const pilgrimSession = {
+          fullName: verifiedUser.fullName || verifiedUser.name || 'Jamaah Terverifikasi',
+          phone: verifiedUser.phone || '081234567890',
+          email: email,
+          regId: verifiedUser.regId || 'REG-SDW-2701',
+          packageTitle: 'Paket Reguler 1448H',
+          departureDate: '27 Oktober 2026',
+          roomType: 'QUAD',
+          flightInfo: 'Garuda Indonesia GA-980',
+          status: 'CONFIRMED',
+          totalPrice: 'Rp 29.500.000',
+          dpAmount: 'Rp 5.000.000',
+          loginMethod: 'EMAIL_OTP',
+          loginAt: new Date().toISOString()
+        };
+        if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.setPilgrimSession === 'function') {
+          SDW_AUTH.setPilgrimSession(pilgrimSession);
+          if (typeof SDW_AUTH.syncPilgrimUI === 'function') SDW_AUTH.syncPilgrimUI();
+          if (typeof SDW_AUTH.switchAppTab === 'function') SDW_AUTH.switchAppTab('tab-profile');
+        }
+        window.closePwaRoleLoginModal();
+        if (typeof window.backToAppHome === 'function') window.backToAppHome();
+        return;
+      }
+
+      try {
+        localStorage.setItem('sdw_admin_session', JSON.stringify(verifiedUser));
+        localStorage.setItem('sdw_admin_role', cfg.role);
+        localStorage.setItem('sdw_admin_token', verifiedUser.token);
+      } catch (e) {}
+      window.closePwaRoleLoginModal();
+      if (r === 'muthawwif') {
+        window.location.href = 'admin.html?role=muthawwif';
+      } else if (r === 'mitra') {
+        window.location.href = 'admin.html?role=agen';
+      } else {
+        window.location.href = 'admin.html';
+      }
+    }
+  };
+
+  window.handlePwaSendAdminOtp = window.handlePwaSendRoleOtp;
+
+  // Subview Auth Helpers
+  window.switchSubviewAuthTab = function(tab) {
+    const btnQuick = document.getElementById('subviewAuthTabBtnQuick');
+    const btnOtp = document.getElementById('subviewAuthTabBtnOtp');
+    const contentQuick = document.getElementById('subviewAuthContentQuick');
+    const contentOtp = document.getElementById('subviewAuthContentOtp');
+    if (!btnQuick || !btnOtp || !contentQuick || !contentOtp) return;
+
+    if (tab === 'quick') {
+      btnQuick.className = 'py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-xs cursor-pointer font-bold';
+      btnOtp.className = 'py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
+      contentQuick.classList.remove('hidden');
+      contentOtp.classList.add('hidden');
+    } else {
+      btnOtp.className = 'py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-xs cursor-pointer font-bold';
+      btnQuick.className = 'py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer';
+      contentOtp.classList.remove('hidden');
+      contentQuick.classList.add('hidden');
+    }
+  };
+
+  window.toggleSubviewOtherPilgrims = function() {
+    const cont = document.getElementById('subviewOtherPilgrimsContainer');
+    if (!cont) return;
+    const isHidden = cont.classList.contains('hidden');
+    if (isHidden) {
+      cont.classList.remove('hidden');
+      const cfg = PWA_ROLE_CONFIGS.jamaah;
+      cont.innerHTML = `
+        <span class="block text-[11px] font-bold text-slate-700">Pilih Dari Jamaah Terdaftar:</span>
+        <div class="grid grid-cols-1 gap-1.5 pr-1">
+          ${cfg.otherList.map(item => `
+            <button type="button" onclick="window.handleQuickRoleLogin('jamaah', '${item.email}', '${item.name}')" class="w-full p-2 rounded-xl bg-white hover:bg-emerald-50 border border-slate-200 text-left flex items-center justify-between text-xs transition cursor-pointer">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold flex items-center justify-center">${item.initial}</span>
+                <div>
+                  <span class="font-bold text-slate-800 block text-[11px]">${item.name}</span>
+                  <span class="text-[10px] text-slate-500 font-mono">${item.sub}</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-600">MASUK &rarr;</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      cont.classList.add('hidden');
+    }
+  };
+
+  window.handleSubviewSendOtp = async function() {
+    const emailInput = document.getElementById('subviewOtpEmailInput');
+    const codeSec = document.getElementById('subviewOtpCodeSection');
+    const submitBtn = document.getElementById('subviewOtpSubmitBtn');
+    const codeInput = document.getElementById('subviewOtpCodeInput');
+    if (!emailInput) return;
+    const email = emailInput.value.trim().toLowerCase();
+    if (!email) {
+      alert('Silakan masukkan alamat email jamaah');
       return;
     }
 
@@ -4024,7 +4418,7 @@
         console.warn('API OTP Request error:', err);
       }
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Verifikasi & Masuk Portal →';
+      submitBtn.textContent = 'Verifikasi & Masuk E-Pass →';
       codeSec.classList.remove('hidden');
       if (codeInput) codeInput.focus();
     } else {
@@ -4035,28 +4429,28 @@
       }
       submitBtn.disabled = true;
       submitBtn.textContent = 'Memverifikasi...';
-      try {
-        if (typeof SDW_API !== 'undefined' && typeof SDW_API.post === 'function') {
-          const res = await SDW_API.post('verifyLoginOtp', { email: email, code: code });
-          if (res && res.success && res.data) {
-            localStorage.setItem('sdw_admin_session', JSON.stringify(res.data));
-            localStorage.setItem('sdw_admin_role', res.data.role || 'ADMIN');
-            window.location.href = 'admin.html';
-            return;
-          }
-        }
-      } catch (e) {}
-      // Fallback session
-      const fallbackSession = {
+
+      const pilgrimSession = {
+        fullName: email.split('@')[0].toUpperCase(),
+        phone: '081234567890',
         email: email,
-        fullName: 'Pengurus Resmi SDW',
-        role: 'ADMIN',
-        token: 'sdw_otp_' + Date.now(),
+        regId: 'REG-SDW-2701',
+        packageTitle: 'Paket Reguler 1448H',
+        departureDate: '27 Oktober 2026',
+        roomType: 'QUAD',
+        flightInfo: 'Garuda Indonesia GA-980',
+        status: 'CONFIRMED',
+        totalPrice: 'Rp 29.500.000',
+        dpAmount: 'Rp 5.000.000',
+        loginMethod: 'EMAIL_OTP',
         loginAt: new Date().toISOString()
       };
-      localStorage.setItem('sdw_admin_session', JSON.stringify(fallbackSession));
-      localStorage.setItem('sdw_admin_role', 'ADMIN');
-      window.location.href = 'admin.html';
+      if (typeof SDW_AUTH !== 'undefined' && typeof SDW_AUTH.setPilgrimSession === 'function') {
+        SDW_AUTH.setPilgrimSession(pilgrimSession);
+        if (typeof SDW_AUTH.syncPilgrimUI === 'function') SDW_AUTH.syncPilgrimUI();
+        if (typeof SDW_AUTH.switchAppTab === 'function') SDW_AUTH.switchAppTab('tab-profile');
+      }
+      if (typeof window.backToAppHome === 'function') window.backToAppHome();
     }
   };
 

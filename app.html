@@ -3789,70 +3789,93 @@
                 <!-- Alert Message Box -->
                 <div id="authAlertBox" class="hidden p-3.5 rounded-2xl text-xs font-medium border transition-all"></div>
 
-                <!-- FORM 1: MASUK AKUN (LOGIN) -->
+                <!-- FORM 1: MASUK AKUN (LOGIN MODAL CONCEPT: 1-KLIK & EMAIL OTP) -->
                 <div id="authFormLogin"
-                    class="bg-white rounded-3xl p-5 sm:p-6 border border-purple-100 shadow-sm space-y-4">
+                    class="bg-white rounded-3xl p-5 sm:p-6 border border-emerald-100 shadow-sm space-y-4">
+                    
                     <div class="text-left space-y-1">
-                        <h3 class="text-base font-black text-slate-900">Masuk ke Akun Anda</h3>
-                        <p class="text-xs text-slate-500">Gunakan nomor WhatsApp aktif dan kata sandi yang telah Anda
-                            daftarkan.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold border border-emerald-100">
+                                <i class="fa-solid fa-kaaba"></i>
+                            </span>
+                            <h3 class="text-base font-black text-slate-900">Masuk Akun Jamaah</h3>
+                        </div>
+                        <p class="text-xs text-slate-500">Pilih masuk instan 1-Klik akun terdaftar atau gunakan kode verifikasi Email OTP tanpa kata sandi.</p>
                     </div>
 
-                    <form onsubmit="window.handlePilgrimLogin(event)" class="space-y-3.5">
-                        <div class="space-y-1.5 text-left">
-                            <label for="loginPhone" class="block text-xs font-bold text-slate-700">Nomor
-                                WhatsApp</label>
-                            <div class="relative">
-                                <span
-                                    class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs font-bold">
-                                    <i class="fa-brands fa-whatsapp text-emerald-600 text-sm"></i>
-                                </span>
-                                <input type="tel" id="loginPhone" name="phone" placeholder="081234567890" required
-                                    class="w-full pl-10 pr-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
-                            </div>
-                        </div>
+                    <!-- Two Tab Switcher: 1-Klik Akun vs Email OTP -->
+                    <div class="p-1 rounded-2xl bg-slate-100/90 border border-slate-200/80 grid grid-cols-2 text-xs font-semibold gap-1">
+                        <button type="button" id="subviewAuthTabBtnQuick" onclick="window.switchSubviewAuthTab('quick')" class="py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-emerald-700 shadow-xs cursor-pointer font-bold">
+                            <i class="fa-solid fa-bolt text-amber-500 text-xs"></i>
+                            <span>1-Klik Akun</span>
+                        </button>
+                        <button type="button" id="subviewAuthTabBtnOtp" onclick="window.switchSubviewAuthTab('otp')" class="py-2 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer">
+                            <i class="fa-regular fa-envelope text-slate-400 text-xs"></i>
+                            <span>Email OTP</span>
+                        </button>
+                    </div>
 
-                        <div class="space-y-1.5 text-left">
+                    <!-- KONTEN TAB 1: 1-KLIK AKUN -->
+                    <div id="subviewAuthContentQuick" class="space-y-3 pt-1">
+                        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-100/90 space-y-3 text-left">
                             <div class="flex items-center justify-between">
-                                <label for="loginPassword" class="block text-xs font-bold text-slate-700">Kata
-                                    Sandi</label>
-                                <a href="https://wa.me/6281234567890?text=Assalamualaikum%20CS%20SDW%20UMROH,%20saya%20lupa%20kata%20sandi%20akun%20jamaah%20saya.%20Mohon%20bantuan%20reset."
-                                    target="_blank" rel="noopener noreferrer"
-                                    class="text-[11px] font-bold text-sdw-pine hover:underline">Lupa Sandi?</a>
+                                <div class="flex items-center gap-1.5 text-[11px] font-bold text-emerald-800 tracking-wider uppercase">
+                                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                                    <span>AKUN RESMI JAMAAH</span>
+                                </div>
+                                <span class="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wide">INSTAN</span>
                             </div>
+                            <p class="text-[11.5px] text-emerald-950/80 leading-relaxed font-normal">
+                                Masuk instan tanpa kata sandi menggunakan Akun Jamaah resmi yang telah terdaftar di database.
+                            </p>
+
+                            <!-- Tombol Continue as Jamaah -->
+                            <button type="button" onclick="window.handleQuickRoleLogin('jamaah', 'ahmad@sdwumroh.com', 'Ahmad Jamaah Teladan')" class="w-full p-3 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500 hover:shadow-md transition text-left flex items-center justify-between group cursor-pointer shadow-xs">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs tracking-wider shrink-0 shadow-xs">AJ</div>
+                                    <div>
+                                        <span class="block text-[10.5px] text-slate-500 font-medium">Continue as jamaah</span>
+                                        <h4 class="text-xs font-bold text-slate-900 group-hover:text-emerald-700 transition">Ahmad Jamaah Teladan</h4>
+                                        <span class="block text-[10px] text-slate-400 font-mono">REG-SDW-2701 • ahmad@sdwumroh.com</span>
+                                    </div>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-emerald-50 text-slate-400 group-hover:text-emerald-600 flex items-center justify-center text-xs transition">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </div>
+                            </button>
+                        </div>
+
+                        <!-- Tombol Buka Pilihan Akun Jamaah Lain -->
+                        <button type="button" onclick="window.toggleSubviewOtherPilgrims()" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs">
+                            <i class="fa-solid fa-users text-slate-400"></i>
+                            <span>Pilih Dari Jamaah Terdaftar / Cari Nama</span>
+                        </button>
+
+                        <div id="subviewOtherPilgrimsContainer" class="hidden space-y-2 p-3 rounded-2xl bg-slate-50 border border-slate-200/80 max-h-52 overflow-y-auto">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- KONTEN TAB 2: EMAIL OTP -->
+                    <div id="subviewAuthContentOtp" class="hidden space-y-3 pt-1">
+                        <div class="space-y-1.5 text-left">
+                            <label for="subviewOtpEmailInput" class="block text-xs font-semibold text-slate-700">Email Resmi Jamaah</label>
                             <div class="relative">
-                                <span
-                                    class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 text-xs">
-                                    <i class="fa-solid fa-lock text-slate-400"></i>
-                                </span>
-                                <input type="password" id="loginPassword" name="password"
-                                    placeholder="Masukkan kata sandi" required
-                                    class="w-full pl-10 pr-11 py-3 rounded-2xl bg-slate-50 border border-slate-200 focus:border-sdw-pine focus:bg-white text-xs font-bold text-slate-800 outline-none transition shadow-2xs">
-                                <button type="button" onclick="window.togglePasswordVisibility('loginPassword', this)"
-                                    class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 cursor-pointer text-xs"
-                                    aria-label="Lihat kata sandi">
-                                    <i class="fa-regular fa-eye"></i>
-                                </button>
+                                <i class="fa-regular fa-envelope absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                                <input type="email" id="subviewOtpEmailInput" placeholder="jamaah@gmail.com" class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-emerald-500 focus:outline-none">
                             </div>
                         </div>
 
-                        <button type="submit" id="loginSubmitBtn"
-                            class="w-full py-3.5 px-4 rounded-2xl bg-sdw-pine hover:bg-purple-900 active:scale-95 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-arrow-right-to-bracket text-amber-300"></i>
-                            <span>Masuk Sekarang</span>
-                        </button>
-                    </form>
+                        <div id="subviewOtpCodeSection" class="hidden space-y-2 text-left">
+                            <label class="block text-xs font-semibold text-slate-700">Masukkan 6 Digit Kode OTP</label>
+                            <input type="text" id="subviewOtpCodeInput" maxlength="6" placeholder="123456" class="w-full text-center tracking-widest text-lg font-mono font-bold py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                        </div>
 
-                    <!-- Quick Demo Account Shortcut -->
-                    <div class="pt-3 border-t border-slate-100 text-center space-y-2">
-                        <span class="text-[10.5px] text-slate-400 block font-medium">Uji Coba Pengembang &amp;
-                            Auditor:</span>
-                        <button type="button" onclick="window.fillDemoAccountAndLogin()"
-                            class="w-full py-2.5 px-3 rounded-xl bg-purple-50 hover:bg-purple-100 text-sdw-pine text-xs font-bold border border-purple-200/80 transition active:scale-95 cursor-pointer flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-bolt text-amber-500"></i>
-                            <span>Masuk Cepat Akun Demo (Ahmad Jamaah Teladan)</span>
+                        <button type="button" id="subviewOtpSubmitBtn" onclick="window.handleSubviewSendOtp()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition active:scale-95 cursor-pointer shadow-md shadow-emerald-500/20">
+                            Kirim Kode OTP &rarr;
                         </button>
                     </div>
+
                 </div>
 
                 <!-- FORM 2: DAFTAR AKUN BARU (REGISTER) -->
@@ -4556,30 +4579,30 @@
         </div>
     </nav>
 
-    <!-- ==================== MODAL LOGIN PENGELOLA / ADMIN DI PWA (PERSIS ASNAWIYYAH) ==================== -->
+    <!-- ==================== MODAL LOGIN RESMI MULTI-ROLE (ASNAWIYYAH 1-KLIK & EMAIL OTP) ==================== -->
     <div id="modalPwaAdminLogin" class="fixed inset-0 z-[120] bg-slate-950/75 backdrop-blur-md flex items-center justify-center p-3 sm:p-5 transition-all duration-300 opacity-0 pointer-events-none" aria-hidden="true">
         <div class="relative bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-left space-y-4 transform scale-95 transition-transform duration-200">
             <!-- Close Button -->
-            <button type="button" onclick="window.closePwaAdminLoginModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center text-xs transition cursor-pointer" title="Tutup / Kembali">
+            <button type="button" onclick="window.closePwaRoleLoginModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center text-xs transition cursor-pointer" title="Tutup / Kembali">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
-            <!-- Centered Shield Icon & Header -->
+            <!-- Centered Shield/Role Icon & Header -->
             <div class="text-center pt-1">
-                <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto text-xl border border-blue-100/80 shadow-xs mb-3">
-                    <i class="fa-solid fa-shield-halved"></i>
+                <div id="roleLoginIconWrap" class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto text-xl border border-blue-100/80 shadow-xs mb-3 transition-colors">
+                    <i id="roleLoginIcon" class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 tracking-tight">Masuk Pengelola / Admin</h3>
-                <p class="text-xs text-slate-500 mt-1">Akses khusus operasional dan data center SDW UMROH</p>
+                <h3 id="roleLoginTitle" class="text-xl font-bold text-slate-900 tracking-tight">Masuk Pengelola / Admin</h3>
+                <p id="roleLoginSubtitle" class="text-xs text-slate-500 mt-1">Akses khusus operasional dan data center SDW UMROH</p>
             </div>
 
             <!-- Two Tab Switcher: 1-Klik Akun vs Email OTP -->
             <div class="p-1 rounded-2xl bg-slate-100/90 border border-slate-200/80 grid grid-cols-2 text-xs font-semibold gap-1">
-                <button type="button" id="pwaTabBtnLoginQuick" onclick="window.switchPwaAdminLoginTab('quick')" class="py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold">
+                <button type="button" id="pwaTabBtnLoginQuick" onclick="window.switchPwaRoleLoginTab('quick')" class="py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 bg-white text-blue-600 shadow-xs cursor-pointer font-bold">
                     <i class="fa-solid fa-bolt text-amber-500 text-xs"></i>
                     <span>1-Klik Akun</span>
                 </button>
-                <button type="button" id="pwaTabBtnLoginOtp" onclick="window.switchPwaAdminLoginTab('otp')" class="py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer">
+                <button type="button" id="pwaTabBtnLoginOtp" onclick="window.switchPwaRoleLoginTab('otp')" class="py-2.5 px-3 rounded-xl transition flex items-center justify-center gap-2 text-slate-500 hover:text-slate-800 cursor-pointer">
                     <i class="fa-regular fa-envelope text-slate-400 text-xs"></i>
                     <span>Email OTP</span>
                 </button>
@@ -4587,26 +4610,26 @@
 
             <!-- TAB 1: 1-KLIK AKUN -->
             <div id="pwaLoginTabContentQuick" class="space-y-3.5 pt-1">
-                <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-100/90 space-y-3 text-left">
+                <div id="roleLoginInfoBox" class="p-4 rounded-2xl bg-blue-50/70 border border-blue-100/90 space-y-3 text-left transition-colors">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-1.5 text-[11px] font-bold text-blue-800 tracking-wider uppercase">
-                            <i class="fa-solid fa-shield-halved text-blue-600"></i>
-                            <span>AKUN RESMI PENGURUS</span>
+                        <div class="flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-slate-800">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            <span id="roleLoginBadge">AKUN RESMI TERDAFTAR</span>
                         </div>
                         <span class="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[10px] font-extrabold uppercase tracking-wide">INSTAN</span>
                     </div>
-                    <p class="text-[11.5px] text-blue-900/80 leading-relaxed font-normal">
-                        Masuk instan tanpa kata sandi menggunakan Akun Pengurus resmi yang terdaftar sebagai Administrator atau Staf Operasional.
+                    <p id="roleLoginDesc" class="text-[11.5px] text-slate-700 leading-relaxed font-normal">
+                        Masuk instan tanpa kata sandi menggunakan Akun resmi yang telah terdaftar di database.
                     </p>
 
-                    <!-- Tombol Continue as Pengurus -->
-                    <button type="button" onclick="window.handlePwaQuickAdminLogin('ops@sdwumroh.com')" class="w-full p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition text-left flex items-center justify-between group cursor-pointer shadow-xs">
+                    <!-- Tombol Continue as User -->
+                    <button type="button" onclick="window.handleQuickRoleLogin()" class="w-full p-3 rounded-2xl bg-white border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition text-left flex items-center justify-between group cursor-pointer shadow-xs">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs tracking-wider shrink-0 shadow-xs">AF</div>
+                            <div id="roleLoginAvatar" class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs tracking-wider shrink-0 shadow-xs">AF</div>
                             <div>
-                                <span class="block text-[10.5px] text-slate-500 font-medium">Continue as pengurus</span>
-                                <h4 class="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">H. Ahmad Fauzi (Admin)</h4>
-                                <span class="block text-[10px] text-slate-400 font-mono">ops@sdwumroh.com</span>
+                                <span id="roleLoginSub" class="block text-[10.5px] text-slate-500 font-medium">Continue as pengurus</span>
+                                <h4 id="roleLoginName" class="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition">H. Ahmad Fauzi (Admin)</h4>
+                                <span id="roleLoginEmail" class="block text-[10px] text-slate-400 font-mono">ops@sdwumroh.com</span>
                             </div>
                         </div>
                         <div class="w-8 h-8 rounded-full bg-slate-50 group-hover:bg-blue-50 text-slate-400 group-hover:text-blue-600 flex items-center justify-center text-xs transition">
@@ -4615,7 +4638,18 @@
                     </button>
                 </div>
 
-                <a href="admin.html" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs">
+                <!-- Tombol Buka Pilihan Akun Lain -->
+                <button type="button" onclick="window.toggleRoleOtherAccounts()" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs">
+                    <i class="fa-solid fa-users text-slate-400"></i>
+                    <span>Buka Pilihan Akun / Ganti Profil Lain</span>
+                </button>
+
+                <!-- Collapsible List Pilihan Akun Lain -->
+                <div id="roleLoginOtherContainer" class="hidden space-y-2 p-3 rounded-2xl bg-slate-50 border border-slate-200/80">
+                    <!-- Populated dynamically by JS -->
+                </div>
+
+                <a id="roleLoginPortalLink" href="admin.html" class="w-full py-2.5 px-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold flex items-center justify-center gap-2 transition cursor-pointer shadow-xs">
                     <i class="fa-solid fa-up-right-from-square text-slate-400"></i>
                     <span>Buka Portal Admin Lengkap (admin.html)</span>
                 </a>
@@ -4624,26 +4658,26 @@
             <!-- TAB 2: EMAIL OTP -->
             <div id="pwaLoginTabContentOtp" class="hidden space-y-3 pt-1">
                 <div class="space-y-1.5">
-                    <label class="block text-xs font-semibold text-slate-700">Email Resmi Pengelola</label>
+                    <label id="roleLoginOtpLabel" class="block text-xs font-semibold text-slate-700">Email Resmi Terdaftar</label>
                     <div class="relative">
                         <i class="fa-regular fa-envelope absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-                        <input type="email" id="pwaAdminOtpEmailInput" placeholder="nama@sdwumroh.com" class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <input type="email" id="roleLoginOtpEmailInput" placeholder="nama@sdwumroh.com" class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-300 text-xs font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none">
                     </div>
                 </div>
 
-                <div id="pwaOtpCodeSection" class="hidden space-y-2">
+                <div id="roleLoginOtpCodeSection" class="hidden space-y-2">
                     <label class="block text-xs font-semibold text-slate-700">Masukkan 6 Digit Kode OTP</label>
-                    <input type="text" id="pwaAdminOtpCodeInput" maxlength="6" placeholder="123456" class="w-full text-center tracking-widest text-lg font-mono font-bold py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                    <input type="text" id="roleLoginOtpCodeInput" maxlength="6" placeholder="123456" class="w-full text-center tracking-widest text-lg font-mono font-bold py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 focus:outline-none">
                 </div>
 
-                <button type="button" id="pwaAdminOtpSubmitBtn" onclick="window.handlePwaSendAdminOtp()" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition active:scale-95 cursor-pointer shadow-md shadow-blue-500/20">
+                <button type="button" id="roleLoginOtpSubmitBtn" onclick="window.handlePwaSendRoleOtp()" class="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition active:scale-95 cursor-pointer shadow-md shadow-blue-500/20">
                     Kirim Kode OTP &rarr;
                 </button>
             </div>
 
             <div class="pt-2 text-center border-t border-slate-100">
-                <button type="button" onclick="window.closePwaAdminLoginModal()" class="text-xs text-slate-400 hover:text-slate-600 transition cursor-pointer">
-                    &larr; Kembali ke Aplikasi Jamaah
+                <button type="button" onclick="window.closePwaRoleLoginModal()" class="text-xs text-slate-400 hover:text-slate-600 transition cursor-pointer">
+                    &larr; Kembali ke Aplikasi
                 </button>
             </div>
         </div>
@@ -4653,12 +4687,12 @@
     <script src="js/app-config.js?v=2.8.0"></script>
     <script src="js/data-mock.js?v=2.8.0"></script>
     <script src="js/api.js?v=2.8.0"></script>
-    <script src="js/auth.js?v=2.9.0"></script>
-    <script src="js/jamaah.js?v=2.9.0"></script>
+    <script src="js/auth.js?v=2.9.1"></script>
+    <script src="js/jamaah.js?v=2.9.1"></script>
     <!-- Leaflet JS for Qibla Satellite Map -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script src="js/kiblat.js?v=2.8.0"></script>
-    <script src="js/pwa.js?v=2.9.0"></script>
+    <script src="js/pwa.js?v=2.9.1"></script>
     <script src="js/berita-kalender.js?v=2.8.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
