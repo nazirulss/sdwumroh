@@ -577,11 +577,13 @@
         if (typeof document === 'undefined') return;
         const session = getPilgrimSession();
 
+        const headerCard = document.getElementById('profileHeaderCard');
         const guestBanner = document.getElementById('profileGuestBanner');
         const authCard = document.getElementById('profileAuthenticatedCard');
         const logoutBtn = document.getElementById('profileLogoutBtn');
         const loginBtnHeader = document.getElementById('profileLoginBtnHeader');
         const badgeAktif = document.getElementById('jamaah-badge-status');
+        const pintuBadgeJamaah = document.getElementById('pintuBadgeJamaah');
 
         const elName = document.getElementById('jamaah-name');
         const elRegId = document.getElementById('jamaah-reg-id');
@@ -605,10 +607,15 @@
         const btnPendingWa = document.getElementById('pendingDpWaBtn');
 
         if (session) {
+            if (headerCard) headerCard.classList.remove('hidden');
             if (guestBanner) guestBanner.classList.add('hidden');
             if (authCard) authCard.classList.remove('hidden');
             if (logoutBtn) logoutBtn.classList.remove('hidden');
             if (loginBtnHeader) loginBtnHeader.classList.add('hidden');
+            if (pintuBadgeJamaah) {
+                pintuBadgeJamaah.textContent = 'Aktif Terhubung';
+                pintuBadgeJamaah.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+            }
 
             if (elName) elName.textContent = session.fullName;
             if (elRegId) elRegId.textContent = session.regId;
@@ -737,11 +744,16 @@
                 }
             }
         } else {
-            // Guest mode
-            if (guestBanner) guestBanner.classList.remove('hidden');
+            // Guest mode (Pintu Akses Resmi Asnawiyyah Mandiri)
+            if (headerCard) headerCard.classList.add('hidden');
+            if (guestBanner) guestBanner.classList.add('hidden');
             if (authCard) authCard.classList.add('hidden');
             if (logoutBtn) logoutBtn.classList.add('hidden');
-            if (loginBtnHeader) loginBtnHeader.classList.remove('hidden');
+            if (loginBtnHeader) loginBtnHeader.classList.add('hidden');
+            if (pintuBadgeJamaah) {
+                pintuBadgeJamaah.textContent = 'Portal Jamaah';
+                pintuBadgeJamaah.className = 'text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700';
+            }
 
             if (newPilgrimSection) newPilgrimSection.classList.add('hidden');
             if (pendingDpSection) pendingDpSection.classList.add('hidden');
