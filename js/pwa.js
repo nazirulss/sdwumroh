@@ -4500,8 +4500,176 @@
     if (knob) knob.className = enabled ? 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-6 shadow-sm' : 'inline-block h-4 w-4 transform rounded-full bg-white transition-transform translate-x-1 shadow-sm';
   };
 
-  // Lokasi Jadwal Sholat
+  // ==================== LOKASI JADWAL SHOLAT & GPS INTEGRATION ====================
+  // Algoritma astronomis waktu shalat presisi offline (standar Kemenag RI / MABIMS)
+  function computeAstronomicalPrayerTimes(lat, lng, dateObj = new Date()) {
+    const year = dateObj.getFullYear();
+    const month = dateObj.getMonth() + 1;
+    const day = dateObj.getDate();
+
+    let a = Math.floor((14 - month) / 12);
+    let y = year + 4800 - a;
+    let m = month + 12 * a - 3;
+    let jd = day + Math.floor((153 * m + 2) / 5) + 365 * y + Math.floor(y / 4) - Math.floor(y / 100) + Math.floor(y / 400) - 32045;
+
+    let d = jd - 2451545.0;
+    let g = (357.529 + 0.98560028 * d) % 360;
+    let q = (280.459 + 0.98564736 * d) % 360;
+    let L = (q + 1.915 * Math.sin(g * Math.PI / 180) + 0.020 * Math.sin(2 * g * Math.PI / 180)) % 360;
+    let e = 23.439 - 0.00000036 * d;
+
+    let dRad = Math.asin(Math.sin(e * Math.PI / 180) * Math.sin(L * Math.PI / 180));
+    let ra = Math.atan2(Math.cos(e * Math.PI / 180) * Math.sin(L * Math.PI / 180), Math.cos(L * Math.PI / 180)) * 180 / Math.PI;
+    ra = (ra / 15 + 24) % 24;
+    let eqt = q / 15 - ra;
+
+    let tzOffset = -dateObj.getTimezoneOffset() / 60;
+    let noon = 12 + tzOffset - (lng / 15) - eqt;
+
+    const sunAngleTime = (angle, direction) => {
+      let latRad = lat * Math.PI / 180;
+      let cosH = (Math.sin(-angle * Math.PI / 180) - Math.sin(latRad) * Math.sin(dRad)) / (Math.cos(latRad) * Math.cos(dRad));
+      if (cosH > 1 || cosH < -1) return noon;
+      let H = Math.acos(cosH) * 180 / Math.PI / 15;
+      return noon + (direction * H);
+    };
+
+    const asrTime = () => {
+      let latRad = lat * Math.PI / 180;
+      let angle = -Math.atan(1 / (1 + Math.tan(Math.abs(latRad - dRad)))) * 180 / Math.PI;
+      let cosH = (Math.sin(-angle * Math.PI / 180) - Math.sin(latRad) * Math.sin(dRad)) / (Math.cos(latRad) * Math.cos(dRad));
+      if (cosH > 1 || cosH < -1) return noon + 3.2;
+      let H = Math.acos(cosH) * 180 / Math.PI / 15;
+      return noon + H;
+    };
+
+    let subuhH = sunAngleTime(20, -1);
+    let maghribH = sunAngleTime(0.833, 1);
+    let isyaH = sunAngleTime(18, 1);
+    let ashrH = asrTime();
+
+    const fmt = (hVal) => {
+      if (!hVal || isNaN(hVal)) return '12:00';
+      let totalM = Math.round(hVal * 60) + 2; // Ikhtiyat +2 menit
+      totalM = (totalM + 1440) % 1440;
+      let hh = String(Math.floor(totalM / 60)).padStart(2, '0');
+      let mm = String(totalM % 60).padStart(2, '0');
+      return `${hh}:${mm}`;
+    };
+
+    return [
+      { name: 'Subuh', time: fmt(subuhH) },
+      { name: 'Dzuhur', time: fmt(noon) },
+      { name: 'Ashar', time: fmt(ashrH) },
+      { name: 'Maghrib', time: fmt(maghribH) },
+      { name: 'Isya', time: fmt(isyaH) }
+    ];
+  }
+
+  // Buka Google Maps / Apple Maps di perangkat pengguna
+  window.openPwaDeviceMap = function() {
+    let lat = null, lng = null;
+    try {
+      lat = localStorage.getItem('sdw_gps_lat');
+      lng = localStorage.getItem('sdw_gps_lng');
+    } catch (e) {}
+
+    if (!lat || !lng) {
+      if (typeof SDW_KIBLAT !== 'undefined' && SDW_KIBLAT.getUserCoords) {
+        const uc = SDW_KIBLAT.getUserCoords();
+        lat = uc.lat;
+        lng = uc.lng;
+      }
+    }
+
+    if (!lat || !lng) {
+      window.requestPwaGpsLocation();
+      return;
+    }
+
+    const url = `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  // Minta Lokasi GPS Perangkat Real-Time
+  window.requestPwaGpsLocation = function() {
+    const btn = document.getElementById('btnPwaGpsQuick');
+    const infoBox = document.getElementById('pwaGpsInfoBox');
+    const locNameEl = document.getElementById('pwaGpsLocationName');
+    const coordsEl = document.getElementById('pwaGpsCoordsText');
+    const select = document.getElementById('pwaPrayerLocationSelect');
+
+    if (btn) {
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i><span>Mencari GPS...</span>';
+    }
+
+    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+      if (btn) btn.innerHTML = '<i class="fa-solid fa-location-crosshairs text-xs"></i><span>Lokasi Terkini (GPS)</span>';
+      alert('Perangkat Anda tidak mendukung fitur Geolocation GPS.');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        const acc = Math.round(position.coords.accuracy || 10);
+
+        try {
+          localStorage.setItem('sdw_gps_lat', lat.toString());
+          localStorage.setItem('sdw_gps_lng', lng.toString());
+          localStorage.setItem('sdw_gps_acc', acc.toString());
+          localStorage.setItem('sdw_prayer_loc', 'GPS');
+        } catch (e) {}
+
+        if (select) select.value = 'GPS';
+        if (btn) {
+          btn.innerHTML = '<i class="fa-solid fa-check text-xs text-emerald-600"></i><span class="text-emerald-700">GPS Terkunci</span>';
+          setTimeout(() => {
+            btn.innerHTML = '<i class="fa-solid fa-location-crosshairs text-xs"></i><span>Lokasi Terkini (GPS)</span>';
+          }, 3000);
+        }
+
+        if (infoBox) infoBox.classList.remove('hidden');
+        if (coordsEl) coordsEl.textContent = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)} (±${acc}m)`;
+        if (locNameEl) locNameEl.textContent = 'Mendeteksi alamat perangkat...';
+
+        // Reverse geocoding via Nominatim
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`)
+          .then(res => res.json())
+          .then(data => {
+            const addr = data.address || {};
+            const city = addr.city || addr.regency || addr.town || addr.county || addr.state || 'Lokasi Saya Terkini';
+            if (locNameEl) locNameEl.textContent = `📍 ${city}`;
+            try { localStorage.setItem('sdw_gps_area', city); } catch (e) {}
+          })
+          .catch(() => {
+            if (locNameEl) locNameEl.textContent = '📍 Lokasi Terkini Terdeteksi';
+          });
+
+        if (typeof SDW_KIBLAT !== 'undefined' && typeof SDW_KIBLAT.syncAllSensorAndLocation === 'function') {
+          try { SDW_KIBLAT.syncAllSensorAndLocation(); } catch (e) {}
+        }
+
+        window.renderPwaPrayerRow('GPS');
+      },
+      (error) => {
+        console.warn('[SDW_GPS] Gagal membaca lokasi:', error);
+        if (btn) btn.innerHTML = '<i class="fa-solid fa-location-crosshairs text-xs"></i><span>Lokasi Terkini (GPS)</span>';
+        alert('Tidak dapat mendeteksi lokasi GPS. Pastikan izin lokasi (GPS) browser/perangkat Anda telah diaktifkan.');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+    );
+  };
+
+  // Event saat pilihan dropdown lokasi berubah
   window.handlePwaLocationChange = function(val) {
+    if (val === 'GPS') {
+      window.requestPwaGpsLocation();
+      return;
+    }
+    const infoBox = document.getElementById('pwaGpsInfoBox');
+    if (infoBox) infoBox.classList.add('hidden');
     try { localStorage.setItem('sdw_prayer_loc', val); } catch (e) {}
     window.renderPwaPrayerRow(val);
   };
@@ -4515,6 +4683,8 @@
     }
     const select = document.getElementById('pwaPrayerLocationSelect');
     if (select && select.value !== key) select.value = key;
+
+    const infoBox = document.getElementById('pwaGpsInfoBox');
 
     const scheduleData = {
       DEMAK: [
@@ -4538,6 +4708,41 @@
         { name: 'Maghrib', time: '17:51' },
         { name: 'Isya', time: '19:04' }
       ],
+      SURABAYA: [
+        { name: 'Subuh', time: '04:10' },
+        { name: 'Dzuhur', time: '11:15' },
+        { name: 'Ashar', time: '14:38' },
+        { name: 'Maghrib', time: '17:28' },
+        { name: 'Isya', time: '18:41' }
+      ],
+      BANDUNG: [
+        { name: 'Subuh', time: '04:31' },
+        { name: 'Dzuhur', time: '11:38' },
+        { name: 'Ashar', time: '15:00' },
+        { name: 'Maghrib', time: '17:50' },
+        { name: 'Isya', time: '19:03' }
+      ],
+      YOGYAKARTA: [
+        { name: 'Subuh', time: '04:21' },
+        { name: 'Dzuhur', time: '11:26' },
+        { name: 'Ashar', time: '14:48' },
+        { name: 'Maghrib', time: '17:38' },
+        { name: 'Isya', time: '18:51' }
+      ],
+      MAKASSAR: [
+        { name: 'Subuh', time: '04:30' },
+        { name: 'Dzuhur', time: '11:54' },
+        { name: 'Ashar', time: '15:18' },
+        { name: 'Maghrib', time: '18:04' },
+        { name: 'Isya', time: '19:17' }
+      ],
+      MEDAN: [
+        { name: 'Subuh', time: '04:58' },
+        { name: 'Dzuhur', time: '12:15' },
+        { name: 'Ashar', time: '15:37' },
+        { name: 'Maghrib', time: '18:17' },
+        { name: 'Isya', time: '19:30' }
+      ],
       MAKKAH: [
         { name: 'Subuh', time: '05:02' },
         { name: 'Dzuhur', time: '12:10' },
@@ -4554,7 +4759,35 @@
       ]
     };
 
-    const list = scheduleData[key] || scheduleData.DEMAK;
+    let list = scheduleData.DEMAK;
+
+    if (key === 'GPS') {
+      let lat = null, lng = null;
+      try {
+        lat = parseFloat(localStorage.getItem('sdw_gps_lat'));
+        lng = parseFloat(localStorage.getItem('sdw_gps_lng'));
+      } catch (e) {}
+
+      if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+        list = computeAstronomicalPrayerTimes(lat, lng, new Date());
+        if (infoBox) {
+          infoBox.classList.remove('hidden');
+          const area = localStorage.getItem('sdw_gps_area') || 'Lokasi Terkini Saya';
+          const locNameEl = document.getElementById('pwaGpsLocationName');
+          const coordsEl = document.getElementById('pwaGpsCoordsText');
+          if (locNameEl) locNameEl.textContent = `📍 ${area}`;
+          if (coordsEl) coordsEl.textContent = `Lat: ${lat.toFixed(4)}, Lng: ${lng.toFixed(4)}`;
+        }
+      } else {
+        // Belum ada GPS, panggil request GPS dan gunakan fallback sementara
+        list = scheduleData.DEMAK;
+        window.requestPwaGpsLocation();
+      }
+    } else {
+      if (infoBox) infoBox.classList.add('hidden');
+      list = scheduleData[key] || scheduleData.DEMAK;
+    }
+
     const now = new Date();
     let nowHours = now.getHours();
     let nowMins = now.getMinutes();

@@ -1803,22 +1803,60 @@
                         </div>
                     </div>
 
-                    <!-- 2. LOKASI & JADWAL SHALAT (PERSIS ASNAWIYYAH) -->
+                    <!-- 2. LOKASI & JADWAL SHALAT (GPS LIVE & TERHUBUNG MAP PERANGKAT) -->
                     <div>
-                        <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Lokasi &amp; Jadwal Shalat</div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lokasi &amp; Jadwal Shalat</span>
+                            <button type="button" onclick="window.requestPwaGpsLocation()" id="btnPwaGpsQuick"
+                                class="text-[10.5px] font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 py-1 px-2.5 rounded-xl border border-emerald-200 transition cursor-pointer shadow-2xs">
+                                <i class="fa-solid fa-location-crosshairs text-xs text-emerald-600"></i>
+                                <span>Lokasi Terkini (GPS)</span>
+                            </button>
+                        </div>
+
                         <div class="bg-white rounded-2xl border border-slate-200/90 p-3.5 shadow-xs space-y-3">
                             <div>
-                                <label for="pwaPrayerLocationSelect" class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">PILIH KOTA / KAB. LOKASI ANDA</label>
+                                <label for="pwaPrayerLocationSelect" class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">PILIH KOTA / BASIS WAKTU SHALAT</label>
                                 <div class="relative">
                                     <select id="pwaPrayerLocationSelect" onchange="window.handlePwaLocationChange(this.value)"
                                         class="w-full py-2 px-3 text-xs font-bold text-slate-800 bg-slate-50 border border-slate-200 rounded-xl appearance-none focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer pr-8">
-                                        <option value="DEMAK" selected>Kab. Demak (PPTQ Asnawiyyah / Kemenag)</option>
-                                        <option value="SEMARANG">Kota Semarang (WIB)</option>
-                                        <option value="JAKARTA">DKI Jakarta &amp; Sekitarnya (WIB)</option>
-                                        <option value="MAKKAH">Makkah Al-Mukarramah (WAS)</option>
-                                        <option value="MADINAH">Madinah Al-Munawwarah (WAS)</option>
+                                        <option value="GPS">📍 Lokasi Terkini Saya (GPS Device Real-Time)</option>
+                                        <option value="MAKKAH">🕋 Makkah Al-Mukarramah (Masjidil Haram - WAS)</option>
+                                        <option value="MADINAH">🕌 Madinah Al-Munawwarah (Masjid Nabawi - WAS)</option>
+                                        <option value="JAKARTA">🇮🇩 DKI Jakarta (Pusat SDW Umroh - WIB)</option>
+                                        <option value="DEMAK" selected>🇮🇩 Demak &amp; Semarang (Jawa Tengah - WIB)</option>
+                                        <option value="SURABAYA">🇮🇩 Surabaya &amp; Jawa Timur (WIB)</option>
+                                        <option value="BANDUNG">🇮🇩 Bandung &amp; Jawa Barat (WIB)</option>
+                                        <option value="YOGYAKARTA">🇮🇩 D.I. Yogyakarta &amp; Solo (WIB)</option>
+                                        <option value="MAKASSAR">🇮🇩 Makassar &amp; Indonesia Timur (WITA)</option>
+                                        <option value="MEDAN">🇮🇩 Medan &amp; Sumatera (WIB)</option>
                                     </select>
                                     <i class="fa-solid fa-chevron-down absolute right-3 top-3 text-[10px] text-slate-400 pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <!-- Bar Info Lokasi GPS & Aksi Map Perangkat (Muncul Otomatis saat GPS Aktif) -->
+                            <div id="pwaGpsInfoBox" class="hidden p-2.5 rounded-xl bg-slate-50 border border-slate-200/90 text-xs text-slate-700 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 transition-all">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs shrink-0 font-bold">
+                                        <i class="fa-solid fa-location-dot"></i>
+                                    </span>
+                                    <div>
+                                        <div id="pwaGpsLocationName" class="font-bold text-slate-800 text-[11.5px]">GPS Aktif</div>
+                                        <div id="pwaGpsCoordsText" class="text-[10px] text-slate-400 font-mono">-</div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-1.5 w-full sm:w-auto">
+                                    <button type="button" onclick="window.openPwaDeviceMap()"
+                                        class="flex-1 sm:flex-none py-1.5 px-2.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer">
+                                        <i class="fa-solid fa-map-location-dot text-xs"></i>
+                                        <span>Buka di Map HP</span>
+                                    </button>
+                                    <button type="button" onclick="window.openAppSubView('ibadah', { tab: 'kiblat' })"
+                                        class="flex-1 sm:flex-none py-1.5 px-2.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-[11px] font-bold flex items-center justify-center gap-1 transition cursor-pointer">
+                                        <i class="fa-solid fa-compass text-xs"></i>
+                                        <span>Arah Kiblat</span>
+                                    </button>
                                 </div>
                             </div>
 
@@ -4687,12 +4725,12 @@
     <script src="js/app-config.js?v=2.8.0"></script>
     <script src="js/data-mock.js?v=2.8.0"></script>
     <script src="js/api.js?v=2.8.0"></script>
-    <script src="js/auth.js?v=2.9.2"></script>
-    <script src="js/jamaah.js?v=2.9.2"></script>
+    <script src="js/auth.js?v=2.9.3"></script>
+    <script src="js/jamaah.js?v=2.9.3"></script>
     <!-- Leaflet JS for Qibla Satellite Map -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script src="js/kiblat.js?v=2.8.0"></script>
-    <script src="js/pwa.js?v=2.9.2"></script>
+    <script src="js/pwa.js?v=2.9.3"></script>
     <script src="js/berita-kalender.js?v=2.8.0"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
