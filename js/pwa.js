@@ -3865,13 +3865,15 @@
       if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
       if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
       try {
-        if (localStorage.getItem('sdw_pintu_akses_collapsed') === 'true') {
-          const c = document.getElementById('pwaPintuAksesContainer');
-          const ch = document.getElementById('pintuAksesChevron');
-          const tt = document.getElementById('pintuAksesToggleText');
-          if (c) c.classList.add('hidden');
-          if (ch) ch.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
-          if (tt) tt.textContent = 'Buka Pintu';
+        const isCollapsed = localStorage.getItem('sdw_pintu_akses_collapsed') !== 'false';
+        const c = document.getElementById('pwaPintuAksesContainer');
+        const ch = document.getElementById('pintuAksesChevron');
+        if (c && isCollapsed) {
+          c.classList.add('hidden');
+          if (ch) ch.className = 'fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
+        } else if (c && !isCollapsed) {
+          c.classList.remove('hidden');
+          if (ch) ch.className = 'fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
         }
       } catch (e) {}
     });
@@ -3884,13 +3886,15 @@
     if (typeof window.updateAppNotifUI === 'function') window.updateAppNotifUI();
     if (typeof window.renderPwaPrayerRow === 'function') window.renderPwaPrayerRow();
     try {
-      if (localStorage.getItem('sdw_pintu_akses_collapsed') === 'true') {
-        const c = document.getElementById('pwaPintuAksesContainer');
-        const ch = document.getElementById('pintuAksesChevron');
-        const tt = document.getElementById('pintuAksesToggleText');
-        if (c) c.classList.add('hidden');
-        if (ch) ch.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
-        if (tt) tt.textContent = 'Buka Pintu';
+      const isCollapsed = localStorage.getItem('sdw_pintu_akses_collapsed') !== 'false';
+      const c = document.getElementById('pwaPintuAksesContainer');
+      const ch = document.getElementById('pintuAksesChevron');
+      if (c && isCollapsed) {
+        c.classList.add('hidden');
+        if (ch) ch.className = 'fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
+      } else if (c && !isCollapsed) {
+        c.classList.remove('hidden');
+        if (ch) ch.className = 'fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
       }
     } catch (e) {}
   }
@@ -3991,19 +3995,16 @@
   window.togglePintuAksesDropdown = function() {
     const container = document.getElementById('pwaPintuAksesContainer');
     const chevron = document.getElementById('pintuAksesChevron');
-    const toggleText = document.getElementById('pintuAksesToggleText');
     if (!container) return;
 
     const isHidden = container.classList.contains('hidden');
     if (isHidden) {
       container.classList.remove('hidden');
-      if (chevron) chevron.className = 'fa-solid fa-chevron-up text-xs transition-transform duration-200';
-      if (toggleText) toggleText.textContent = 'Sembunyikan';
+      if (chevron) chevron.className = 'fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
       try { localStorage.setItem('sdw_pintu_akses_collapsed', 'false'); } catch (e) {}
     } else {
       container.classList.add('hidden');
-      if (chevron) chevron.className = 'fa-solid fa-chevron-down text-xs transition-transform duration-200';
-      if (toggleText) toggleText.textContent = 'Buka Pintu';
+      if (chevron) chevron.className = 'fa-solid fa-chevron-right text-xs text-slate-400 group-hover:text-slate-600 transition-transform duration-200';
       try { localStorage.setItem('sdw_pintu_akses_collapsed', 'true'); } catch (e) {}
     }
   };
